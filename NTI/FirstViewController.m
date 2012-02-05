@@ -10,6 +10,13 @@
 
 @implementation FirstViewController
 
+- (void) accelerometerReciver: (NSNotification*) theNotice{
+    currentAcceleration=((CMAccelerometerData*)[theNotice.userInfo objectForKey: @"accel"]).acceleration;
+//    accX.text =[NSString stringWithFormat:@"%d км/ч", [current intValue]];
+    accX.text=[NSString stringWithFormat:@"%f", currentAcceleration.x];
+    accY.text=[NSString stringWithFormat:@"%f", currentAcceleration.y];
+    accZ.text=[NSString stringWithFormat:@"%f", currentAcceleration.z];
+}
 
 - (void)didReceiveMemoryWarning
 {
@@ -58,6 +65,12 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+    [[NSNotificationCenter defaultCenter]	
+     addObserver: self
+     selector: @selector(accelerometerReciver:)
+     name: @"accelNotification"
+     object: nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -67,7 +80,12 @@
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-	[super viewDidDisappear:animated];
+    [super viewDidDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter]	
+     removeObserver: self
+     name: @"accelNotification"
+     object: nil];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

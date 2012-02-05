@@ -12,6 +12,8 @@
 
 @synthesize window = _window, lastLoc;
 
+#define accelUpdateFrequency 30.0	
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {
     locationManager=[[CLLocationManager alloc] init];
@@ -19,7 +21,14 @@
     locationManager.desiredAccuracy=kCLLocationAccuracyBest;
     
     lastLoc = [[CLLocation alloc] init];
+<<<<<<< HEAD
     [self startGPSDetect];
+=======
+    
+    motionManager = [[CMMotionManager alloc] init];
+    motionManager.accelerometerUpdateInterval = 1.0 / accelUpdateFrequency;
+    [self startAccelerometerDetect];
+>>>>>>> 217e378b44d0790197998a43174f8903f9c8d311
     return YES;
 }
 
@@ -36,7 +45,6 @@
     gpsState=YES;
 }
 
-
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation{
     
     
@@ -47,6 +55,27 @@
     [[NSNotificationCenter defaultCenter]	postNotificationName:	@"locateNotification" object:  nil];
     
 }
+
+//accelerometer
+- (void)stopAccelerometerDetect {
+    [motionManager stopAccelerometerUpdates];
+}
+
+- (void)startAccelerometerDetect
+{
+    [motionManager startAccelerometerUpdatesToQueue:[[NSOperationQueue alloc] init]
+                                        withHandler:^(CMAccelerometerData *data, NSError *error) {
+                                            dispatch_async(dispatch_get_main_queue(), ^{
+                                                NSDictionary* accDict = [NSDictionary dictionaryWithObject: data
+                                                                                                    forKey: @"accel"];
+                                                [[NSNotificationCenter defaultCenter]	postNotificationName:@"accelNotification" 
+                                                                                                    object:  nil
+                                                                                                  userInfo:accDict];
+                                            });
+                                        }
+     ];
+}
+
 
 
 

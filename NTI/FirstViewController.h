@@ -7,8 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+<<<<<<< HEAD
 #import "AppDelegate.h"
 #define myAppDelegate (AppDelegate*) [[UIApplication sharedApplication] delegate]
+=======
+#import <CoreMotion/CoreMotion.h>
+>>>>>>> 217e378b44d0790197998a43174f8903f9c8d311
 
 @interface FirstViewController : UIViewController{
     
@@ -20,7 +24,13 @@
     IBOutlet UILabel *course;
     IBOutlet UILabel *longitude;
     IBOutlet UILabel *speed;
+<<<<<<< HEAD
     IBOutlet UILabel *latitude;
+=======
+    IBOutlet UILabel *altitude;
+    
+    CMAcceleration currentAcceleration;
+>>>>>>> 217e378b44d0790197998a43174f8903f9c8d311
 }
 
 - (IBAction)acceleration:(id)sender;
