@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		276C4C9814DEE94D00C469A6 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 276C4C9714DEE94D00C469A6 /* CoreMotion.framework */; };
+		276C4C9B14DEF4FF00C469A6 /* DatabaseActions.m in Sources */ = {isa = PBXBuildFile; fileRef = 276C4C9A14DEF4FF00C469A6 /* DatabaseActions.m */; };
+		276C4C9D14DEF66B00C469A6 /* log.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 276C4C9C14DEF66B00C469A6 /* log.sqlite */; };
 		53E0A76B14DEC75D004E3E1B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53E0A76A14DEC75D004E3E1B /* UIKit.framework */; };
 		53E0A76D14DEC75D004E3E1B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53E0A76C14DEC75D004E3E1B /* Foundation.framework */; };
 		53E0A76F14DEC75D004E3E1B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53E0A76E14DEC75D004E3E1B /* CoreGraphics.framework */; };
@@ -28,6 +30,9 @@
 
 /* Begin PBXFileReference section */
 		276C4C9714DEE94D00C469A6 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		276C4C9914DEF4FF00C469A6 /* DatabaseActions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatabaseActions.h; sourceTree = "<group>"; };
+		276C4C9A14DEF4FF00C469A6 /* DatabaseActions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseActions.m; sourceTree = "<group>"; };
+		276C4C9C14DEF66B00C469A6 /* log.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = log.sqlite; sourceTree = "<group>"; };
 		53E0A76614DEC75D004E3E1B /* NTI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NTI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		53E0A76A14DEC75D004E3E1B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		53E0A76C14DEC75D004E3E1B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -149,6 +154,9 @@
 		53E0A7A014DEDE75004E3E1B /* DataBase */ = {
 			isa = PBXGroup;
 			children = (
+				276C4C9C14DEF66B00C469A6 /* log.sqlite */,
+				276C4C9914DEF4FF00C469A6 /* DatabaseActions.h */,
+				276C4C9A14DEF4FF00C469A6 /* DatabaseActions.m */,
 				53E0A79C14DEDE6F004E3E1B /* libsqlite3.0.dylib */,
 				53E0A79D14DEDE6F004E3E1B /* libsqlite3.dylib */,
 			);
@@ -211,6 +219,7 @@
 				53E0A78514DEC75D004E3E1B /* first@2x.png in Resources */,
 				53E0A78A14DEC75D004E3E1B /* second.png in Resources */,
 				53E0A78C14DEC75D004E3E1B /* second@2x.png in Resources */,
+				276C4C9D14DEF66B00C469A6 /* log.sqlite in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -225,6 +234,7 @@
 				53E0A77B14DEC75D004E3E1B /* AppDelegate.m in Sources */,
 				53E0A78114DEC75D004E3E1B /* FirstViewController.m in Sources */,
 				53E0A78814DEC75D004E3E1B /* SecondViewController.m in Sources */,
+				276C4C9B14DEF4FF00C469A6 /* DatabaseActions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

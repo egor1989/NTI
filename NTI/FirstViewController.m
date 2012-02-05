@@ -16,6 +16,7 @@
     accX.text=[NSString stringWithFormat:@"%f", currentAcceleration.x];
     accY.text=[NSString stringWithFormat:@"%f", currentAcceleration.y];
     accZ.text=[NSString stringWithFormat:@"%f", currentAcceleration.z];
+//    [databaseAction addRecord:currentAcceleration];
 }
 
 - (void)didReceiveMemoryWarning
@@ -29,6 +30,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    databaseAction = [[DatabaseActions alloc] initDataBase];
 	// Do any additional setup after loading the view, typically from a nib.
 }
 

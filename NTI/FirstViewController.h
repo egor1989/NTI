@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreMotion/CoreMotion.h>
+#import "DatabaseActions.h"
 
 @interface FirstViewController : UIViewController{
     
@@ -22,6 +23,8 @@
     IBOutlet UILabel *altitude;
     
     CMAcceleration currentAcceleration;
+    
+    DatabaseActions *databaseAction;
 }
 
 - (IBAction)acceleration:(id)sender;
