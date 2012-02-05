@@ -33,7 +33,7 @@
     altitude = nil;
     speed = nil;
     longitude = nil;
-    route = nil;
+    course = nil;
     time = nil;
 
     [super viewDidUnload];
@@ -80,5 +80,6 @@
 }
 
 - (IBAction)action:(id)sender {
+    NSLog(@"push action");
 }
 @end

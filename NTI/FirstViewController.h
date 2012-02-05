@@ -15,7 +15,7 @@
     IBOutlet UILabel *accZ;
     
     IBOutlet UILabel *time;
-    IBOutlet UILabel *route;
+    IBOutlet UILabel *course;
     IBOutlet UILabel *longitude;
     IBOutlet UILabel *speed;
     IBOutlet UILabel *altitude;

@@ -12,12 +12,37 @@
 
 @synthesize window = _window;
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {
-    // Override point for customization after application launch.
+    locationManager=[[CLLocationManager alloc] init];
+    locationManager.delegate=self;
+    locationManager.desiredAccuracy=kCLLocationAccuracyBest;
+    
+    lastLoc = [[CLLocation alloc] init];
     return YES;
 }
-							
+
+
+
+//gps
+-(void)stopGPSDetect{
+    [locationManager stopUpdatingLocation];
+    gpsState=NO;
+}
+
+-(void)startGPSDetect{
+    [locationManager startUpdatingLocation];
+    gpsState=YES;
+}
+
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation{
+    
+}
+
+
+
+//lifecyrcle for programm							
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     /*
