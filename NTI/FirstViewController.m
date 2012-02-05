@@ -16,7 +16,7 @@
     accX.text=[NSString stringWithFormat:@"%f", currentAcceleration.x];
     accY.text=[NSString stringWithFormat:@"%f", currentAcceleration.y];
     accZ.text=[NSString stringWithFormat:@"%f", currentAcceleration.z];
-//    [databaseAction addRecord:currentAcceleration];
+    [databaseAction addRecord:currentAcceleration Type:0];
 }
 
 - (void)didReceiveMemoryWarning

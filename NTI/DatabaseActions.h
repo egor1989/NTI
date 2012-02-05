@@ -11,6 +11,7 @@
 #import <CoreMotion/CoreMotion.h>
 #import <sqlite3.h> 
 
+
 @interface DatabaseActions : NSObject{
     // Database variables
 	NSString *databaseName;
@@ -27,7 +28,7 @@
 
 - (id) initDataBase;
 - (void) checkAndCreateDatabase;
-- (void) addRecord: (CMAcceleration) point;
+- (void) addRecord: (CMAcceleration) point Type: (int)type;
 - (void) clearDatabase;
 //- (NSArray*) readDatabase;
 + (void) finalizeStatements;

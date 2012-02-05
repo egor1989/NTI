@@ -7,7 +7,9 @@
 //
 
 #import "DatabaseActions.h"
-#define myAppDelegate (GoodRoadsAppDelegate*) [[UIApplication sharedApplication] delegate]
+#import "AppDelegate.h"
+
+#define myAppDelegate (AppDelegate*) [[UIApplication sharedApplication] delegate]
 
 static sqlite3 *database = nil;
 static sqlite3_stmt *deleteStmt = nil;
@@ -54,11 +56,12 @@ static sqlite3_stmt *addStmt = nil;
 	[fileManager copyItemAtPath:databasePathFromApp toPath:databasePath error:nil];
 }
 
--(void) addRecord: (CMAcceleration) point{
+-(void) addRecord: (CMAcceleration) point Type:(int)type{
 
+    CLLocation* location=[myAppDelegate lastLoc];
     
    	if(addStmt == nil) {
-		const char *sql = "INSERT INTO speedchangelog(time, speedDiff, acceleration) VALUES(?, ?, ?)";
+		const char *sql = "INSERT INTO log(time, accX, accY, accZ, lon, lat, course, speed, type) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		if(sqlite3_prepare_v2(database, sql, -1, &addStmt, NULL) != SQLITE_OK)
 			NSAssert1(0, @"Error while creating add statement. '%s'", sqlite3_errmsg(database));
 	}
@@ -66,9 +69,12 @@ static sqlite3_stmt *addStmt = nil;
     sqlite3_bind_double(addStmt, 2, point.x);
     sqlite3_bind_double(addStmt, 3, point.y);
     sqlite3_bind_double(addStmt, 4, point.z);
-    sqlite3_bind_double(addStmt, 5, point.y);
-    sqlite3_bind_double(addStmt, 6, point.y);
-    sqlite3_bind_double(addStmt, 7, point.y);
+    sqlite3_bind_double(addStmt, 5, location.coordinate.longitude);
+    sqlite3_bind_double(addStmt, 6, location.coordinate.latitude);
+    sqlite3_bind_double(addStmt, 7, location.course);
+    sqlite3_bind_double(addStmt, 8, location.speed);
+    sqlite3_bind_double(addStmt, 9, type);
+    
     
 	if(SQLITE_DONE != sqlite3_step(addStmt))
 		NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
