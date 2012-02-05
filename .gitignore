@@ -1,6 +1,8 @@
 # osx noise
 .DS_Store
 profile
+*.swp
+*~.nib
 
 # xcode noise
 build/*
@@ -12,6 +14,7 @@ build/*
 *.pbxuser
 *.xcworkspace
 xcuserdata
+Snapshots
 
 # svn & cvs
 .svn
