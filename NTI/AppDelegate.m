@@ -60,7 +60,6 @@
                                                 [[NSNotificationCenter defaultCenter]	postNotificationName:@"accelNotification" 
                                                                                                     object:  nil
                                                                                                   userInfo:accDict];
-                                                NSLog(@"accNot");
                                             });
                                         }
      ];

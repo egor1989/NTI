@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreMotion/CoreMotion.h>
 
 @interface FirstViewController : UIViewController{
     
@@ -19,6 +20,8 @@
     IBOutlet UILabel *longitude;
     IBOutlet UILabel *speed;
     IBOutlet UILabel *altitude;
+    
+    CMAcceleration currentAcceleration;
 }
 
 - (IBAction)acceleration:(id)sender;
