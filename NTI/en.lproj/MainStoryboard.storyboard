@@ -32,7 +32,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="action:" destination="2" eventType="touchUpInside" id="dZ1-9M-SEt"/>
+                                    <action selector="actionButton:" destination="2" eventType="touchUpInside" id="Oro-dw-bgo"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="khO-GB-iyr">
@@ -207,6 +207,7 @@
                         <outlet property="accX" destination="oKe-li-5Jx" id="yY6-IC-Au2"/>
                         <outlet property="accY" destination="tFV-I2-GFL" id="m53-Xh-iRN"/>
                         <outlet property="accZ" destination="FtS-C3-r1r" id="6W3-y9-DZa"/>
+                        <outlet property="action" destination="IhZ-sT-0Se" id="yZQ-6j-QDE"/>
                         <outlet property="course" destination="O11-8f-OAz" id="xUo-an-2zx"/>
                         <outlet property="latitude" destination="aDE-UJ-PkN" id="9ol-lK-Vj5"/>
                         <outlet property="longitude" destination="ZxZ-iT-Qld" id="iNK-7U-wPd"/>
@@ -270,6 +271,29 @@
         <image name="first" width="16" height="16"/>
         <image name="second" width="16" height="16"/>
     </resources>
+    <classes>
+        <class className="FirstViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/FirstViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="acceleration:"/>
+                <relationship kind="action" name="actionButton:"/>
+                <relationship kind="action" name="deceleration:"/>
+                <relationship kind="action" name="rotation:"/>
+                <relationship kind="outlet" name="accX" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="accY" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="accZ" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="action" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="course" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="latitude" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="longitude" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="speed" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="time" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="SecondViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/SecondViewController.h"/>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

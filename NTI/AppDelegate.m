@@ -21,14 +21,11 @@
     locationManager.desiredAccuracy=kCLLocationAccuracyBest;
     
     lastLoc = [[CLLocation alloc] init];
-<<<<<<< HEAD
     [self startGPSDetect];
-=======
-    
     motionManager = [[CMMotionManager alloc] init];
     motionManager.accelerometerUpdateInterval = 1.0 / accelUpdateFrequency;
     [self startAccelerometerDetect];
->>>>>>> 217e378b44d0790197998a43174f8903f9c8d311
+
     return YES;
 }
 
@@ -45,13 +42,17 @@
     gpsState=YES;
 }
 
+-(double) getTime {
+    //[locationManager.location.timestamp timeIntervalSince1970];
+    return [locationManager.location.timestamp timeIntervalSince1970];;
+}
+
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation{
     
     
     lastLoc = [[CLLocation alloc] initWithCoordinate:newLocation.coordinate altitude:newLocation.altitude horizontalAccuracy:newLocation.horizontalAccuracy verticalAccuracy:newLocation.verticalAccuracy course:newLocation.course speed:newLocation.speed timestamp:newLocation.timestamp];
     
-    NSLog(@"lat = %@, lond = %@", [NSString stringWithFormat:@"%f", lastLoc.coordinate.latitude], [NSString stringWithFormat:@"%f", lastLoc.coordinate.longitude]);
-    
+        
     [[NSNotificationCenter defaultCenter]	postNotificationName:	@"locateNotification" object:  nil];
     
 }
