@@ -8,6 +8,22 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FirstViewController : UIViewController
+@interface FirstViewController : UIViewController{
+    
+    IBOutlet UILabel *accX;
+    IBOutlet UILabel *accY;
+    IBOutlet UILabel *accZ;
+    
+    IBOutlet UILabel *time;
+    IBOutlet UILabel *route;
+    IBOutlet UILabel *longitude;
+    IBOutlet UILabel *speed;
+    IBOutlet UILabel *altitude;
+}
+
+- (IBAction)acceleration:(id)sender;
+- (IBAction)deceleration:(id)sender;
+- (IBAction)rotation:(id)sender;
+- (IBAction)action:(id)sender;
 
 @end

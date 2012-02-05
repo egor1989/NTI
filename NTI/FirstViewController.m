@@ -10,6 +10,7 @@
 
 @implementation FirstViewController
 
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -26,6 +27,15 @@
 
 - (void)viewDidUnload
 {
+    accX = nil;
+    accY = nil;
+    accZ = nil;
+    altitude = nil;
+    speed = nil;
+    longitude = nil;
+    route = nil;
+    time = nil;
+
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -57,4 +67,18 @@
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
+- (IBAction)acceleration:(id)sender {
+    NSLog(@"push acceleration");
+}
+
+- (IBAction)deceleration:(id)sender {
+     NSLog(@"push deceleration");
+}
+
+- (IBAction)rotation:(id)sender {
+     NSLog(@"push rotation");
+}
+
+- (IBAction)action:(id)sender {
+}
 @end
