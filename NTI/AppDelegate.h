@@ -19,5 +19,6 @@
 -(void)startGPSDetect;
 
 @property (strong, nonatomic) UIWindow *window;
+@property (readonly, NS_NONATOMIC_IPHONEONLY) CLLocation *lastLoc;
 
 @end

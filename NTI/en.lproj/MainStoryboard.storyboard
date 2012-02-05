@@ -115,7 +115,7 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="alt" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="nmg-V2-GJt">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="lat" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="nmg-V2-GJt">
                                 <rect key="frame" x="20" y="186" width="42" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -165,14 +165,14 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" minimumFontSize="10" id="aDE-UJ-PkN">
-                                <rect key="frame" x="84" y="187" width="42" height="21"/>
+                                <rect key="frame" x="84" y="187" width="74" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" minimumFontSize="10" id="ZxZ-iT-Qld">
-                                <rect key="frame" x="219" y="187" width="42" height="21"/>
+                                <rect key="frame" x="219" y="187" width="81" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -207,8 +207,8 @@
                         <outlet property="accX" destination="oKe-li-5Jx" id="yY6-IC-Au2"/>
                         <outlet property="accY" destination="tFV-I2-GFL" id="m53-Xh-iRN"/>
                         <outlet property="accZ" destination="FtS-C3-r1r" id="6W3-y9-DZa"/>
-                        <outlet property="altitude" destination="aDE-UJ-PkN" id="Kcz-Pi-4is"/>
                         <outlet property="course" destination="O11-8f-OAz" id="xUo-an-2zx"/>
+                        <outlet property="latitude" destination="aDE-UJ-PkN" id="9ol-lK-Vj5"/>
                         <outlet property="longitude" destination="ZxZ-iT-Qld" id="iNK-7U-wPd"/>
                         <outlet property="speed" destination="mkA-bX-UL8" id="epf-IZ-Ds8"/>
                         <outlet property="time" destination="SfZ-t3-Lq2" id="bbJ-Wc-06D"/>

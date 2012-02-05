@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+#define myAppDelegate (AppDelegate*) [[UIApplication sharedApplication] delegate]
 
 @interface FirstViewController : UIViewController{
     
@@ -18,12 +20,14 @@
     IBOutlet UILabel *course;
     IBOutlet UILabel *longitude;
     IBOutlet UILabel *speed;
-    IBOutlet UILabel *altitude;
+    IBOutlet UILabel *latitude;
 }
 
 - (IBAction)acceleration:(id)sender;
 - (IBAction)deceleration:(id)sender;
 - (IBAction)rotation:(id)sender;
 - (IBAction)action:(id)sender;
+
+- (void) showGPS;
 
 @end

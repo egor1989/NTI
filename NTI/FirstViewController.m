@@ -21,7 +21,16 @@
 
 - (void)viewDidLoad
 {
+    
+    [[NSNotificationCenter defaultCenter]	
+     addObserver: self
+     selector: @selector(showGPS)
+     name: @"locateNotification"
+     object: nil]; 
+
     [super viewDidLoad];
+    
+    
 	// Do any additional setup after loading the view, typically from a nib.
 }
 
@@ -30,7 +39,7 @@
     accX = nil;
     accY = nil;
     accZ = nil;
-    altitude = nil;
+    latitude = nil;
     speed = nil;
     longitude = nil;
     course = nil;
@@ -66,6 +75,18 @@
     // Return YES for supported orientations
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
+
+
+- (void) showGPS{
+    CLLocation *location = [myAppDelegate lastLoc];  
+    //NSLog(@"lat = %@, lond = %@", [NSString stringWithFormat:@"%f", location.coordinate.latitude], [NSString stringWithFormat:@"%f", location.coordinate.longitude]);
+    course.text = [NSString stringWithFormat:@"%.2f",location.course];
+    longitude.text = [NSString stringWithFormat:@"%.6f", location.coordinate.longitude]; 
+    speed.text =  [NSString stringWithFormat:@"%.2f", location.speed];
+    latitude.text = [NSString stringWithFormat:@"%.6f", location.coordinate.latitude];
+    time.text = [NSString stringWithFormat:@"%.6f", [location.timestamp timeIntervalSince1970]];
+}
+
 
 - (IBAction)acceleration:(id)sender {
     NSLog(@"push acceleration");

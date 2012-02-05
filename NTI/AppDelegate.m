@@ -10,7 +10,7 @@
 
 @implementation AppDelegate
 
-@synthesize window = _window;
+@synthesize window = _window, lastLoc;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {
@@ -19,6 +19,7 @@
     locationManager.desiredAccuracy=kCLLocationAccuracyBest;
     
     lastLoc = [[CLLocation alloc] init];
+    [self startGPSDetect];
     return YES;
 }
 
@@ -37,6 +38,13 @@
 
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation{
+    
+    
+    lastLoc = [[CLLocation alloc] initWithCoordinate:newLocation.coordinate altitude:newLocation.altitude horizontalAccuracy:newLocation.horizontalAccuracy verticalAccuracy:newLocation.verticalAccuracy course:newLocation.course speed:newLocation.speed timestamp:newLocation.timestamp];
+    
+    NSLog(@"lat = %@, lond = %@", [NSString stringWithFormat:@"%f", lastLoc.coordinate.latitude], [NSString stringWithFormat:@"%f", lastLoc.coordinate.longitude]);
+    
+    [[NSNotificationCenter defaultCenter]	postNotificationName:	@"locateNotification" object:  nil];
     
 }
 
