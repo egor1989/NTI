@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		276C4C9814DEE94D00C469A6 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 276C4C9714DEE94D00C469A6 /* CoreMotion.framework */; };
 		53E0A76B14DEC75D004E3E1B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53E0A76A14DEC75D004E3E1B /* UIKit.framework */; };
 		53E0A76D14DEC75D004E3E1B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53E0A76C14DEC75D004E3E1B /* Foundation.framework */; };
 		53E0A76F14DEC75D004E3E1B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53E0A76E14DEC75D004E3E1B /* CoreGraphics.framework */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		276C4C9714DEE94D00C469A6 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		53E0A76614DEC75D004E3E1B /* NTI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NTI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		53E0A76A14DEC75D004E3E1B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		53E0A76C14DEC75D004E3E1B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -55,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				276C4C9814DEE94D00C469A6 /* CoreMotion.framework in Frameworks */,
 				53E0A79E14DEDE6F004E3E1B /* libsqlite3.0.dylib in Frameworks */,
 				53E0A79F14DEDE6F004E3E1B /* libsqlite3.dylib in Frameworks */,
 				53E0A79B14DEDE37004E3E1B /* CoreLocation.framework in Frameworks */,
@@ -67,6 +70,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		276C4C9014DEE6D500C469A6 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				53E0A77F14DEC75D004E3E1B /* FirstViewController.h */,
+				53E0A78014DEC75D004E3E1B /* FirstViewController.m */,
+				53E0A78614DEC75D004E3E1B /* SecondViewController.h */,
+				53E0A78714DEC75D004E3E1B /* SecondViewController.m */,
+			);
+			name = ViewControllers;
+			sourceTree = "<group>";
+		};
+		276C4C9214DEE6EA00C469A6 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				53E0A78214DEC75D004E3E1B /* first.png */,
+				53E0A78414DEC75D004E3E1B /* first@2x.png */,
+				53E0A78914DEC75D004E3E1B /* second.png */,
+				53E0A78B14DEC75D004E3E1B /* second@2x.png */,
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
 		53E0A75B14DEC75D004E3E1B = {
 			isa = PBXGroup;
 			children = (
@@ -87,6 +112,7 @@
 		53E0A76914DEC75D004E3E1B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				276C4C9714DEE94D00C469A6 /* CoreMotion.framework */,
 				53E0A79A14DEDE37004E3E1B /* CoreLocation.framework */,
 				53E0A76A14DEC75D004E3E1B /* UIKit.framework */,
 				53E0A76C14DEC75D004E3E1B /* Foundation.framework */,
@@ -102,14 +128,8 @@
 				53E0A77914DEC75D004E3E1B /* AppDelegate.h */,
 				53E0A77A14DEC75D004E3E1B /* AppDelegate.m */,
 				53E0A77C14DEC75D004E3E1B /* MainStoryboard.storyboard */,
-				53E0A77F14DEC75D004E3E1B /* FirstViewController.h */,
-				53E0A78014DEC75D004E3E1B /* FirstViewController.m */,
-				53E0A78214DEC75D004E3E1B /* first.png */,
-				53E0A78414DEC75D004E3E1B /* first@2x.png */,
-				53E0A78614DEC75D004E3E1B /* SecondViewController.h */,
-				53E0A78714DEC75D004E3E1B /* SecondViewController.m */,
-				53E0A78914DEC75D004E3E1B /* second.png */,
-				53E0A78B14DEC75D004E3E1B /* second@2x.png */,
+				276C4C9014DEE6D500C469A6 /* ViewControllers */,
+				276C4C9214DEE6EA00C469A6 /* Images */,
 				53E0A77114DEC75D004E3E1B /* Supporting Files */,
 			);
 			path = NTI;
@@ -316,6 +336,7 @@
 				53E0A79114DEC75D004E3E1B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

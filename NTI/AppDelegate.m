@@ -12,6 +12,8 @@
 
 @synthesize window = _window;
 
+#define accelUpdateFrequency 30.0	
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {
     locationManager=[[CLLocationManager alloc] init];
@@ -19,6 +21,10 @@
     locationManager.desiredAccuracy=kCLLocationAccuracyBest;
     
     lastLoc = [[CLLocation alloc] init];
+    
+    motionManager = [[CMMotionManager alloc] init];
+    motionManager.accelerometerUpdateInterval = 1.0 / accelUpdateFrequency;
+    [self startAccelerometerDetect];
     return YES;
 }
 
@@ -35,10 +41,31 @@
     gpsState=YES;
 }
 
-
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation{
     
 }
+
+//accelerometer
+- (void)stopAccelerometerDetect {
+    [motionManager stopAccelerometerUpdates];
+}
+
+- (void)startAccelerometerDetect
+{
+    [motionManager startAccelerometerUpdatesToQueue:[[NSOperationQueue alloc] init]
+                                        withHandler:^(CMAccelerometerData *data, NSError *error) {
+                                            dispatch_async(dispatch_get_main_queue(), ^{
+                                                NSDictionary* accDict = [NSDictionary dictionaryWithObject: data
+                                                                                                    forKey: @"accel"];
+                                                [[NSNotificationCenter defaultCenter]	postNotificationName:@"accelNotification" 
+                                                                                                    object:  nil
+                                                                                                  userInfo:accDict];
+                                                NSLog(@"accNot");
+                                            });
+                                        }
+     ];
+}
+
 
 
 
