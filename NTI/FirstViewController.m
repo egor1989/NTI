@@ -16,7 +16,11 @@
     accX.text=[NSString stringWithFormat:@"%f", currentAcceleration.x];
     accY.text=[NSString stringWithFormat:@"%f", currentAcceleration.y];
     accZ.text=[NSString stringWithFormat:@"%f", currentAcceleration.z];
-    [databaseAction addRecord:currentAcceleration Type:0];
+    
+    time.text = [NSString stringWithFormat:@"%.5f",[[[NSDate alloc ]init]timeIntervalSince1970]];
+    if (writeInDB) {
+        [databaseAction addRecord:currentAcceleration Type:0];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -33,6 +37,7 @@
     
     [super viewDidLoad];
     databaseAction = [[DatabaseActions alloc] initDataBase];
+    writeInDB = NO;
 	// Do any additional setup after loading the view, typically from a nib.
 }
 
@@ -111,36 +116,41 @@
     longitude.text = [NSString stringWithFormat:@"%.6f", location.coordinate.longitude]; 
     speed.text =  [NSString stringWithFormat:@"%.2f", location.speed];
     latitude.text = [NSString stringWithFormat:@"%.6f", location.coordinate.latitude];
-    time.text = [NSString stringWithFormat:@"%.6f", [location.timestamp timeIntervalSince1970]];
+
 }
 
 
 - (IBAction)acceleration:(id)sender {
     NSLog(@"push acceleration");
-    //записать в бд запись с флагом что вручную
+    [databaseAction addRecord:currentAcceleration Type:1];
 }
 
 - (IBAction)deceleration:(id)sender {
      NSLog(@"push deceleration");
+    [databaseAction addRecord:currentAcceleration Type:2];
     
 }
 
 - (IBAction)rotation:(id)sender {
-     NSLog(@"push rotation");
+    [databaseAction addRecord:currentAcceleration Type:3];
 }
 
 - (IBAction)actionButton:(id)sender {
     NSLog(@"%@", action.titleLabel.text);
     if ([action.titleLabel.text isEqualToString:@"Start"]) {
         [action setTitle:@"Stop" forState:UIControlStateNormal];
-        
+        writeInDB = YES;
         //start write to database
     }
     else {
         [action setTitle:@"Start" forState:UIControlStateNormal];
-        
+        writeInDB =NO;
         //stop write to database
     }
     NSLog(@"push action");
+}
+
+- (IBAction)clearDB:(id)sender {
+    [databaseAction clearDatabase];
 }
 @end

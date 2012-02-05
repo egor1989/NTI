@@ -31,12 +31,14 @@
     CMAcceleration currentAcceleration;
     
     DatabaseActions *databaseAction;
+    BOOL writeInDB;
 }
 
 - (IBAction)acceleration:(id)sender;
 - (IBAction)deceleration:(id)sender;
 - (IBAction)rotation:(id)sender;
 - (IBAction)actionButton:(id)sender;
+- (IBAction)clearDB:(id)sender;
 
 - (void) showGPS;
 
