@@ -10,7 +10,7 @@
 
 @implementation AppDelegate
 
-@synthesize window = _window;
+@synthesize window = _window, lastLoc;
 
 #define accelUpdateFrequency 30.0	
 
@@ -21,10 +21,11 @@
     locationManager.desiredAccuracy=kCLLocationAccuracyBest;
     
     lastLoc = [[CLLocation alloc] init];
-    
+    [self startGPSDetect];
     motionManager = [[CMMotionManager alloc] init];
     motionManager.accelerometerUpdateInterval = 1.0 / accelUpdateFrequency;
     [self startAccelerometerDetect];
+
     return YES;
 }
 
@@ -41,7 +42,16 @@
     gpsState=YES;
 }
 
+-(double) getTime {
+    //[locationManager.location.timestamp timeIntervalSince1970];
+    return [locationManager.location.timestamp timeIntervalSince1970];;
+}
+
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation{
+    
+    lastLoc = [[CLLocation alloc] initWithCoordinate:newLocation.coordinate altitude:newLocation.altitude horizontalAccuracy:newLocation.horizontalAccuracy verticalAccuracy:newLocation.verticalAccuracy course:newLocation.course speed:newLocation.speed timestamp:newLocation.timestamp];
+        
+    [[NSNotificationCenter defaultCenter]	postNotificationName:	@"locateNotification" object:  nil];
 }
 
 //accelerometer

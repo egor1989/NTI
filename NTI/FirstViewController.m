@@ -29,6 +29,8 @@
 
 - (void)viewDidLoad
 {
+    
+    
     [super viewDidLoad];
     databaseAction = [[DatabaseActions alloc] initDataBase];
 	// Do any additional setup after loading the view, typically from a nib.
@@ -39,7 +41,7 @@
     accX = nil;
     accY = nil;
     accZ = nil;
-    altitude = nil;
+    latitude = nil;
     speed = nil;
     longitude = nil;
     course = nil;
@@ -61,6 +63,14 @@
     
     [[NSNotificationCenter defaultCenter]	
      addObserver: self
+     selector: @selector(showGPS)
+     name: @"locateNotification"
+     object: nil]; 
+
+    
+    
+    [[NSNotificationCenter defaultCenter]	
+     addObserver: self
      selector: @selector(accelerometerReciver:)
      name: @"accelNotification"
      object: nil];
@@ -77,6 +87,12 @@
     
     [[NSNotificationCenter defaultCenter]	
      removeObserver: self
+     name: @"locateNotification"
+     object: nil]; 
+
+    
+    [[NSNotificationCenter defaultCenter]	
+     removeObserver: self
      name: @"accelNotification"
      object: nil];
 }
@@ -87,19 +103,44 @@
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
+
+- (void) showGPS{
+    CLLocation *location = [myAppDelegate lastLoc];  
+    //NSLog(@"lat = %@, lond = %@", [NSString stringWithFormat:@"%f", location.coordinate.latitude], [NSString stringWithFormat:@"%f", location.coordinate.longitude]);
+    course.text = [NSString stringWithFormat:@"%.2f",location.course];
+    longitude.text = [NSString stringWithFormat:@"%.6f", location.coordinate.longitude]; 
+    speed.text =  [NSString stringWithFormat:@"%.2f", location.speed];
+    latitude.text = [NSString stringWithFormat:@"%.6f", location.coordinate.latitude];
+    time.text = [NSString stringWithFormat:@"%.6f", [location.timestamp timeIntervalSince1970]];
+}
+
+
 - (IBAction)acceleration:(id)sender {
     NSLog(@"push acceleration");
+    //записать в бд запись с флагом что вручную
 }
 
 - (IBAction)deceleration:(id)sender {
      NSLog(@"push deceleration");
+    
 }
 
 - (IBAction)rotation:(id)sender {
      NSLog(@"push rotation");
 }
 
-- (IBAction)action:(id)sender {
+- (IBAction)actionButton:(id)sender {
+    NSLog(@"%@", action.titleLabel.text);
+    if ([action.titleLabel.text isEqualToString:@"Start"]) {
+        [action setTitle:@"Stop" forState:UIControlStateNormal];
+        
+        //start write to database
+    }
+    else {
+        [action setTitle:@"Start" forState:UIControlStateNormal];
+        
+        //stop write to database
+    }
     NSLog(@"push action");
 }
 @end

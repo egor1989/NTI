@@ -7,8 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+
+#import "AppDelegate.h"
+#define myAppDelegate (AppDelegate*) [[UIApplication sharedApplication] delegate]
+
 #import <CoreMotion/CoreMotion.h>
 #import "DatabaseActions.h"
+
 
 @interface FirstViewController : UIViewController{
     
@@ -20,7 +25,8 @@
     IBOutlet UILabel *course;
     IBOutlet UILabel *longitude;
     IBOutlet UILabel *speed;
-    IBOutlet UILabel *altitude;
+    IBOutlet UIButton *action;
+    IBOutlet UILabel *latitude;
     
     CMAcceleration currentAcceleration;
     
@@ -30,6 +36,8 @@
 - (IBAction)acceleration:(id)sender;
 - (IBAction)deceleration:(id)sender;
 - (IBAction)rotation:(id)sender;
-- (IBAction)action:(id)sender;
+- (IBAction)actionButton:(id)sender;
+
+- (void) showGPS;
 
 @end
