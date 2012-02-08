@@ -88,21 +88,22 @@ static sqlite3_stmt *addStmt = nil;
 }
 
 - (void) clearDatabase{
-        if(deleteStmt == nil) {
-            const char *sql = "delete from log";
-            if(sqlite3_prepare_v2(database, sql, -1, &deleteStmt, NULL) != SQLITE_OK)
-                NSAssert1(0, @"Error while creating delete statement. '%s'", sqlite3_errmsg(database));
-        }
-        
-        //When binding parameters, index starts from 1 and not zero.
-       // sqlite3_bind_int(deleteStmt, 1, coffeeID);
-        
-        if (SQLITE_DONE != sqlite3_step(deleteStmt)) 
-            NSAssert1(0, @"Error while deleting. '%s'", sqlite3_errmsg(database));
+    const char *sql = "delete from log";
+    if(sqlite3_prepare_v2(database, sql, -1, &deleteStmt, NULL) != SQLITE_OK)
+        NSAssert1(0, @"Error while creating delete statement. '%s'", sqlite3_errmsg(database));
     
-        
-        sqlite3_reset(deleteStmt);
+    if (SQLITE_DONE != sqlite3_step(deleteStmt)) 
+        NSAssert1(0, @"Error while deleting. '%s'", sqlite3_errmsg(database));
+
+    //thanks to http://stackoverflow.com/questions/1601697/sqlite-reset-primary-key-field
+    sql = "delete from sqlite_sequence where name='log'";
+    if(sqlite3_prepare_v2(database, sql, -1, &deleteStmt, NULL) != SQLITE_OK)
+        NSAssert1(0, @"Error while creating delete statement. '%s'", sqlite3_errmsg(database));
     
+    if (SQLITE_DONE != sqlite3_step(deleteStmt)) 
+        NSAssert1(0, @"Error while deleting. '%s'", sqlite3_errmsg(database));
+    
+    sqlite3_reset(deleteStmt);
 }
 
 /*
