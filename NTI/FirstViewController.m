@@ -9,6 +9,7 @@
 #import "FirstViewController.h"
 
 @implementation FirstViewController
+@synthesize forJSON;
 
 - (void) accelerometerReciver: (NSNotification*) theNotice{
     currentAcceleration=((CMAccelerometerData*)[theNotice.userInfo objectForKey: @"accel"]).acceleration;
@@ -31,8 +32,8 @@
         NSDictionary *entries = [NSDictionary dictionaryWithObjects:objs forKeys:keys];
         
         [forJSON addObject:entries];
-        NSInteger countInArray = forJSON.count;
-        NSLog(@"countInArray = %i", countInArray);
+    //   NSInteger countInArray = forJSON.count;
+    //    NSLog(@"countInArray = %i", countInArray);
     //    for (id key in entries) {
     //         NSLog(@"key: %@, value: %@", key, [entries objectForKey:key]);
     //    }
@@ -167,6 +168,7 @@
     else {
        // [accelButton setBackgroundColor:[UIColor whiteColor]];
         [accelButton setTitle:@"Ускорение" forState:UIControlStateNormal];
+        [[NSNotificationCenter defaultCenter]	postNotificationName:	@"convertToJSON" object:  nil];
         writeToFile = NO;
     }
         //[databaseAction addRecord:currentAcceleration Type:1];

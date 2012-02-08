@@ -67,6 +67,8 @@
 - (IBAction)actionButton:(id)sender;
 - (IBAction)clearDB:(id)sender;
 
+@property (nonatomic, retain) NSMutableArray *forJSON;
+
 
 
 - (void) showGPS;
