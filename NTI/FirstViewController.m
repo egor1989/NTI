@@ -18,9 +18,33 @@
     accZ.text=[NSString stringWithFormat:@"%f", currentAcceleration.z];
     
     time.text = [NSString stringWithFormat:@"%.5f",[[[NSDate alloc ]init]timeIntervalSince1970]];
-    if (writeInDB) {
-        [databaseAction addRecord:currentAcceleration Type:0];
+    
+   // if (writeInDB) {
+   //     [databaseAction addRecord:currentAcceleration Type:0];
+   // }
+
+    if (writeToFile) {
+       // double timestamp = [[[NSDate alloc ]init]timeIntervalSince1970];
+        
+       // keys = [NSArray arrayWithObjects:@"timestamp", @"acX", @"acY",@"gpsSpeed",@"gpsCourse", nil];
+        NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.5f",[[[NSDate alloc ]init]timeIntervalSince1970]], [NSString stringWithFormat:@"%f", currentAcceleration.x], [NSString stringWithFormat:@"%f", currentAcceleration.y], [NSString stringWithFormat:@"%.2f",location.course], [NSString stringWithFormat:@"%.2f",location.speed], nil];
+        NSDictionary *entries = [NSDictionary dictionaryWithObjects:objs forKeys:keys];
+        
+        [forJSON addObject:entries];
+        NSInteger countInArray = forJSON.count;
+        NSLog(@"countInArray = %i", countInArray);
+    //    for (id key in entries) {
+    //         NSLog(@"key: %@, value: %@", key, [entries objectForKey:key]);
+    //    }
+        
+
+        
+        
+        
+        NSLog(@"write");
+        
     }
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -38,6 +62,16 @@
     [super viewDidLoad];
     databaseAction = [[DatabaseActions alloc] initDataBase];
     writeInDB = NO;
+    
+    accelFileNumber = 0;
+    decelFileNumber = 0;
+    leftRotFileNumber = 0;
+    rightRotFileNumber = 0;
+    otherFile = 0;
+    forJSON = [[NSMutableArray alloc] init];
+    
+    keys = [NSArray arrayWithObjects:@"timestamp", @"acX", @"acY",@"gpsSpeed",@"gpsCourse", nil];
+
 	// Do any additional setup after loading the view, typically from a nib.
 }
 
@@ -110,7 +144,7 @@
 
 
 - (void) showGPS{
-    CLLocation *location = [myAppDelegate lastLoc];  
+    location = [myAppDelegate lastLoc];  
     //NSLog(@"lat = %@, lond = %@", [NSString stringWithFormat:@"%f", location.coordinate.latitude], [NSString stringWithFormat:@"%f", location.coordinate.longitude]);
     course.text = [NSString stringWithFormat:@"%.2f",location.course];
     longitude.text = [NSString stringWithFormat:@"%.6f", location.coordinate.longitude]; 
@@ -122,21 +156,70 @@
 
 - (IBAction)acceleration:(id)sender {
     NSLog(@"push acceleration");
-    [databaseAction addRecord:currentAcceleration Type:1];
+    if (![accelButton.titleLabel.text isEqualToString:@"Stop"]) {
+       // [accelButton setBackgroundColor:[UIColor greenColor]];
+        [accelButton setTitle:@"Stop" forState:UIControlStateNormal];
+        writeToFile = YES;
+        fileName = [NSString stringWithFormat: @"acceleration%i",accelFileNumber];
+        accelFileNumber++;
+        NSLog(@"%@", fileName);
+    }
+    else {
+       // [accelButton setBackgroundColor:[UIColor whiteColor]];
+        [accelButton setTitle:@"Ускорение" forState:UIControlStateNormal];
+        writeToFile = NO;
+    }
+        //[databaseAction addRecord:currentAcceleration Type:1];
 }
 
 - (IBAction)deceleration:(id)sender {
      NSLog(@"push deceleration");
-    [databaseAction addRecord:currentAcceleration Type:2];
+    if (![decelButton.titleLabel.text isEqualToString:@"Stop"]) {
+        decelFileNumber++;
+        [decelButton setTitle:@"Stop" forState:UIControlStateNormal];
+        fileName = [NSString stringWithFormat: @"deceleration%i",decelFileNumber];
+        writeToFile = YES;
+        
+    }
+    else {
+        [decelButton setTitle:@"Торможение" forState:UIControlStateNormal];
+        writeToFile = NO;
+    }
+    
+    //[databaseAction addRecord:currentAcceleration Type:2];
     
 }
 
 - (IBAction)leftRot:(id)sender {
-    [databaseAction addRecord:currentAcceleration Type:3];
+    if (![leftButton.titleLabel.text isEqualToString:@"Stop"]) {
+        [leftButton setTitle:@"Stop" forState:UIControlStateNormal];
+        fileName = [NSString stringWithFormat: @"leftRotation%i",leftRotFileNumber];
+        leftRotFileNumber++;
+        writeToFile = YES;
+    }
+    else {
+        [leftButton setTitle:@"Торможение" forState:UIControlStateNormal];
+        writeToFile = NO;
+    }
+
+    //[databaseAction addRecord:currentAcceleration Type:3];
 }
 
 - (IBAction)rightRot:(id)sender {
-    [databaseAction addRecord:currentAcceleration Type:4];
+    if (![rightButton.titleLabel.text isEqualToString:@"Stop"]) {
+        [rightButton setTitle:@"Stop" forState:UIControlStateNormal];
+        fileName = [NSString stringWithFormat: @"rightRotation%i",rightRotFileNumber];
+        rightRotFileNumber++;
+
+        writeToFile = YES;
+    }
+    else {
+        [rightButton setTitle:@"Торможение" forState:UIControlStateNormal];
+        writeToFile = NO;
+        
+    }
+
+    //[databaseAction addRecord:currentAcceleration Type:4];
 }
 
 
@@ -144,12 +227,18 @@
     NSLog(@"%@", action.titleLabel.text);
     if ([action.titleLabel.text isEqualToString:@"Start"]) {
         [action setTitle:@"Stop" forState:UIControlStateNormal];
-        writeInDB = YES;
+        
+        writeToFile = YES;
+        fileName = [NSString stringWithFormat:@"other%i", otherFile];
+        otherFile++;
+       // writeInDB = YES;
         //start write to database
     }
     else {
         [action setTitle:@"Start" forState:UIControlStateNormal];
-        writeInDB =NO;
+        writeToFile = NO;
+        
+      //  writeInDB =NO;
         //stop write to database
     }
     NSLog(@"push action");
@@ -158,4 +247,7 @@
 - (IBAction)clearDB:(id)sender {
     [databaseAction clearDatabase];
 }
+
+
+
 @end

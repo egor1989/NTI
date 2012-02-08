@@ -25,13 +25,39 @@
     IBOutlet UILabel *course;
     IBOutlet UILabel *longitude;
     IBOutlet UILabel *speed;
-    IBOutlet UIButton *action;
+    
     IBOutlet UILabel *latitude;
     
     CMAcceleration currentAcceleration;
     
     DatabaseActions *databaseAction;
+    
+    IBOutlet UIButton *action;
+    NSInteger otherFile;
+    
+    IBOutlet UIButton *accelButton;
+    BOOL writeToAccelFile;
+    NSInteger accelFileNumber;
+    IBOutlet UIButton *decelButton;
+    BOOL writeToDecelFile;
+    NSInteger decelFileNumber;
+    IBOutlet UIButton *rightButton;
+    BOOL writeToRightRotFile;
+    NSInteger rightRotFileNumber;
+    IBOutlet UIButton *leftButton;
+    BOOL writeToLeftRotFile;
+    NSInteger leftRotFileNumber;
+    
+    BOOL writeToFile;
+    NSString *fileName;
+    
     BOOL writeInDB;
+    
+    NSArray *keys;
+    NSMutableArray *forJSON;
+   // NSDictionary *entries;
+    
+    CLLocation *location;
 }
 
 - (IBAction)acceleration:(id)sender;
@@ -40,6 +66,8 @@
 - (IBAction)leftRot:(id)sender;
 - (IBAction)actionButton:(id)sender;
 - (IBAction)clearDB:(id)sender;
+
+
 
 - (void) showGPS;
 
