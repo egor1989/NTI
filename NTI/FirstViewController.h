@@ -36,7 +36,8 @@
 
 - (IBAction)acceleration:(id)sender;
 - (IBAction)deceleration:(id)sender;
-- (IBAction)rotation:(id)sender;
+- (IBAction)rightRot:(id)sender;
+- (IBAction)leftRot:(id)sender;
 - (IBAction)actionButton:(id)sender;
 - (IBAction)clearDB:(id)sender;
 

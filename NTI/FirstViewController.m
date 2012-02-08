@@ -131,9 +131,14 @@
     
 }
 
-- (IBAction)rotation:(id)sender {
+- (IBAction)leftRot:(id)sender {
     [databaseAction addRecord:currentAcceleration Type:3];
 }
+
+- (IBAction)rightRot:(id)sender {
+    [databaseAction addRecord:currentAcceleration Type:4];
+}
+
 
 - (IBAction)actionButton:(id)sender {
     NSLog(@"%@", action.titleLabel.text);
