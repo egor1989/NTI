@@ -25,9 +25,7 @@
     NSLog(@"convert");
     NSLog(@"count %i", arrayForConvert.count);
     
-  //  for (id key in entries) {
-  //               NSLog(@"key: %@, value: %@", key, [entries objectForKey:key]);
-  //          }
+
     NSError *error = nil;
     NSData  *jsonArray = [NSJSONSerialization dataWithJSONObject:arrayForConvert options:NSJSONWritingPrettyPrinted error:&error]; 
     

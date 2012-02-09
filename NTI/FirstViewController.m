@@ -27,28 +27,22 @@
     if (writeToFile) {
        // double timestamp = [[[NSDate alloc ]init]timeIntervalSince1970];
         
-       // keys = [NSArray arrayWithObjects:@"timestamp", @"acX", @"acY",@"gpsSpeed",@"gpsCourse", nil];
+      
         
         //вызвать вычисление x y здесь и записать вместо предыдущих 
+      
+        NSDictionary *acc = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%f", currentAcceleration.x], @"accX", [NSString stringWithFormat:@"%f", currentAcceleration.y], @"accY", nil];
         
-        NSArray *acc = [NSArray arrayWithObjects: [NSString stringWithFormat:@"%f", currentAcceleration.x], [NSString stringWithFormat:@"%f", currentAcceleration.y], nil];
-        NSArray *gps = [NSArray arrayWithObjects: [NSString stringWithFormat:@"%.2f",location.course], [NSString stringWithFormat:@"%.2f",location.speed], nil];
-        
+        NSDictionary *gps = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%.2f",location.course], @"direction", [NSString stringWithFormat:@"%.2f",location.speed*3,6], @"speed", nil];
         
         NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.5f",[[[NSDate alloc ]init]timeIntervalSince1970]], acc,gps, nil];
         NSDictionary *entries = [NSDictionary dictionaryWithObjects:objs forKeys:keys];
         
         [forJSON addObject:entries];
-       NSInteger countInArray = forJSON.count;
+        
+        NSInteger countInArray = forJSON.count;
         NSLog(@"countInArray = %i", countInArray);
-    //    for (id key in entries) {
-    //         NSLog(@"key: %@, value: %@", key, [entries objectForKey:key]);
-    //    }
-        
-
-        
-        
-        
+   
         NSLog(@"write");
         
     }
@@ -76,7 +70,7 @@
     leftRotFileNumber = 0;
     rightRotFileNumber = 0;
     otherFile = 0;
-    forJSON = [[NSMutableArray alloc] init];
+   // forJSON = [[NSMutableArray alloc] init];
     
     keys = [NSArray arrayWithObjects:@"timestamp", @"acc", @"gps", nil];
     
@@ -157,8 +151,9 @@
     location = [myAppDelegate lastLoc];  
     //NSLog(@"lat = %@, lond = %@", [NSString stringWithFormat:@"%f", location.coordinate.latitude], [NSString stringWithFormat:@"%f", location.coordinate.longitude]);
     course.text = [NSString stringWithFormat:@"%.2f",location.course];
-    longitude.text = [NSString stringWithFormat:@"%.6f", location.coordinate.longitude]; 
-    speed.text =  [NSString stringWithFormat:@"%.2f", location.speed];
+    longitude.text = [NSString stringWithFormat:@"%.6f", location.coordinate.longitude];
+    if (location.speed <= 0) speed.text = @"0";
+    else speed.text =  [NSString stringWithFormat:@"%.2f", location.speed*3,6];
     latitude.text = [NSString stringWithFormat:@"%.6f", location.coordinate.latitude];
 
 }
@@ -167,6 +162,7 @@
 - (IBAction)acceleration:(id)sender {
     NSLog(@"push acceleration");
     if (![accelButton.titleLabel.text isEqualToString:@"Stop"]) {
+        forJSON = [[NSMutableArray alloc] init];
        // [accelButton setBackgroundColor:[UIColor greenColor]];
         [accelButton setTitle:@"Stop" forState:UIControlStateNormal];
         writeToFile = YES;
@@ -177,9 +173,10 @@
     else {
        // [accelButton setBackgroundColor:[UIColor whiteColor]];
         [accelButton setTitle:@"Ускорение" forState:UIControlStateNormal];
-        [[NSNotificationCenter defaultCenter]	postNotificationName:	@"convertToJSON" object:  nil];
         writeToFile = NO;
         [jsonConvert convert:forJSON];
+        
+        //[forJSON removeAllObjects];
         
     }
         //[databaseAction addRecord:currentAcceleration Type:1];
@@ -188,6 +185,7 @@
 - (IBAction)deceleration:(id)sender {
      NSLog(@"push deceleration");
     if (![decelButton.titleLabel.text isEqualToString:@"Stop"]) {
+        forJSON = [[NSMutableArray alloc] init];
         decelFileNumber++;
         [decelButton setTitle:@"Stop" forState:UIControlStateNormal];
         fileName = [NSString stringWithFormat: @"deceleration%i",decelFileNumber];
@@ -197,6 +195,7 @@
     else {
         [decelButton setTitle:@"Торможение" forState:UIControlStateNormal];
         writeToFile = NO;
+        [jsonConvert convert:forJSON];
     }
     
     //[databaseAction addRecord:currentAcceleration Type:2];
@@ -205,6 +204,7 @@
 
 - (IBAction)leftRot:(id)sender {
     if (![leftButton.titleLabel.text isEqualToString:@"Stop"]) {
+        forJSON = [[NSMutableArray alloc] init];
         [leftButton setTitle:@"Stop" forState:UIControlStateNormal];
         fileName = [NSString stringWithFormat: @"leftRotation%i",leftRotFileNumber];
         leftRotFileNumber++;
@@ -213,6 +213,7 @@
     else {
         [leftButton setTitle:@"<-" forState:UIControlStateNormal];
         writeToFile = NO;
+        [jsonConvert convert:forJSON];
     }
 
     //[databaseAction addRecord:currentAcceleration Type:3];
@@ -220,6 +221,7 @@
 
 - (IBAction)rightRot:(id)sender {
     if (![rightButton.titleLabel.text isEqualToString:@"Stop"]) {
+        forJSON = [[NSMutableArray alloc] init];
         [rightButton setTitle:@"Stop" forState:UIControlStateNormal];
         fileName = [NSString stringWithFormat: @"rightRotation%i",rightRotFileNumber];
         rightRotFileNumber++;
@@ -229,6 +231,7 @@
     else {
         [rightButton setTitle:@"->" forState:UIControlStateNormal];
         writeToFile = NO;
+        [jsonConvert convert:forJSON];
         
     }
 
@@ -239,6 +242,7 @@
 - (IBAction)actionButton:(id)sender {
     NSLog(@"%@", action.titleLabel.text);
     if ([action.titleLabel.text isEqualToString:@"Start"]) {
+        forJSON = [[NSMutableArray alloc] init];
         [action setTitle:@"Stop" forState:UIControlStateNormal];
         
         writeToFile = YES;
@@ -250,6 +254,7 @@
     else {
         [action setTitle:@"Start" forState:UIControlStateNormal];
         writeToFile = NO;
+        [jsonConvert convert:forJSON];
         
       //  writeInDB =NO;
         //stop write to database
