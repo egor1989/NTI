@@ -13,6 +13,7 @@
 
 #import <CoreMotion/CoreMotion.h>
 #import "DatabaseActions.h"
+#import "toJSON.h"
 
 
 @interface FirstViewController : UIViewController{
@@ -56,6 +57,8 @@
     NSArray *keys;
     NSMutableArray *forJSON;
    // NSDictionary *entries;
+    
+    toJSON *jsonConvert;
     
     CLLocation *location;
 }

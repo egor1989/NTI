@@ -28,12 +28,19 @@
        // double timestamp = [[[NSDate alloc ]init]timeIntervalSince1970];
         
        // keys = [NSArray arrayWithObjects:@"timestamp", @"acX", @"acY",@"gpsSpeed",@"gpsCourse", nil];
-        NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.5f",[[[NSDate alloc ]init]timeIntervalSince1970]], [NSString stringWithFormat:@"%f", currentAcceleration.x], [NSString stringWithFormat:@"%f", currentAcceleration.y], [NSString stringWithFormat:@"%.2f",location.course], [NSString stringWithFormat:@"%.2f",location.speed], nil];
+        
+        //вызвать вычисление x y здесь и записать вместо предыдущих 
+        
+        NSArray *acc = [NSArray arrayWithObjects: [NSString stringWithFormat:@"%f", currentAcceleration.x], [NSString stringWithFormat:@"%f", currentAcceleration.y], nil];
+        NSArray *gps = [NSArray arrayWithObjects: [NSString stringWithFormat:@"%.2f",location.course], [NSString stringWithFormat:@"%.2f",location.speed], nil];
+        
+        
+        NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.5f",[[[NSDate alloc ]init]timeIntervalSince1970]], acc,gps, nil];
         NSDictionary *entries = [NSDictionary dictionaryWithObjects:objs forKeys:keys];
         
         [forJSON addObject:entries];
-    //   NSInteger countInArray = forJSON.count;
-    //    NSLog(@"countInArray = %i", countInArray);
+       NSInteger countInArray = forJSON.count;
+        NSLog(@"countInArray = %i", countInArray);
     //    for (id key in entries) {
     //         NSLog(@"key: %@, value: %@", key, [entries objectForKey:key]);
     //    }
@@ -71,7 +78,9 @@
     otherFile = 0;
     forJSON = [[NSMutableArray alloc] init];
     
-    keys = [NSArray arrayWithObjects:@"timestamp", @"acX", @"acY",@"gpsSpeed",@"gpsCourse", nil];
+    keys = [NSArray arrayWithObjects:@"timestamp", @"acc", @"gps", nil];
+    
+    jsonConvert = [[toJSON alloc]init];
 
 	// Do any additional setup after loading the view, typically from a nib.
 }
@@ -170,6 +179,8 @@
         [accelButton setTitle:@"Ускорение" forState:UIControlStateNormal];
         [[NSNotificationCenter defaultCenter]	postNotificationName:	@"convertToJSON" object:  nil];
         writeToFile = NO;
+        [jsonConvert convert:forJSON];
+        
     }
         //[databaseAction addRecord:currentAcceleration Type:1];
 }
@@ -200,7 +211,7 @@
         writeToFile = YES;
     }
     else {
-        [leftButton setTitle:@"Торможение" forState:UIControlStateNormal];
+        [leftButton setTitle:@"<-" forState:UIControlStateNormal];
         writeToFile = NO;
     }
 
@@ -216,7 +227,7 @@
         writeToFile = YES;
     }
     else {
-        [rightButton setTitle:@"Торможение" forState:UIControlStateNormal];
+        [rightButton setTitle:@"->" forState:UIControlStateNormal];
         writeToFile = NO;
         
     }

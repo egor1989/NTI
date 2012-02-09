@@ -14,20 +14,27 @@
     self = [super init];
     
     if (self != nil) {
-        [[NSNotificationCenter defaultCenter]	
-         addObserver: self
-         selector: @selector(convert)
-         name: @"convertToJSON"
-         object: nil]; 
-        
+                
     }
     return self;
 }
 
-- (void)convert{
-    
+- (void)convert : (NSArray *)arrayForConvert{
+    // keys = [NSArray arrayWithObjects:@"timestamp", @"acX", @"acY",@"gpsSpeed",@"gpsCourse", nil];
+
     NSLog(@"convert");
-   // NSArray *forConvert = [
+    NSLog(@"count %i", arrayForConvert.count);
+    
+  //  for (id key in entries) {
+  //               NSLog(@"key: %@, value: %@", key, [entries objectForKey:key]);
+  //          }
+    NSError *error = nil;
+    NSData  *jsonArray = [NSJSONSerialization dataWithJSONObject:arrayForConvert options:NSJSONWritingPrettyPrinted error:&error]; 
+    
+    NSString *JSON = [[NSString alloc] initWithData:jsonArray encoding:NSASCIIStringEncoding]; 
+    NSLog(@"JSON %@", JSON);
+   // NSArray *acc = [NSArray arrayWithObject:[arrayForConvert objectAtIndex:],[],nil];
+    
   /*
     //build an info object and convert to json
     NSDictionary* info = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -41,9 +48,10 @@
                           nil];
     
     //convert object to data
-    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:info 
-                                                       options:NSJSONWritingPrettyPrinted error:&error];
    */
+ //   NSData* jsonData = [NSJSONSerialization dataWithJSONObject:arrayForConvert 
+ //                                                      options:NSJSONWritingPrettyPrinted error:&error];
+   
 }
 
 
