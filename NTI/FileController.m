@@ -71,9 +71,34 @@
 - (BOOL) deleteFile{
     
 	NSLog(@"************* deleteFileAction *************");
-	
+	NSError *error = nil;
+    for (NSString *file in [self.fileMgr contentsOfDirectoryAtPath:self.documentsDirectory error:&error])
+    {    
+        NSString *deleteFilePath = [self.documentsDirectory stringByAppendingPathComponent:file];
+        NSLog(@"File : %@", deleteFilePath);
+        
+        BOOL fileDeleted = [self.fileMgr removeItemAtPath:deleteFilePath error:&error];
+        
+        if (fileDeleted != YES || error != nil)
+        {
+            NSLog(@"ERROR!");
+        }
+    }
+    
+    NSUserDefaults *userDefaults =[NSUserDefaults standardUserDefaults];
+    [userDefaults setInteger:0 forKey: @"accelFileNumber"];
+    [userDefaults setInteger:0 forKey: @"decelFileNumber"];
+    [userDefaults setInteger:0 forKey: @"leftRotFileNumber"];
+    [userDefaults setInteger:0 forKey: @"rightRotFileNumber"];
+    [userDefaults setInteger:0 forKey: @"otherFile"];
+    [userDefaults synchronize];
+    
+    return YES;
+    
+    
+    
 	//Test whether this file exists now that we have tried to remove it
-	if([self.fileMgr fileExistsAtPath:self.filePath])
+/*	if([self.fileMgr fileExistsAtPath:self.filePath])
 	{
 		NSLog(@"File exists try removing it");
 		// attempt to delete file from documents directory
@@ -95,7 +120,7 @@
         return FALSE;
 		
 	}
-    
+  */  
     
 }
 

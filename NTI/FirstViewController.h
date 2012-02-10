@@ -42,6 +42,7 @@
     
     IBOutlet UIButton *action;
     NSInteger otherFile;
+    NSUserDefaults *userDefaults;
     
     IBOutlet UIButton *accelButton;
     BOOL writeToAccelFile;

@@ -45,11 +45,7 @@
    // }
 
     if (writeToFile) {
-       // double timestamp = [[[NSDate alloc ]init]timeIntervalSince1970];
-        
-      
-        
-        //вызвать вычисление x y здесь и записать вместо предыдущих 
+
       
         NSDictionary *acc = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%f", x], @"accX", [NSString stringWithFormat:@"%f", y], @"accY", nil];
         
@@ -84,14 +80,14 @@
     [super viewDidLoad];
     databaseAction = [[DatabaseActions alloc] initDataBase];
     writeInDB = NO;
-    
-    accelFileNumber = 0;
-    decelFileNumber = 0;
-    leftRotFileNumber = 0;
-    rightRotFileNumber = 0;
-    otherFile = 0;
-   // forJSON = [[NSMutableArray alloc] init];
-    
+    userDefaults = [NSUserDefaults standardUserDefaults];
+
+   // accelFileNumber = 0;
+   // decelFileNumber = 0;
+   // leftRotFileNumber = 0;
+   // rightRotFileNumber = 0;
+   // otherFile = 0;
+       
     keys = [NSArray arrayWithObjects:@"timestamp", @"acc", @"gps", nil];
     
     jsonConvert = [[toJSON alloc]init];
@@ -188,8 +184,11 @@
        // [accelButton setBackgroundColor:[UIColor greenColor]];
         [accelButton setTitle:@"Stop" forState:UIControlStateNormal];
         writeToFile = YES;
-        fileName = [NSString stringWithFormat: @"acceleration%i",accelFileNumber];
-        accelFileNumber++;
+        fileName = [NSString stringWithFormat: @"acceleration%i",[userDefaults integerForKey:@"accelFileNumber"]];
+        accelFileNumber = [userDefaults integerForKey:@"accelFileNumber"]+1;
+        [userDefaults setInteger:accelFileNumber forKey:@"accelFileNumber"];
+        [userDefaults synchronize];
+        NSLog(@"accelFileNumber %i", [userDefaults integerForKey:@"accelFileNumber"]);
         NSLog(@"%@", fileName);
     }
     else {
@@ -211,14 +210,20 @@
         forJSON = [[NSMutableArray alloc] init];
         decelFileNumber++;
         [decelButton setTitle:@"Stop" forState:UIControlStateNormal];
-        fileName = [NSString stringWithFormat: @"deceleration%i",decelFileNumber];
+        fileName = [NSString stringWithFormat: @"deceleration%i",[userDefaults integerForKey:@"decelFileNumber"]];
+        decelFileNumber = [userDefaults integerForKey:@"decelFileNumber"]+1;
+        [userDefaults setInteger:decelFileNumber forKey:@"decelFileNumber"];
+        [userDefaults synchronize];
+
         writeToFile = YES;
         
     }
     else {
         [decelButton setTitle:@"Торможение" forState:UIControlStateNormal];
         writeToFile = NO;
-        [jsonConvert convert:forJSON];
+        NSString *JSON = [jsonConvert convert:forJSON];
+        [fileController writeToFile:JSON fileName:fileName];
+
     }
     
     //[databaseAction addRecord:currentAcceleration Type:2];
@@ -229,14 +234,18 @@
     if (![leftButton.titleLabel.text isEqualToString:@"Stop"]) {
         forJSON = [[NSMutableArray alloc] init];
         [leftButton setTitle:@"Stop" forState:UIControlStateNormal];
-        fileName = [NSString stringWithFormat: @"leftRotation%i",leftRotFileNumber];
-        leftRotFileNumber++;
+        fileName = [NSString stringWithFormat: @"leftRotation%i",[userDefaults integerForKey:@"leftRotFileNumber"]];
+        leftRotFileNumber = [userDefaults integerForKey:@"leftRotFileNumber"]+1;
+        [userDefaults setInteger:leftRotFileNumber forKey:@"leftRotFileNumber"];
+        [userDefaults synchronize];
         writeToFile = YES;
     }
     else {
         [leftButton setTitle:@"<-" forState:UIControlStateNormal];
         writeToFile = NO;
-        [jsonConvert convert:forJSON];
+        NSString *JSON = [jsonConvert convert:forJSON];
+        [fileController writeToFile:JSON fileName:fileName];
+
     }
 
     //[databaseAction addRecord:currentAcceleration Type:3];
@@ -246,15 +255,21 @@
     if (![rightButton.titleLabel.text isEqualToString:@"Stop"]) {
         forJSON = [[NSMutableArray alloc] init];
         [rightButton setTitle:@"Stop" forState:UIControlStateNormal];
-        fileName = [NSString stringWithFormat: @"rightRotation%i",rightRotFileNumber];
-        rightRotFileNumber++;
+        fileName = [NSString stringWithFormat: @"rightRotation%i",[userDefaults integerForKey:@"rightRotFileNumber"]];
+        rightRotFileNumber = [userDefaults integerForKey:@"rightRotFileNumber"]+1;
+        [userDefaults setInteger:rightRotFileNumber forKey:@"rightRotFileNumber"];
+        [userDefaults synchronize];
+
+       // rightRotFileNumber++;
 
         writeToFile = YES;
     }
     else {
         [rightButton setTitle:@"->" forState:UIControlStateNormal];
         writeToFile = NO;
-        [jsonConvert convert:forJSON];
+        NSString *JSON = [jsonConvert convert:forJSON];
+        [fileController writeToFile:JSON fileName:fileName];
+
         
     }
 
@@ -269,7 +284,12 @@
         [action setTitle:@"Stop" forState:UIControlStateNormal];
         
         writeToFile = YES;
-        fileName = [NSString stringWithFormat:@"other%i", otherFile];
+        fileName = [NSString stringWithFormat:@"other%i", [userDefaults integerForKey:@"otherFile"]];
+        otherFile = [userDefaults integerForKey:@"otherFile"]+1;
+        [userDefaults setInteger:otherFile forKey:@"otherFile"];
+        [userDefaults synchronize];
+
+        
         otherFile++;
        // writeInDB = YES;
         //start write to database
@@ -277,8 +297,8 @@
     else {
         [action setTitle:@"Start" forState:UIControlStateNormal];
         writeToFile = NO;
-        [jsonConvert convert:forJSON];
-        
+        NSString *JSON = [jsonConvert convert:forJSON];
+        [fileController writeToFile:JSON fileName:fileName];
       //  writeInDB =NO;
         //stop write to database
     }
@@ -286,7 +306,8 @@
 }
 
 - (IBAction)clearDB:(id)sender {
-    [databaseAction clearDatabase];
+    //[databaseAction clearDatabase];
+    [fileController deleteFile];
 }
 
 
