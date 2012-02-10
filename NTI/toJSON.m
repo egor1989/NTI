@@ -19,7 +19,7 @@
     return self;
 }
 
-- (void)convert : (NSArray *)arrayForConvert{
+- (NSString *)convert : (NSArray *)arrayForConvert{
     // keys = [NSArray arrayWithObjects:@"timestamp", @"acX", @"acY",@"gpsSpeed",@"gpsCourse", nil];
 
     NSLog(@"convert");
@@ -31,27 +31,11 @@
     
     NSString *JSON = [[NSString alloc] initWithData:jsonArray encoding:NSASCIIStringEncoding]; 
     NSLog(@"JSON %@", JSON);
-   // NSArray *acc = [NSArray arrayWithObject:[arrayForConvert objectAtIndex:],[],nil];
     
-  /*
-    //build an info object and convert to json
-    NSDictionary* info = [NSDictionary dictionaryWithObjectsAndKeys:
-                          [loan objectForKey:@"name"], 
-                          @"who",
-                          [(NSDictionary*)[loan objectForKey:@"location"] 
-                           objectForKey:@"country"], 
-                          @"where",
-                          [NSNumber numberWithFloat: outstandingAmount], 
-                          @"what",
-                          nil];
+    FileController *fileController = [[FileController alloc] init];
     
-    //convert object to data
-   */
- //   NSData* jsonData = [NSJSONSerialization dataWithJSONObject:arrayForConvert 
- //                                                      options:NSJSONWritingPrettyPrinted error:&error];
+    
    
 }
-
-
 
 @end

@@ -9,7 +9,7 @@
 #import "FirstViewController.h"
 
 @implementation FirstViewController
-@synthesize forJSON;
+@synthesize fileName;
 
 - (void) accelerometerReciver: (NSNotification*) theNotice{
     currentAcceleration=((CMAccelerometerData*)[theNotice.userInfo objectForKey: @"accel"]).acceleration;

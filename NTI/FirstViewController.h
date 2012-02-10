@@ -16,6 +16,8 @@
 #import "toJSON.h"
 
 
+
+
 @interface FirstViewController : UIViewController{
     
     IBOutlet UILabel *accX;
@@ -70,8 +72,8 @@
 - (IBAction)actionButton:(id)sender;
 - (IBAction)clearDB:(id)sender;
 
-@property (nonatomic, retain) NSMutableArray *forJSON;
 
+@property (nonatomic, retain) NSString *fileName;
 
 
 - (void) showGPS;

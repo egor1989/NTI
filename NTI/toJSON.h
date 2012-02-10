@@ -7,12 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "FileController.h"
 
 
 @interface toJSON : NSObject {
     
     
 }
-- (void)convert : (NSArray *)arrayForConvert;
+- (NSString *)convert : (NSArray *)arrayForConvert;
 
 @end
