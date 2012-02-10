@@ -7,14 +7,14 @@
 //
 
 #import "FileController.h"
-#import "FirstViewController.h"
+
 
 
 @implementation FileController
 
 @synthesize fileMgr, paths, documentsDirectory, filePath;
 
-- (id) init {
+- (id)init{
     
     self = [super init];
     
@@ -27,25 +27,23 @@
 	// get documents directory path
 	self.documentsDirectory = [paths objectAtIndex:0];
     
-    FirstViewController *firstViewController = [[FirstViewController alloc] init];
-    
-    fileName = firstViewController.fileName;
-    NSLog(@"fileName %@", fileName);
-    //fileName = @"holesData";
     // create the file name with qualified path ot the file
-	self.filePath = [documentsDirectory stringByAppendingPathComponent: fileName];
+	
    
     
 	return self;
 }
 
-- (BOOL) writeToFile:(NSString *)myString{
+- (BOOL) writeToFile:(NSString *)myString fileName: (NSString *)fileName{
     
-  NSLog(@"************* writeToFile *************");
+    NSLog(@"fileName %@", fileName);
+    self.filePath = [documentsDirectory stringByAppendingPathComponent: fileName];
+    
+    NSLog(@"************* writeToFile *************");
     if(![self.fileMgr fileExistsAtPath:self.filePath]){
         [self.fileMgr createFileAtPath:filePath contents:nil attributes:nil];
         NSLog(@"file created");
-        [[NSNotificationCenter defaultCenter]	postNotificationName:	@"fileSendButtonTitleUpdate" object:  nil];
+       
     }
     NSFileHandle *fileHandle = [NSFileHandle fileHandleForWritingAtPath:filePath];
     [fileHandle seekToEndOfFile];
@@ -120,9 +118,7 @@
 }
 
 
-- (NSString*) getFileName{
-    return fileName;
-}
+
 
 - (BOOL) isFileEmpty {
     if([self.fileMgr fileExistsAtPath:self.filePath]){

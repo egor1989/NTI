@@ -75,6 +75,7 @@
     keys = [NSArray arrayWithObjects:@"timestamp", @"acc", @"gps", nil];
     
     jsonConvert = [[toJSON alloc]init];
+    fileController = [[FileController alloc] init];
 
 	// Do any additional setup after loading the view, typically from a nib.
 }
@@ -91,6 +92,7 @@
     time = nil;
 
     [super viewDidUnload];
+    
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
@@ -174,8 +176,9 @@
        // [accelButton setBackgroundColor:[UIColor whiteColor]];
         [accelButton setTitle:@"Ускорение" forState:UIControlStateNormal];
         writeToFile = NO;
-        [jsonConvert convert:forJSON];
         
+        NSString *JSON = [jsonConvert convert:forJSON];
+        [fileController writeToFile:JSON fileName:fileName];
         //[forJSON removeAllObjects];
         
     }

@@ -32,9 +32,8 @@
     NSString *JSON = [[NSString alloc] initWithData:jsonArray encoding:NSASCIIStringEncoding]; 
     NSLog(@"JSON %@", JSON);
     
-    FileController *fileController = [[FileController alloc] init];
     
-    
+    return JSON;
    
 }
 

@@ -13,6 +13,7 @@
 
 #import <CoreMotion/CoreMotion.h>
 #import "DatabaseActions.h"
+#import "FileController.h"
 #import "toJSON.h"
 
 
@@ -34,6 +35,7 @@
     CMAcceleration currentAcceleration;
     
     DatabaseActions *databaseAction;
+    FileController *fileController;
     
     IBOutlet UIButton *action;
     NSInteger otherFile;

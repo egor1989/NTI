@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "FileController.h"
 
 
 @interface toJSON : NSObject {

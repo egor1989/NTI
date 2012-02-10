@@ -16,7 +16,7 @@
     NSFileManager	*fileMgr;
 	NSArray			*paths;
 	NSString		*documentsDirectory;
-    NSString        *fileName;
+
 }
 
 @property (nonatomic, retain) 	NSFileManager	*fileMgr;
@@ -24,13 +24,12 @@
 @property (nonatomic, retain) 	NSString		*documentsDirectory;
 @property (nonatomic, retain) 	NSString		*filePath;
 
-- (id) init;
 - (BOOL) createFile;
-- (BOOL) writeToFile:(NSString *)myString;
+- (BOOL) writeToFile:(NSString *)myString fileName: (NSString *)fileName;
 - (BOOL) deleteFile;
 - (BOOL) isFileEmpty;
 - (NSString*) readFile;
-- (NSString*) getFileName;
+
 
 
 @end
