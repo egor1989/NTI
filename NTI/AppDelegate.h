@@ -21,8 +21,10 @@
 -(void)stopGPSDetect;
 -(void)startGPSDetect;
 
-- (void)stopAccelerometerDetect;
-- (void)startAccelerometerDetect;
+//- (void)stopAccelerometerDetect;
+//- (void)startAccelerometerDetect;
+
+-(void) startMotionDetect;
 
 -(double) getTime;
 

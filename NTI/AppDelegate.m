@@ -23,8 +23,15 @@
     lastLoc = [[CLLocation alloc] init];
     [self startGPSDetect];
     motionManager = [[CMMotionManager alloc] init];
-    motionManager.accelerometerUpdateInterval = 1.0 / accelUpdateFrequency;
-    [self startAccelerometerDetect];
+    if ([motionManager isGyroAvailable]) {
+        motionManager.deviceMotionUpdateInterval = 1.0/accelUpdateFrequency;
+        [self startMotionDetect];
+    }
+    else{
+//    motionManager.accelerometerUpdateInterval = 1.0 / accelUpdateFrequency;
+//    [self startAccelerometerDetect];
+        NSLog(@"bad iphone");
+    }
 
     return YES;
 }
@@ -54,26 +61,39 @@
     [[NSNotificationCenter defaultCenter]	postNotificationName:	@"locateNotification" object:  nil];
 }
 
+//motion
+
+-(void) startMotionDetect{
+    [motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue currentQueue] 
+                                       withHandler:^(CMDeviceMotion *motion, NSError *error) {
+                                           NSDictionary* dict = [NSDictionary dictionaryWithObject: motion
+                                                                                            forKey: @"motion"];
+                                           [[NSNotificationCenter defaultCenter]	postNotificationName:	@"motionNotification" 
+                                                                                               object:  nil
+                                                                                             userInfo:dict];
+                                       }];
+}
+
 //accelerometer
-- (void)stopAccelerometerDetect {
-    [motionManager stopAccelerometerUpdates];
-}
-
-- (void)startAccelerometerDetect
-{
-    [motionManager startAccelerometerUpdatesToQueue:[[NSOperationQueue alloc] init]
-                                        withHandler:^(CMAccelerometerData *data, NSError *error) {
-                                            dispatch_async(dispatch_get_main_queue(), ^{
-                                                NSDictionary* accDict = [NSDictionary dictionaryWithObject: data
-                                                                                                    forKey: @"accel"];
-                                                [[NSNotificationCenter defaultCenter]	postNotificationName:@"accelNotification" 
-                                                                                                    object:  nil
-                                                                                                  userInfo:accDict];
-                                            });
-                                        }
-     ];
-}
-
+//- (void)stopAccelerometerDetect {
+//    [motionManager stopAccelerometerUpdates];
+//}
+//
+//- (void)startAccelerometerDetect
+//{
+//    [motionManager startAccelerometerUpdatesToQueue:[[NSOperationQueue alloc] init]
+//                                        withHandler:^(CMAccelerometerData *data, NSError *error) {
+//                                            dispatch_async(dispatch_get_main_queue(), ^{
+//                                                NSDictionary* accDict = [NSDictionary dictionaryWithObject: data
+//                                                                                                    forKey: @"accel"];
+//                                                [[NSNotificationCenter defaultCenter]	postNotificationName:@"accelNotification" 
+//                                                                                                    object:  nil
+//                                                                                                  userInfo:accDict];
+//                                            });
+//                                        }
+//     ];
+//}
+//
 
 
 

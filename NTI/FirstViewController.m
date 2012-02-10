@@ -8,15 +8,35 @@
 
 #import "FirstViewController.h"
 
+#define MAX3(a,b,c) ( MAX(a,b)>c ? ((a>b)? 1:2) : 3 )
+
 @implementation FirstViewController
 @synthesize fileName;
 
 - (void) accelerometerReciver: (NSNotification*) theNotice{
-    currentAcceleration=((CMAccelerometerData*)[theNotice.userInfo objectForKey: @"accel"]).acceleration;
+    userAcceleration=((CMDeviceMotion*)[theNotice.userInfo objectForKey: @"motion"]).userAcceleration;
+    gravity=((CMDeviceMotion*)[theNotice.userInfo objectForKey: @"motion"]).gravity;
+    maxGravityAxe = MAX3(fabs(gravity.x), fabs(gravity.y), fabs(gravity.z));
+    if (maxGravityAxe==1){
+        x=userAcceleration.y+gravity.y;
+        y=userAcceleration.z+gravity.z;
+    }
+    else{
+        if (maxGravityAxe==2){
+            x=userAcceleration.x+gravity.x;
+            y=userAcceleration.z+gravity.z;
+        }
+        else{
+            if (maxGravityAxe==3){
+                x=userAcceleration.y+gravity.y;
+                y=userAcceleration.x+gravity.x;
+            }
+        }
+    }
 //    accX.text =[NSString stringWithFormat:@"%d км/ч", [current intValue]];
-    accX.text=[NSString stringWithFormat:@"%f", currentAcceleration.x];
-    accY.text=[NSString stringWithFormat:@"%f", currentAcceleration.y];
-    accZ.text=[NSString stringWithFormat:@"%f", currentAcceleration.z];
+    accX.text=[NSString stringWithFormat:@"%f", userAcceleration.x];
+    accY.text=[NSString stringWithFormat:@"%f", userAcceleration.y];
+    accZ.text=[NSString stringWithFormat:@"%f", userAcceleration.z];
     
     time.text = [NSString stringWithFormat:@"%.5f",[[[NSDate alloc ]init]timeIntervalSince1970]];
     
@@ -31,7 +51,7 @@
         
         //вызвать вычисление x y здесь и записать вместо предыдущих 
       
-        NSDictionary *acc = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%f", currentAcceleration.x], @"accX", [NSString stringWithFormat:@"%f", currentAcceleration.y], @"accY", nil];
+        NSDictionary *acc = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%f", x], @"accX", [NSString stringWithFormat:@"%f", y], @"accY", nil];
         
         NSDictionary *gps = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%.2f",location.course], @"direction", [NSString stringWithFormat:@"%.2f",location.speed*3,6], @"speed", nil];
         
@@ -115,7 +135,7 @@
     [[NSNotificationCenter defaultCenter]	
      addObserver: self
      selector: @selector(accelerometerReciver:)
-     name: @"accelNotification"
+     name: @"motionNotification"
      object: nil];
 }
 
@@ -136,7 +156,7 @@
     
     [[NSNotificationCenter defaultCenter]	
      removeObserver: self
-     name: @"accelNotification"
+     name: @"motionNotification"
      object: nil];
 }
 

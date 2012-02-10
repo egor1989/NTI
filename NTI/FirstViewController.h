@@ -31,7 +31,10 @@
     
     IBOutlet UILabel *latitude;
     
-    CMAcceleration currentAcceleration;
+    CMAcceleration userAcceleration;
+    CMAcceleration gravity;
+    int maxGravityAxe;
+    double x,y;
     
     DatabaseActions *databaseAction;
     
