@@ -142,17 +142,7 @@
 	}
 }
 
-- (NSString *)getAttachment: (NSInteger) i{
 
-    NSError *error = nil;
-    NSString *file = [[self.fileMgr contentsOfDirectoryAtPath:self.documentsDirectory error:&error] objectAtIndex:i];
-    NSString *sendFilePath = [self.documentsDirectory stringByAppendingPathComponent:file];
-    NSLog(@"File : %@", sendFilePath);
-    
-    NSString *attachment = [NSString stringWithContentsOfFile:sendFilePath encoding:NSUTF8StringEncoding error:&error];
-    [self makeArchive];
-    return attachment;
-}
 
 - (NSInteger) countFiles{
     NSError *error = nil;
@@ -168,7 +158,7 @@
                            
 }
 
--(BOOL) makeArchive {
+-(NSData *)makeArchive {
    // BOOL isDir=NO;	
     NSError *error = nil;
     NSArray *subpaths = [self.fileMgr contentsOfDirectoryAtPath:self.documentsDirectory error:&error];	
@@ -195,9 +185,13 @@
         //}
     }
     
+   // NSString *fileContent = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"data.zip"];
     BOOL successCompressing = [archiver CloseZipFile2]; 
-    NSLog(@"%@", successCompressing?@"YES":@"NO"); //someBool ? @"YES" : @"NO"
-    return successCompressing;
+    NSLog(@"%@", successCompressing?@"YES":@"NO");
+    
+    NSData *zipData = [NSData dataWithContentsOfFile:archivePath];
+   
+    return zipData;
 }
 
 

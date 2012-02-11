@@ -12,10 +12,12 @@
 #define myAppDelegate (AppDelegate*) [[UIApplication sharedApplication] delegate]
 
 #import <CoreMotion/CoreMotion.h>
+#import <MessageUI/MessageUI.h>
+#import <MessageUI/MFMailComposeViewController.h>
 #import "DatabaseActions.h"
 #import "FileController.h"
 #import "toJSON.h"
-#import "Email.h"
+
 
 
 

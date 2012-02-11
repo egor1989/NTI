@@ -31,10 +31,9 @@
 - (BOOL) deleteFile;
 - (BOOL) isFileEmpty;
 - (NSString*) readFile;
-- (NSString *)getAttachment: (NSInteger) i;
 - (NSInteger) countFiles;
 - (NSArray *) arrayFiles;
-- (BOOL)makeArchive;
+- (NSData *)makeArchive;
 
 
 

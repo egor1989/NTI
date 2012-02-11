@@ -328,29 +328,26 @@
     
 	// Add email addresses
     // Notice three sections: "to" "cc" and "bcc"	
-	[picker setToRecipients:[NSArray arrayWithObjects:@"alekseenko.lena@gmail.com", nil]];
-	//[picker setCcRecipients:[NSArray arrayWithObject:@"emailaddress3@domainName.com"]];	
+	//[picker setToRecipients:[NSArray arrayWithObjects:@"peacock7team@gmail.com", nil]];
+    [picker setToRecipients:[NSArray arrayWithObjects:@"alekseenko.lena@gmail.com", nil]];
+		
     
 	// Fill out the email body text
-	NSString *emailBody = @"JSON data.";
+	NSString *emailBody = @"NTI data";
     
 	// This is not an HTML formatted email
 	[picker setMessageBody:emailBody isHTML:NO];
     
     
-    NSInteger count = [fileController countFiles]; 
-    NSData *attachment = [[fileController getAttachment:5] dataUsingEncoding:NSUTF8StringEncoding];
-    NSLog(@"%@",[fileController getAttachment:5]);
-    NSArray *filesArray = [fileController arrayFiles];
-    NSString *name = [filesArray objectAtIndex:5];
-    NSLog(@"%@",name);
+
+    NSData *attachment = [fileController makeArchive];
     
     // Attach  data to the email
+    
 	
-	[picker addAttachmentData:attachment mimeType:@"text/plain" fileName:name];
+	[picker addAttachmentData:attachment mimeType:@"application/zip" fileName:@"NTI"];
     
-    
-    
+
 	// Show email view
 	
 	[self presentModalViewController:picker animated:YES];
@@ -362,6 +359,9 @@
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error 
 {	
 	[self dismissModalViewControllerAnimated:YES];
+    if (error == nil) {
+        [fileController deleteFile];
+    }
 }
 
 
