@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ZipArchive.h"
+
 
 
 
@@ -29,6 +31,10 @@
 - (BOOL) deleteFile;
 - (BOOL) isFileEmpty;
 - (NSString*) readFile;
+- (NSString *)getAttachment: (NSInteger) i;
+- (NSInteger) countFiles;
+- (NSArray *) arrayFiles;
+- (BOOL)makeArchive;
 
 
 

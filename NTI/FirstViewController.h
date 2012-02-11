@@ -15,11 +15,12 @@
 #import "DatabaseActions.h"
 #import "FileController.h"
 #import "toJSON.h"
+#import "Email.h"
 
 
 
 
-@interface FirstViewController : UIViewController{
+@interface FirstViewController : UIViewController <UINavigationControllerDelegate, MFMailComposeViewControllerDelegate>{
     
     IBOutlet UILabel *accX;
     IBOutlet UILabel *accY;
@@ -77,11 +78,13 @@
 - (IBAction)leftRot:(id)sender;
 - (IBAction)actionButton:(id)sender;
 - (IBAction)clearDB:(id)sender;
+- (IBAction)sendFile:(id)sender;
 
 
 @property (nonatomic, retain) NSString *fileName;
 
 
 - (void) showGPS;
+- (void)sendFile;
 
 @end

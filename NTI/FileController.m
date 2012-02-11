@@ -142,6 +142,66 @@
 	}
 }
 
+- (NSString *)getAttachment: (NSInteger) i{
+
+    NSError *error = nil;
+    NSString *file = [[self.fileMgr contentsOfDirectoryAtPath:self.documentsDirectory error:&error] objectAtIndex:i];
+    NSString *sendFilePath = [self.documentsDirectory stringByAppendingPathComponent:file];
+    NSLog(@"File : %@", sendFilePath);
+    
+    NSString *attachment = [NSString stringWithContentsOfFile:sendFilePath encoding:NSUTF8StringEncoding error:&error];
+    [self makeArchive];
+    return attachment;
+}
+
+- (NSInteger) countFiles{
+    NSError *error = nil;
+    NSInteger count = [[self.fileMgr contentsOfDirectoryAtPath:self.documentsDirectory error:&error] count];
+    NSLog(@"countFile %i", count);
+    return count;
+}
+
+- (NSArray *) arrayFiles{
+    NSError *error = nil;
+    NSArray *arrayFiles = [self.fileMgr contentsOfDirectoryAtPath:self.documentsDirectory error:&error];
+    return arrayFiles;
+                           
+}
+
+-(BOOL) makeArchive {
+   // BOOL isDir=NO;	
+    NSError *error = nil;
+    NSArray *subpaths = [self.fileMgr contentsOfDirectoryAtPath:self.documentsDirectory error:&error];	
+   // NSString *exportPath = @"exportData";
+    //NSFileManager *fileManager = [NSFileManager defaultManager];	
+    //if ([fileManager fileExistsAtPath:exportPath isDirectory:&isDir] && isDir){
+    //    subpaths = [fileManager subpathsAtPath:exportPath];
+   // }
+    
+  //  NSLog(@"fileName %@", fileName);
+  //  self.filePath = [documentsDirectory stringByAppendingPathComponent: fileName];
+
+    
+    NSString *archivePath = [documentsDirectory stringByAppendingPathComponent: @"exportData.zip"];//@"exportData.zip";
+    
+    ZipArchive *archiver = [[ZipArchive alloc] init];
+    [archiver CreateZipFile2:archivePath];
+    for(NSString *path in subpaths){		
+        // Only add it if it's not a directory. ZipArchive will take care of those.
+        //NSString *deleteFilePath = [self.documentsDirectory stringByAppendingPathComponent:file];
+        NSString *longPath = [self.documentsDirectory stringByAppendingPathComponent:path];
+       // if([self.fileMgr fileExistsAtPath:longPath isDirectory:&isDir] && !isDir){
+            [archiver addFileToZip:longPath newname:path];		
+        //}
+    }
+    
+    BOOL successCompressing = [archiver CloseZipFile2]; 
+    NSLog(@"%@", successCompressing?@"YES":@"NO"); //someBool ? @"YES" : @"NO"
+    return successCompressing;
+}
+
+
+
 
 
 

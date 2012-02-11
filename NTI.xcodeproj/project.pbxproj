@@ -28,6 +28,15 @@
 		53E0A79F14DEDE6F004E3E1B /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 53E0A79D14DEDE6F004E3E1B /* libsqlite3.dylib */; };
 		53E0A7D314E3035A004E3E1B /* toJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0A7D214E3035A004E3E1B /* toJSON.m */; };
 		53E0A7D814E45247004E3E1B /* FileController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0A7D614E45247004E3E1B /* FileController.m */; };
+		53E0A7FA14E69A3A004E3E1B /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53E0A7F914E69A3A004E3E1B /* CFNetwork.framework */; };
+		53E0A81D14E6A1BC004E3E1B /* Email.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0A81C14E6A1BC004E3E1B /* Email.m */; };
+		53E0A81F14E6AC6F004E3E1B /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53E0A81E14E6AC6F004E3E1B /* MessageUI.framework */; };
+		53E0A82914E6DC49004E3E1B /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 53E0A82814E6DC49004E3E1B /* libz.1.2.5.dylib */; };
+		53E0A83814E6DDEB004E3E1B /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 53E0A82E14E6DDEB004E3E1B /* ioapi.c */; };
+		53E0A83914E6DDEB004E3E1B /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = 53E0A83014E6DDEB004E3E1B /* mztools.c */; };
+		53E0A83A14E6DDEB004E3E1B /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 53E0A83214E6DDEB004E3E1B /* unzip.c */; };
+		53E0A83B14E6DDEB004E3E1B /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 53E0A83414E6DDEB004E3E1B /* zip.c */; };
+		53E0A83C14E6DDEB004E3E1B /* ZipArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 53E0A83714E6DDEB004E3E1B /* ZipArchive.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,6 +70,22 @@
 		53E0A7D214E3035A004E3E1B /* toJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = toJSON.m; sourceTree = "<group>"; };
 		53E0A7D614E45247004E3E1B /* FileController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileController.m; sourceTree = "<group>"; };
 		53E0A7D714E45247004E3E1B /* FileController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileController.h; sourceTree = "<group>"; };
+		53E0A7F914E69A3A004E3E1B /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		53E0A81B14E6A1BC004E3E1B /* Email.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Email.h; sourceTree = "<group>"; };
+		53E0A81C14E6A1BC004E3E1B /* Email.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Email.m; sourceTree = "<group>"; };
+		53E0A81E14E6AC6F004E3E1B /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		53E0A82814E6DC49004E3E1B /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.5.dylib; path = usr/lib/libz.1.2.5.dylib; sourceTree = SDKROOT; };
+		53E0A82D14E6DDEB004E3E1B /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
+		53E0A82E14E6DDEB004E3E1B /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
+		53E0A82F14E6DDEB004E3E1B /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
+		53E0A83014E6DDEB004E3E1B /* mztools.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mztools.c; sourceTree = "<group>"; };
+		53E0A83114E6DDEB004E3E1B /* mztools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mztools.h; sourceTree = "<group>"; };
+		53E0A83214E6DDEB004E3E1B /* unzip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unzip.c; sourceTree = "<group>"; };
+		53E0A83314E6DDEB004E3E1B /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unzip.h; sourceTree = "<group>"; };
+		53E0A83414E6DDEB004E3E1B /* zip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zip.c; sourceTree = "<group>"; };
+		53E0A83514E6DDEB004E3E1B /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
+		53E0A83614E6DDEB004E3E1B /* ZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipArchive.h; sourceTree = "<group>"; };
+		53E0A83714E6DDEB004E3E1B /* ZipArchive.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ZipArchive.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +93,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				53E0A82914E6DC49004E3E1B /* libz.1.2.5.dylib in Frameworks */,
+				53E0A81F14E6AC6F004E3E1B /* MessageUI.framework in Frameworks */,
+				53E0A7FA14E69A3A004E3E1B /* CFNetwork.framework in Frameworks */,
 				276C4C9814DEE94D00C469A6 /* CoreMotion.framework in Frameworks */,
 				53E0A79E14DEDE6F004E3E1B /* libsqlite3.0.dylib in Frameworks */,
 				53E0A79F14DEDE6F004E3E1B /* libsqlite3.dylib in Frameworks */,
@@ -123,6 +151,9 @@
 		53E0A76914DEC75D004E3E1B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				53E0A82814E6DC49004E3E1B /* libz.1.2.5.dylib */,
+				53E0A81E14E6AC6F004E3E1B /* MessageUI.framework */,
+				53E0A7F914E69A3A004E3E1B /* CFNetwork.framework */,
 				276C4C9714DEE94D00C469A6 /* CoreMotion.framework */,
 				53E0A79A14DEDE37004E3E1B /* CoreLocation.framework */,
 				53E0A76A14DEC75D004E3E1B /* UIKit.framework */,
@@ -135,6 +166,8 @@
 		53E0A77014DEC75D004E3E1B /* NTI */ = {
 			isa = PBXGroup;
 			children = (
+				53E0A82B14E6DDEB004E3E1B /* ZipArchive */,
+				53E0A7E014E693EE004E3E1B /* Email */,
 				53E0A7D514E4522B004E3E1B /* FileController */,
 				53E0A7D414E30385004E3E1B /* JSON */,
 				53E0A7A014DEDE75004E3E1B /* DataBase */,
@@ -144,8 +177,6 @@
 				276C4C9014DEE6D500C469A6 /* ViewControllers */,
 				276C4C9214DEE6EA00C469A6 /* Images */,
 				53E0A77114DEC75D004E3E1B /* Supporting Files */,
-				53E0A7D114E3035A004E3E1B /* toJSON.h */,
-				53E0A7D214E3035A004E3E1B /* toJSON.m */,
 			);
 			path = NTI;
 			sourceTree = "<group>";
@@ -176,6 +207,8 @@
 		53E0A7D414E30385004E3E1B /* JSON */ = {
 			isa = PBXGroup;
 			children = (
+				53E0A7D114E3035A004E3E1B /* toJSON.h */,
+				53E0A7D214E3035A004E3E1B /* toJSON.m */,
 			);
 			name = JSON;
 			sourceTree = "<group>";
@@ -187,6 +220,41 @@
 				53E0A7D714E45247004E3E1B /* FileController.h */,
 			);
 			name = FileController;
+			sourceTree = "<group>";
+		};
+		53E0A7E014E693EE004E3E1B /* Email */ = {
+			isa = PBXGroup;
+			children = (
+				53E0A81B14E6A1BC004E3E1B /* Email.h */,
+				53E0A81C14E6A1BC004E3E1B /* Email.m */,
+			);
+			name = Email;
+			sourceTree = "<group>";
+		};
+		53E0A82B14E6DDEB004E3E1B /* ZipArchive */ = {
+			isa = PBXGroup;
+			children = (
+				53E0A82C14E6DDEB004E3E1B /* minizip */,
+				53E0A83614E6DDEB004E3E1B /* ZipArchive.h */,
+				53E0A83714E6DDEB004E3E1B /* ZipArchive.mm */,
+			);
+			path = ZipArchive;
+			sourceTree = "<group>";
+		};
+		53E0A82C14E6DDEB004E3E1B /* minizip */ = {
+			isa = PBXGroup;
+			children = (
+				53E0A82D14E6DDEB004E3E1B /* crypt.h */,
+				53E0A82E14E6DDEB004E3E1B /* ioapi.c */,
+				53E0A82F14E6DDEB004E3E1B /* ioapi.h */,
+				53E0A83014E6DDEB004E3E1B /* mztools.c */,
+				53E0A83114E6DDEB004E3E1B /* mztools.h */,
+				53E0A83214E6DDEB004E3E1B /* unzip.c */,
+				53E0A83314E6DDEB004E3E1B /* unzip.h */,
+				53E0A83414E6DDEB004E3E1B /* zip.c */,
+				53E0A83514E6DDEB004E3E1B /* zip.h */,
+			);
+			path = minizip;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -263,6 +331,12 @@
 				276C4C9B14DEF4FF00C469A6 /* DatabaseActions.m in Sources */,
 				53E0A7D314E3035A004E3E1B /* toJSON.m in Sources */,
 				53E0A7D814E45247004E3E1B /* FileController.m in Sources */,
+				53E0A81D14E6A1BC004E3E1B /* Email.m in Sources */,
+				53E0A83814E6DDEB004E3E1B /* ioapi.c in Sources */,
+				53E0A83914E6DDEB004E3E1B /* mztools.c in Sources */,
+				53E0A83A14E6DDEB004E3E1B /* unzip.c in Sources */,
+				53E0A83B14E6DDEB004E3E1B /* zip.c in Sources */,
+				53E0A83C14E6DDEB004E3E1B /* ZipArchive.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

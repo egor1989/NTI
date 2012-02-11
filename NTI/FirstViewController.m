@@ -310,6 +310,61 @@
     [fileController deleteFile];
 }
 
+- (IBAction)sendFile:(id)sender {
+    //Email *email = [[Email alloc] initWith:self];
+    [self sendFile];
+}
+
+
+- (void)sendFile
+{
+    MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] initWithNibName:@"Email" bundle:nil];
+    picker.mailComposeDelegate = self;
+    
+    
+    
+	// Set the subject of email
+    [picker setSubject:@"NTI!"];
+    
+	// Add email addresses
+    // Notice three sections: "to" "cc" and "bcc"	
+	[picker setToRecipients:[NSArray arrayWithObjects:@"alekseenko.lena@gmail.com", nil]];
+	//[picker setCcRecipients:[NSArray arrayWithObject:@"emailaddress3@domainName.com"]];	
+    
+	// Fill out the email body text
+	NSString *emailBody = @"JSON data.";
+    
+	// This is not an HTML formatted email
+	[picker setMessageBody:emailBody isHTML:NO];
+    
+    
+    NSInteger count = [fileController countFiles]; 
+    NSData *attachment = [[fileController getAttachment:5] dataUsingEncoding:NSUTF8StringEncoding];
+    NSLog(@"%@",[fileController getAttachment:5]);
+    NSArray *filesArray = [fileController arrayFiles];
+    NSString *name = [filesArray objectAtIndex:5];
+    NSLog(@"%@",name);
+    
+    // Attach  data to the email
+	
+	[picker addAttachmentData:attachment mimeType:@"text/plain" fileName:name];
+    
+    
+    
+	// Show email view
+	
+	[self presentModalViewController:picker animated:YES];
+    
+	// Release picker
+    
+}
+
+- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error 
+{	
+	[self dismissModalViewControllerAnimated:YES];
+}
+
+
 
 
 @end
