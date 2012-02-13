@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SecondViewController : UIViewController
+@interface SecondViewController : UIViewController{
+}
 
+- (void)refreshPlot:(NSNotification*)theNotice;
+@property (getter = getX) double x;
+@property (getter = getY) double y;
 @end

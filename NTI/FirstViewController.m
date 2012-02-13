@@ -18,8 +18,8 @@
     gravity=((CMDeviceMotion*)[theNotice.userInfo objectForKey: @"motion"]).gravity;
     maxGravityAxe = MAX3(fabs(gravity.x), fabs(gravity.y), fabs(gravity.z));
     if (maxGravityAxe==1){
-        x=userAcceleration.y+gravity.y;
-        y=userAcceleration.z+gravity.z;
+        x=userAcceleration.z+gravity.z;
+        y=userAcceleration.y+gravity.y;
     }
     else{
         if (maxGravityAxe==2){
@@ -28,11 +28,20 @@
         }
         else{
             if (maxGravityAxe==3){
-                x=userAcceleration.y+gravity.y;
-                y=userAcceleration.x+gravity.x;
+                x=userAcceleration.x+gravity.x;
+                y=userAcceleration.y+gravity.y;
             }
         }
     }
+    if (k%3==0) {
+        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:x], @"accX", [NSNumber numberWithDouble:y], @"accY", nil];
+        [[NSNotificationCenter defaultCenter]	postNotificationName:	@"plotNotification" 
+                                                            object:  nil
+                                                          userInfo:dict];
+    }
+    k++;
+    
+    NSLog(@"plotNot");
 //    accX.text =[NSString stringWithFormat:@"%d км/ч", [current intValue]];
     accX.text=[NSString stringWithFormat:@"%f", userAcceleration.x];
     accY.text=[NSString stringWithFormat:@"%f", userAcceleration.y];
@@ -78,6 +87,7 @@
     
     
     [super viewDidLoad];
+    k=0;
     databaseAction = [[DatabaseActions alloc] initDataBase];
     writeInDB = NO;
     userDefaults = [NSUserDefaults standardUserDefaults];
@@ -146,16 +156,16 @@
 {
     [super viewDidDisappear:animated];
     
-    [[NSNotificationCenter defaultCenter]	
-     removeObserver: self
-     name: @"locateNotification"
-     object: nil]; 
+//    [[NSNotificationCenter defaultCenter]	
+//     removeObserver: self
+//     name: @"locateNotification"
+//     object: nil]; 
 
     
-    [[NSNotificationCenter defaultCenter]	
-     removeObserver: self
-     name: @"motionNotification"
-     object: nil];
+//    [[NSNotificationCenter defaultCenter]	
+//     removeObserver: self
+//     name: @"motionNotification"
+//     object: nil];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

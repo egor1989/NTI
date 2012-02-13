@@ -72,6 +72,7 @@
     toJSON *jsonConvert;
     
     CLLocation *location;
+    int k;
 }
 
 - (IBAction)acceleration:(id)sender;

@@ -10,6 +10,12 @@
 
 @implementation SecondViewController
 
+@synthesize x,y;
+
+- (void) refreshPlot:(NSNotification*)theNotice{
+    [self.view setNeedsDisplay];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -30,25 +36,23 @@
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-}
-
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-	[super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter]	
+     addObserver: self
+     selector: @selector(refreshPlot:)
+     name: @"plotNotification"
+     object: nil];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
 	[super viewDidDisappear:animated];
+    [[NSNotificationCenter defaultCenter]	
+     removeObserver: self
+     name: @"plotNotification"
+     object: nil];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
