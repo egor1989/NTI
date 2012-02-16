@@ -7,9 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "math.h"
+#import "AppDelegate.h"
+#define myAppDelegate (AppDelegate*) [[UIApplication sharedApplication] delegate]
 
 @interface MyView : UIView {
-    double x,y;
+    double x,y,course,speed;
     bool f;
 }
 

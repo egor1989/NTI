@@ -19,7 +19,7 @@
     maxGravityAxe = MAX3(fabs(gravity.x), fabs(gravity.y), fabs(gravity.z));
     if (maxGravityAxe==1){
         x=userAcceleration.z;
-        y=userAcceleration.y;
+        y=-userAcceleration.y;//!!
     }
     else{
         if (maxGravityAxe==2){
@@ -29,7 +29,7 @@
         else{
             if (maxGravityAxe==3){
                 x=userAcceleration.x;
-                y=userAcceleration.y;
+                y=-userAcceleration.y;//!!
             }
         }
     }
@@ -40,8 +40,6 @@
                                                           userInfo:dict];
     }
     k++;
-    
-    NSLog(@"plotNot");
 //    accX.text =[NSString stringWithFormat:@"%d км/ч", [current intValue]];
     accX.text=[NSString stringWithFormat:@"%f", userAcceleration.x];
     accY.text=[NSString stringWithFormat:@"%f", userAcceleration.y];
@@ -56,11 +54,11 @@
     if (writeToFile) {
 
       
-        NSDictionary *acc = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%f", x], @"accX", [NSString stringWithFormat:@"%f", y], @"accY", nil];
+        NSDictionary *acc = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%f", x], @"x", [NSString stringWithFormat:@"%f", y], @"y", nil];
         
         NSDictionary *gps = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%.2f",location.course], @"direction", [NSString stringWithFormat:@"%.2f",location.speed*3,6], @"speed", nil];
         
-        NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.5f",[[[NSDate alloc ]init]timeIntervalSince1970]], acc,gps, nil];
+        NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]*1000], acc,gps, nil];
         NSDictionary *entries = [NSDictionary dictionaryWithObjects:objs forKeys:keys];
         
         [forJSON addObject:entries];
@@ -103,6 +101,19 @@
     jsonConvert = [[toJSON alloc]init];
     fileController = [[FileController alloc] init];
 
+    [[NSNotificationCenter defaultCenter]	
+     addObserver: self
+     selector: @selector(accelerometerReciver:)
+     name: @"motionNotification"
+     object: nil];
+    
+    
+    [[NSNotificationCenter defaultCenter]	
+     addObserver: self
+     selector: @selector(showGPS)
+     name: @"locateNotification"
+     object: nil]; 
+
 	// Do any additional setup after loading the view, typically from a nib.
 }
 
@@ -131,20 +142,6 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
-    [[NSNotificationCenter defaultCenter]	
-     addObserver: self
-     selector: @selector(showGPS)
-     name: @"locateNotification"
-     object: nil]; 
-
-    
-    
-    [[NSNotificationCenter defaultCenter]	
-     addObserver: self
-     selector: @selector(accelerometerReciver:)
-     name: @"motionNotification"
-     object: nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

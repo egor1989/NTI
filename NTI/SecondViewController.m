@@ -53,12 +53,20 @@
      removeObserver: self
      name: @"plotNotification"
      object: nil];
+    
+    [[NSNotificationCenter defaultCenter]	
+     removeObserver: self
+     name: @"locateNotification"
+     object: nil];
+
+    
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     // Return YES for supported orientations
-    return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+//    return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+    return NO;
 }
 
 @end
