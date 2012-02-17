@@ -306,6 +306,39 @@
         <image name="first" width="16" height="16"/>
         <image name="second" width="16" height="16"/>
     </resources>
+    <classes>
+        <class className="FirstViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/FirstViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="acceleration:"/>
+                <relationship kind="action" name="actionButton:"/>
+                <relationship kind="action" name="clearDB:"/>
+                <relationship kind="action" name="deceleration:"/>
+                <relationship kind="action" name="leftRot:"/>
+                <relationship kind="action" name="rightRot:"/>
+                <relationship kind="action" name="sendFile:"/>
+                <relationship kind="outlet" name="accX" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="accY" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="accZ" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="accelButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="action" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="course" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="decelButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="latitude" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="leftButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="longitude" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="rightButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="speed" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="time" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="MyView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MyView.h"/>
+        </class>
+        <class className="SecondViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/SecondViewController.h"/>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

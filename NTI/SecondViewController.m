@@ -9,11 +9,10 @@
 #import "SecondViewController.h"
 
 @implementation SecondViewController
-
 @synthesize x,y;
 
 - (void) refreshPlot:(NSNotification*)theNotice{
-    [self.view setNeedsDisplay];
+//    [myView setNeedsDisplay];
 }
 
 - (void)didReceiveMemoryWarning
@@ -27,7 +26,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
 }
 
 - (void)viewDidUnload
@@ -52,11 +50,6 @@
     [[NSNotificationCenter defaultCenter]	
      removeObserver: self
      name: @"plotNotification"
-     object: nil];
-    
-    [[NSNotificationCenter defaultCenter]	
-     removeObserver: self
-     name: @"locateNotification"
      object: nil];
 
     

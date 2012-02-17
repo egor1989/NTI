@@ -13,7 +13,6 @@
 
 @interface MyView : UIView {
     double x,y,course,speed;
-    bool f;
 }
 
 @end

@@ -18,18 +18,18 @@
     gravity=((CMDeviceMotion*)[theNotice.userInfo objectForKey: @"motion"]).gravity;
     maxGravityAxe = MAX3(fabs(gravity.x), fabs(gravity.y), fabs(gravity.z));
     if (maxGravityAxe==1){
-        x=userAcceleration.z;
-        y=-userAcceleration.y;//!!
+        x=-userAcceleration.z;
+        y=userAcceleration.y;
     }
     else{
         if (maxGravityAxe==2){
-            x=userAcceleration.x;
-            y=userAcceleration.z;
+            x=-userAcceleration.x;
+            y=-userAcceleration.z;
         }
         else{
             if (maxGravityAxe==3){
-                x=userAcceleration.x;
-                y=-userAcceleration.y;//!!
+                x=userAcceleration.x;//!!
+                y=userAcceleration.y;
             }
         }
     }
