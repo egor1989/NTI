@@ -30,10 +30,10 @@
     
     IBOutlet UILabel *time;
     IBOutlet UILabel *course;
-    IBOutlet UILabel *longitude;
     IBOutlet UILabel *speed;
-    
-    IBOutlet UILabel *latitude;
+    IBOutlet UIImageView *rowCourse;
+    IBOutlet UILabel *rowDegrees;
+
     
     CMAcceleration userAcceleration;
     CMAcceleration gravity;

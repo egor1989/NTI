@@ -113,6 +113,12 @@
      selector: @selector(showGPS)
      name: @"locateNotification"
      object: nil]; 
+    
+    [[NSNotificationCenter defaultCenter]	
+     addObserver: self
+     selector: @selector(redrawCourse)
+     name: @"redrawCourse"
+     object: nil]; 
 
 	// Do any additional setup after loading the view, typically from a nib.
 }
@@ -122,9 +128,9 @@
     accX = nil;
     accY = nil;
     accZ = nil;
-    latitude = nil;
+
     speed = nil;
-    longitude = nil;
+
     course = nil;
     time = nil;
 
@@ -176,11 +182,18 @@
     location = [myAppDelegate lastLoc];  
     //NSLog(@"lat = %@, lond = %@", [NSString stringWithFormat:@"%f", location.coordinate.latitude], [NSString stringWithFormat:@"%f", location.coordinate.longitude]);
     course.text = [NSString stringWithFormat:@"%.2f",location.course];
-    longitude.text = [NSString stringWithFormat:@"%.6f", location.coordinate.longitude];
+  
     if (location.speed <= 0) speed.text = @"0";
     else speed.text =  [NSString stringWithFormat:@"%.2f", location.speed*3,6];
-    latitude.text = [NSString stringWithFormat:@"%.6f", location.coordinate.latitude];
 
+
+}
+
+- (void) redrawCourse{
+    
+    rowCourse.transform = CGAffineTransformMakeRotation([myAppDelegate course]); 
+    rowDegrees.text = [NSString stringWithFormat:@"%.2f", [myAppDelegate course]];
+    
 }
 
 
@@ -331,7 +344,7 @@
     
     
 	// Set the subject of email
-    [picker setSubject:@"NTI!"];
+    [picker setSubject:@"NTI"];
     
 	// Add email addresses
     // Notice three sections: "to" "cc" and "bcc"	

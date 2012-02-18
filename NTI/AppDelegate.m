@@ -8,9 +8,12 @@
 
 #import "AppDelegate.h"
 
+#define CC_RADIANS_TO_DEGREES(__ANGLE__) ((__ANGLE__) / (float)M_PI * 180.0f)
+#define radianConst M_PI/180.0
+
 @implementation AppDelegate
 
-@synthesize window = _window, lastLoc;
+@synthesize window = _window, lastLoc, course;
 
 #define accelUpdateFrequency 30.0	
 
@@ -19,6 +22,8 @@
     locationManager=[[CLLocationManager alloc] init];
     locationManager.delegate=self;
     locationManager.desiredAccuracy=kCLLocationAccuracyBest;
+    
+    [locationManager startUpdatingHeading];
     
     lastLoc = [[CLLocation alloc] init];
     [self startGPSDetect];
@@ -32,7 +37,15 @@
 //    [self startAccelerometerDetect];
         NSLog(@"bad iphone");
     }
-
+    
+    
+    [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(updater:) userInfo:nil repeats:YES];
+    //[NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(calibrate:) userInfo:nil repeats:YES];
+    
+    oldHeading          = 0;
+    offsetG             = 0;
+    newCompassTarget    = 0;
+    
     return YES;
 }
 
@@ -61,11 +74,69 @@
     [[NSNotificationCenter defaultCenter]	postNotificationName:	@"locateNotification" object:  nil];
 }
 
+//compass
+
+- (void)calibrate:(NSTimer *)timer
+{   
+    // Set offset so the compassImg will be calibrated to northOffset
+    northOffest = updatedHeading - 0;
+}
+
+- (void)updater:(NSTimer *)timer 
+{
+    northOffest = updatedHeading - 0;
+
+    // If the compass hasn't moved in a while we can calibrate the gyro 
+    if(updatedHeading == oldHeading) {
+        NSLog(@"Update gyro");
+        // Populate newCompassTarget with new compass value and the offset we set in calibrate
+        newCompassTarget = (0 - updatedHeading) + northOffest;
+        NSLog(@"c = %f", currentYaw);
+        offsetG = currentYaw;
+    } 
+    
+    oldHeading = updatedHeading;
+}
+
+
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading
+{
+    // Update variable updateHeading to be used in updater method
+    updatedHeading = newHeading.magneticHeading;
+    float headingFloat = 0 - newHeading.magneticHeading;
+        
+    //compassImg.transform = CGAffineTransformMakeRotation((headingFloat + northOffest)*radianConst); 
+    //course = (headingFloat + northOffest)*radianConst;
+    NSLog(@"%f north", northOffest);
+    course = (lastLoc.course + northOffest)*radianConst;
+    [[NSNotificationCenter defaultCenter]	postNotificationName:	@"redrawCourse" object:  nil];
+}
+
+
+
+
+
 //motion
 
 -(void) startMotionDetect{
     [motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue currentQueue] 
                                        withHandler:^(CMDeviceMotion *motion, NSError *error) {
+                                           CMAttitude *currentAttitude = motion.attitude;
+                                           float yawValue = currentAttitude.yaw; // Use the yaw value
+                                           
+                                           // Yaw values are in radians (-180 - 180), here we convert to degrees
+                                           float yawDegrees = CC_RADIANS_TO_DEGREES(yawValue);
+                                           currentYaw = yawDegrees;
+                                           
+                                           // We add new compass value together with new yaw value
+                                           yawDegrees = newCompassTarget + (yawDegrees - offsetG);
+                                           
+                                           // Degrees should always be positive
+                                           if(yawDegrees < 0) {
+                                               yawDegrees = yawDegrees + 360;
+
+                                           }
                                            NSDictionary* dict = [NSDictionary dictionaryWithObject: motion
                                                                                             forKey: @"motion"];
                                            [[NSNotificationCenter defaultCenter]	postNotificationName:	@"motionNotification" 

@@ -16,6 +16,18 @@
     BOOL gpsState;
     
     CMMotionManager *motionManager;
+    
+    //for compass
+    NSOperationQueue    *opQ;
+    
+    float course;
+    float updatedHeading;
+    float northOffest;
+    float oldHeading;
+    float offsetG;
+    float newCompassTarget;
+    float currentYaw;
+
 }
 
 -(void)stopGPSDetect;
@@ -30,5 +42,6 @@
 
 @property (strong, nonatomic) UIWindow *window;
 @property (readonly, NS_NONATOMIC_IPHONEONLY) CLLocation *lastLoc;
+@property (nonatomic) float course;
 
 @end
