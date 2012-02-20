@@ -9,6 +9,7 @@
 #import "FirstViewController.h"
 
 #define MAX3(a,b,c) ( MAX(a,b)>c ? ((a>b)? 1:2) : 3 )
+#define radianConst M_PI/180.0
 
 @implementation FirstViewController
 @synthesize fileName;
@@ -134,6 +135,9 @@
     course = nil;
     time = nil;
 
+    gpsRow = nil;
+    northRow = nil;
+    northValue = nil;
     [super viewDidUnload];
     
     // Release any retained subviews of the main view.
@@ -182,6 +186,13 @@
     location = [myAppDelegate lastLoc];  
     //NSLog(@"lat = %@, lond = %@", [NSString stringWithFormat:@"%f", location.coordinate.latitude], [NSString stringWithFormat:@"%f", location.coordinate.longitude]);
     course.text = [NSString stringWithFormat:@"%.2f",location.course];
+    if (location.course <=0) {
+        gpsRow.hidden = YES;
+    }
+    else {
+        gpsRow.hidden = NO;
+        gpsRow.transform = CGAffineTransformMakeRotation(location.course*radianConst);
+    }
   
     if (location.speed <= 0) speed.text = @"0";
     else speed.text =  [NSString stringWithFormat:@"%.2f", location.speed*3,6];
@@ -190,9 +201,15 @@
 }
 
 - (void) redrawCourse{
-    
-    rowCourse.transform = CGAffineTransformMakeRotation([myAppDelegate course]); 
+    if (gpsRow.hidden == YES) rowCourse.hidden = YES;
+    else {
+        rowCourse.hidden = NO;
+        rowCourse.transform = CGAffineTransformMakeRotation([myAppDelegate course]*radianConst);
+    }
     rowDegrees.text = [NSString stringWithFormat:@"%.2f", [myAppDelegate course]];
+    
+    northValue.text = [NSString stringWithFormat:@"%.2f", [myAppDelegate trueNorth]];
+    northRow.transform = CGAffineTransformMakeRotation([myAppDelegate trueNorth]*radianConst); 
     
 }
 

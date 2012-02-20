@@ -43,5 +43,6 @@
 @property (strong, nonatomic) UIWindow *window;
 @property (readonly, NS_NONATOMIC_IPHONEONLY) CLLocation *lastLoc;
 @property (nonatomic) float course;
+@property (nonatomic) float trueNorth;
 
 @end

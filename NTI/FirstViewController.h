@@ -34,6 +34,9 @@
     IBOutlet UIImageView *rowCourse;
     IBOutlet UILabel *rowDegrees;
 
+    IBOutlet UILabel *northValue;
+    IBOutlet UIImageView *northRow;
+    IBOutlet UIImageView *gpsRow;
     
     CMAcceleration userAcceleration;
     CMAcceleration gravity;

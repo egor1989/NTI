@@ -222,6 +222,21 @@
                                 <rect key="frame" x="142" y="149" width="36" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="gps.png" id="DxY-8Z-qlL">
+                                <rect key="frame" x="146" y="149" width="29" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="north.png" id="cwA-Ps-d54">
+                                <rect key="frame" x="146" y="149" width="24" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" minimumFontSize="10" id="A6t-aD-sh4">
+                                <rect key="frame" x="244" y="276" width="42" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -234,7 +249,10 @@
                         <outlet property="action" destination="IhZ-sT-0Se" id="yZQ-6j-QDE"/>
                         <outlet property="course" destination="O11-8f-OAz" id="xUo-an-2zx"/>
                         <outlet property="decelButton" destination="1bY-hu-axu" id="rjP-9Q-EvT"/>
+                        <outlet property="gpsRow" destination="DxY-8Z-qlL" id="n7T-c1-VrT"/>
                         <outlet property="leftButton" destination="w89-Uv-waP" id="ZbT-yR-BZk"/>
+                        <outlet property="northRow" destination="cwA-Ps-d54" id="euY-Cd-5jB"/>
+                        <outlet property="northValue" destination="A6t-aD-sh4" id="npa-ji-rLo"/>
                         <outlet property="rightButton" destination="36S-D0-EnK" id="CF6-jZ-lmk"/>
                         <outlet property="rowCourse" destination="8cR-1H-mho" id="bEI-8z-2L2"/>
                         <outlet property="rowDegrees" destination="jdz-tI-Q32" id="Ygp-Ty-tgh"/>
@@ -281,6 +299,8 @@
     <resources>
         <image name="compass.png" width="51" height="96"/>
         <image name="first" width="16" height="16"/>
+        <image name="gps.png" width="35" height="79"/>
+        <image name="north.png" width="40" height="80"/>
         <image name="second" width="16" height="16"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

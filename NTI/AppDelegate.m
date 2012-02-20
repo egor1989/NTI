@@ -13,7 +13,7 @@
 
 @implementation AppDelegate
 
-@synthesize window = _window, lastLoc, course;
+@synthesize window = _window, lastLoc, course, trueNorth;
 
 #define accelUpdateFrequency 30.0	
 
@@ -84,14 +84,14 @@
 
 - (void)updater:(NSTimer *)timer 
 {
-    northOffest = updatedHeading - 0;
+   // northOffest = updatedHeading - 0; кнопка калибровки
 
     // If the compass hasn't moved in a while we can calibrate the gyro 
     if(updatedHeading == oldHeading) {
         NSLog(@"Update gyro");
         // Populate newCompassTarget with new compass value and the offset we set in calibrate
         newCompassTarget = (0 - updatedHeading) + northOffest;
-        NSLog(@"c = %f", currentYaw);
+        
         offsetG = currentYaw;
     } 
     
@@ -104,12 +104,16 @@
 {
     // Update variable updateHeading to be used in updater method
     updatedHeading = newHeading.magneticHeading;
-    float headingFloat = 0 - newHeading.magneticHeading;
+    trueNorth = 0 - newHeading.magneticHeading;
         
     //compassImg.transform = CGAffineTransformMakeRotation((headingFloat + northOffest)*radianConst); 
     //course = (headingFloat + northOffest)*radianConst;
-    NSLog(@"%f north", northOffest);
-    course = (lastLoc.course + northOffest)*radianConst;
+    //NSLog(@"%f north", northOffest);
+    course = (northOffest-lastLoc.course);
+    //NSLog(@"%f north", (lastLoc.course + northOffest));
+    
+    
+    //trueNorth.transform = CGAffineTransformMakeRotation(headingFloat*radianConst);
     [[NSNotificationCenter defaultCenter]	postNotificationName:	@"redrawCourse" object:  nil];
 }
 
