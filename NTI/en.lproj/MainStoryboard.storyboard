@@ -153,7 +153,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" minimumFontSize="10" id="O11-8f-OAz">
-                                <rect key="frame" x="207" y="247" width="42" height="21"/>
+                                <rect key="frame" x="189" y="225" width="42" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -212,28 +212,28 @@
                                 </connections>
                             </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" minimumFontSize="10" id="jdz-tI-Q32">
-                                <rect key="frame" x="266" y="247" width="42" height="21"/>
+                                <rect key="frame" x="109" y="225" width="42" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="compass.png" id="8cR-1H-mho">
-                                <rect key="frame" x="142" y="149" width="36" height="60"/>
+                                <rect key="frame" x="112" y="149" width="36" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="gps.png" id="DxY-8Z-qlL">
-                                <rect key="frame" x="146" y="149" width="29" height="60"/>
+                                <rect key="frame" x="189" y="149" width="29" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="north.png" id="cwA-Ps-d54">
-                                <rect key="frame" x="146" y="149" width="24" height="60"/>
+                                <rect key="frame" x="266" y="149" width="24" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" minimumFontSize="10" id="A6t-aD-sh4">
-                                <rect key="frame" x="244" y="276" width="42" height="21"/>
+                                <rect key="frame" x="266" y="225" width="42" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -303,6 +303,42 @@
         <image name="north.png" width="40" height="80"/>
         <image name="second" width="16" height="16"/>
     </resources>
+    <classes>
+        <class className="FirstViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/FirstViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="acceleration:"/>
+                <relationship kind="action" name="actionButton:"/>
+                <relationship kind="action" name="clearDB:"/>
+                <relationship kind="action" name="deceleration:"/>
+                <relationship kind="action" name="leftRot:"/>
+                <relationship kind="action" name="rightRot:"/>
+                <relationship kind="action" name="sendFile:"/>
+                <relationship kind="outlet" name="accX" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="accY" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="accZ" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="accelButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="action" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="course" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="decelButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="gpsRow" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="leftButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="northRow" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="northValue" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="rightButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="rowCourse" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="rowDegrees" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="speed" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="time" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="MyView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MyView.h"/>
+        </class>
+        <class className="SecondViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/SecondViewController.h"/>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

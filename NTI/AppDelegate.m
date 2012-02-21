@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 
+
 #define CC_RADIANS_TO_DEGREES(__ANGLE__) ((__ANGLE__) / (float)M_PI * 180.0f)
 #define radianConst M_PI/180.0
 
@@ -88,7 +89,7 @@
 
     // If the compass hasn't moved in a while we can calibrate the gyro 
     if(updatedHeading == oldHeading) {
-        NSLog(@"Update gyro");
+       // NSLog(@"Update gyro");
         // Populate newCompassTarget with new compass value and the offset we set in calibrate
         newCompassTarget = (0 - updatedHeading) + northOffest;
         
@@ -109,8 +110,10 @@
     //compassImg.transform = CGAffineTransformMakeRotation((headingFloat + northOffest)*radianConst); 
     //course = (headingFloat + northOffest)*radianConst;
     //NSLog(@"%f north", northOffest);
-    course = (northOffest-lastLoc.course);
-    //NSLog(@"%f north", (lastLoc.course + northOffest));
+    course = (int)((360+trueNorth)+lastLoc.course) % 360; //mod 360;
+    
+    
+    
     
     
     //trueNorth.transform = CGAffineTransformMakeRotation(headingFloat*radianConst);
