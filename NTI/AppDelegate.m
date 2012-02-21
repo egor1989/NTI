@@ -105,7 +105,7 @@
 {
     // Update variable updateHeading to be used in updater method
     updatedHeading = newHeading.magneticHeading;
-    trueNorth = 0 - newHeading.magneticHeading;
+    trueNorth = 0 - newHeading.trueHeading;
         
     //compassImg.transform = CGAffineTransformMakeRotation((headingFloat + northOffest)*radianConst); 
     //course = (headingFloat + northOffest)*radianConst;
