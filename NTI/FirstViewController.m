@@ -343,13 +343,32 @@
 }
 
 - (IBAction)clearDB:(id)sender {
-    //[databaseAction clearDatabase];
-    [fileController deleteFile];
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Подтвержение" message:@"Вы действительно хотите удалить все файлы?" delegate:self cancelButtonTitle:@"Отмена" otherButtonTitles:@"Да",nil];
+    [alert show];
+    
+
+    }
+
+
+- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex ==1) {
+        //[databaseAction clearDatabase];
+       [fileController deleteFile]; 
+    }
+    
+	//NSLog(@"Index - %i, title - %@", buttonIndex, [alertView buttonTitleAtIndex:buttonIndex]);
 }
+
+
+
 
 - (IBAction)sendFile:(id)sender {
     //Email *email = [[Email alloc] initWith:self];
     [self sendFile];
+    NSLog(@"tampampam");
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Запрос на удаление" message:@"Вы хотите удалить отправленные файлы?" delegate:self cancelButtonTitle:@"Отмена" otherButtonTitles:@"Да",nil];
+    [alert show];
 }
 
 
@@ -390,7 +409,7 @@
 	[self presentModalViewController:picker animated:YES];
     
 	// Release picker
-    
+        
 }
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error 
