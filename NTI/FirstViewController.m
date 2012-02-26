@@ -57,7 +57,7 @@
       
         NSDictionary *acc = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%f", x], @"x", [NSString stringWithFormat:@"%f", y], @"y", nil];
         
-        NSDictionary *gps = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%.1f",[myAppDelegate course]], @"direction", [NSString stringWithFormat:@"%.2f",location.speed*3,6], @"speed", nil];
+        NSDictionary *gps = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%.1f",[myAppDelegate course]], @"direction", [NSString stringWithFormat:@"%.2f",location.speed*3,6], @"speed", [NSString stringWithFormat:@"%.2f",location.coordinate.latitude], @"latitude", [NSString stringWithFormat:@"%.2f",location.coordinate.longitude], @"longitude",  nil];
         
         NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]*1000], acc,gps, nil];
         NSDictionary *entries = [NSDictionary dictionaryWithObjects:objs forKeys:keys];

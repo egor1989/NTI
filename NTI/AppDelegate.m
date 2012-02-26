@@ -22,7 +22,9 @@
 {
     locationManager=[[CLLocationManager alloc] init];
     locationManager.delegate=self;
-    locationManager.desiredAccuracy=kCLLocationAccuracyBest;
+    //locationManager.desiredAccuracy=kCLLocationAccuracyBest;
+    locationManager.desiredAccuracy= kCLLocationAccuracyNearestTenMeters;//kCLLocationAccuracyBestForNavigation; //
+    locationManager.distanceFilter = kCLDistanceFilterNone;
     
     [locationManager startUpdatingHeading];
     
