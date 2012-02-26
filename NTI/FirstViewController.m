@@ -366,9 +366,9 @@
 - (IBAction)sendFile:(id)sender {
     //Email *email = [[Email alloc] initWith:self];
     [self sendFile];
-    NSLog(@"tampampam");
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Запрос на удаление" message:@"Вы хотите удалить отправленные файлы?" delegate:self cancelButtonTitle:@"Отмена" otherButtonTitles:@"Да",nil];
-    [alert show];
+  //  NSLog(@"tampampam");
+  //  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Запрос на удаление" message:@"Вы хотите удалить отправленные файлы?" delegate:self cancelButtonTitle:@"Отмена" otherButtonTitles:@"Да",nil];
+  //  [alert show];
 }
 
 
