@@ -18,12 +18,14 @@
     [self setNeedsDisplay];
 }
 
+/*
 - (void) refreshGPSLine:(NSNotification*)theNotice{
     course = [myAppDelegate lastLoc].course;
     speed = [myAppDelegate lastLoc].speed;
     course=course/180*M_PI;
     [self setNeedsDisplay];
 }
+ */
 
 -(void) method{
     self.clearsContextBeforeDrawing=YES;
@@ -33,11 +35,11 @@
      name: @"plotNotification"
      object: nil];
     
-    [[NSNotificationCenter defaultCenter]	
-     addObserver: self
-     selector: @selector(refreshGPSLine:)
-     name: @"locateNotification"
-     object: nil];
+//    [[NSNotificationCenter defaultCenter]	
+//     addObserver: self
+//     selector: @selector(refreshGPSLine:)
+//     name: @"locateNotification"
+//     object: nil];
 }
 
 -(id) initWithCoder:(NSCoder *)aDecoder{
@@ -56,10 +58,10 @@
 	CGContextAddLineToPoint(c, centrX+x*150.0, centrY-y*150.0);
 	CGContextStrokePath(c);
     
-    [[UIColor blueColor] set];
-    CGContextMoveToPoint(c, centrX, centrY);
-	CGContextAddLineToPoint(c, centrX+speed*sin(M_PI - course), centrY+speed*cos(M_PI -course));
-	CGContextStrokePath(c);
+//    [[UIColor blueColor] set];
+//    CGContextMoveToPoint(c, centrX, centrY);
+//	CGContextAddLineToPoint(c, centrX+speed*sin(M_PI - course), centrY+speed*cos(M_PI -course));
+//	CGContextStrokePath(c);
     
     [[UIColor blackColor] set];
     CGContextFillEllipseInRect(c, CGRectMake(centrX-3, centrY-2, 7, 7));
