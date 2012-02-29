@@ -12,7 +12,7 @@
 
 @implementation FileController
 
-@synthesize fileMgr, paths, documentsDirectory, filePath;
+@synthesize fileMgr, paths, documentsDirectory, filePath, size, fileCount;
 
 - (id)init{
     
@@ -144,11 +144,28 @@
 
 
 
-- (NSInteger) countFiles{
+- (void) countFiles{
     NSError *error = nil;
-    NSInteger count = [[self.fileMgr contentsOfDirectoryAtPath:self.documentsDirectory error:&error] count];
-    NSLog(@"countFile %i", count);
-    return count;
+    size = 0;
+    
+    fileCount = [[fileMgr contentsOfDirectoryAtPath:documentsDirectory error:&error] count];
+   // NSDictionary *fileAttributes = [self.fileMgr fileAttributesAtPath:filePath];
+    
+    for (NSString *file in [self.fileMgr contentsOfDirectoryAtPath:self.documentsDirectory error:&error])
+    {    
+        NSString *fileForCount = [self.documentsDirectory stringByAppendingPathComponent:file];
+    
+        NSDictionary *fileAttributes = [fileMgr attributesOfItemAtPath:fileForCount error:&error];
+        if(fileAttributes != nil)
+        {
+            fileSize = [fileAttributes objectForKey:@"NSFileSize"];
+            size += [fileSize integerValue];
+            
+            NSLog(@"File size: %@ b", fileSize);
+            NSLog(@"all size %i", size);
+        }
+    }
+    
 }
 
 - (NSArray *) arrayFiles{

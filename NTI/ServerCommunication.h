@@ -8,6 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ServerCommunication : NSObject
+@interface ServerCommunication : NSObject {
+    NSString *returnString; 
+    
+}
+
+- (void)uploadData:(NSString *)fileContent;
+//- (void)checkErrors:(NSString *)answerString;
 
 @end

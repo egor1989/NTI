@@ -364,11 +364,15 @@
 
 
 - (IBAction)sendFile:(id)sender {
-    //Email *email = [[Email alloc] initWith:self];
-    [self sendFile];
+    
+  //  [self sendFile];
+    [self sendToServer];
+    
+    
   //  NSLog(@"tampampam");
   //  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Запрос на удаление" message:@"Вы хотите удалить отправленные файлы?" delegate:self cancelButtonTitle:@"Отмена" otherButtonTitles:@"Да",nil];
   //  [alert show];
+    
 }
 
 
@@ -409,6 +413,15 @@
 	[self presentModalViewController:picker animated:YES];
     
 	// Release picker
+        
+}
+
+- (void)sendToServer
+{
+    [fileController countFiles];
+    NSInteger count = fileController.fileCount;
+    NSInteger size = fileController.size;
+    NSLog(@"count = %i, size = %i", count, size);
         
 }
 

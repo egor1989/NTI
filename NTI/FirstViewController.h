@@ -92,5 +92,5 @@
 
 - (void) showGPS;
 - (void)sendFile;
-
+- (void)sendToServer;
 @end

@@ -24,9 +24,9 @@ static sqlite3_stmt *addStmt = nil;
 	NSArray *documentPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDir = [documentPaths objectAtIndex:0];
 	databasePath = [documentsDir stringByAppendingPathComponent:databaseName];
-    [self checkAndCreateDatabase];
-    if (sqlite3_open([databasePath UTF8String], &database) == SQLITE_OK) NSLog(@"Database open");
-    else NSLog(@"error! base not open");
+    //[self checkAndCreateDatabase];
+    //if (sqlite3_open([databasePath UTF8String], &database) == SQLITE_OK) NSLog(@"Database open");
+    //else NSLog(@"error! base not open");
     return self;
 }
 
