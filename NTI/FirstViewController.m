@@ -352,7 +352,13 @@
 
 
 - (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex ==1) {
+    
+    if ([alertView.title isEqualToString:@"Отправление файлов"]) {
+        NSLog(@"neb");
+        [self sendToServer];
+        //[fileController sendFile];
+    }
+    else if (buttonIndex ==1) {
         //[databaseAction clearDatabase];
        [fileController deleteFile]; 
     }
@@ -366,7 +372,7 @@
 - (IBAction)sendFile:(id)sender {
     
   //  [self sendFile];
-    [self sendToServer];
+    [self infoAboutFiles];
     
     
   //  NSLog(@"tampampam");
@@ -416,13 +422,42 @@
         
 }
 
-- (void)sendToServer
+- (NSString *)convertSize: (NSInteger)size{
+    NSString *result = nil;
+    NSInteger kb = size/1024;
+    NSLog(@"%i",kb);
+    if (kb>1024) {
+        NSInteger mb = (int)kb/1024;
+        result = [NSString stringWithFormat:@"%i mb %i kb",mb,kb];
+    }
+    else result = [NSString stringWithFormat:@"%i kb",kb];
+    return result;
+}
+
+
+
+- (void)infoAboutFiles
 {
     [fileController countFiles];
-    NSInteger count = fileController.fileCount;
-    NSInteger size = fileController.size;
-    NSLog(@"count = %i, size = %i", count, size);
-        
+    
+    NSLog(@"count = %i, size = %@", fileController.fileCount,  [self convertSize: fileController.size]);
+    NSString *message = [NSString stringWithFormat:@"Отправить: %i файла(ов) общим размером %@. Продолжить?", fileController.fileCount,  [self convertSize: fileController.size]];
+    
+    UIAlertView *sendAlert = [[UIAlertView alloc] initWithTitle:@"Отправление файлов" message: message delegate:self cancelButtonTitle:@"Отмена" otherButtonTitles:@"Продолжить",nil];
+    [sendAlert show];
+    
+    
+    
+}
+
+-(void) sendToServer{
+    ServerCommunication *serverCommunication = [[ServerCommunication alloc] init];
+    NSMutableArray *allFiles = [fileController getAllFiles];
+    for (NSString *file in allFiles) {
+        NSLog(@"%@",file);
+        NSString *content = [fileController readFile:file];
+        [serverCommunication uploadData:content];
+    }
 }
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error 

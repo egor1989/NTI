@@ -15,7 +15,7 @@
     
     
     //NSString *content = [NSString stringWithFormat:<#(NSString *), ...#>];
-    fileContent=[@"data={\"method\":\"addHoleSet\",\"params\":{\"points\":" stringByAppendingString:fileContent];
+    fileContent=[@"data={\"method\":\"addNTIFile\",\"params\":{\"ntifile\":" stringByAppendingString:fileContent];
     fileContent=[fileContent stringByAppendingString:@"}}"];
     
     NSLog(@"Request: %@", fileContent);

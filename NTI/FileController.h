@@ -36,11 +36,11 @@
 - (BOOL) writeToFile:(NSString *)myString fileName: (NSString *)fileName;
 - (BOOL) deleteFile;
 - (BOOL) isFileEmpty;
-- (NSString*) readFile;
+- (NSString *) readFile: (NSString *)path;
 - (void) countFiles;
 - (NSArray *) arrayFiles;
 - (NSData *)makeArchive;
-
+- (NSMutableArray *) getAllFiles;
 
 
 @end

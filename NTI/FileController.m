@@ -124,15 +124,29 @@
     
 }
 
-- (NSString *) readFile{
+- (NSMutableArray *) getAllFiles{
+    NSError *error = nil;
+    NSMutableArray *allFiles = [[NSMutableArray alloc] init];
+    for (NSString *file in [self.fileMgr contentsOfDirectoryAtPath:self.documentsDirectory error:&error])
+    {    
+        NSString *getFile = [self.documentsDirectory stringByAppendingPathComponent:file];
+        NSLog(@"File : %@", getFile);
+        [allFiles addObject:getFile];
+    }
+    return allFiles;
+}
+
+- (NSString *) readFile: (NSString *)path{
     
     NSLog(@"************* readFileAction *************");
 	
+    
+    
 	//Test whether this file exists before we read it
-	if([self.fileMgr fileExistsAtPath:self.filePath])
+	if([self.fileMgr fileExistsAtPath:path])
 	{
 		NSLog(@"File exists we can now try to read it");
-        NSString *content = [[NSString alloc] initWithContentsOfFile:self.filePath usedEncoding:nil error:nil];
+        NSString *content = [[NSString alloc] initWithContentsOfFile:path usedEncoding:nil error:nil];
         return content;
 	}
 	else 

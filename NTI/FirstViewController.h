@@ -17,6 +17,7 @@
 #import "DatabaseActions.h"
 #import "FileController.h"
 #import "toJSON.h"
+#import "ServerCommunication.h"
 
 
 
@@ -92,5 +93,7 @@
 
 - (void) showGPS;
 - (void)sendFile;
+- (void)infoAboutFiles;
+- (NSString *)convertSize: (NSInteger)size;
 - (void)sendToServer;
 @end
