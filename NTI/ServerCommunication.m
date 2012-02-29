@@ -13,8 +13,7 @@
 
 - (void)uploadData:(NSString *)fileContent{
     
-    
-    //NSString *content = [NSString stringWithFormat:<#(NSString *), ...#>];
+
     fileContent=[@"data={\"method\":\"addNTIFile\",\"params\":{\"ntifile\":" stringByAppendingString:fileContent];
     fileContent=[fileContent stringByAppendingString:@"}}"];
     

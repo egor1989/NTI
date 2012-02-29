@@ -371,7 +371,7 @@
 
 - (IBAction)sendFile:(id)sender {
     
-  //  [self sendFile];
+    [self sendFile];
     [self infoAboutFiles];
     
     
