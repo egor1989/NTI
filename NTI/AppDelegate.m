@@ -14,7 +14,7 @@
 
 @implementation AppDelegate
 
-@synthesize window = _window, lastLoc, course, trueNorth;
+@synthesize window = _window, lastLoc, course, trueNorth, north, allDistance;
 
 #define accelUpdateFrequency 30.0	
 
@@ -27,6 +27,7 @@
     locationManager.distanceFilter = kCLDistanceFilterNone;
     
     [locationManager startUpdatingHeading];
+    allDistance = 0;
     
     lastLoc = [[CLLocation alloc] init];
     [self startGPSDetect];
@@ -72,6 +73,10 @@
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation{
     
+    
+    CLLocationDistance meters = [newLocation distanceFromLocation:oldLocation];
+    if (meters<0) meters = 0;
+    allDistance += meters;
     lastLoc = [[CLLocation alloc] initWithCoordinate:newLocation.coordinate altitude:newLocation.altitude horizontalAccuracy:newLocation.horizontalAccuracy verticalAccuracy:newLocation.verticalAccuracy course:newLocation.course speed:newLocation.speed timestamp:newLocation.timestamp];
         
     [[NSNotificationCenter defaultCenter]	postNotificationName:	@"locateNotification" object:  nil];
@@ -108,6 +113,7 @@
     // Update variable updateHeading to be used in updater method
     updatedHeading = newHeading.magneticHeading;
     trueNorth = 0 - newHeading.trueHeading;
+    north = 360 - newHeading.trueHeading;
         
     //compassImg.transform = CGAffineTransformMakeRotation((headingFloat + northOffest)*radianConst); 
     //course = (headingFloat + northOffest)*radianConst;

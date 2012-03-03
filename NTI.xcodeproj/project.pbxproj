@@ -11,6 +11,7 @@
 		276C4C9B14DEF4FF00C469A6 /* DatabaseActions.m in Sources */ = {isa = PBXBuildFile; fileRef = 276C4C9A14DEF4FF00C469A6 /* DatabaseActions.m */; };
 		276C4C9D14DEF66B00C469A6 /* log.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 276C4C9C14DEF66B00C469A6 /* log.sqlite */; };
 		27F218B114E8238000E22C44 /* MyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 27F218B014E8238000E22C44 /* MyView.m */; };
+		532A46991502623A0070340D /* CSVConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 532A46981502623A0070340D /* CSVConverter.m */; };
 		536E026F14F00625003A2B15 /* compass.png in Resources */ = {isa = PBXBuildFile; fileRef = 536E026E14F00625003A2B15 /* compass.png */; };
 		539B29BE14F305C3007E6977 /* gps.png in Resources */ = {isa = PBXBuildFile; fileRef = 539B29BC14F305C3007E6977 /* gps.png */; };
 		539B29BF14F305C3007E6977 /* north.png in Resources */ = {isa = PBXBuildFile; fileRef = 539B29BD14F305C3007E6977 /* north.png */; };
@@ -50,6 +51,8 @@
 		276C4C9C14DEF66B00C469A6 /* log.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = log.sqlite; sourceTree = "<group>"; };
 		27F218AF14E8238000E22C44 /* MyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyView.h; sourceTree = "<group>"; };
 		27F218B014E8238000E22C44 /* MyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyView.m; sourceTree = "<group>"; };
+		532A46971502623A0070340D /* CSVConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSVConverter.h; sourceTree = "<group>"; };
+		532A46981502623A0070340D /* CSVConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSVConverter.m; sourceTree = "<group>"; };
 		536E026E14F00625003A2B15 /* compass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = compass.png; sourceTree = "<group>"; };
 		539B29BC14F305C3007E6977 /* gps.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gps.png; sourceTree = "<group>"; };
 		539B29BD14F305C3007E6977 /* north.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = north.png; sourceTree = "<group>"; };
@@ -145,6 +148,15 @@
 			name = Images;
 			sourceTree = "<group>";
 		};
+		532A46951502621A0070340D /* CSV */ = {
+			isa = PBXGroup;
+			children = (
+				532A46971502623A0070340D /* CSVConverter.h */,
+				532A46981502623A0070340D /* CSVConverter.m */,
+			);
+			name = CSV;
+			sourceTree = "<group>";
+		};
 		53AAF04314FE26D700E12486 /* ServerCommunication */ = {
 			isa = PBXGroup;
 			children = (
@@ -189,6 +201,7 @@
 		53E0A77014DEC75D004E3E1B /* NTI */ = {
 			isa = PBXGroup;
 			children = (
+				532A46951502621A0070340D /* CSV */,
 				53AAF04314FE26D700E12486 /* ServerCommunication */,
 				53E0A82B14E6DDEB004E3E1B /* ZipArchive */,
 				53E0A7D514E4522B004E3E1B /* FileController */,
@@ -355,6 +368,7 @@
 				53E0A83C14E6DDEB004E3E1B /* ZipArchive.mm in Sources */,
 				27F218B114E8238000E22C44 /* MyView.m in Sources */,
 				53AAF04B14FE2CF000E12486 /* ServerCommunication.m in Sources */,
+				532A46991502623A0070340D /* CSVConverter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

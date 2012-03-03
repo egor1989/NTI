@@ -18,6 +18,7 @@
 #import "FileController.h"
 #import "toJSON.h"
 #import "ServerCommunication.h"
+#import "CSVConverter.h"
 
 
 
@@ -66,8 +67,11 @@
     
     BOOL writeToFile;
     NSString *fileName;
+    IBOutlet UIButton *mapButton;
     
     BOOL writeInDB;
+    NSInteger logFile;
+    
     
     NSArray *keys;
     NSMutableArray *forJSON;
@@ -77,6 +81,10 @@
     
     CLLocation *location;
     int k;
+    
+    CSVConverter *csvConverter;
+    
+    
 }
 
 - (IBAction)acceleration:(id)sender;
@@ -86,6 +94,8 @@
 - (IBAction)actionButton:(id)sender;
 - (IBAction)clearDB:(id)sender;
 - (IBAction)sendFile:(id)sender;
+- (IBAction)mapLogFile:(id)sender;
+
 
 
 @property (nonatomic, retain) NSString *fileName;

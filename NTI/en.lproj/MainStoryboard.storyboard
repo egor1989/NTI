@@ -36,7 +36,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="khO-GB-iyr">
-                                <rect key="frame" x="100" y="276" width="120" height="37"/>
+                                <rect key="frame" x="20" y="276" width="120" height="37"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -53,7 +53,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="1bY-hu-axu">
-                                <rect key="frame" x="100" y="321" width="120" height="37"/>
+                                <rect key="frame" x="20" y="320" width="120" height="37"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" title="Торможение">
@@ -68,7 +68,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="w89-Uv-waP">
-                                <rect key="frame" x="102" y="366" width="56" height="37"/>
+                                <rect key="frame" x="20" y="364" width="56" height="37"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" title="&lt;-">
@@ -182,7 +182,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="36S-D0-EnK">
-                                <rect key="frame" x="161" y="366" width="59" height="37"/>
+                                <rect key="frame" x="81" y="364" width="59" height="37"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" title="->">
@@ -237,6 +237,21 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="0Q9-kB-xIj">
+                                <rect key="frame" x="189" y="276" width="122" height="38"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="MapLog">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="mapLogFile:" destination="2" eventType="touchUpInside" id="7DR-rT-3a2"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -251,6 +266,7 @@
                         <outlet property="decelButton" destination="1bY-hu-axu" id="rjP-9Q-EvT"/>
                         <outlet property="gpsRow" destination="DxY-8Z-qlL" id="n7T-c1-VrT"/>
                         <outlet property="leftButton" destination="w89-Uv-waP" id="ZbT-yR-BZk"/>
+                        <outlet property="mapButton" destination="0Q9-kB-xIj" id="lTA-Fv-stY"/>
                         <outlet property="northRow" destination="cwA-Ps-d54" id="euY-Cd-5jB"/>
                         <outlet property="northValue" destination="A6t-aD-sh4" id="npa-ji-rLo"/>
                         <outlet property="rightButton" destination="36S-D0-EnK" id="CF6-jZ-lmk"/>
@@ -303,42 +319,6 @@
         <image name="north.png" width="40" height="80"/>
         <image name="second" width="16" height="16"/>
     </resources>
-    <classes>
-        <class className="FirstViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/FirstViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="acceleration:"/>
-                <relationship kind="action" name="actionButton:"/>
-                <relationship kind="action" name="clearDB:"/>
-                <relationship kind="action" name="deceleration:"/>
-                <relationship kind="action" name="leftRot:"/>
-                <relationship kind="action" name="rightRot:"/>
-                <relationship kind="action" name="sendFile:"/>
-                <relationship kind="outlet" name="accX" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="accY" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="accZ" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="accelButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="action" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="course" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="decelButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="gpsRow" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="leftButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="northRow" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="northValue" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="rightButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="rowCourse" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="rowDegrees" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="speed" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="time" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="MyView" superclassName="UIView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MyView.h"/>
-        </class>
-        <class className="SecondViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/SecondViewController.h"/>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

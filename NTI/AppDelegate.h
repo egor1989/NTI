@@ -27,6 +27,7 @@
     float offsetG;
     float newCompassTarget;
     float currentYaw;
+    CLLocationDistance allDistance;
 
 }
 
@@ -44,5 +45,7 @@
 @property (readonly, NS_NONATOMIC_IPHONEONLY) CLLocation *lastLoc;
 @property (nonatomic) float course;
 @property (nonatomic) float trueNorth;
+@property (nonatomic) float north;
+@property (readonly, nonatomic) CLLocationDistance allDistance;
 
 @end

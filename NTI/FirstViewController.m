@@ -12,6 +12,7 @@
 #define radianConst M_PI/180.0
 
 @implementation FirstViewController
+
 @synthesize fileName;
 
 - (void) accelerometerReciver: (NSNotification*) theNotice{
@@ -53,11 +54,15 @@
    // }
 
     if (writeToFile) {
-
+        float curSpeed = 0;
+        if (location.speed > 0) curSpeed = location.speed*3.6;
+        
+        float distance = [myAppDelegate allDistance]/1000;
+        
       
         NSDictionary *acc = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%f", x], @"x", [NSString stringWithFormat:@"%f", y], @"y", nil];
         
-        NSDictionary *gps = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%.1f",[myAppDelegate course]], @"direction", [NSString stringWithFormat:@"%.2f",location.speed*3,6], @"speed", [NSString stringWithFormat:@"%.2f",location.coordinate.latitude], @"latitude", [NSString stringWithFormat:@"%.2f",location.coordinate.longitude], @"longitude",  nil];
+        NSDictionary *gps = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%.1f",[myAppDelegate course]], @"direction", [NSString stringWithFormat:@"%.2f",curSpeed], @"speed", [NSString stringWithFormat:@"%.6f",location.coordinate.latitude], @"latitude", [NSString stringWithFormat:@"%.6f",location.coordinate.longitude], @"longitude", [NSString stringWithFormat:@"%.0f",[myAppDelegate north]], @"compass", [NSString stringWithFormat:@"%.2f",distance], @"distance",   nil];
         
         NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]*1000], acc,gps, nil];
         NSDictionary *entries = [NSDictionary dictionaryWithObjects:objs forKeys:keys];
@@ -66,10 +71,11 @@
         
         NSInteger countInArray = forJSON.count;
         NSLog(@"countInArray = %i", countInArray);
-   
-        NSLog(@"write");
+        //NSLog(@"%@",forJSON);
         
     }
+            
+    
     
 }
 
@@ -101,6 +107,7 @@
     
     jsonConvert = [[toJSON alloc]init];
     fileController = [[FileController alloc] init];
+    csvConverter = [[CSVConverter alloc] init];
 
     [[NSNotificationCenter defaultCenter]	
      addObserver: self
@@ -138,6 +145,7 @@
     gpsRow = nil;
     northRow = nil;
     northValue = nil;
+    
     [super viewDidUnload];
     
     // Release any retained subviews of the main view.
@@ -195,7 +203,7 @@
     }
   
     if (location.speed <= 0) speed.text = @"0";
-    else speed.text =  [NSString stringWithFormat:@"%.2f", location.speed*3,6];
+    else speed.text =  [NSString stringWithFormat:@"%.2f", location.speed*3.6];
 
 
 }
@@ -381,6 +389,37 @@
     
 }
 
+- (IBAction)mapLogFile:(id)sender {
+    
+    NSLog(@"%@", mapButton.titleLabel.text);
+    if ([mapButton.titleLabel.text isEqualToString:@"MapLog"]) {
+        forJSON = [[NSMutableArray alloc] init];
+        [mapButton setTitle:@"Stop" forState:UIControlStateNormal];
+        
+        writeToFile = YES;
+        fileName = [NSString stringWithFormat:@"maplog%i", [userDefaults integerForKey:@"logFile"]];
+        logFile = [userDefaults integerForKey:@"logFile"]+1;
+        [userDefaults setInteger:otherFile forKey:@"logFile"];
+        [userDefaults synchronize];
+        
+        
+        logFile++;
+       
+        //start write to database
+    }
+    else {
+        [mapButton setTitle:@"MapLog" forState:UIControlStateNormal];
+        writeToFile = NO;
+        
+        NSString *CSV = [csvConverter arrayToCSVString:forJSON];
+        [fileController writeToFile:CSV fileName:fileName];
+        //  writeInDB =NO;
+        //stop write to database
+    }
+
+    
+}
+
 
 - (void)sendFile
 {
@@ -467,6 +506,9 @@
         [fileController deleteFile];
     }
 }
+
+
+
 
 
 
