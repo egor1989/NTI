@@ -83,6 +83,7 @@
     int k;
     
     CSVConverter *csvConverter;
+    BOOL writeToLog;
     
     
 }

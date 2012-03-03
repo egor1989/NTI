@@ -25,7 +25,7 @@
         
         csv = [csv stringByAppendingString:string];
         
-        NSLog(@"%@",csv);
+       // NSLog(@"%@",csv);
 
     }
     
