@@ -67,7 +67,7 @@
     
     BOOL writeToFile;
     NSString *fileName;
-    IBOutlet UIButton *mapButton;
+
     
     BOOL writeInDB;
     NSInteger logFile;
@@ -97,7 +97,7 @@
 - (IBAction)actionButton:(id)sender;
 - (IBAction)clearDB:(id)sender;
 - (IBAction)sendFile:(id)sender;
-- (IBAction)mapLogFile:(id)sender;
+
 
 
 

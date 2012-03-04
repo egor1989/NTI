@@ -28,6 +28,7 @@
     float newCompassTarget;
     float currentYaw;
     CLLocationDistance allDistance;
+    BOOL kmch5;
 
 }
 
@@ -38,8 +39,10 @@
 //- (void)startAccelerometerDetect;
 
 -(void) startMotionDetect;
-
+- (void)checkSpeedTimer;
 -(double) getTime;
+-(void) timerFired: (NSTimer *)timer;
+-(void)fiveMinTimer;
 
 @property (strong, nonatomic) UIWindow *window;
 @property (readonly, NS_NONATOMIC_IPHONEONLY) CLLocation *lastLoc;
@@ -47,5 +50,6 @@
 @property (nonatomic) float trueNorth;
 @property (nonatomic) float north;
 @property (readonly, nonatomic) CLLocationDistance allDistance;
+
 
 @end

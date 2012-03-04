@@ -390,34 +390,7 @@
     
 }
 
-- (IBAction)mapLogFile:(id)sender {
-    
-    NSLog(@"%@", mapButton.titleLabel.text);
-    if ([mapButton.titleLabel.text isEqualToString:@"MapLog"]) {
-        forJSON = [[NSMutableArray alloc] init];
-        [mapButton setTitle:@"Stop" forState:UIControlStateNormal];
-        writeToFile = YES;
-        //writeToFile = YES;
-        fileName = [NSString stringWithFormat:@"maplog%i", [userDefaults integerForKey:@"logFile"]];
-        logFile = [userDefaults integerForKey:@"logFile"]+1;
-        [userDefaults setInteger:logFile forKey:@"logFile"];
-        [userDefaults synchronize];
-        
-       
-        //start write to database
-    }
-    else {
-        [mapButton setTitle:@"MapLog" forState:UIControlStateNormal];
-        writeToFile = NO;
-        
-        NSString *CSV = [csvConverter arrayToCSVString:forJSON];
-        [fileController writeToFile:CSV fileName:fileName];
-        //  writeInDB =NO;
-        //stop write to database
-    }
 
-    
-}
 
 
 - (void)sendFile
@@ -432,7 +405,7 @@
     
 	// Add email addresses
     // Notice three sections: "to" "cc" and "bcc"	
-    [picker setToRecipients:[NSArray arrayWithObjects:@"alekseenko.lena@gmail.com", @"peacock7team@gmail.com",nil]];
+    [picker setToRecipients:[NSArray arrayWithObjects:@"alekseenko.lena@gmail.com", /* @"peacock7team@gmail.com", */nil]];
     //[picker setBccRecipients:<#(NSArray *)#>
 		
     
