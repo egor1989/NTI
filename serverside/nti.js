@@ -50,9 +50,15 @@ function handler(request)
     {	alert ('ERROR');
 		return;
 	}
-	
+	var drivingScore = 0;
+	var coef1 = 0.1;
+	var coef2 = 0.2;
+	var coef3 = 0.6;
+	var speedType = 0;
 	var deltaSpeed=0;
-	var exSpeed=0;
+	var speed1=0;
+	var speed2=0;
+	var speed3=0;
 	var acc1=0;
 	var acc2=0;
 	var acc3=0;
@@ -73,7 +79,7 @@ function handler(request)
 	var pt = new Array();
 	var filteredPt = new Array();
 	var j=0;
-	//С‡РёС‚Р°РµРј РёР· С„Р°Р№Р»Р° Рё С„РёР»СЊС‚СЂСѓРµРј
+	//читаем из файла и фильтруем
 	for (i=0; i<t.length; i++) if (t[i]!="")
 	{	// New point 
 		pt[i] = t[i].split(',');
@@ -104,6 +110,7 @@ function handler(request)
 		typeAcc[0] = "normal point";
 		var sevTurn = 0;
 		var sevAcc = 0;
+		var sevSpeed = 0;
 		speed = filteredPt[i][3];
 		var deltaTime = (filteredPt[i][5] - filteredPt[i-1][5])/1000;
 		if ((i!=0)&&((filteredPt[i][1]-filteredPt[i-1][1])!=0)){
@@ -113,13 +120,24 @@ function handler(request)
 			wAcc = Math.abs(deltaTurn/deltaTime);
 			radius = speed/wAcc;
 			//var acc = (filteredPt[i][3] - filteredPt[i-1][3])/(filteredPt[i][5] - filteredPt[i][5])/3600;
-			if (speed > 70) exSpeed++;
-			if ((wAcc<1)||(isNaN(wAcc))) {
+			if (speed < 90) {
+			  speedType = 0;
+			} else if (speed<110){
+			  speed1++;
+			  speedType = 1;
+			} else if (speed<130){
+			  speed2++;
+			  speedType = 2;
+			  } else {
+			  speed3++;
+			  speedType = 3;
+			  }
+			if ((wAcc<4.5)||(isNaN(wAcc))) {
 			  sevTurn = 0;
-			} else if (wAcc<2){
+			} else if (wAcc<6){
 			  sevTurn = 1;
 			  turn1++;
-			} else if (wAcc<3){
+			} else if (wAcc<7.5){
 			  sevTurn = 2;
 			  turn2++;
 			} else {
@@ -222,6 +240,7 @@ function handler(request)
 			    typeAcc = "normal point";
 			  }
 			}*/
+		
 		/*for acc and brake*/
 	    var color = "white";
 		if (sevAcc==1) color = "#c3eb0d";
@@ -231,7 +250,9 @@ function handler(request)
 		if (sevAcc==-2) color = "#eb610d";
 		if (sevAcc==-3) color = "#eb0d1b";
 		
-		/* for cornering
+		/* for cornering*/
+		/*
+		var color = "white";
 		if (sevTurn==1) color = "green";
 		if (sevTurn==2) color = "#fc6";
 		if (sevTurn==3) color = "black";
@@ -245,10 +266,9 @@ function handler(request)
 				time : Number(deltaTime),
 				label : Number(filteredPt[i][6]),
 				typeTurn : String(typeTurn[i]),
-				radiusTurn: Number(radius),
 				wAcc : Number(wAcc),
 				severityTurn : Number(sevTurn),
-				typeAcc : String(typeAcc[i]),
+				accel : String(accel[i]),
 				severityAcc : Number(sevAcc)
 			}, { fillColor: color,
 			     rotation: 360-Number(filteredPt[i][2]),			// rotation as attribute
@@ -262,11 +282,14 @@ function handler(request)
 		);
 		features.push(feature);
    }
-   
-	alert("РєРѕР»РёС‡РµСЃС‚РІРѕ РїРѕРІРѕСЂРѕС‚РѕРІ РїРѕ Р¶РµСЃС‚РєРѕСЃС‚Рё" + turn1+ " " + turn2 + " " + turn3);
-	alert("РїСЂРµРІС‹С€РµРЅРёРµ СЃРєРѕСЂРѕСЃС‚Рё РІ СЃРµРє" + exSpeed);
-	alert("РєРѕР»РёС‡РµСЃС‚РІРѕ СЂРµР·РєРёС… СѓСЃРєРѕСЂРµРЅРёР№ РїРѕ Р¶РµСЃС‚РєРѕСЃС‚Рё" + acc1+ " " + acc2 + " " + acc3);
-	alert("РєРѕР»РёС‡РµСЃС‚РІРѕ СЂРµР·РєРёС… С‚РѕСЂРјРѕР¶РµРЅРёР№ РїРѕ Р¶РµСЃС‚РєРѕСЃС‚Рё" + brake1 + " " + brake2 + " " +brake3);
+    var fullTime = (filteredPt[filteredPt.length - 1][5] - filteredPt[0][5]) /1000 / 60 / 60;
+    drivingScore = (coef1 * (speed1 + turn1 + acc1 + brake1) + coef2 * (speed2 + turn2 + acc2 + brake2) 
+					+ coef3 * (speed3 + turn3 + acc3 + brake3)) / fullTime;
+	//alert("количество поворотов по жесткости" + turn1 + " " + turn2 + " " + turn3);
+	//alert("превышения скорости по жесткости, в сек" + speed1 + " " + speed2 + " " + speed3);
+	//alert("количество резких ускорений по жесткости" + acc1 + " " + acc2 + " " + acc3);
+	//alert("количество резких торможений по жесткости" + brake1 + " " + brake2 + " " + brake3);
+    alert(drivingScore);
    // Add to the layer
    this.amLayer.addFeatures(features);
    
@@ -319,10 +342,9 @@ function init()
 				+"Time : "+e.feature.attributes.time+"<br/>"
 				+"Label : "+e.feature.attributes.label+" <br/>"
 				+"TypeTurn: "+e.feature.attributes.typeTurn+" <br/>"
-				+"RadiusTurn: "+e.feature.attributes.radiusTurn+" <br/>"
 				+"wAcc: "+e.feature.attributes.wAcc+" <br/>"
 				+"severityTurn: "+e.feature.attributes.severityTurn+" <br/>"
-				+"TypeAcc: "+e.feature.attributes.typeAcc+" <br/>"
+				+"Acc: "+e.feature.attributes.accel+" <br/>"
 				+"SeverityAcc: "+e.feature.attributes.severityAcc;
         },
         "featureunselected": function(e) { document.getElementById("status").innerHTML = ""; }
@@ -330,7 +352,7 @@ function init()
 
 	// AddFeatures
 	var request = OpenLayers.Request.GET
-	({	url: "data/1.csv",
+	({	url: "data/nti.csv",
 		callback: handler,
 		scope:map
 	});
