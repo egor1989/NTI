@@ -53,17 +53,10 @@
     NSUserDefaults *userDefaults;
     
     IBOutlet UIButton *accelButton;
-    BOOL writeToAccelFile;
-    NSInteger accelFileNumber;
     IBOutlet UIButton *decelButton;
-    BOOL writeToDecelFile;
-    NSInteger decelFileNumber;
     IBOutlet UIButton *rightButton;
-    BOOL writeToRightRotFile;
-    NSInteger rightRotFileNumber;
     IBOutlet UIButton *leftButton;
-    BOOL writeToLeftRotFile;
-    NSInteger leftRotFileNumber;
+
     
     BOOL writeToFile;
     NSString *fileName;
@@ -87,7 +80,9 @@
     BOOL writeToLog;
     NSString *type;
     
+    IBOutlet UILabel *writeLabel;
     
+    IBOutlet UILabel *timerLabel;
 }
 
 - (IBAction)acceleration:(id)sender;

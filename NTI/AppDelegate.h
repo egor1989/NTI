@@ -29,6 +29,8 @@
     float currentYaw;
     CLLocationDistance allDistance;
     BOOL kmch5;
+    NSInteger l5Km;
+    NSInteger m5Km;
 
 }
 
@@ -43,6 +45,7 @@
 -(double) getTime;
 -(void) timerFired: (NSTimer *)timer;
 -(void)fiveMinTimer;
+-(void)checkAfterFiveMin;
 
 @property (strong, nonatomic) UIWindow *window;
 @property (readonly, NS_NONATOMIC_IPHONEONLY) CLLocation *lastLoc;

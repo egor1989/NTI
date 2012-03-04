@@ -128,9 +128,13 @@
      selector: @selector(redrawCourse)
      name: @"redrawCourse"
      object: nil]; 
+    
+
 
 	// Do any additional setup after loading the view, typically from a nib.
 }
+
+
 
 - (void)viewDidUnload
 {
@@ -147,6 +151,8 @@
     northRow = nil;
     northValue = nil;
     
+    writeLabel = nil;
+    timerLabel = nil;
     [super viewDidUnload];
     
     // Release any retained subviews of the main view.

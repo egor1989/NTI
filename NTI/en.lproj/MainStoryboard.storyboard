@@ -230,6 +230,20 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" minimumFontSize="10" id="SmZ-cJ-Mcb">
+                                <rect key="frame" x="166" y="94" width="42" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" minimumFontSize="10" id="VR7-8s-3Z0">
+                                <rect key="frame" x="258" y="94" width="42" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -251,6 +265,8 @@
                         <outlet property="rowDegrees" destination="jdz-tI-Q32" id="Ygp-Ty-tgh"/>
                         <outlet property="speed" destination="mkA-bX-UL8" id="epf-IZ-Ds8"/>
                         <outlet property="time" destination="SfZ-t3-Lq2" id="bbJ-Wc-06D"/>
+                        <outlet property="timerLabel" destination="SmZ-cJ-Mcb" id="f0q-HL-djq"/>
+                        <outlet property="writeLabel" destination="VR7-8s-3Z0" id="xSf-xC-ZXw"/>
                     </connections>
                 </viewController>
             </objects>
