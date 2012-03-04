@@ -16,7 +16,7 @@
 
 @synthesize window = _window, lastLoc, course, trueNorth, north, allDistance;
 
-#define accelUpdateFrequency 30.0	
+#define accelUpdateFrequency 5.0	
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {
