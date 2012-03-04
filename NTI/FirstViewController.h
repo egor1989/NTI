@@ -71,6 +71,7 @@
     
     BOOL writeInDB;
     NSInteger logFile;
+    NSString *fileNameCSV;
     
     
     NSArray *keys;
@@ -84,6 +85,7 @@
     
     CSVConverter *csvConverter;
     BOOL writeToLog;
+    NSString *type;
     
     
 }
@@ -100,6 +102,7 @@
 
 
 @property (nonatomic, retain) NSString *fileName;
+@property (nonatomic, retain) NSString *type;
 
 
 - (void) showGPS;

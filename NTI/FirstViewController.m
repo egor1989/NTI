@@ -13,7 +13,7 @@
 
 @implementation FirstViewController
 
-@synthesize fileName;
+@synthesize fileName, type;
 
 - (void) accelerometerReciver: (NSNotification*) theNotice{
     userAcceleration=((CMDeviceMotion*)[theNotice.userInfo objectForKey: @"motion"]).userAcceleration;
@@ -62,7 +62,7 @@
       
         NSDictionary *acc = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%f", x], @"x", [NSString stringWithFormat:@"%f", y], @"y", nil];
         
-        NSDictionary *gps = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%.1f",[myAppDelegate course]], @"direction", [NSString stringWithFormat:@"%.2f",curSpeed], @"speed", [NSString stringWithFormat:@"%.6f",location.coordinate.latitude], @"latitude", [NSString stringWithFormat:@"%.6f",location.coordinate.longitude], @"longitude", [NSString stringWithFormat:@"%.0f",[myAppDelegate north]], @"compass", [NSString stringWithFormat:@"%.2f",distance], @"distance",   nil];
+        NSDictionary *gps = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%.1f",[myAppDelegate course]], @"direction", [NSString stringWithFormat:@"%.2f",curSpeed], @"speed", [NSString stringWithFormat:@"%.6f",location.coordinate.latitude], @"latitude", [NSString stringWithFormat:@"%.6f",location.coordinate.longitude], @"longitude", [NSString stringWithFormat:@"%.0f",[myAppDelegate north]], @"compass", [NSString stringWithFormat:@"%.2f",distance], @"distance",    nil];
         
         NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]*1000], acc,gps, nil];
         NSDictionary *entries = [NSDictionary dictionaryWithObjects:objs forKeys:keys];
@@ -194,7 +194,7 @@
 - (void) showGPS{
     
     
-    if (writeToLog) {
+/*    if (writeToLog) {
       float curSpeed = location.speed*3.6;
         if (curSpeed<0) {
             curSpeed=0;
@@ -216,6 +216,7 @@
         NSLog(@"%@",forJSON);
         
     }
+ */
 
     location = [myAppDelegate lastLoc];  
     //NSLog(@"lat = %@, lond = %@", [NSString stringWithFormat:@"%f", location.coordinate.latitude], [NSString stringWithFormat:@"%f", location.coordinate.longitude]);
@@ -355,6 +356,7 @@
         [action setTitle:@"Stop" forState:UIControlStateNormal];
         
         writeToFile = YES;
+        fileNameCSV = [NSString stringWithFormat:@"other%i.csv", [userDefaults integerForKey:@"otherFile"]];
         fileName = [NSString stringWithFormat:@"other%i", [userDefaults integerForKey:@"otherFile"]];
         otherFile = [userDefaults integerForKey:@"otherFile"]+1;
         [userDefaults setInteger:otherFile forKey:@"otherFile"];
@@ -369,6 +371,8 @@
         [action setTitle:@"Start" forState:UIControlStateNormal];
         writeToFile = NO;
         NSString *JSON = [jsonConvert convert:forJSON];
+        NSString *CSV = [csvConverter arrayToCSVString:forJSON];
+        [fileController writeToFile:CSV fileName:fileNameCSV];
         [fileController writeToFile:JSON fileName:fileName];
       //  writeInDB =NO;
         //stop write to database
@@ -421,7 +425,7 @@
     if ([mapButton.titleLabel.text isEqualToString:@"MapLog"]) {
         forJSON = [[NSMutableArray alloc] init];
         [mapButton setTitle:@"Stop" forState:UIControlStateNormal];
-        writeToLog = YES;
+        writeToFile = YES;
         //writeToFile = YES;
         fileName = [NSString stringWithFormat:@"maplog%i", [userDefaults integerForKey:@"logFile"]];
         logFile = [userDefaults integerForKey:@"logFile"]+1;
@@ -433,7 +437,7 @@
     }
     else {
         [mapButton setTitle:@"MapLog" forState:UIControlStateNormal];
-        writeToLog = NO;
+        writeToFile = NO;
         
         NSString *CSV = [csvConverter arrayToCSVString:forJSON];
         [fileController writeToFile:CSV fileName:fileName];
@@ -530,11 +534,6 @@
         [fileController deleteFile];
     }
 }
-
-
-
-
-
 
 
 @end
