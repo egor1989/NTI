@@ -6,11 +6,11 @@
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
-#import "MyView.h"
+#import "Plot.h"
 #define centrX 170.0
 #define centrY 215.0
 
-@implementation MyView
+@implementation Plot
 
 - (void) refreshAccLine:(NSNotification*)theNotice{
     x=[((NSNumber*)[theNotice.userInfo objectForKey: @"accX"]) doubleValue];

@@ -11,7 +11,7 @@
 #import "AppDelegate.h"
 #define myAppDelegate (AppDelegate*) [[UIApplication sharedApplication] delegate]
 
-@interface MyView : UIView {
+@interface Plot : UIView {
     double x,y,course,speed;
 }
 
