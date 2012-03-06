@@ -64,7 +64,7 @@
         
         NSDictionary *gps = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%.1f",[myAppDelegate course]], @"direction", [NSString stringWithFormat:@"%.2f",curSpeed], @"speed", [NSString stringWithFormat:@"%.6f",location.coordinate.latitude], @"latitude", [NSString stringWithFormat:@"%.6f",location.coordinate.longitude], @"longitude", [NSString stringWithFormat:@"%.0f",[myAppDelegate north]], @"compass", [NSString stringWithFormat:@"%.2f",distance], @"distance",    nil];
         
-        NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]*1000], acc,gps, nil];
+        NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]*1000], type, acc, gps, nil];
         NSDictionary *entries = [NSDictionary dictionaryWithObjects:objs forKeys:keys];
         
         [forJSON addObject:entries];
@@ -104,7 +104,7 @@
    // rightRotFileNumber = 0;
    // otherFile = 0;
        
-    keys = [NSArray arrayWithObjects:@"timestamp", @"acc", @"gps", nil];
+    keys = [NSArray arrayWithObjects:@"timestamp", @"type", @"acc", @"gps", nil];
     
     jsonConvert = [[toJSON alloc]init];
     fileController = [[FileController alloc] init];
@@ -128,9 +128,13 @@
      selector: @selector(redrawCourse)
      name: @"redrawCourse"
      object: nil]; 
+    
+
 
 	// Do any additional setup after loading the view, typically from a nib.
 }
+
+
 
 - (void)viewDidUnload
 {
@@ -147,6 +151,8 @@
     northRow = nil;
     northValue = nil;
     
+    writeLabel = nil;
+    timerLabel = nil;
     [super viewDidUnload];
     
     // Release any retained subviews of the main view.
@@ -252,26 +258,13 @@
 - (IBAction)acceleration:(id)sender {
     NSLog(@"push acceleration");
     if (![accelButton.titleLabel.text isEqualToString:@"Stop"]) {
-        forJSON = [[NSMutableArray alloc] init];
-       // [accelButton setBackgroundColor:[UIColor greenColor]];
         [accelButton setTitle:@"Stop" forState:UIControlStateNormal];
-        writeToFile = YES;
-        fileName = [NSString stringWithFormat: @"acceleration%i",[userDefaults integerForKey:@"accelFileNumber"]];
-        accelFileNumber = [userDefaults integerForKey:@"accelFileNumber"]+1;
-        [userDefaults setInteger:accelFileNumber forKey:@"accelFileNumber"];
-        [userDefaults synchronize];
-        NSLog(@"accelFileNumber %i", [userDefaults integerForKey:@"accelFileNumber"]);
-        NSLog(@"%@", fileName);
+        type = @"acceleration";
     }
     else {
-       // [accelButton setBackgroundColor:[UIColor whiteColor]];
+       
         [accelButton setTitle:@"Ускорение" forState:UIControlStateNormal];
-        writeToFile = NO;
-        
-        NSString *JSON = [jsonConvert convert:forJSON];
-        [fileController writeToFile:JSON fileName:fileName];
-        //[forJSON removeAllObjects];
-        
+        type = @"-";
     }
         //[databaseAction addRecord:currentAcceleration Type:1];
 }
@@ -279,22 +272,23 @@
 - (IBAction)deceleration:(id)sender {
      NSLog(@"push deceleration");
     if (![decelButton.titleLabel.text isEqualToString:@"Stop"]) {
-        forJSON = [[NSMutableArray alloc] init];
-        decelFileNumber++;
         [decelButton setTitle:@"Stop" forState:UIControlStateNormal];
-        fileName = [NSString stringWithFormat: @"deceleration%i",[userDefaults integerForKey:@"decelFileNumber"]];
-        decelFileNumber = [userDefaults integerForKey:@"decelFileNumber"]+1;
-        [userDefaults setInteger:decelFileNumber forKey:@"decelFileNumber"];
-        [userDefaults synchronize];
+        type = @"deceleration";
+        //forJSON = [[NSMutableArray alloc] init];
+        //fileName = [NSString stringWithFormat: @"deceleration%i",[userDefaults integerForKey:@"decelFileNumber"]];
+        //decelFileNumber = [userDefaults integerForKey:@"decelFileNumber"]+1;
+        //[userDefaults setInteger:decelFileNumber forKey:@"decelFileNumber"];
+        //[userDefaults synchronize];
 
-        writeToFile = YES;
+        //writeToFile = YES;
         
     }
     else {
         [decelButton setTitle:@"Торможение" forState:UIControlStateNormal];
-        writeToFile = NO;
-        NSString *JSON = [jsonConvert convert:forJSON];
-        [fileController writeToFile:JSON fileName:fileName];
+        type = @"-";
+        //writeToFile = NO;
+        //NSString *JSON = [jsonConvert convert:forJSON];
+        //[fileController writeToFile:JSON fileName:fileName];
 
     }
     
@@ -304,19 +298,12 @@
 
 - (IBAction)leftRot:(id)sender {
     if (![leftButton.titleLabel.text isEqualToString:@"Stop"]) {
-        forJSON = [[NSMutableArray alloc] init];
         [leftButton setTitle:@"Stop" forState:UIControlStateNormal];
-        fileName = [NSString stringWithFormat: @"leftRotation%i",[userDefaults integerForKey:@"leftRotFileNumber"]];
-        leftRotFileNumber = [userDefaults integerForKey:@"leftRotFileNumber"]+1;
-        [userDefaults setInteger:leftRotFileNumber forKey:@"leftRotFileNumber"];
-        [userDefaults synchronize];
-        writeToFile = YES;
+        type = @"left";
     }
     else {
         [leftButton setTitle:@"<-" forState:UIControlStateNormal];
-        writeToFile = NO;
-        NSString *JSON = [jsonConvert convert:forJSON];
-        [fileController writeToFile:JSON fileName:fileName];
+        type = @"-";
 
     }
 
@@ -325,27 +312,13 @@
 
 - (IBAction)rightRot:(id)sender {
     if (![rightButton.titleLabel.text isEqualToString:@"Stop"]) {
-        forJSON = [[NSMutableArray alloc] init];
-        [rightButton setTitle:@"Stop" forState:UIControlStateNormal];
-        fileName = [NSString stringWithFormat: @"rightRotation%i",[userDefaults integerForKey:@"rightRotFileNumber"]];
-        rightRotFileNumber = [userDefaults integerForKey:@"rightRotFileNumber"]+1;
-        [userDefaults setInteger:rightRotFileNumber forKey:@"rightRotFileNumber"];
-        [userDefaults synchronize];
-
-       // rightRotFileNumber++;
-
-        writeToFile = YES;
+            [rightButton setTitle:@"Stop" forState:UIControlStateNormal];
+            type=@"right";
     }
     else {
         [rightButton setTitle:@"->" forState:UIControlStateNormal];
-        writeToFile = NO;
-        NSString *JSON = [jsonConvert convert:forJSON];
-        [fileController writeToFile:JSON fileName:fileName];
-
-        
+        type = @"-";
     }
-
-    //[databaseAction addRecord:currentAcceleration Type:4];
 }
 
 
@@ -354,10 +327,10 @@
     if ([action.titleLabel.text isEqualToString:@"Start"]) {
         forJSON = [[NSMutableArray alloc] init];
         [action setTitle:@"Stop" forState:UIControlStateNormal];
-        
+        type = @"-";
         writeToFile = YES;
-        fileNameCSV = [NSString stringWithFormat:@"other%i.csv", [userDefaults integerForKey:@"otherFile"]];
-        fileName = [NSString stringWithFormat:@"other%i", [userDefaults integerForKey:@"otherFile"]];
+        fileNameCSV = [NSString stringWithFormat:@"log%i.csv", [userDefaults integerForKey:@"otherFile"]];
+        fileName = [NSString stringWithFormat:@"log%i", [userDefaults integerForKey:@"otherFile"]];
         otherFile = [userDefaults integerForKey:@"otherFile"]+1;
         [userDefaults setInteger:otherFile forKey:@"otherFile"];
         [userDefaults synchronize];
@@ -392,8 +365,12 @@
 - (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     
     if ([alertView.title isEqualToString:@"Отправление файлов"]) {
-        NSLog(@"neb");
-        [self sendToServer];
+        if (buttonIndex == 1) {
+             NSLog(@"продолжить");
+            [self sendFile];
+        }
+        //NSLog(@"neb");
+        //[self sendToServer];
         //[fileController sendFile];
     }
     else if (buttonIndex ==1) {
@@ -409,7 +386,7 @@
 
 - (IBAction)sendFile:(id)sender {
     
-    [self sendFile];
+    //[self sendFile];
     [self infoAboutFiles];
     
     
@@ -419,34 +396,7 @@
     
 }
 
-- (IBAction)mapLogFile:(id)sender {
-    
-    NSLog(@"%@", mapButton.titleLabel.text);
-    if ([mapButton.titleLabel.text isEqualToString:@"MapLog"]) {
-        forJSON = [[NSMutableArray alloc] init];
-        [mapButton setTitle:@"Stop" forState:UIControlStateNormal];
-        writeToFile = YES;
-        //writeToFile = YES;
-        fileName = [NSString stringWithFormat:@"maplog%i", [userDefaults integerForKey:@"logFile"]];
-        logFile = [userDefaults integerForKey:@"logFile"]+1;
-        [userDefaults setInteger:logFile forKey:@"logFile"];
-        [userDefaults synchronize];
-        
-       
-        //start write to database
-    }
-    else {
-        [mapButton setTitle:@"MapLog" forState:UIControlStateNormal];
-        writeToFile = NO;
-        
-        NSString *CSV = [csvConverter arrayToCSVString:forJSON];
-        [fileController writeToFile:CSV fileName:fileName];
-        //  writeInDB =NO;
-        //stop write to database
-    }
 
-    
-}
 
 
 - (void)sendFile
@@ -461,8 +411,8 @@
     
 	// Add email addresses
     // Notice three sections: "to" "cc" and "bcc"	
-	//[picker setToRecipients:[NSArray arrayWithObjects:@"peacock7team@gmail.com", nil]];
-    [picker setToRecipients:[NSArray arrayWithObjects:@"alekseenko.lena@gmail.com", nil]];
+    [picker setToRecipients:[NSArray arrayWithObjects:@"alekseenko.lena@gmail.com", /* @"peacock7team@gmail.com", */nil]];
+    //[picker setBccRecipients:<#(NSArray *)#>
 		
     
 	// Fill out the email body text

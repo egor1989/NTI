@@ -11,12 +11,13 @@
 
 #define CC_RADIANS_TO_DEGREES(__ANGLE__) ((__ANGLE__) / (float)M_PI * 180.0f)
 #define radianConst M_PI/180.0
+#define SPEED 1.5
 
 @implementation AppDelegate
 
 @synthesize window = _window, lastLoc, course, trueNorth, north, allDistance;
 
-#define accelUpdateFrequency 30.0	
+#define accelUpdateFrequency 5.0	
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {
@@ -26,11 +27,15 @@
     locationManager.desiredAccuracy= kCLLocationAccuracyNearestTenMeters;//kCLLocationAccuracyBestForNavigation; //
     locationManager.distanceFilter = kCLDistanceFilterNone;
     
-    [locationManager startUpdatingHeading];
-    allDistance = 0;
+
     
     lastLoc = [[CLLocation alloc] init];
-    [self startGPSDetect];
+    kmch5 = NO;
+    l5Km = 0;
+    m5Km = 0;
+    allDistance = 0;
+    [self checkSpeedTimer];
+        
     motionManager = [[CMMotionManager alloc] init];
     if ([motionManager isGyroAvailable]) {
         motionManager.deviceMotionUpdateInterval = 1.0/accelUpdateFrequency;
@@ -53,16 +58,56 @@
     return YES;
 }
 
+- (void)checkSpeedTimer{
+    [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(timerFired:) userInfo:nil repeats:NO];
+
+    [self startGPSDetect];
+}
+
+-(void) timerFired: (NSTimer *)timer{
+    NSLog(@"m=%i l=%i", m5Km,l5Km);
+    NSLog(@"30sec");
+    if (l5Km>m5Km) {
+        [self stopGPSDetect];
+        [self fiveMinTimer];
+
+    }
+    else {
+        [self startGPSDetect];
+
+        kmch5 = YES;
+    }
+    
+}
+
+-(void)fiveMinTimer{
+    if (kmch5) {
+        l5Km = 0;
+        m5Km = 0;
+        kmch5 = NO;
+        [NSTimer scheduledTimerWithTimeInterval:300 target:self selector:@selector(checkAfterFiveMin) userInfo:nil repeats:NO];
+    }
+    else [NSTimer scheduledTimerWithTimeInterval:300 target:self selector:@selector(checkSpeedTimer) userInfo:nil repeats:NO];
+}
+
+-(void)checkAfterFiveMin{
+     NSLog(@"m=%i l=%i", m5Km,l5Km);
+    if (l5Km>m5Km) [self checkSpeedTimer];
+    else kmch5 = YES;
+}
+
 
 
 //gps
 -(void)stopGPSDetect{
     [locationManager stopUpdatingLocation];
+    [locationManager stopUpdatingHeading];
     gpsState=NO;
 }
 
 -(void)startGPSDetect{
     [locationManager startUpdatingLocation];
+    [locationManager startUpdatingHeading];
     gpsState=YES;
 }
 
@@ -77,6 +122,12 @@
     CLLocationDistance meters = [newLocation distanceFromLocation:oldLocation];
     if (meters<0) meters = 0;
     allDistance += meters;
+    if (newLocation.speed > SPEED) m5Km++;
+    else l5Km++;
+    
+    if (kmch5) 
+        if (newLocation.speed < SPEED) [self fiveMinTimer];
+    
     lastLoc = [[CLLocation alloc] initWithCoordinate:newLocation.coordinate altitude:newLocation.altitude horizontalAccuracy:newLocation.horizontalAccuracy verticalAccuracy:newLocation.verticalAccuracy course:newLocation.course speed:newLocation.speed timestamp:newLocation.timestamp];
         
     [[NSNotificationCenter defaultCenter]	postNotificationName:	@"locateNotification" object:  nil];
