@@ -294,6 +294,7 @@
 				53E0A76214DEC75D004E3E1B /* Sources */,
 				53E0A76314DEC75D004E3E1B /* Frameworks */,
 				53E0A76414DEC75D004E3E1B /* Resources */,
+				273B788715065660003F1A67 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -348,6 +349,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		273B788715065660003F1A67 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd $SOURCE_ROOT;\nNUMBER_OF_COMMITS=`git rev-list --all | wc -l`;\n\n\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $NUMBER_OF_COMMITS\" NTI/NTI-Info.plist;";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		53E0A76214DEC75D004E3E1B /* Sources */ = {
