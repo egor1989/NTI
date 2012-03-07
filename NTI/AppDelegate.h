@@ -31,6 +31,7 @@
     BOOL kmch5;
     NSInteger l5Km;
     NSInteger m5Km;
+    BOOL canWriteToFile;
 
 }
 
@@ -53,6 +54,7 @@
 @property (nonatomic) float trueNorth;
 @property (nonatomic) float north;
 @property (readonly, nonatomic) CLLocationDistance allDistance;
+@property (nonatomic) BOOL canWriteToFile;
 
 
 @end

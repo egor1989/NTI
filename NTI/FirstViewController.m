@@ -70,7 +70,7 @@
         [forJSON addObject:entries];
         
         NSInteger countInArray = forJSON.count;
-        NSLog(@"countInArray = %i", countInArray);
+       // NSLog(@"countInArray = %i", countInArray);
         //NSLog(@"%@",forJSON);
         
     }

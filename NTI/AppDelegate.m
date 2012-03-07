@@ -15,7 +15,7 @@
 
 @implementation AppDelegate
 
-@synthesize window = _window, lastLoc, course, trueNorth, north, allDistance;
+@synthesize window = _window, lastLoc, course, trueNorth, north, allDistance, canWriteToFile;
 
 #define accelUpdateFrequency 5.0	
 
@@ -74,13 +74,15 @@
     }
     else {
         [self startGPSDetect];
-
         kmch5 = YES;
+        canWriteToFile = YES;
+        NSLog(@"canWriteToFile = YES");
     }
     
 }
 
 -(void)fiveMinTimer{
+    NSLog(@"5min");
     if (kmch5) {
         l5Km = 0;
         m5Km = 0;
@@ -91,8 +93,12 @@
 }
 
 -(void)checkAfterFiveMin{
-     NSLog(@"m=%i l=%i", m5Km,l5Km);
-    if (l5Km>m5Km) [self checkSpeedTimer];
+    NSLog(@"after 5 min m=%i l=%i", m5Km,l5Km);
+    if (l5Km>m5Km) {
+        [self checkSpeedTimer];
+        canWriteToFile = NO;
+        NSLog(@"canWriteToFile = NO");
+    }
     else kmch5 = YES;
 }
 
@@ -100,12 +106,14 @@
 
 //gps
 -(void)stopGPSDetect{
+    NSLog(@"stopGPSDetect");
     [locationManager stopUpdatingLocation];
     [locationManager stopUpdatingHeading];
     gpsState=NO;
 }
 
 -(void)startGPSDetect{
+    NSLog(@"startGPSDetect");
     [locationManager startUpdatingLocation];
     [locationManager startUpdatingHeading];
     gpsState=YES;
