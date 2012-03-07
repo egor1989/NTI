@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import <CoreMotion/CoreMotion.h>
+#import "FirstViewController.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, CLLocationManagerDelegate, UIAccelerometerDelegate> {
     CLLocationManager *locationManager;
@@ -55,6 +56,7 @@
 @property (nonatomic) float north;
 @property (readonly, nonatomic) CLLocationDistance allDistance;
 @property (nonatomic) BOOL canWriteToFile;
+
 
 
 @end

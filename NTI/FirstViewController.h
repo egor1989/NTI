@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FirstViewController : UIViewController
+@interface FirstViewController : UIViewController{
+    
+}
+- (IBAction)regButton:(id)sender;
+- (IBAction)authButton:(id)sender;
 
 @end

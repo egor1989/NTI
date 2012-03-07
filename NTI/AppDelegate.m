@@ -21,6 +21,11 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    
+        //[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:YES];
+    
     locationManager=[[CLLocationManager alloc] init];
     locationManager.delegate=self;
     //locationManager.desiredAccuracy=kCLLocationAccuracyBest;
@@ -54,8 +59,23 @@
     oldHeading          = 0;
     offsetG             = 0;
     newCompassTarget    = 0;
+    FirstViewController *firstViewController = [[FirstViewController alloc] init];
+    //UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+    //firstViewController = [storyboard instantiateViewControllerWithIdentifier:@"authAndRegView"];
+    if ([userDefaults stringForKey:@"login"] == nil)  {
+       // _window.rootViewController = firstViewController;
+        //[_window addSubview:firstViewController.view];
+        //[self.window setRootViewController: firstViewController];
+        
+        [self.window.rootViewController performSegueWithIdentifier:@"authAndRegView" sender:self];    
+    }
+    //else self.window.rootViewController = self.tabBarController;
     
+    [self.window makeKeyAndVisible];
+    
+
     return YES;
+    
 }
 
 - (void)checkSpeedTimer{

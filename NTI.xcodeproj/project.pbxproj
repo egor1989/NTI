@@ -29,7 +29,6 @@
 		53E0A77514DEC75D004E3E1B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 53E0A77314DEC75D004E3E1B /* InfoPlist.strings */; };
 		53E0A77714DEC75D004E3E1B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0A77614DEC75D004E3E1B /* main.m */; };
 		53E0A77B14DEC75D004E3E1B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0A77A14DEC75D004E3E1B /* AppDelegate.m */; };
-		53E0A77E14DEC75D004E3E1B /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 53E0A77C14DEC75D004E3E1B /* MainStoryboard.storyboard */; };
 		53E0A78114DEC75D004E3E1B /* StatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0A78014DEC75D004E3E1B /* StatViewController.m */; };
 		53E0A78314DEC75D004E3E1B /* first.png in Resources */ = {isa = PBXBuildFile; fileRef = 53E0A78214DEC75D004E3E1B /* first.png */; };
 		53E0A78514DEC75D004E3E1B /* first@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53E0A78414DEC75D004E3E1B /* first@2x.png */; };
@@ -50,15 +49,12 @@
 		53E0A83B14E6DDEB004E3E1B /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 53E0A83414E6DDEB004E3E1B /* zip.c */; };
 		53E0A83C14E6DDEB004E3E1B /* ZipArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 53E0A83714E6DDEB004E3E1B /* ZipArchive.mm */; };
 		53F0061515077DCB0074156E /* AuthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F0061315077DCB0074156E /* AuthViewController.m */; };
-		53F0061615077DCB0074156E /* AuthViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F0061415077DCB0074156E /* AuthViewController.xib */; };
 		53F0061A15077F390074156E /* RegistrationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F0061815077F380074156E /* RegistrationViewController.m */; };
-		53F0061B15077F390074156E /* RegistrationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F0061915077F390074156E /* RegistrationViewController.xib */; };
 		53F00626150784310074156E /* GoButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F00622150784310074156E /* GoButton@2x.png */; };
 		53F00627150784310074156E /* GoButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F00623150784310074156E /* GoButton.png */; };
 		53F00628150784310074156E /* cButton.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 53F00624150784310074156E /* cButton.jpg */; };
 		53F00629150784310074156E /* Background.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F00625150784310074156E /* Background.png */; };
 		53F006321507A9350074156E /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F006301507A9350074156E /* FirstViewController.m */; };
-		53F006331507A9350074156E /* FirstViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F006311507A9350074156E /* FirstViewController.xib */; };
 		53F006351507A94F0074156E /* first_screen.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 53F006341507A94F0074156E /* first_screen.jpg */; };
 /* End PBXBuildFile section */
 
@@ -94,7 +90,6 @@
 		53E0A77814DEC75D004E3E1B /* NTI-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NTI-Prefix.pch"; sourceTree = "<group>"; };
 		53E0A77914DEC75D004E3E1B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		53E0A77A14DEC75D004E3E1B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		53E0A77D14DEC75D004E3E1B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		53E0A77F14DEC75D004E3E1B /* StatViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StatViewController.h; sourceTree = "<group>"; };
 		53E0A78014DEC75D004E3E1B /* StatViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StatViewController.m; sourceTree = "<group>"; };
 		53E0A78214DEC75D004E3E1B /* first.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = first.png; sourceTree = "<group>"; };
@@ -126,17 +121,14 @@
 		53E0A83714E6DDEB004E3E1B /* ZipArchive.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ZipArchive.mm; sourceTree = "<group>"; };
 		53F0061215077DCB0074156E /* AuthViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AuthViewController.h; path = NTI/AuthViewController.h; sourceTree = "<group>"; };
 		53F0061315077DCB0074156E /* AuthViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AuthViewController.m; path = NTI/AuthViewController.m; sourceTree = "<group>"; };
-		53F0061415077DCB0074156E /* AuthViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AuthViewController.xib; path = NTI/AuthViewController.xib; sourceTree = "<group>"; };
 		53F0061715077F380074156E /* RegistrationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RegistrationViewController.h; path = NTI/RegistrationViewController.h; sourceTree = "<group>"; };
 		53F0061815077F380074156E /* RegistrationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RegistrationViewController.m; path = NTI/RegistrationViewController.m; sourceTree = "<group>"; };
-		53F0061915077F390074156E /* RegistrationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = RegistrationViewController.xib; path = NTI/RegistrationViewController.xib; sourceTree = "<group>"; };
 		53F00622150784310074156E /* GoButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "GoButton@2x.png"; path = "Images/GoButton@2x.png"; sourceTree = "<group>"; };
 		53F00623150784310074156E /* GoButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = GoButton.png; path = Images/GoButton.png; sourceTree = "<group>"; };
 		53F00624150784310074156E /* cButton.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = cButton.jpg; path = Images/cButton.jpg; sourceTree = "<group>"; };
 		53F00625150784310074156E /* Background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Background.png; path = Images/Background.png; sourceTree = "<group>"; };
 		53F0062F1507A9350074156E /* FirstViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FirstViewController.h; path = NTI/FirstViewController.h; sourceTree = "<group>"; };
 		53F006301507A9350074156E /* FirstViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FirstViewController.m; path = NTI/FirstViewController.m; sourceTree = "<group>"; };
-		53F006311507A9350074156E /* FirstViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FirstViewController.xib; path = NTI/FirstViewController.xib; sourceTree = "<group>"; };
 		53F006341507A94F0074156E /* first_screen.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = first_screen.jpg; path = Images/first_screen.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -272,7 +264,6 @@
 				53E0A7A014DEDE75004E3E1B /* DataBase */,
 				53E0A77914DEC75D004E3E1B /* AppDelegate.h */,
 				53E0A77A14DEC75D004E3E1B /* AppDelegate.m */,
-				53E0A77C14DEC75D004E3E1B /* MainStoryboard.storyboard */,
 				276C4C9014DEE6D500C469A6 /* ViewControllers */,
 				276C4C9214DEE6EA00C469A6 /* Images */,
 				53E0A77114DEC75D004E3E1B /* Supporting Files */,
@@ -352,13 +343,10 @@
 			children = (
 				53F0061715077F380074156E /* RegistrationViewController.h */,
 				53F0061815077F380074156E /* RegistrationViewController.m */,
-				53F0061915077F390074156E /* RegistrationViewController.xib */,
 				53F0061215077DCB0074156E /* AuthViewController.h */,
 				53F0061315077DCB0074156E /* AuthViewController.m */,
-				53F0061415077DCB0074156E /* AuthViewController.xib */,
 				53F0062F1507A9350074156E /* FirstViewController.h */,
 				53F006301507A9350074156E /* FirstViewController.m */,
-				53F006311507A9350074156E /* FirstViewController.xib */,
 			);
 			name = "Auth&Registration";
 			sourceTree = "<group>";
@@ -415,7 +403,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				53E0A77514DEC75D004E3E1B /* InfoPlist.strings in Resources */,
-				53E0A77E14DEC75D004E3E1B /* MainStoryboard.storyboard in Resources */,
 				53E0A78314DEC75D004E3E1B /* first.png in Resources */,
 				53E0A78514DEC75D004E3E1B /* first@2x.png in Resources */,
 				53E0A78A14DEC75D004E3E1B /* second.png in Resources */,
@@ -430,13 +417,10 @@
 				2775F55415068A7900FE08BC /* NTI_MapMenuIcon@2x.png in Resources */,
 				2775F55515068A7900FE08BC /* NTI_StatMenuIcon.png in Resources */,
 				2775F55615068A7900FE08BC /* NTI_StatMenuIcon@2x.png in Resources */,
-				53F0061615077DCB0074156E /* AuthViewController.xib in Resources */,
-				53F0061B15077F390074156E /* RegistrationViewController.xib in Resources */,
 				53F00626150784310074156E /* GoButton@2x.png in Resources */,
 				53F00627150784310074156E /* GoButton.png in Resources */,
 				53F00628150784310074156E /* cButton.jpg in Resources */,
 				53F00629150784310074156E /* Background.png in Resources */,
-				53F006331507A9350074156E /* FirstViewController.xib in Resources */,
 				53F006351507A94F0074156E /* first_screen.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -497,14 +481,6 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		53E0A77C14DEC75D004E3E1B /* MainStoryboard.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				53E0A77D14DEC75D004E3E1B /* en */,
-			);
-			name = MainStoryboard.storyboard;
-			sourceTree = "<group>";
-		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -531,7 +507,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PROVISIONING_PROFILE = "945ACF9E-A880-4572-8BB2-D9BAB10DAAE6";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "57E9399D-33B1-4820-BA4C-E5AEF63BDE98";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "945ACF9E-A880-4572-8BB2-D9BAB10DAAE6";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -568,8 +544,8 @@
 				GCC_PREFIX_HEADER = "NTI/NTI-Prefix.pch";
 				INFOPLIST_FILE = "NTI/NTI-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "57E9399D-33B1-4820-BA4C-E5AEF63BDE98";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "57E9399D-33B1-4820-BA4C-E5AEF63BDE98";
+				PROVISIONING_PROFILE = "945ACF9E-A880-4572-8BB2-D9BAB10DAAE6";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "945ACF9E-A880-4572-8BB2-D9BAB10DAAE6";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;

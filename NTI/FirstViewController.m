@@ -16,6 +16,7 @@
     if (self) {
         // Custom initialization
     }
+    NSLog(@"first");
     return self;
 }
 
@@ -48,4 +49,9 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
+- (IBAction)regButton:(id)sender {
+}
+
+- (IBAction)authButton:(id)sender {
+}
 @end
