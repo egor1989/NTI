@@ -15,12 +15,17 @@
 
 @implementation AppDelegate
 
-@synthesize window = _window, lastLoc, course, trueNorth, north, allDistance;
+@synthesize window = _window, lastLoc, course, trueNorth, north, allDistance, canWriteToFile;
 
 #define accelUpdateFrequency 5.0	
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    
+        //[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:YES];
+    
     locationManager=[[CLLocationManager alloc] init];
     locationManager.delegate=self;
     //locationManager.desiredAccuracy=kCLLocationAccuracyBest;
@@ -54,8 +59,23 @@
     oldHeading          = 0;
     offsetG             = 0;
     newCompassTarget    = 0;
+    FirstViewController *firstViewController = [[FirstViewController alloc] init];
+    //UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+    //firstViewController = [storyboard instantiateViewControllerWithIdentifier:@"authAndRegView"];
+    if ([userDefaults stringForKey:@"login"] == nil)  {
+       // _window.rootViewController = firstViewController;
+        //[_window addSubview:firstViewController.view];
+        //[self.window setRootViewController: firstViewController];
+        
+        [self.window.rootViewController performSegueWithIdentifier:@"authAndRegView" sender:self];    
+    }
+    //else self.window.rootViewController = self.tabBarController;
     
+    [self.window makeKeyAndVisible];
+    
+
     return YES;
+    
 }
 
 - (void)checkSpeedTimer{
@@ -74,13 +94,15 @@
     }
     else {
         [self startGPSDetect];
-
         kmch5 = YES;
+        canWriteToFile = YES;
+        NSLog(@"canWriteToFile = YES");
     }
     
 }
 
 -(void)fiveMinTimer{
+    NSLog(@"5min");
     if (kmch5) {
         l5Km = 0;
         m5Km = 0;
@@ -91,8 +113,12 @@
 }
 
 -(void)checkAfterFiveMin{
-     NSLog(@"m=%i l=%i", m5Km,l5Km);
-    if (l5Km>m5Km) [self checkSpeedTimer];
+    NSLog(@"after 5 min m=%i l=%i", m5Km,l5Km);
+    if (l5Km>m5Km) {
+        [self checkSpeedTimer];
+        canWriteToFile = NO;
+        NSLog(@"canWriteToFile = NO");
+    }
     else kmch5 = YES;
 }
 
@@ -100,12 +126,14 @@
 
 //gps
 -(void)stopGPSDetect{
+    NSLog(@"stopGPSDetect");
     [locationManager stopUpdatingLocation];
     [locationManager stopUpdatingHeading];
     gpsState=NO;
 }
 
 -(void)startGPSDetect{
+    NSLog(@"startGPSDetect");
     [locationManager startUpdatingLocation];
     [locationManager startUpdatingHeading];
     gpsState=YES;

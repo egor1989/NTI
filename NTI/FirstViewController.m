@@ -1,14 +1,24 @@
 //
-//  StatTableViewController.m
+//  FirstViewController.m
 //  NTI
 //
-//  Created by Mike on 07.03.12.
+//  Created by Елена on 07.03.12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "StatViewController.h"
+#import "FirstViewController.h"
 
-@implementation StatViewController
+@implementation FirstViewController
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+    }
+    NSLog(@"first");
+    return self;
+}
 
 - (void)didReceiveMemoryWarning
 {
@@ -20,17 +30,10 @@
 
 #pragma mark - View lifecycle
 
-/*
-// Implement loadView to create a view hierarchy programmatically, without using a nib.
-- (void)loadView
-{
-}
-*/
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSLog(@"lalal");
+    // Do any additional setup after loading the view from its nib.
 }
 
 - (void)viewDidUnload
@@ -46,4 +49,9 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
+- (IBAction)regButton:(id)sender {
+}
+
+- (IBAction)authButton:(id)sender {
+}
 @end
