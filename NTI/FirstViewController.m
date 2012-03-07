@@ -54,4 +54,7 @@
 
 - (IBAction)authButton:(id)sender {
 }
+
+- (IBAction)tabBarButton:(id)sender {
+}
 @end
