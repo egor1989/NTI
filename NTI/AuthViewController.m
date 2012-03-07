@@ -10,6 +10,7 @@
 
 @implementation AuthViewController
 
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -37,6 +38,7 @@
 
 - (void)viewDidUnload
 {
+
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -48,4 +50,15 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
+- (IBAction)cancelButton:(id)sender {
+      [self dismissModalViewControllerAnimated:YES];
+}
+
+- (IBAction)goButton:(id)sender {
+    
+}
+
+- (BOOL)checkData{
+    return YES;
+}
 @end

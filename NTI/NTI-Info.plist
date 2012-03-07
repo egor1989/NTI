@@ -23,20 +23,19 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>72</string>
+	<string>73</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>UIMainStoryboardFile</key>
-	<string>MainStoryboard</string>
-	<key>UIRequiredDeviceCapabilities</key>
+	<key>UIBackgroundModes</key>
 	<array>
+		<string>location</string>
 		<string>armv7</string>
 	</array>
+	<key>UIMainStoryboardFile</key>
+	<string>MainStoryboard</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 </dict>
 </plist>

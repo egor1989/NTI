@@ -19,10 +19,10 @@
     
     NSLog(@"Request: %@", fileContent);
         
-   NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://goodroads.ru/another/api.php"]cachePolicy:NSURLRequestUseProtocolCachePolicy
+   request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://goodroads.ru/another/api.php"]cachePolicy:NSURLRequestUseProtocolCachePolicy
                                   timeoutInterval:60.0];
 
-    NSData *requestData = [NSData dataWithBytes:[fileContent UTF8String] length:[fileContent length]];
+    requestData = [NSData dataWithBytes:[fileContent UTF8String] length:[fileContent length]];
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody: requestData];
 //    [request setAllHTTPHeaderFields:headers];
@@ -60,5 +60,27 @@
     
 }
  */
+
+- (NSString *)regUser:(NSString *)login password:(NSString *)password email:(NSString *)email{
+    
+    NSLog(@"sendData login = %@ message = %@ email = %@", login, password, email);
+    
+    NSString *data = [NSString stringWithFormat:(@"%@%@%@%@%@%@%@"),@"data={\"method\":\"NTIregister\",\"params\":{\"login\":\"",login, @"\",\"password\":\"", password,@"\",\"email\":\"",email, @"\"}}"];
+    NSLog(@"Request: %@", data);
+    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://goodroads.ru/another/api.php"]cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                  timeoutInterval:60.0];
+    
+    requestData = [NSData dataWithBytes:[data UTF8String] length:[data length]];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody: requestData];
+    
+    NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
+    returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
+    NSLog(@"returnData: %@", returnString);
+    //[self parseAuthJSON:returnString cookie: cookie method: @"regUser"];
+    //parse json
+    return returnString;
+}
+
 
 @end
