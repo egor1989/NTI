@@ -128,9 +128,9 @@
 
     if ([self checkField]) {
         NSData *password = [passwordField.text dataUsingEncoding:NSUTF8StringEncoding];
-        EncryptionData *encryptionData = [[EncryptionData alloc] init];
-        NSString *encryptedPass = [encryptionData encryptionPassword:password];
-        NSLog(@"%@", encryptedPass);
+       // EncryptionData *encryptionData = [[EncryptionData alloc] init];
+       // NSString *encryptedPass = [encryptionData encryptionPassword:password];
+      //  NSLog(@"%@", encryptedPass);
         
         // отправка на сервер
         ServerCommunication *serverCommunication = [[ServerCommunication alloc] init];

@@ -12,14 +12,6 @@
 @implementation EncryptionData
 
 
-- (id) init {
-    self = [super init];
-    
-    if (self != nil) {
-    }
-    return self;
-}
-
 -(NSString *)encryptionPassword:(NSData *)password{
     CC_SHA256(password.bytes, password.length, hashedPassword);
     //CC_MD5(password.bytes, password.length, hashedPassword);
@@ -51,7 +43,7 @@
     }
     *hex = 0;
     hexBytes = [NSString stringWithUTF8String:strbuf];
-    //free(strbuf);
+    free(strbuf);
     return hexBytes;
 }
 
@@ -98,6 +90,8 @@
     return decryptStr;
     
 }
+
+
 
 
 

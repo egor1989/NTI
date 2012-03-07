@@ -503,12 +503,10 @@
 				53F0061515077DCB0074156E /* AuthViewController.m in Sources */,
 				53F0061A15077F390074156E /* RegistrationViewController.m in Sources */,
 				53F006321507A9350074156E /* FirstViewController.m in Sources */,
-<<<<<<< HEAD
 				53F8832D1507E70F000F7FE3 /* EncryptionData.m in Sources */,
 				53F8832E1507E70F000F7FE3 /* NSData+CommonCrypto.m in Sources */,
-=======
 				2775F5641507D48C00FE08BC /* StatViewController.m in Sources */,
->>>>>>> 71cc1bda553e23b68499c62681c1de5f55bbca35
+
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
