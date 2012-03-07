@@ -24,7 +24,7 @@
 
 
 
-@interface StatViewController : UIViewController <UINavigationControllerDelegate, MFMailComposeViewControllerDelegate>{
+@interface DevelopViewController : UIViewController <UINavigationControllerDelegate, MFMailComposeViewControllerDelegate>{
     
     IBOutlet UILabel *accX;
     IBOutlet UILabel *accY;

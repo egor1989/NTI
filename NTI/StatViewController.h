@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface StatTableViewController : UIViewController
+@interface StatViewController : UIViewController
 
 @end

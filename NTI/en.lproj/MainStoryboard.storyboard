@@ -8,7 +8,7 @@
         <scene sceneID="11">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="10" sceneMemberID="firstResponder"/>
-                <viewController title="First" id="2" customClass="StatViewController" sceneMemberID="viewController">
+                <viewController title="First" id="2" customClass="DevelopViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="16">
                         <rect key="frame" x="0.0" y="20" width="320" height="411"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -247,7 +247,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Statistic" image="NTI_StatMenuIcon.png" id="7"/>
+                    <tabBarItem key="tabBarItem" title="Develop" image="second.png" id="7"/>
                     <connections>
                         <outlet property="accX" destination="oKe-li-5Jx" id="yY6-IC-Au2"/>
                         <outlet property="accY" destination="tFV-I2-GFL" id="m53-Xh-iRN"/>
@@ -270,7 +270,7 @@
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="653" y="-138"/>
+            <point key="canvasLocation" x="647" y="-202"/>
         </scene>
         <scene sceneID="13">
             <objects>
@@ -284,7 +284,7 @@
                     <tabBarItem key="tabBarItem" title="Plot" image="NTI_GraphMenuIcon.png" id="6"/>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="653" y="498"/>
+            <point key="canvasLocation" x="647" y="378"/>
         </scene>
         <scene sceneID="fL4-Ev-0a8">
             <objects>
@@ -308,7 +308,21 @@
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="653" y="1139"/>
+            <point key="canvasLocation" x="647" y="967"/>
+        </scene>
+        <scene sceneID="Dib-eT-l5c">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="x4Q-Ha-gZ2" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController id="Bao-Tc-kOx" customClass="StatViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ga1-lf-58B">
+                        <rect key="frame" x="0.0" y="20" width="320" height="411"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Statistic" image="NTI_StatMenuIcon.png" id="3ET-ef-ovP"/>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="647" y="-764"/>
         </scene>
         <scene sceneID="15">
             <objects>
@@ -321,13 +335,14 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </tabBar>
                     <connections>
+                        <segue destination="Bao-Tc-kOx" kind="relationship" relationship="viewControllers" id="CGR-sz-vvz"/>
                         <segue destination="2" kind="relationship" relationship="viewControllers" id="26"/>
                         <segue destination="3" kind="relationship" relationship="viewControllers" id="27"/>
                         <segue destination="BYh-6p-dCO" kind="relationship" relationship="viewControllers" id="nhx-Ln-Vbr"/>
                     </connections>
                 </tabBarController>
             </objects>
-            <point key="canvasLocation" x="134" y="498"/>
+            <point key="canvasLocation" x="140" y="62"/>
         </scene>
     </scenes>
     <resources>
@@ -337,16 +352,11 @@
         <image name="compass.png" width="51" height="96"/>
         <image name="gps.png" width="35" height="79"/>
         <image name="north.png" width="40" height="80"/>
+        <image name="second.png" width="30" height="30"/>
     </resources>
     <classes>
-        <class className="Plot" superclassName="UIView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/Plot.h"/>
-        </class>
-        <class className="PlotViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/PlotViewController.h"/>
-        </class>
-        <class className="StatViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/StatViewController.h"/>
+        <class className="DevelopViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/DevelopViewController.h"/>
             <relationships>
                 <relationship kind="action" name="acceleration:"/>
                 <relationship kind="action" name="actionButton:"/>
@@ -374,6 +384,15 @@
                 <relationship kind="outlet" name="timerLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="writeLabel" candidateClass="UILabel"/>
             </relationships>
+        </class>
+        <class className="Plot" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/Plot.h"/>
+        </class>
+        <class className="PlotViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/PlotViewController.h"/>
+        </class>
+        <class className="StatViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/StatViewController.h"/>
         </class>
         <class className="WebViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/WebViewController.h"/>

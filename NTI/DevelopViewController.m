@@ -6,12 +6,12 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "StatViewController.h"
+#import "DevelopViewController.h"
 
 #define MAX3(a,b,c) ( MAX(a,b)>c ? ((a>b)? 1:2) : 3 )
 #define radianConst M_PI/180.0
 
-@implementation StatViewController
+@implementation DevelopViewController
 
 @synthesize fileName, type;
 
