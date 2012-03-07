@@ -67,7 +67,7 @@
         //[_window addSubview:firstViewController.view];
         //[self.window setRootViewController: firstViewController];
         
-        [self.window.rootViewController performSegueWithIdentifier:@"authAndRegView" sender:self];    
+        //[self.window.rootViewController performSegueWithIdentifier:@"authAndRegView" sender:self];    
     }
     //else self.window.rootViewController = self.tabBarController;
     

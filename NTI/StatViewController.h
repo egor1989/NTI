@@ -1,5 +1,5 @@
 //
-//  StatTableViewController.h
+//  StatViewController.h
 //  NTI
 //
 //  Created by Mike on 07.03.12.
@@ -7,7 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AppDelegate.h"
 
-@interface StatViewController : UIViewController
+#define myAppDelegate (AppDelegate*) [[UIApplication sharedApplication] delegate]
+
+@interface StatViewController : UITableViewController{
+    UILabel *speedLabel;
+}
+
+- (void) speedUpdate;
 
 @end
