@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "SecondViewController.h"
+#import "PlotViewController.h"
 
-@implementation SecondViewController
+@implementation PlotViewController
 @synthesize x,y;
 
 - (void) refreshPlot:(NSNotification*)theNotice{
