@@ -49,6 +49,17 @@
 		53E0A83A14E6DDEB004E3E1B /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 53E0A83214E6DDEB004E3E1B /* unzip.c */; };
 		53E0A83B14E6DDEB004E3E1B /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 53E0A83414E6DDEB004E3E1B /* zip.c */; };
 		53E0A83C14E6DDEB004E3E1B /* ZipArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 53E0A83714E6DDEB004E3E1B /* ZipArchive.mm */; };
+		53F0061515077DCB0074156E /* AuthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F0061315077DCB0074156E /* AuthViewController.m */; };
+		53F0061615077DCB0074156E /* AuthViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F0061415077DCB0074156E /* AuthViewController.xib */; };
+		53F0061A15077F390074156E /* RegistrationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F0061815077F380074156E /* RegistrationViewController.m */; };
+		53F0061B15077F390074156E /* RegistrationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F0061915077F390074156E /* RegistrationViewController.xib */; };
+		53F00626150784310074156E /* GoButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F00622150784310074156E /* GoButton@2x.png */; };
+		53F00627150784310074156E /* GoButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F00623150784310074156E /* GoButton.png */; };
+		53F00628150784310074156E /* cButton.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 53F00624150784310074156E /* cButton.jpg */; };
+		53F00629150784310074156E /* Background.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F00625150784310074156E /* Background.png */; };
+		53F006321507A9350074156E /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F006301507A9350074156E /* FirstViewController.m */; };
+		53F006331507A9350074156E /* FirstViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F006311507A9350074156E /* FirstViewController.xib */; };
+		53F006351507A94F0074156E /* first_screen.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 53F006341507A94F0074156E /* first_screen.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -113,6 +124,20 @@
 		53E0A83514E6DDEB004E3E1B /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
 		53E0A83614E6DDEB004E3E1B /* ZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipArchive.h; sourceTree = "<group>"; };
 		53E0A83714E6DDEB004E3E1B /* ZipArchive.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ZipArchive.mm; sourceTree = "<group>"; };
+		53F0061215077DCB0074156E /* AuthViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AuthViewController.h; path = NTI/AuthViewController.h; sourceTree = "<group>"; };
+		53F0061315077DCB0074156E /* AuthViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AuthViewController.m; path = NTI/AuthViewController.m; sourceTree = "<group>"; };
+		53F0061415077DCB0074156E /* AuthViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AuthViewController.xib; path = NTI/AuthViewController.xib; sourceTree = "<group>"; };
+		53F0061715077F380074156E /* RegistrationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RegistrationViewController.h; path = NTI/RegistrationViewController.h; sourceTree = "<group>"; };
+		53F0061815077F380074156E /* RegistrationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RegistrationViewController.m; path = NTI/RegistrationViewController.m; sourceTree = "<group>"; };
+		53F0061915077F390074156E /* RegistrationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = RegistrationViewController.xib; path = NTI/RegistrationViewController.xib; sourceTree = "<group>"; };
+		53F00622150784310074156E /* GoButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "GoButton@2x.png"; path = "Images/GoButton@2x.png"; sourceTree = "<group>"; };
+		53F00623150784310074156E /* GoButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = GoButton.png; path = Images/GoButton.png; sourceTree = "<group>"; };
+		53F00624150784310074156E /* cButton.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = cButton.jpg; path = Images/cButton.jpg; sourceTree = "<group>"; };
+		53F00625150784310074156E /* Background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Background.png; path = Images/Background.png; sourceTree = "<group>"; };
+		53F0062F1507A9350074156E /* FirstViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FirstViewController.h; path = NTI/FirstViewController.h; sourceTree = "<group>"; };
+		53F006301507A9350074156E /* FirstViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FirstViewController.m; path = NTI/FirstViewController.m; sourceTree = "<group>"; };
+		53F006311507A9350074156E /* FirstViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FirstViewController.xib; path = NTI/FirstViewController.xib; sourceTree = "<group>"; };
+		53F006341507A94F0074156E /* first_screen.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = first_screen.jpg; path = Images/first_screen.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,6 +179,11 @@
 		276C4C9214DEE6EA00C469A6 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				53F006341507A94F0074156E /* first_screen.jpg */,
+				53F00622150784310074156E /* GoButton@2x.png */,
+				53F00623150784310074156E /* GoButton.png */,
+				53F00624150784310074156E /* cButton.jpg */,
+				53F00625150784310074156E /* Background.png */,
 				2775F53615068A0300FE08BC /* TabBar Icons */,
 				539B29BC14F305C3007E6977 /* gps.png */,
 				539B29BD14F305C3007E6977 /* north.png */,
@@ -201,6 +231,7 @@
 		53E0A75B14DEC75D004E3E1B = {
 			isa = PBXGroup;
 			children = (
+				53F0062E1507A8EB0074156E /* Auth&Registration */,
 				53E0A77014DEC75D004E3E1B /* NTI */,
 				53E0A76914DEC75D004E3E1B /* Frameworks */,
 				53E0A76714DEC75D004E3E1B /* Products */,
@@ -316,6 +347,22 @@
 			path = minizip;
 			sourceTree = "<group>";
 		};
+		53F0062E1507A8EB0074156E /* Auth&Registration */ = {
+			isa = PBXGroup;
+			children = (
+				53F0061715077F380074156E /* RegistrationViewController.h */,
+				53F0061815077F380074156E /* RegistrationViewController.m */,
+				53F0061915077F390074156E /* RegistrationViewController.xib */,
+				53F0061215077DCB0074156E /* AuthViewController.h */,
+				53F0061315077DCB0074156E /* AuthViewController.m */,
+				53F0061415077DCB0074156E /* AuthViewController.xib */,
+				53F0062F1507A9350074156E /* FirstViewController.h */,
+				53F006301507A9350074156E /* FirstViewController.m */,
+				53F006311507A9350074156E /* FirstViewController.xib */,
+			);
+			name = "Auth&Registration";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -383,6 +430,14 @@
 				2775F55415068A7900FE08BC /* NTI_MapMenuIcon@2x.png in Resources */,
 				2775F55515068A7900FE08BC /* NTI_StatMenuIcon.png in Resources */,
 				2775F55615068A7900FE08BC /* NTI_StatMenuIcon@2x.png in Resources */,
+				53F0061615077DCB0074156E /* AuthViewController.xib in Resources */,
+				53F0061B15077F390074156E /* RegistrationViewController.xib in Resources */,
+				53F00626150784310074156E /* GoButton@2x.png in Resources */,
+				53F00627150784310074156E /* GoButton.png in Resources */,
+				53F00628150784310074156E /* cButton.jpg in Resources */,
+				53F00629150784310074156E /* Background.png in Resources */,
+				53F006331507A9350074156E /* FirstViewController.xib in Resources */,
+				53F006351507A94F0074156E /* first_screen.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -425,6 +480,9 @@
 				53AAF04B14FE2CF000E12486 /* ServerCommunication.m in Sources */,
 				532A46991502623A0070340D /* CSVConverter.m in Sources */,
 				2775F53115067E9E00FE08BC /* WebViewController.m in Sources */,
+				53F0061515077DCB0074156E /* AuthViewController.m in Sources */,
+				53F0061A15077F390074156E /* RegistrationViewController.m in Sources */,
+				53F006321507A9350074156E /* FirstViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
