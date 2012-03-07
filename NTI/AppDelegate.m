@@ -59,7 +59,7 @@
     oldHeading          = 0;
     offsetG             = 0;
     newCompassTarget    = 0;
-    FirstViewController *firstViewController = [[FirstViewController alloc] init];
+    //FirstViewController *firstViewController = [[FirstViewController alloc] init];
     //UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     //firstViewController = [storyboard instantiateViewControllerWithIdentifier:@"authAndRegView"];
     if ([userDefaults stringForKey:@"login"] == nil)  {
@@ -67,7 +67,7 @@
         //[_window addSubview:firstViewController.view];
         //[self.window setRootViewController: firstViewController];
         
-        [self.window.rootViewController performSegueWithIdentifier:@"authAndRegView" sender:self];    
+        //[self.window.rootViewController performSegueWithIdentifier:@"authAndRegView" sender:self];    
     }
     //else self.window.rootViewController = self.tabBarController;
     

@@ -13,5 +13,6 @@
 }
 - (IBAction)regButton:(id)sender;
 - (IBAction)authButton:(id)sender;
+- (IBAction)tabBarButton:(id)sender;
 
 @end
