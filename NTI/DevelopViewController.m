@@ -74,6 +74,8 @@
         //NSLog(@"%@",forJSON);
         
     }
+    if ([myAppDelegate canWriteToFile]) writeLabel.text = @"+";
+    else writeLabel.text = @"-";
  
             
     

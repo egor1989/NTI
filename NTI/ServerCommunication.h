@@ -10,9 +10,11 @@
 
 @interface ServerCommunication : NSObject {
     NSString *returnString; 
+    NSMutableURLRequest *request;
+    NSData *requestData;
     
 }
-
+- (NSString *)regUser:(NSString *)login password:(NSString *)password email:(NSString *)email;
 - (void)uploadData:(NSString *)fileContent;
 //- (void)checkErrors:(NSString *)answerString;
 

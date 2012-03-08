@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AuthViewController : UIViewController
+@interface AuthViewController : UIViewController {
+    
+}
+
+- (IBAction)cancelButton:(id)sender;
+- (IBAction)goButton:(id)sender;
+- (BOOL)checkData;
 
 @end

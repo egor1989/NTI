@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "EncryptionData.h"
+#import "ServerCommunication.h"
 
 @interface RegistrationViewController : UIViewController{
     
@@ -19,6 +21,7 @@
 - (IBAction)goButton:(id)sender;
 - (IBAction)cancelButton:(id)sender;
 - (BOOL)checkField;
+
 
 
 @end

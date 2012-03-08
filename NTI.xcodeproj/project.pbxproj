@@ -58,6 +58,8 @@
 		53F00629150784310074156E /* Background.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F00625150784310074156E /* Background.png */; };
 		53F006321507A9350074156E /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F006301507A9350074156E /* FirstViewController.m */; };
 		53F006351507A94F0074156E /* first_screen.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 53F006341507A94F0074156E /* first_screen.jpg */; };
+		53F8832D1507E70F000F7FE3 /* EncryptionData.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F883281507E70F000F7FE3 /* EncryptionData.m */; };
+		53F8832E1507E70F000F7FE3 /* NSData+CommonCrypto.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F8832C1507E70F000F7FE3 /* NSData+CommonCrypto.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -135,6 +137,10 @@
 		53F0062F1507A9350074156E /* FirstViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FirstViewController.h; path = NTI/FirstViewController.h; sourceTree = "<group>"; };
 		53F006301507A9350074156E /* FirstViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FirstViewController.m; path = NTI/FirstViewController.m; sourceTree = "<group>"; };
 		53F006341507A94F0074156E /* first_screen.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = first_screen.jpg; path = Images/first_screen.jpg; sourceTree = "<group>"; };
+		53F883281507E70F000F7FE3 /* EncryptionData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EncryptionData.m; path = NTI/EncryptionData.m; sourceTree = "<group>"; };
+		53F883291507E70F000F7FE3 /* EncryptionData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EncryptionData.h; path = NTI/EncryptionData.h; sourceTree = "<group>"; };
+		53F8832B1507E70F000F7FE3 /* NSData+CommonCrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+CommonCrypto.h"; sourceTree = "<group>"; };
+		53F8832C1507E70F000F7FE3 /* NSData+CommonCrypto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+CommonCrypto.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -349,6 +355,7 @@
 		53F0062E1507A8EB0074156E /* Auth&Registration */ = {
 			isa = PBXGroup;
 			children = (
+				53F883221507E50E000F7FE3 /* Crypto */,
 				53F0061715077F380074156E /* RegistrationViewController.h */,
 				53F0061815077F380074156E /* RegistrationViewController.m */,
 				53F0061215077DCB0074156E /* AuthViewController.h */,
@@ -358,6 +365,26 @@
 			);
 			name = "Auth&Registration";
 			path = ..;
+			sourceTree = "<group>";
+		};
+		53F883221507E50E000F7FE3 /* Crypto */ = {
+			isa = PBXGroup;
+			children = (
+				53F883281507E70F000F7FE3 /* EncryptionData.m */,
+				53F883291507E70F000F7FE3 /* EncryptionData.h */,
+				53F8832A1507E70F000F7FE3 /* CommonCrypto */,
+			);
+			name = Crypto;
+			sourceTree = "<group>";
+		};
+		53F8832A1507E70F000F7FE3 /* CommonCrypto */ = {
+			isa = PBXGroup;
+			children = (
+				53F8832B1507E70F000F7FE3 /* NSData+CommonCrypto.h */,
+				53F8832C1507E70F000F7FE3 /* NSData+CommonCrypto.m */,
+			);
+			name = CommonCrypto;
+			path = NTI/CommonCrypto;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -477,7 +504,10 @@
 				53F0061515077DCB0074156E /* AuthViewController.m in Sources */,
 				53F0061A15077F390074156E /* RegistrationViewController.m in Sources */,
 				53F006321507A9350074156E /* FirstViewController.m in Sources */,
+				53F8832D1507E70F000F7FE3 /* EncryptionData.m in Sources */,
+				53F8832E1507E70F000F7FE3 /* NSData+CommonCrypto.m in Sources */,
 				2775F5641507D48C00FE08BC /* StatViewController.m in Sources */,
+
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
