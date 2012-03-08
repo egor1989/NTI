@@ -86,7 +86,6 @@
 }
 
 - (void) speedUpdate{
-    NSLog(@"%f",[myAppDelegate lastLoc].speed);
     speedLabel.text =[NSString stringWithFormat:@"%.0f км/ч", [myAppDelegate lastLoc].speed*3.6];
 }
 
