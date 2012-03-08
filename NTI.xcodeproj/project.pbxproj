@@ -172,6 +172,7 @@
 				27F218B014E8238000E22C44 /* Plot.m */,
 				2775F52F15067E9E00FE08BC /* WebViewController.h */,
 				2775F53015067E9E00FE08BC /* WebViewController.m */,
+				53F0062E1507A8EB0074156E /* Auth&Registration */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -231,7 +232,6 @@
 		53E0A75B14DEC75D004E3E1B = {
 			isa = PBXGroup;
 			children = (
-				53F0062E1507A8EB0074156E /* Auth&Registration */,
 				53E0A77014DEC75D004E3E1B /* NTI */,
 				53E0A76914DEC75D004E3E1B /* Frameworks */,
 				53E0A76714DEC75D004E3E1B /* Products */,
@@ -357,6 +357,7 @@
 				53F006301507A9350074156E /* FirstViewController.m */,
 			);
 			name = "Auth&Registration";
+			path = ..;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

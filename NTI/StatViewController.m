@@ -30,14 +30,13 @@
 }
 
 #pragma mark - View lifecycle
-
+            
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
     //инициализация лейблов для таблицы
     speedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];
-//    speedLabel.backgroundColor = [UIColor colorWithWhite:0.97 alpha:1.0];
     speedLabel.font =            [UIFont fontWithName:@"Trebuchet MS" size:16];
     speedLabel.textAlignment =   UITextAlignmentRight;
     speedLabel.text =            [NSString stringWithFormat:@"%d", 0];
@@ -87,7 +86,8 @@
 }
 
 - (void) speedUpdate{
-    speedLabel.text =[NSString stringWithFormat:@"%d км/ч", [myAppDelegate lastLoc].speed];
+    NSLog(@"%f",[myAppDelegate lastLoc].speed);
+    speedLabel.text =[NSString stringWithFormat:@"%.0f км/ч", [myAppDelegate lastLoc].speed*3.6];
 }
 
 #pragma mark - Table view data source
