@@ -134,7 +134,7 @@
         
         // отправка на сервер
         ServerCommunication *serverCommunication = [[ServerCommunication alloc] init];
-      //  NSString *serverAnswer = [serverCommunication regUser:nameField.text password:encryptedPass email:emailField.text];
+        NSString *serverAnswer = [serverCommunication regUser:nameField.text password:encryptedPass email:emailField.text];
         
      //   NSLog(@"answer = %@", serverAnswer);
     }

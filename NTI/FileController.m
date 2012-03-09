@@ -49,6 +49,7 @@
     [fileHandle seekToEndOfFile];
     NSData* myData = [myString dataUsingEncoding:NSUTF8StringEncoding];
     [fileHandle writeData:myData];
+    [fileHandle closeFile];
 
     return TRUE;
 }

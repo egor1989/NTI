@@ -13,7 +13,7 @@
 
 
 - (NSString *) arrayToCSVString: (NSMutableArray *) arrayForConvert{
-    
+    NSLog(@"data = ", arrayForConvert);
     NSString *csv = @"";
     
     for (NSDictionary *entries in arrayForConvert) {

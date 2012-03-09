@@ -19,7 +19,7 @@
     
     NSLog(@"Request: %@", fileContent);
         
-   request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://goodroads.ru/another/api.php"]cachePolicy:NSURLRequestUseProtocolCachePolicy
+   request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
                                   timeoutInterval:60.0];
 
     requestData = [NSData dataWithBytes:[fileContent UTF8String] length:[fileContent length]];
@@ -67,7 +67,7 @@
     
     NSString *data = [NSString stringWithFormat:(@"%@%@%@%@%@%@%@"),@"data={\"method\":\"NTIregister\",\"params\":{\"login\":\"",login, @"\",\"password\":\"", password,@"\",\"email\":\"",email, @"\"}}"];
     NSLog(@"Request: %@", data);
-    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://goodroads.ru/another/api.php"]cachePolicy:NSURLRequestUseProtocolCachePolicy
+    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
                                   timeoutInterval:60.0];
     
     requestData = [NSData dataWithBytes:[data UTF8String] length:[data length]];
