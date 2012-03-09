@@ -16,6 +16,8 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        [nameField becomeFirstResponder];
+        
     }
     return self;
 }

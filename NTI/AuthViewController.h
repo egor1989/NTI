@@ -7,9 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "EncryptionData.h"
+#import "ServerCommunication.h"
 
 @interface AuthViewController : UIViewController {
     
+    IBOutlet UITextField *passwordField;
+    IBOutlet UITextField *loginField;
 }
 
 - (IBAction)cancelButton:(id)sender;

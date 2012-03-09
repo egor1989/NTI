@@ -83,4 +83,42 @@
 }
 
 
+- (NSString *) authUser:(NSString *)login secret:(NSString *)message{
+    NSError *requestError = nil;
+    // NSLog(@"sendData login = %@ message = %@", login, message);
+    
+    NSString *data = [NSString stringWithFormat:(@"%@%@%@%@%@"),@"data={\"method\":\"NTIauth\",\"params\":{\"login\":\"",login, @"\",\"secret\":\"", message,@"\"}}"];
+    
+    NSLog(@"Request: %@", data);
+    
+    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                  timeoutInterval:60.0];
+    
+    requestData = [NSData dataWithBytes:[data UTF8String] length:[data length]];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody: requestData];
+
+    
+    NSURLResponse *response = nil;
+    NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: &response error: &requestError];
+    
+    if (requestError!=nil) {
+        NSLog(@"ERROR!ERROR!ERROR!");
+    }
+    
+    NSDictionary *fields = [(NSHTTPURLResponse *)response allHeaderFields];
+    NSString *cookie = [fields valueForKey:@"Set-Cookie"];
+    
+    NSLog(@"Cookie: %@", cookie);
+    
+    returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
+    NSLog(@"returnData: %@", returnString);
+    return returnString;
+    //[self parseAuthJSON:returnString cookie: cookie method:@"sendData"];
+    //parse json
+    //return serverAnswer;
+}
+
+
+
 @end
