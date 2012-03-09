@@ -507,7 +507,6 @@
 				53F8832D1507E70F000F7FE3 /* EncryptionData.m in Sources */,
 				53F8832E1507E70F000F7FE3 /* NSData+CommonCrypto.m in Sources */,
 				2775F5641507D48C00FE08BC /* StatViewController.m in Sources */,
-
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -593,8 +592,8 @@
 				GCC_PREFIX_HEADER = "NTI/NTI-Prefix.pch";
 				INFOPLIST_FILE = "NTI/NTI-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "57E9399D-33B1-4820-BA4C-E5AEF63BDE98";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "57E9399D-33B1-4820-BA4C-E5AEF63BDE98";
+				PROVISIONING_PROFILE = "945ACF9E-A880-4572-8BB2-D9BAB10DAAE6";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "945ACF9E-A880-4572-8BB2-D9BAB10DAAE6";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;

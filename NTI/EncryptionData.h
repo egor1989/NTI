@@ -13,7 +13,7 @@
 
 
 @interface EncryptionData : NSObject{
-    unsigned char hashedPassword[16];
+    unsigned char hashedPassword[CC_SHA256_DIGEST_LENGTH];
     NSData *key;
     NSString *psString;
     NSInteger a;
