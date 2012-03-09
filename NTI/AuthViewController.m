@@ -69,6 +69,7 @@
         ServerCommunication *serverCommunication = [[ServerCommunication alloc] init];
         NSString *serverAnswer = [serverCommunication authUser:loginField.text secret:encryptedPass];
         NSLog(@"auth %@", serverAnswer);
+        
         //   NSLog(@"answer = %@", serverAnswer);
     }
 
@@ -78,6 +79,15 @@
 
 - (BOOL)checkData{
     if (![loginField.text isEqual:@""]&&![passwordField.text isEqual:@""]) return YES;
-    else return NO;
+    else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"заполните все поля" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
+        [alert show];
+        return NO;  
+    }
+}
+
+- (void)showResult: (NSString *)answer{
+    
+    
 }
 @end

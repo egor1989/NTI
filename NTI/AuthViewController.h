@@ -19,5 +19,6 @@
 - (IBAction)cancelButton:(id)sender;
 - (IBAction)goButton:(id)sender;
 - (BOOL)checkData;
+- (void)showResult: (NSString *)answer;
 
 @end
