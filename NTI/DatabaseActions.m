@@ -27,6 +27,7 @@ static sqlite3_stmt *readStmt = nil;
 	NSArray *documentPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDir = [documentPaths objectAtIndex:0];
 	databasePath = [documentsDir stringByAppendingPathComponent:databaseName];
+    
     [self checkAndCreateDatabase];
     if (sqlite3_open([databasePath UTF8String], &database) == SQLITE_OK) NSLog(@"Database open");
     else NSLog(@"error! base not open");
@@ -133,36 +134,58 @@ static sqlite3_stmt *readStmt = nil;
     
 }
 
-- (void) readDatabase{
-   /*
-    NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]*1000], type, [NSString stringWithFormat:@"%f", x], [NSString stringWithFormat:@"%f", y], [NSString stringWithFormat:@"%.0f",[myAppDelegate north]], [NSString stringWithFormat:@"%.1f",[myAppDelegate course]], [NSString stringWithFormat:@"%.2f",distance], [NSString stringWithFormat:@"%.6f",location.coordinate.latitude],[NSString stringWithFormat:@"%.6f",location.coordinate.longitude], [NSString stringWithFormat:@"%.2f",curSpeed], nil];
-    NSDictionary *entries = [NSDictionary dictionaryWithObjects: objs forKeys:keys];
-    [dataArray addObject:entries];
-    */
+- (void) readDatabase{  
+    NSArray *keys = [NSArray arrayWithObjects:@"timestamp", @"type", @"acc", @"gps", nil];
+
+    // NSDictionary *acc = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%f", x], @"x", [NSString stringWithFormat:@"%f", y], @"y", nil];
+    
+    // NSDictionary *gps = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%.1f",[myAppDelegate course]], @"direction", [NSString stringWithFormat:@"%.2f",curSpeed], @"speed", [NSString stringWithFormat:@"%.6f",location.coordinate.latitude], @"latitude", [NSString stringWithFormat:@"%.6f",location.coordinate.longitude], @"longitude", [NSString stringWithFormat:@"%.0f",[myAppDelegate north]], @"compass", [NSString stringWithFormat:@"%.2f",distance], @"distance",    nil];
+    
+    // NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]*1000], type, acc, gps, nil];
+    // NSDictionary *entries = [NSDictionary dictionaryWithObjects:objs forKeys:keys];
     
     
-    NSMutableArray *dataArray = [[NSMutableArray alloc]init ];
+    NSMutableArray *dataArray = [[NSMutableArray alloc]init];
+    
+    
     if(sqlite3_open([databasePath UTF8String], &database) == SQLITE_OK) {
         const char *sql = "select * from log";
         if(sqlite3_prepare_v2(database, sql, -1, &readStmt, NULL) == SQLITE_OK){
             while(sqlite3_step(readStmt) == SQLITE_ROW){
-                record = [[NSMutableDictionary alloc] init];
-                [record setObject:[NSString stringWithFormat:@"%s", sqlite3_column_text(readStmt, 1)] forKey:@"type"];
-                [record setValue: [NSString stringWithFormat:@"%f", sqlite3_column_text(readStmt, 2)] forKey:@"time"];
-                [record setValue: [NSString stringWithFormat:@"%f", sqlite3_column_text(readStmt, 3)] forKey:@"accX"];
-                [record setValue: [NSString stringWithFormat:@"%f", sqlite3_column_text(readStmt, 4)] forKey:@"accY"];
-                [record setValue: [NSString stringWithFormat:@"%f", sqlite3_column_text(readStmt, 5)] forKey:@"compass"];
-                [record setValue: [NSString stringWithFormat:@"%f", sqlite3_column_text(readStmt, 6)] forKey:@"direction"];
-                [record setValue: [NSString stringWithFormat:@"%f", sqlite3_column_text(readStmt, 7)] forKey:@"distance"];
-                [record setValue: [NSString stringWithFormat:@"%f", sqlite3_column_text(readStmt, 8)] forKey:@"latitude"];
-                [record setValue: [NSString stringWithFormat:@"%f", sqlite3_column_text(readStmt, 9)] forKey:@"longitude"];
-                [record setValue: [NSString stringWithFormat:@"%f", sqlite3_column_text(readStmt, 10)] forKey:@"speed"];
+                
+                NSDictionary *acc = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%f", sqlite3_column_double(readStmt, 2)], @"x", [NSString stringWithFormat:@"%f", sqlite3_column_double(readStmt, 3)], @"y", nil];
+                
+                NSDictionary *gps = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%.1f", sqlite3_column_double(readStmt, 5)], @"direction", [NSString stringWithFormat:@"%.1f", sqlite3_column_double(readStmt, 9)], @"speed", [NSString stringWithFormat:@"%f", sqlite3_column_double(readStmt, 7)], @"latitude", [NSString stringWithFormat:@"%f", sqlite3_column_double(readStmt, 8)], @"longitude", [NSString stringWithFormat:@"%.0f", sqlite3_column_double(readStmt, 4)], @"compass", [NSString stringWithFormat:@"%.2f", sqlite3_column_double(readStmt, 6)], @"distance", nil];
+                
+                NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.0f", sqlite3_column_double(readStmt, 1)],[NSString stringWithFormat:@"%s", sqlite3_column_text(readStmt, 0)], 
+                                 acc, gps, nil];
+                
+                NSDictionary *record = [NSDictionary dictionaryWithObjects:objs forKeys:keys];
+                
+                
+              //  record = [[NSMutableDictionary alloc] init];
+                
+                
+              //  [record setObject: [NSString stringWithFormat:@"%s", sqlite3_column_text(readStmt, 0)] forKey:@"type"];
+              //  [record setObject: [NSString stringWithFormat:@"%.0f", sqlite3_column_double(readStmt, 1)] forKey:@"time"];
+              //  [record setObject: [NSString stringWithFormat:@"%f", sqlite3_column_double(readStmt, 2)] forKey:@"accX"];
+              //  [record setObject: [NSString stringWithFormat:@"%f", sqlite3_column_double(readStmt, 3)] forKey:@"accY"];
+              //  [record setObject: [NSString stringWithFormat:@"%.0f", sqlite3_column_double(readStmt, 4)] forKey:@"compass"];
+              //  [record setObject: [NSString stringWithFormat:@"%.1f", sqlite3_column_double(readStmt, 5)] forKey:@"direction"];
+              //  [record setObject: [NSString stringWithFormat:@"%.2f", sqlite3_column_double(readStmt, 6)] forKey:@"distance"];
+               // [record setObject: [NSString stringWithFormat:@"%f", sqlite3_column_double(readStmt, 7)] forKey:@"latitude"];
+             //   [record setObject: [NSString stringWithFormat:@"%f", sqlite3_column_double(readStmt, 8)] forKey:@"longitude"];
+               // [record setObject: [NSString stringWithFormat:@"%.1f", sqlite3_column_double(readStmt, 9)] forKey:@"speed"];
+        
+                [dataArray addObject:record];
+          
             }
-            [dataArray addObject:record];
         }
     }
-    NSLog(@"+");
-     NSLog(@"data = %@", dataArray);
+   
+    sqlite3_finalize(readStmt);
+    NSLog(@"data = %@", dataArray);
+    
     
 }
 
