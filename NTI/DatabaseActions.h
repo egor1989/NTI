@@ -27,6 +27,7 @@
    // NSMutableDictionary *record;
    // NSMutableDictionary *acc;
    // NSMutableDictionary *gps;
+    NSMutableArray *dataArray;
     
 }
 
@@ -36,4 +37,5 @@
 - (BOOL)addArray: (NSMutableArray *)data;
 - (void) readDatabase;
 + (void) finalizeStatements;
+- (void) arrayConvert;
 @end
