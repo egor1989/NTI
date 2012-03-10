@@ -10,6 +10,7 @@
 
 #define MAX3(a,b,c) ( MAX(a,b)>c ? ((a>b)? 1:2) : 3 )
 #define radianConst M_PI/180.0
+#define maxEntries 100
 
 @implementation DevelopViewController
 
@@ -53,7 +54,7 @@
    //     [databaseAction addRecord:currentAcceleration Type:0];
    // }
 
-    if (writeToFile) {
+    if (writeToDB) {
         float curSpeed = 0;
         if (location.speed > 0) curSpeed = location.speed*3.6;
         
@@ -67,9 +68,23 @@
         NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]*1000], type, acc, gps, nil];
         NSDictionary *entries = [NSDictionary dictionaryWithObjects:objs forKeys:keys];
         
-        [forJSON addObject:entries];
+        [dataArray addObject:entries];
         
-        NSInteger countInArray = forJSON.count;
+        NSInteger countInArray = dataArray.count;
+       
+        if (countInArray > maxEntries){ 
+            //countInArray = 0;
+            NSMutableArray *toWrite = dataArray;
+            dataArray = [[NSMutableArray alloc] init];
+            //создаем новый тред
+            NSThread* myThread = [[NSThread alloc] initWithTarget:databaseAction
+                                                         selector:@selector(addArray:)
+                                                           object:toWrite];
+            [myThread start]; 
+            
+            
+        }
+        
         NSLog(@"countInArray = %i", countInArray);
         //NSLog(@"%@",forJSON);
         
@@ -97,7 +112,7 @@
     [super viewDidLoad];
     k=0;
     databaseAction = [[DatabaseActions alloc] initDataBase];
-    writeInDB = NO;
+    writeToDB = NO;
     userDefaults = [NSUserDefaults standardUserDefaults];
 
    // accelFileNumber = 0;
@@ -202,30 +217,6 @@
 - (void) showGPS{
     
     
-/*    if (writeToLog) {
-      float curSpeed = location.speed*3.6;
-        if (curSpeed<0) {
-            curSpeed=0;
-        } 
-        float distance = [myAppDelegate allDistance]/1000;
-        
-        
-        NSDictionary *acc = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%f", x], @"x", [NSString stringWithFormat:@"%f", y], @"y", nil];
-        
-        NSDictionary *gps = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%.1f",[myAppDelegate course]], @"direction", [NSString stringWithFormat:@"%.2f",curSpeed], @"speed", [NSString stringWithFormat:@"%.6f",location.coordinate.latitude], @"latitude", [NSString stringWithFormat:@"%.6f",location.coordinate.longitude], @"longitude", [NSString stringWithFormat:@"%.0f",[myAppDelegate north]], @"compass", [NSString stringWithFormat:@"%.2f",distance], @"distance",   nil];
-        
-        NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]*1000], acc,gps, nil];
-        NSDictionary *entries = [NSDictionary dictionaryWithObjects:objs forKeys:keys];
-        
-        [forJSON addObject:entries];
-        
-        NSInteger countInArray = forJSON.count;
-        NSLog(@"countInArray = %i", countInArray);
-        NSLog(@"%@",forJSON);
-        
-    }
- */
-
     location = [myAppDelegate lastLoc];  
     //NSLog(@"lat = %@, lond = %@", [NSString stringWithFormat:@"%f", location.coordinate.latitude], [NSString stringWithFormat:@"%f", location.coordinate.longitude]);
     course.text = [NSString stringWithFormat:@"%.2f",location.course];
@@ -327,7 +318,7 @@
 - (IBAction)actionButton:(id)sender {
     NSLog(@"%@", action.titleLabel.text);
     if ([action.titleLabel.text isEqualToString:@"Start"]) {
-        forJSON = [[NSMutableArray alloc] init];
+        dataArray = [[NSMutableArray alloc] init];
         [action setTitle:@"Stop" forState:UIControlStateNormal];
         type = @"-";
         writeToFile = YES;
@@ -340,17 +331,17 @@
 
         
         otherFile++;
-       // writeInDB = YES;
+        writeToDB = YES;
         //start write to database
     }
     else {
         [action setTitle:@"Start" forState:UIControlStateNormal];
         writeToFile = NO;
-        NSString *JSON = [jsonConvert convert:forJSON];
-        NSString *CSV = [csvConverter arrayToCSVString:forJSON];
+        NSString *JSON = [jsonConvert convert:dataArray];
+        NSString *CSV = [csvConverter arrayToCSVString:dataArray];
         [fileController writeToFile:CSV fileName:fileNameCSV];
         [fileController writeToFile:JSON fileName:fileName];
-      //  writeInDB =NO;
+        writeToDB =NO;
         //stop write to database
     }
     NSLog(@"push action");

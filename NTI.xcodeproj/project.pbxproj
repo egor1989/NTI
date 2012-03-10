@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		276C4C9814DEE94D00C469A6 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 276C4C9714DEE94D00C469A6 /* CoreMotion.framework */; };
 		276C4C9B14DEF4FF00C469A6 /* DatabaseActions.m in Sources */ = {isa = PBXBuildFile; fileRef = 276C4C9A14DEF4FF00C469A6 /* DatabaseActions.m */; };
-		276C4C9D14DEF66B00C469A6 /* log.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 276C4C9C14DEF66B00C469A6 /* log.sqlite */; };
 		2775F53115067E9E00FE08BC /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2775F53015067E9E00FE08BC /* WebViewController.m */; };
 		2775F55115068A7900FE08BC /* NTI_GraphMenuIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2775F54B15068A7900FE08BC /* NTI_GraphMenuIcon.png */; };
 		2775F55215068A7900FE08BC /* NTI_GraphMenuIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2775F54C15068A7900FE08BC /* NTI_GraphMenuIcon@2x.png */; };
@@ -71,13 +70,13 @@
 		53F8836C150A53D6000F7FE3 /* SBJsonTokeniser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F8835F150A53D6000F7FE3 /* SBJsonTokeniser.m */; };
 		53F8836D150A53D6000F7FE3 /* SBJsonUTF8Stream.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F88361150A53D6000F7FE3 /* SBJsonUTF8Stream.m */; };
 		53F8836E150A53D6000F7FE3 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F88363150A53D6000F7FE3 /* SBJsonWriter.m */; };
+		53F88371150B9740000F7FE3 /* log.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 53F88370150B9740000F7FE3 /* log.sqlite */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		276C4C9714DEE94D00C469A6 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		276C4C9914DEF4FF00C469A6 /* DatabaseActions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatabaseActions.h; sourceTree = "<group>"; };
 		276C4C9A14DEF4FF00C469A6 /* DatabaseActions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseActions.m; sourceTree = "<group>"; };
-		276C4C9C14DEF66B00C469A6 /* log.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = log.sqlite; sourceTree = "<group>"; };
 		2775F52F15067E9E00FE08BC /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
 		2775F53015067E9E00FE08BC /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 		2775F54B15068A7900FE08BC /* NTI_GraphMenuIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = NTI_GraphMenuIcon.png; sourceTree = "<group>"; };
@@ -175,6 +174,7 @@
 		53F88361150A53D6000F7FE3 /* SBJsonUTF8Stream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonUTF8Stream.m; sourceTree = "<group>"; };
 		53F88362150A53D6000F7FE3 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
 		53F88363150A53D6000F7FE3 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
+		53F88370150B9740000F7FE3 /* log.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = log.sqlite; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -334,7 +334,7 @@
 		53E0A7A014DEDE75004E3E1B /* DataBase */ = {
 			isa = PBXGroup;
 			children = (
-				276C4C9C14DEF66B00C469A6 /* log.sqlite */,
+				53F88370150B9740000F7FE3 /* log.sqlite */,
 				276C4C9914DEF4FF00C469A6 /* DatabaseActions.h */,
 				276C4C9A14DEF4FF00C469A6 /* DatabaseActions.m */,
 				53E0A79C14DEDE6F004E3E1B /* libsqlite3.0.dylib */,
@@ -508,7 +508,6 @@
 				53E0A78514DEC75D004E3E1B /* first@2x.png in Resources */,
 				53E0A78A14DEC75D004E3E1B /* second.png in Resources */,
 				53E0A78C14DEC75D004E3E1B /* second@2x.png in Resources */,
-				276C4C9D14DEF66B00C469A6 /* log.sqlite in Resources */,
 				536E026F14F00625003A2B15 /* compass.png in Resources */,
 				539B29BE14F305C3007E6977 /* gps.png in Resources */,
 				539B29BF14F305C3007E6977 /* north.png in Resources */,
@@ -524,6 +523,7 @@
 				53F00629150784310074156E /* Background.png in Resources */,
 				53F006351507A94F0074156E /* first_screen.jpg in Resources */,
 				2775F5601507D01900FE08BC /* MainStoryboard.storyboard in Resources */,
+				53F88371150B9740000F7FE3 /* log.sqlite in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -56,6 +56,13 @@ static sqlite3_stmt *addStmt = nil;
 	[fileManager copyItemAtPath:databasePathFromApp toPath:databasePath error:nil];
 }
 
+- (BOOL)addArray: (NSMutableArray *)data{
+    NSLog(@"%@", data);
+    return YES;
+}
+
+
+
 -(void) addRecord: (CMAcceleration) point Type:(int)type{
 
     CLLocation* location=[myAppDelegate lastLoc];
@@ -86,6 +93,8 @@ static sqlite3_stmt *addStmt = nil;
 	//Reset the add statement.
 	sqlite3_reset(addStmt); 
 }
+
+
 
 - (void) clearDatabase{
     const char *sql = "delete from log";

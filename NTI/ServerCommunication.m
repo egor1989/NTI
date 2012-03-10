@@ -40,6 +40,7 @@
    // [self checkErrors:returnString];
 }
 
+
 - (BOOL)checkErrors:(NSString *)answerString{
     
     SBJsonParser *jsonParser = [SBJsonParser new];
@@ -109,8 +110,17 @@
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody: requestData];
     
-    NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
+    
+    NSError *requestError = nil;
+    NSURLResponse *response = nil;
+    NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: &response error: &requestError ];
     returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
+    
+    NSDictionary *fields = [(NSHTTPURLResponse *)response allHeaderFields];
+    NSString *cookie = [fields valueForKey:@"Set-Cookie"];
+    
+    NSLog(@"Cookie: %@", cookie);
+ 
     NSLog(@"returnData: %@", returnString);
     
     
@@ -120,7 +130,7 @@
 
 
 - (NSString *) authUser:(NSString *)login secret:(NSString *)message{
-    NSError *requestError = nil;
+    
     // NSLog(@"sendData login = %@ message = %@", login, message);
     
     NSString *data = [NSString stringWithFormat:(@"%@%@%@%@%@"),@"data={\"method\":\"NTIauth\",\"params\":{\"login\":\"",login, @"\",\"secret\":\"", message,@"\"}}"];
@@ -134,11 +144,12 @@
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody: requestData];
 
-    
+    NSError *requestError = nil;
     NSURLResponse *response = nil;
     NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: &response error: &requestError];
     
     if (requestError!=nil) {
+        NSLog(@"%@", requestError);
         NSLog(@"ERROR!ERROR!ERROR!");
     }
     

@@ -30,6 +30,7 @@
 - (void) checkAndCreateDatabase;
 - (void) addRecord: (CMAcceleration) point Type: (int)type;
 - (void) clearDatabase;
+- (BOOL)addArray: (NSMutableArray *)data;
 //- (NSArray*) readDatabase;
 + (void) finalizeStatements;
 @end

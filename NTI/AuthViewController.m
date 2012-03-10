@@ -70,6 +70,12 @@
         NSString *serverAnswer = [serverCommunication authUser:loginField.text secret:encryptedPass];
         NSLog(@"auth %@", serverAnswer);
         BOOL ok = [serverCommunication checkErrors: serverAnswer];
+        if (ok) {
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setValue: loginField.text forKey:@"login"];
+            [userDefaults setValue: passwordField.text forKey:@"password"];
+            [userDefaults synchronize];
+        }
         
     }
 
