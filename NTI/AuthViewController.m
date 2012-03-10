@@ -69,8 +69,8 @@
         ServerCommunication *serverCommunication = [[ServerCommunication alloc] init];
         NSString *serverAnswer = [serverCommunication authUser:loginField.text secret:encryptedPass];
         NSLog(@"auth %@", serverAnswer);
+        BOOL ok = [serverCommunication checkErrors: serverAnswer];
         
-        //   NSLog(@"answer = %@", serverAnswer);
     }
 
     

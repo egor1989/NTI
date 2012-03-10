@@ -40,7 +40,7 @@
    // [self checkErrors:returnString];
 }
 
-- (void)checkErrors:(NSString *)answerString{
+- (BOOL)checkErrors:(NSString *)answerString{
     
     SBJsonParser *jsonParser = [SBJsonParser new];
     NSArray *answer = [jsonParser objectWithString:answerString error:NULL];
@@ -79,7 +79,7 @@
     }
 
     [self showResult:info];
-    
+    return errors;
 }
 
 - (void)showResult: (NSString *)info {
@@ -113,7 +113,7 @@
     returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
     NSLog(@"returnData: %@", returnString);
     
-    [self checkErrors: returnString];
+    
     
     return returnString;
 }

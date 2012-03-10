@@ -331,6 +331,7 @@
         [action setTitle:@"Stop" forState:UIControlStateNormal];
         type = @"-";
         writeToFile = YES;
+        [NSDate date];
         fileNameCSV = [NSString stringWithFormat:@"log%i.csv", [userDefaults integerForKey:@"otherFile"]];
         fileName = [NSString stringWithFormat:@"log%i", [userDefaults integerForKey:@"otherFile"]];
         otherFile = [userDefaults integerForKey:@"otherFile"]+1;

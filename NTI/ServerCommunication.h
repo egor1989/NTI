@@ -20,7 +20,7 @@
 - (NSString *)regUser:(NSString *)login password:(NSString *)password email:(NSString *)email;
 - (void)uploadData:(NSString *)fileContent;
 - (NSString *)authUser:(NSString *)login secret:(NSString *)message;
-- (void)checkErrors:(NSString *)answerString;
+- (BOOL)checkErrors:(NSString *)answerString;
 - (void)showResult: (NSString *)info;
 
 @property (nonatomic) BOOL errors;
