@@ -10,10 +10,13 @@
 #import "AppDelegate.h"
 
 #define myAppDelegate (AppDelegate*) [[UIApplication sharedApplication] delegate]
+#define maxEntries 1000
 
 static sqlite3 *database = nil;
 static sqlite3_stmt *deleteStmt = nil;
 static sqlite3_stmt *addStmt = nil;
+static sqlite3_stmt *readStmt = nil;
+
 
 
 
@@ -107,40 +110,6 @@ static sqlite3_stmt *addStmt = nil;
 }
 
 
-
--(void) addRecord: (CMAcceleration) point Type:(int)type{
-    
-    CLLocation* location=[myAppDelegate lastLoc];
-    
-   	if(addStmt == nil) {
-		const char *sql = "INSERT INTO log(time, accX, accY, accZ, lon, lat, course, speed, type) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
-		if(sqlite3_prepare_v2(database, sql, -1, &addStmt, NULL) != SQLITE_OK)
-			NSAssert1(0, @"Error while creating add statement. '%s'", sqlite3_errmsg(database));
-	}
-    sqlite3_bind_double(addStmt, 1, [[[NSDate alloc ]init]timeIntervalSince1970]);
-    sqlite3_bind_double(addStmt, 2, point.x);
-    sqlite3_bind_double(addStmt, 3, point.y);
-    sqlite3_bind_double(addStmt, 4, point.z);
-    sqlite3_bind_double(addStmt, 5, location.coordinate.longitude);
-    sqlite3_bind_double(addStmt, 6, location.coordinate.latitude);
-    sqlite3_bind_double(addStmt, 7, location.course);
-    sqlite3_bind_double(addStmt, 8, location.speed);
-    sqlite3_bind_double(addStmt, 9, type);
-    
-    
-	if(SQLITE_DONE != sqlite3_step(addStmt))
-		NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
-	else {
-		//SQLite provides a method to get the last primary key inserted by using sqlite3_last_insert_rowid
-		pk = sqlite3_last_insert_rowid(database);
-        NSLog(@"addRecord SpeedChange! №%i",pk);
-	}
-	//Reset the add statement.
-	sqlite3_reset(addStmt); 
-}
-
-
-
 - (void) clearDatabase{
     const char *sql = "delete from log";
     if(sqlite3_prepare_v2(database, sql, -1, &deleteStmt, NULL) != SQLITE_OK)
@@ -149,6 +118,9 @@ static sqlite3_stmt *addStmt = nil;
     if (SQLITE_DONE != sqlite3_step(deleteStmt)) 
         NSAssert1(0, @"Error while deleting. '%s'", sqlite3_errmsg(database));
     
+    sqlite3_reset(deleteStmt); 
+    sqlite3_clear_bindings(deleteStmt);
+
     //thanks to http://stackoverflow.com/questions/1601697/sqlite-reset-primary-key-field
     sql = "delete from sqlite_sequence where name='log'";
     if(sqlite3_prepare_v2(database, sql, -1, &deleteStmt, NULL) != SQLITE_OK)
@@ -156,26 +128,46 @@ static sqlite3_stmt *addStmt = nil;
     
     if (SQLITE_DONE != sqlite3_step(deleteStmt)) 
         NSAssert1(0, @"Error while deleting. '%s'", sqlite3_errmsg(database));
-    
+    NSLog(@"dataBaseClear");
     sqlite3_reset(deleteStmt);
+    
 }
 
-/*
- - (double) takeMaxSpeed{
- 
- double maxSpeed = 0;
- const char *sql = "SELECT MAX(speed) FROM speedchangelog";
- 
- sqlite3_stmt *selectstmt;
- if(sqlite3_prepare_v2(database, sql, -1, &selectstmt, NULL) == SQLITE_OK) {
- if(sqlite3_step(selectstmt) == SQLITE_ROW){
- maxSpeed = sqlite3_column_double(selectstmt, 0);    
- }
- NSLog(@"max = %f", maxSpeed);
- }
- return maxSpeed;
- }
- */
+- (void) readDatabase{
+   /*
+    NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]*1000], type, [NSString stringWithFormat:@"%f", x], [NSString stringWithFormat:@"%f", y], [NSString stringWithFormat:@"%.0f",[myAppDelegate north]], [NSString stringWithFormat:@"%.1f",[myAppDelegate course]], [NSString stringWithFormat:@"%.2f",distance], [NSString stringWithFormat:@"%.6f",location.coordinate.latitude],[NSString stringWithFormat:@"%.6f",location.coordinate.longitude], [NSString stringWithFormat:@"%.2f",curSpeed], nil];
+    NSDictionary *entries = [NSDictionary dictionaryWithObjects: objs forKeys:keys];
+    [dataArray addObject:entries];
+    */
+    
+    
+    NSMutableArray *dataArray = [[NSMutableArray alloc]init ];
+    if(sqlite3_open([databasePath UTF8String], &database) == SQLITE_OK) {
+        const char *sql = "select * from log";
+        if(sqlite3_prepare_v2(database, sql, -1, &readStmt, NULL) == SQLITE_OK){
+            while(sqlite3_step(readStmt) == SQLITE_ROW){
+                record = [[NSMutableDictionary alloc] init];
+                [record setObject:[NSString stringWithFormat:@"%s", sqlite3_column_text(readStmt, 1)] forKey:@"type"];
+                [record setValue: [NSString stringWithFormat:@"%f", sqlite3_column_text(readStmt, 2)] forKey:@"time"];
+                [record setValue: [NSString stringWithFormat:@"%f", sqlite3_column_text(readStmt, 3)] forKey:@"accX"];
+                [record setValue: [NSString stringWithFormat:@"%f", sqlite3_column_text(readStmt, 4)] forKey:@"accY"];
+                [record setValue: [NSString stringWithFormat:@"%f", sqlite3_column_text(readStmt, 5)] forKey:@"compass"];
+                [record setValue: [NSString stringWithFormat:@"%f", sqlite3_column_text(readStmt, 6)] forKey:@"direction"];
+                [record setValue: [NSString stringWithFormat:@"%f", sqlite3_column_text(readStmt, 7)] forKey:@"distance"];
+                [record setValue: [NSString stringWithFormat:@"%f", sqlite3_column_text(readStmt, 8)] forKey:@"latitude"];
+                [record setValue: [NSString stringWithFormat:@"%f", sqlite3_column_text(readStmt, 9)] forKey:@"longitude"];
+                [record setValue: [NSString stringWithFormat:@"%f", sqlite3_column_text(readStmt, 10)] forKey:@"speed"];
+            }
+            [dataArray addObject:record];
+        }
+    }
+    NSLog(@"+");
+     NSLog(@"data = %@", dataArray);
+    
+}
+
+
+
 
 /*
  -(NSArray*) readDatabase {

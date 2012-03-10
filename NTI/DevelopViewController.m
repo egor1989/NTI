@@ -322,13 +322,13 @@
         dataArray = [[NSMutableArray alloc] init];
         [action setTitle:@"Stop" forState:UIControlStateNormal];
         type = @"-";
-        writeToFile = YES;
+       // writeToFile = YES;
         [NSDate date];
-        fileNameCSV = [NSString stringWithFormat:@"log%i.csv", [userDefaults integerForKey:@"otherFile"]];
-        fileName = [NSString stringWithFormat:@"log%i", [userDefaults integerForKey:@"otherFile"]];
-        otherFile = [userDefaults integerForKey:@"otherFile"]+1;
-        [userDefaults setInteger:otherFile forKey:@"otherFile"];
-        [userDefaults synchronize];
+        //fileNameCSV = [NSString stringWithFormat:@"log%i.csv", [userDefaults integerForKey:@"otherFile"]];
+        //fileName = [NSString stringWithFormat:@"log%i", [userDefaults integerForKey:@"otherFile"]];
+        //otherFile = [userDefaults integerForKey:@"otherFile"]+1;
+        //[userDefaults setInteger:otherFile forKey:@"otherFile"];
+        //[userDefaults synchronize];
 
         
         otherFile++;
@@ -337,12 +337,21 @@
     }
     else {
         [action setTitle:@"Start" forState:UIControlStateNormal];
-        writeToFile = NO;
-        NSString *JSON = [jsonConvert convert:dataArray];
-        NSString *CSV = [csvConverter arrayToCSVString:dataArray];
-        [fileController writeToFile:CSV fileName:fileNameCSV];
-        [fileController writeToFile:JSON fileName:fileName];
+      //  writeToFile = NO;
+      //  NSString *JSON = [jsonConvert convert:dataArray];
+      //  NSString *CSV = [csvConverter arrayToCSVString:dataArray];
+      //  [fileController writeToFile:CSV fileName:fileNameCSV];
+      //  [fileController writeToFile:JSON fileName:fileName];
         writeToDB =NO;
+        
+        NSMutableArray *toWrite = dataArray;
+        dataArray = [[NSMutableArray alloc] init];
+        //создаем новый тред
+        NSThread* myThread = [[NSThread alloc] initWithTarget:databaseAction
+                                                     selector:@selector(addArray:)
+                                                       object:toWrite];
+        [myThread start]; 
+        
         //stop write to database
     }
     NSLog(@"push action");
@@ -369,8 +378,8 @@
         //[fileController sendFile];
     }
     else if (buttonIndex ==1) {
-        //[databaseAction clearDatabase];
-       [fileController deleteFile]; 
+        [databaseAction clearDatabase];
+       //[fileController deleteFile]; 
     }
     
 	//NSLog(@"Index - %i, title - %@", buttonIndex, [alertView buttonTitleAtIndex:buttonIndex]);
@@ -380,14 +389,11 @@
 
 
 - (IBAction)sendFile:(id)sender {
+    [databaseAction readDatabase];
+    
     
     //[self sendFile];
-    [self infoAboutFiles];
-    
-    
-  //  NSLog(@"tampampam");
-  //  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Запрос на удаление" message:@"Вы хотите удалить отправленные файлы?" delegate:self cancelButtonTitle:@"Отмена" otherButtonTitles:@"Да",nil];
-  //  [alert show];
+    //[self infoAboutFiles];
     
 }
 
@@ -463,13 +469,14 @@
 }
 
 -(void) sendToServer{
-    ServerCommunication *serverCommunication = [[ServerCommunication alloc] init];
-    NSMutableArray *allFiles = [fileController getAllFiles];
-    for (NSString *file in allFiles) {
-        NSLog(@"%@",file);
-        NSString *content = [fileController readFile:file];
-        [serverCommunication uploadData:content];
-    }
+    [databaseAction readDatabase];
+    //ServerCommunication *serverCommunication = [[ServerCommunication alloc] init];
+    //NSMutableArray *allFiles = [fileController getAllFiles];
+    //for (NSString *file in allFiles) {
+    //    NSLog(@"%@",file);
+    //    NSString *content = [fileController readFile:file];
+    //    [serverCommunication uploadData:content];
+    //}
 }
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error 

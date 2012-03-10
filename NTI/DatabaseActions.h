@@ -23,14 +23,14 @@
     double time;
     double speedDiff, currentAcceleration;
     double timeOver, maxOver;
+    NSMutableDictionary *record;
     
 }
 
 - (id) initDataBase;
 - (void) checkAndCreateDatabase;
-- (void) addRecord: (CMAcceleration) point Type: (int)type;
 - (void) clearDatabase;
 - (BOOL)addArray: (NSMutableArray *)data;
-//- (NSArray*) readDatabase;
+- (void) readDatabase;
 + (void) finalizeStatements;
 @end

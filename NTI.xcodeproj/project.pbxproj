@@ -71,6 +71,7 @@
 		53F8836D150A53D6000F7FE3 /* SBJsonUTF8Stream.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F88361150A53D6000F7FE3 /* SBJsonUTF8Stream.m */; };
 		53F8836E150A53D6000F7FE3 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F88363150A53D6000F7FE3 /* SBJsonWriter.m */; };
 		53F88371150B9740000F7FE3 /* log.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 53F88370150B9740000F7FE3 /* log.sqlite */; };
+		53F88378150BD312000F7FE3 /* Record.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F88377150BD311000F7FE3 /* Record.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -175,6 +176,8 @@
 		53F88362150A53D6000F7FE3 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
 		53F88363150A53D6000F7FE3 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
 		53F88370150B9740000F7FE3 /* log.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = log.sqlite; sourceTree = "<group>"; };
+		53F88376150BD310000F7FE3 /* Record.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Record.h; sourceTree = "<group>"; };
+		53F88377150BD311000F7FE3 /* Record.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Record.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -339,6 +342,8 @@
 				276C4C9A14DEF4FF00C469A6 /* DatabaseActions.m */,
 				53E0A79C14DEDE6F004E3E1B /* libsqlite3.0.dylib */,
 				53E0A79D14DEDE6F004E3E1B /* libsqlite3.dylib */,
+				53F88376150BD310000F7FE3 /* Record.h */,
+				53F88377150BD311000F7FE3 /* Record.m */,
 			);
 			name = DataBase;
 			sourceTree = "<group>";
@@ -583,6 +588,7 @@
 				53F8836C150A53D6000F7FE3 /* SBJsonTokeniser.m in Sources */,
 				53F8836D150A53D6000F7FE3 /* SBJsonUTF8Stream.m in Sources */,
 				53F8836E150A53D6000F7FE3 /* SBJsonWriter.m in Sources */,
+				53F88378150BD312000F7FE3 /* Record.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
