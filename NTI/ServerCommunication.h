@@ -7,15 +7,22 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SBJson.h"
 
 @interface ServerCommunication : NSObject {
     NSString *returnString; 
     NSMutableURLRequest *request;
     NSData *requestData;
+    BOOL forgotPassword;
+    BOOL errors;
     
 }
 - (NSString *)regUser:(NSString *)login password:(NSString *)password email:(NSString *)email;
 - (void)uploadData:(NSString *)fileContent;
-//- (void)checkErrors:(NSString *)answerString;
+- (NSString *)authUser:(NSString *)login secret:(NSString *)message;
+- (BOOL)checkErrors:(NSString *)answerString;
+- (void)showResult: (NSString *)info;
+
+@property (nonatomic) BOOL errors;
 
 @end

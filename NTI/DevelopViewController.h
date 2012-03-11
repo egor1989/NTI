@@ -62,13 +62,13 @@
     NSString *fileName;
 
     
-    BOOL writeInDB;
+    BOOL writeToDB;
     NSInteger logFile;
     NSString *fileNameCSV;
     
     
     NSArray *keys;
-    NSMutableArray *forJSON;
+    NSMutableArray *dataArray;
    // NSDictionary *entries;
     
     toJSON *jsonConvert;

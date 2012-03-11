@@ -27,7 +27,7 @@
     return shaString;
 }
 
-
+/*
 - (NSString*)stringWithHexBytes: (NSData *) encrypted {
     static const char hexdigits[] = "0123456789ABCDEF";
     const size_t numBytes = [encrypted length];
@@ -91,7 +91,7 @@
     
 }
 
-
+*/
 
 
 

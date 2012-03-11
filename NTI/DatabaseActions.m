@@ -10,10 +10,13 @@
 #import "AppDelegate.h"
 
 #define myAppDelegate (AppDelegate*) [[UIApplication sharedApplication] delegate]
+#define maxEntries 1000
 
 static sqlite3 *database = nil;
 static sqlite3_stmt *deleteStmt = nil;
 static sqlite3_stmt *addStmt = nil;
+static sqlite3_stmt *readStmt = nil;
+
 
 
 
@@ -24,9 +27,10 @@ static sqlite3_stmt *addStmt = nil;
 	NSArray *documentPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDir = [documentPaths objectAtIndex:0];
 	databasePath = [documentsDir stringByAppendingPathComponent:databaseName];
-    //[self checkAndCreateDatabase];
-    //if (sqlite3_open([databasePath UTF8String], &database) == SQLITE_OK) NSLog(@"Database open");
-    //else NSLog(@"error! base not open");
+    
+    [self checkAndCreateDatabase];
+    if (sqlite3_open([databasePath UTF8String], &database) == SQLITE_OK) NSLog(@"Database open");
+    else NSLog(@"error! base not open");
     return self;
 }
 
@@ -56,36 +60,57 @@ static sqlite3_stmt *addStmt = nil;
 	[fileManager copyItemAtPath:databasePathFromApp toPath:databasePath error:nil];
 }
 
--(void) addRecord: (CMAcceleration) point Type:(int)type{
+- (BOOL)addArray: (NSMutableArray *)data{
+    
+    NSLog(@"data=%@", data);
+    
+        const char *sql = "INSERT INTO log(type, time, accX, accY, compass, direction, distance, latitude, longitude, speed) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    if(addStmt == nil) {
+        if(sqlite3_prepare_v2(database, sql, -1, &addStmt, NULL) != SQLITE_OK){
+            NSAssert1(0, @"Error while creating add statement. '%s'", sqlite3_errmsg(database));
+            return NO;
+        }
+    }
+    sqlite3_exec(database, "BEGIN", NULL, NULL, NULL);
+    for (NSDictionary *entrie in data) {
+        //sqlite3_exec(databaseName, "BEGIN", 0, 0, 0);
 
-    CLLocation* location=[myAppDelegate lastLoc];
+        sqlite3_bind_text(addStmt, 1, [[entrie objectForKey:@"type"] UTF8String], -1, SQLITE_TRANSIENT);
+        sqlite3_bind_double(addStmt, 2, [[entrie objectForKey:@"timestamp"] doubleValue]);
+        sqlite3_bind_double(addStmt, 3, [[entrie objectForKey:@"accX"] doubleValue]);
+        sqlite3_bind_double(addStmt, 4, [[entrie objectForKey:@"accY"] doubleValue]);
+        sqlite3_bind_double(addStmt, 5, [[entrie objectForKey:@"compass"] doubleValue]);
+        sqlite3_bind_double(addStmt, 6, [[entrie objectForKey:@"direction"] doubleValue]);
+        sqlite3_bind_double(addStmt, 7, [[entrie objectForKey:@"distance"] doubleValue]);
+        sqlite3_bind_double(addStmt, 8, [[entrie objectForKey:@"latitude"] doubleValue]);
+        sqlite3_bind_double(addStmt, 9, [[entrie objectForKey:@"longitude"] doubleValue]);
+        sqlite3_bind_double(addStmt, 10, [[entrie objectForKey:@"speed"] doubleValue]);
+        
+        
+        if(SQLITE_DONE != sqlite3_step(addStmt)){
+            NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
+            return NO;
+        }
+        else {
+            //SQLite provides a method to get the last primary key inserted by using sqlite3_last_insert_rowid
+            //sqlite3_
+            pk = sqlite3_last_insert_rowid(database);
+            NSLog(@"addRecord  №%i",pk);
+            
+        }
+        
+        
+        //Reset the add statement.
+        sqlite3_reset(addStmt); 
+        sqlite3_clear_bindings(addStmt);
+        
+        
+    }
+    sqlite3_exec(database, "COMMIT", NULL, NULL, NULL);
     
-   	if(addStmt == nil) {
-		const char *sql = "INSERT INTO log(time, accX, accY, accZ, lon, lat, course, speed, type) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
-		if(sqlite3_prepare_v2(database, sql, -1, &addStmt, NULL) != SQLITE_OK)
-			NSAssert1(0, @"Error while creating add statement. '%s'", sqlite3_errmsg(database));
-	}
-    sqlite3_bind_double(addStmt, 1, [[[NSDate alloc ]init]timeIntervalSince1970]);
-    sqlite3_bind_double(addStmt, 2, point.x);
-    sqlite3_bind_double(addStmt, 3, point.y);
-    sqlite3_bind_double(addStmt, 4, point.z);
-    sqlite3_bind_double(addStmt, 5, location.coordinate.longitude);
-    sqlite3_bind_double(addStmt, 6, location.coordinate.latitude);
-    sqlite3_bind_double(addStmt, 7, location.course);
-    sqlite3_bind_double(addStmt, 8, location.speed);
-    sqlite3_bind_double(addStmt, 9, type);
-    
-    
-	if(SQLITE_DONE != sqlite3_step(addStmt))
-		NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
-	else {
-		//SQLite provides a method to get the last primary key inserted by using sqlite3_last_insert_rowid
-		pk = sqlite3_last_insert_rowid(database);
-        NSLog(@"addRecord SpeedChange! №%i",pk);
-	}
-	//Reset the add statement.
-	sqlite3_reset(addStmt); 
+    return YES;
 }
+
 
 - (void) clearDatabase{
     const char *sql = "delete from log";
@@ -94,75 +119,72 @@ static sqlite3_stmt *addStmt = nil;
     
     if (SQLITE_DONE != sqlite3_step(deleteStmt)) 
         NSAssert1(0, @"Error while deleting. '%s'", sqlite3_errmsg(database));
-
+    
+    sqlite3_reset(deleteStmt); 
+    
+    //если придется вернуть очистку рк
     //thanks to http://stackoverflow.com/questions/1601697/sqlite-reset-primary-key-field
-    sql = "delete from sqlite_sequence where name='log'";
-    if(sqlite3_prepare_v2(database, sql, -1, &deleteStmt, NULL) != SQLITE_OK)
-        NSAssert1(0, @"Error while creating delete statement. '%s'", sqlite3_errmsg(database));
-    
-    if (SQLITE_DONE != sqlite3_step(deleteStmt)) 
-        NSAssert1(0, @"Error while deleting. '%s'", sqlite3_errmsg(database));
-    
-    sqlite3_reset(deleteStmt);
 }
 
-/*
-- (double) takeMaxSpeed{
+- (void) readDatabase{  
+    NSArray *keys = [NSArray arrayWithObjects:@"timestamp", @"type", @"acc", @"gps", nil];
+    dataArray = [[NSMutableArray alloc]init];
     
-    double maxSpeed = 0;
-    const char *sql = "SELECT MAX(speed) FROM speedchangelog";
     
-    sqlite3_stmt *selectstmt;
-    if(sqlite3_prepare_v2(database, sql, -1, &selectstmt, NULL) == SQLITE_OK) {
-        if(sqlite3_step(selectstmt) == SQLITE_ROW){
-        maxSpeed = sqlite3_column_double(selectstmt, 0);    
-        }
-        NSLog(@"max = %f", maxSpeed);
-    }
-    return maxSpeed;
-}
-*/
-
-/*
--(NSArray*) readDatabase {
-    
-	// Init the animals Array
-	NSMutableArray *points = [[NSMutableArray alloc] init];
-    
-	// Open the database from the users filessytem
-//	if(sqlite3_open([databasePath UTF8String], &database) == SQLITE_OK) {
-		// Setup the SQL Statement and compile it for faster access
-		const char *sqlStatement = "select * from speedchangelog";
-		sqlite3_stmt *compiledStatement;
-		if(sqlite3_prepare_v2(database, sqlStatement, -1, &compiledStatement, NULL) == SQLITE_OK) {
-			// Loop through the results and add them to the feeds array
-			while(sqlite3_step(compiledStatement) == SQLITE_ROW) {
-				// Read the data from the result row
-				// Create a new animal object with the data from the database
-				Info *point = [[Info alloc] initWithUserID: sqlite3_column_double(compiledStatement, 1)
-                                                  UserName:[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement, 2)]
-                                                      Time: sqlite3_column_double(compiledStatement, 3)
-                                                     Speed: sqlite3_column_double(compiledStatement, 4) 
-                                                 Longitude: sqlite3_column_double(compiledStatement, 5) 
-                                                  Latitude: sqlite3_column_double(compiledStatement, 6) 
-                                                  Altitude: sqlite3_column_double(compiledStatement, 7)
-                               ];
+    if(sqlite3_open([databasePath UTF8String], &database) == SQLITE_OK) {
+        const char *sql = "select * from log";
+        //const char *sql = "SELECT * FROM log WHERE rowid BETWEEN 0 AND 10";
+        if(sqlite3_prepare_v2(database, sql, -1, &readStmt, NULL) == SQLITE_OK){
+            
+            while(sqlite3_step(readStmt) == SQLITE_ROW){
                 
-				// Add the animal object to the animals Array
-				[points addObject:point];
-			}
-		}
-		// Release the compiled statement from memory
-		sqlite3_finalize(compiledStatement);
+                NSDictionary *acc = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%f", sqlite3_column_double(readStmt, 2)], @"x", [NSString stringWithFormat:@"%f", sqlite3_column_double(readStmt, 3)], @"y", nil];
+                
+                NSDictionary *gps = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%.1f", sqlite3_column_double(readStmt, 5)], @"direction", [NSString stringWithFormat:@"%.1f", sqlite3_column_double(readStmt, 9)], @"speed", [NSString stringWithFormat:@"%f", sqlite3_column_double(readStmt, 7)], @"latitude", [NSString stringWithFormat:@"%f", sqlite3_column_double(readStmt, 8)], @"longitude", [NSString stringWithFormat:@"%.0f", sqlite3_column_double(readStmt, 4)], @"compass", [NSString stringWithFormat:@"%.2f", sqlite3_column_double(readStmt, 6)], @"distance", nil];
+                
+                NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.0f", sqlite3_column_double(readStmt, 1)],[NSString stringWithFormat:@"%s", sqlite3_column_text(readStmt, 0)], 
+                                 acc, gps, nil];
+                
+                NSDictionary *record = [NSDictionary dictionaryWithObjects:objs forKeys:keys];
+                
+                
+              //  record = [[NSMutableDictionary alloc] init];
+                
+                
+              //  [record setObject: [NSString stringWithFormat:@"%s", sqlite3_column_text(readStmt, 0)] forKey:@"type"];
+              //  [record setObject: [NSString stringWithFormat:@"%.0f", sqlite3_column_double(readStmt, 1)] forKey:@"time"];
+              //  [record setObject: [NSString stringWithFormat:@"%f", sqlite3_column_double(readStmt, 2)] forKey:@"accX"];
+              //  [record setObject: [NSString stringWithFormat:@"%f", sqlite3_column_double(readStmt, 3)] forKey:@"accY"];
+              //  [record setObject: [NSString stringWithFormat:@"%.0f", sqlite3_column_double(readStmt, 4)] forKey:@"compass"];
+              //  [record setObject: [NSString stringWithFormat:@"%.1f", sqlite3_column_double(readStmt, 5)] forKey:@"direction"];
+              //  [record setObject: [NSString stringWithFormat:@"%.2f", sqlite3_column_double(readStmt, 6)] forKey:@"distance"];
+               // [record setObject: [NSString stringWithFormat:@"%f", sqlite3_column_double(readStmt, 7)] forKey:@"latitude"];
+             //   [record setObject: [NSString stringWithFormat:@"%f", sqlite3_column_double(readStmt, 8)] forKey:@"longitude"];
+               // [record setObject: [NSString stringWithFormat:@"%.1f", sqlite3_column_double(readStmt, 9)] forKey:@"speed"];
         
-//	}
-//	sqlite3_close(database);
-    return points;
+                [dataArray addObject:record];
+          
+            }
+        }
+    }
+   
+    sqlite3_finalize(readStmt);
+    NSLog(@"data = %@", dataArray);
+    [self arrayConvert];
+    
     
 }
 
-*/
+- (void) arrayConvert{
+    NSInteger size = [dataArray count];
+    NSLog(@"%i",size);
+}
 
+
+//  NSString *JSON = [jsonConvert convert:dataArray];
+//  NSString *CSV = [csvConverter arrayToCSVString:dataArray];
+//  [fileController writeToFile:CSV fileName:fileNameCSV];
+//  [fileController writeToFile:JSON fileName:fileName];
 
 
 + (void) finalizeStatements {

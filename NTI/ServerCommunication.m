@@ -9,6 +9,7 @@
 #import "ServerCommunication.h"
 
 @implementation ServerCommunication
+@synthesize errors;
 
 
 - (void)uploadData:(NSString *)fileContent{
@@ -19,7 +20,7 @@
     
     NSLog(@"Request: %@", fileContent);
         
-   request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://goodroads.ru/another/api.php"]cachePolicy:NSURLRequestUseProtocolCachePolicy
+   request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
                                   timeoutInterval:60.0];
 
     requestData = [NSData dataWithBytes:[fileContent UTF8String] length:[fileContent length]];
@@ -39,27 +40,62 @@
    // [self checkErrors:returnString];
 }
 
-/*- (void)checkErrors:(NSString *)answerString{
+
+- (BOOL)checkErrors:(NSString *)answerString{
     
     SBJsonParser *jsonParser = [SBJsonParser new];
     NSArray *answer = [jsonParser objectWithString:answerString error:NULL];
     NSArray *error = [answer valueForKey:@"error"];
     NSInteger code =[[error valueForKey:@"code"] intValue];
     
-    if (code == 80) { 
-        NSLog(@"User isn't logged in");
+    NSString *info = nil;
+    forgotPassword = NO;
+    errors = YES;
+    
+    switch (code) {
+        case 0:
+            info = @"Поздравляем!";
+            errors = NO;
+            break;
+        case 2:
+        case 10:
+            info = @"Не все обязательные поля заполнены";
+            break;
+        case 3:
+            info = @"Пользователь с таким именем уже существует";
+            break;
+        case 4:
+            info = @"E-mail уже используется";
+            break;
+        case 11:
+            info = @"Пользователя с таким именем не существует";
+            break;
+        case 12:
+            info = @"Неверный пароль";
+            forgotPassword = YES;
+            break;
+            
+        default:
+            break;
     }
-    else if ((code == 81)||(code == 82)){
-        NSLog(@"Key incorrect");
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSString *login = [userDefaults stringForKey:@"login"];
-        NSString *password = [userDefaults stringForKey:@"password"];
-        ServerCommunication *serverCommunication = [[[ServerCommunication alloc] init:NULL] autorelease];
-        [serverCommunication sendData:login secret: password];
+
+    [self showResult:info];
+    return errors;
+}
+
+- (void)showResult: (NSString *)info {
+    if (forgotPassword) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:info delegate:self cancelButtonTitle:@"Еще раз" otherButtonTitles:@"Забыл пароль",nil];
+        [alert show];
+    }
+    else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ответ сервера" message:info delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
+        [alert show];    
     }
     
 }
- */
+ 
+ 
 
 - (NSString *)regUser:(NSString *)login password:(NSString *)password email:(NSString *)email{
     
@@ -67,20 +103,71 @@
     
     NSString *data = [NSString stringWithFormat:(@"%@%@%@%@%@%@%@"),@"data={\"method\":\"NTIregister\",\"params\":{\"login\":\"",login, @"\",\"password\":\"", password,@"\",\"email\":\"",email, @"\"}}"];
     NSLog(@"Request: %@", data);
-    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://goodroads.ru/another/api.php"]cachePolicy:NSURLRequestUseProtocolCachePolicy
+    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
                                   timeoutInterval:60.0];
     
     requestData = [NSData dataWithBytes:[data UTF8String] length:[data length]];
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody: requestData];
     
-    NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil ];
+    
+    NSError *requestError = nil;
+    NSURLResponse *response = nil;
+    NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: &response error: &requestError ];
     returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
+    
+    NSDictionary *fields = [(NSHTTPURLResponse *)response allHeaderFields];
+    NSString *cookie = [fields valueForKey:@"Set-Cookie"];
+    
+    NSLog(@"Cookie: %@", cookie);
+ 
     NSLog(@"returnData: %@", returnString);
-    //[self parseAuthJSON:returnString cookie: cookie method: @"regUser"];
-    //parse json
+    
+    
+    
     return returnString;
 }
+
+
+- (NSString *) authUser:(NSString *)login secret:(NSString *)message{
+    
+    // NSLog(@"sendData login = %@ message = %@", login, message);
+    
+    NSString *data = [NSString stringWithFormat:(@"%@%@%@%@%@"),@"data={\"method\":\"NTIauth\",\"params\":{\"login\":\"",login, @"\",\"secret\":\"", message,@"\"}}"];
+    
+    NSLog(@"Request: %@", data);
+    
+    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                  timeoutInterval:60.0];
+    
+    requestData = [NSData dataWithBytes:[data UTF8String] length:[data length]];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody: requestData];
+
+    NSError *requestError = nil;
+    NSURLResponse *response = nil;
+    NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: &response error: &requestError];
+    
+    if (requestError!=nil) {
+        NSLog(@"%@", requestError);
+        NSLog(@"ERROR!ERROR!ERROR!");
+    }
+    
+    NSDictionary *fields = [(NSHTTPURLResponse *)response allHeaderFields];
+    NSString *cookie = [fields valueForKey:@"Set-Cookie"];
+    
+    NSLog(@"Cookie: %@", cookie);
+    
+    returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
+    NSLog(@"returnData: %@", returnString);
+    return returnString;
+    
+    [self checkErrors:returnString];
+    //[self parseAuthJSON:returnString cookie: cookie method:@"sendData"];
+    //parse json
+    //return serverAnswer;
+}
+
 
 
 @end

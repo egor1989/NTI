@@ -16,6 +16,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        [loginField becomeFirstResponder];
     }
     return self;
 }
@@ -39,6 +40,8 @@
 - (void)viewDidUnload
 {
 
+    loginField = nil;
+    passwordField = nil;
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -56,9 +59,41 @@
 
 - (IBAction)goButton:(id)sender {
     
+    if ([self checkData]) {
+        NSData *password = [passwordField.text dataUsingEncoding:NSUTF8StringEncoding];
+        EncryptionData *encryptionData = [[EncryptionData alloc] init];
+        NSString *encryptedPass = [encryptionData encryptionPassword:password];
+        //  NSLog(@"%@", encryptedPass);
+        
+        // отправка на сервер
+        ServerCommunication *serverCommunication = [[ServerCommunication alloc] init];
+        NSString *serverAnswer = [serverCommunication authUser:loginField.text secret:encryptedPass];
+        NSLog(@"auth %@", serverAnswer);
+        BOOL ok = [serverCommunication checkErrors: serverAnswer];
+        if (ok) {
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setValue: loginField.text forKey:@"login"];
+            [userDefaults setValue: passwordField.text forKey:@"password"];
+            [userDefaults synchronize];
+        }
+        
+    }
+
+    
+    
 }
 
 - (BOOL)checkData{
-    return YES;
+    if (![loginField.text isEqual:@""]&&![passwordField.text isEqual:@""]) return YES;
+    else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"заполните все поля" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
+        [alert show];
+        return NO;  
+    }
+}
+
+- (void)showResult: (NSString *)answer{
+    
+    
 }
 @end

@@ -10,6 +10,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import <CoreMotion/CoreMotion.h>
 #import <sqlite3.h> 
+#import "Record.h"
 
 
 @interface DatabaseActions : NSObject{
@@ -23,13 +24,18 @@
     double time;
     double speedDiff, currentAcceleration;
     double timeOver, maxOver;
+   // NSMutableDictionary *record;
+   // NSMutableDictionary *acc;
+   // NSMutableDictionary *gps;
+    NSMutableArray *dataArray;
     
 }
 
 - (id) initDataBase;
 - (void) checkAndCreateDatabase;
-- (void) addRecord: (CMAcceleration) point Type: (int)type;
 - (void) clearDatabase;
-//- (NSArray*) readDatabase;
+- (BOOL)addArray: (NSMutableArray *)data;
+- (void) readDatabase;
 + (void) finalizeStatements;
+- (void) arrayConvert;
 @end

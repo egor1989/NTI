@@ -16,6 +16,8 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        [nameField becomeFirstResponder];
+        
     }
     return self;
 }
@@ -128,15 +130,15 @@
 
     if ([self checkField]) {
         NSData *password = [passwordField.text dataUsingEncoding:NSUTF8StringEncoding];
-       // EncryptionData *encryptionData = [[EncryptionData alloc] init];
-       // NSString *encryptedPass = [encryptionData encryptionPassword:password];
+        EncryptionData *encryptionData = [[EncryptionData alloc] init];
+        NSString *encryptedPass = [encryptionData encryptionPassword:password];
       //  NSLog(@"%@", encryptedPass);
         
         // отправка на сервер
         ServerCommunication *serverCommunication = [[ServerCommunication alloc] init];
-      //  NSString *serverAnswer = [serverCommunication regUser:nameField.text password:encryptedPass email:emailField.text];
-        
-     //   NSLog(@"answer = %@", serverAnswer);
+        NSString *serverAnswer = [serverCommunication regUser:nameField.text password:encryptedPass email:emailField.text];
+        [serverCommunication checkErrors: serverAnswer];
+
     }
     
 }

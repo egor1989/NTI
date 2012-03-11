@@ -10,6 +10,7 @@
 
 #define MAX3(a,b,c) ( MAX(a,b)>c ? ((a>b)? 1:2) : 3 )
 #define radianConst M_PI/180.0
+#define maxEntries 100
 
 @implementation DevelopViewController
 
@@ -53,26 +54,41 @@
    //     [databaseAction addRecord:currentAcceleration Type:0];
    // }
 
-    if (writeToFile) {
+    if (writeToDB) {
         float curSpeed = 0;
         if (location.speed > 0) curSpeed = location.speed*3.6;
         
         float distance = [myAppDelegate allDistance]/1000;
         
-      
-        NSDictionary *acc = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%f", x], @"x", [NSString stringWithFormat:@"%f", y], @"y", nil];
         
-        NSDictionary *gps = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%.1f",[myAppDelegate course]], @"direction", [NSString stringWithFormat:@"%.2f",curSpeed], @"speed", [NSString stringWithFormat:@"%.6f",location.coordinate.latitude], @"latitude", [NSString stringWithFormat:@"%.6f",location.coordinate.longitude], @"longitude", [NSString stringWithFormat:@"%.0f",[myAppDelegate north]], @"compass", [NSString stringWithFormat:@"%.2f",distance], @"distance",    nil];
+       // NSDictionary *acc = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%f", x], @"x", [NSString stringWithFormat:@"%f", y], @"y", nil];
         
-        NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]*1000], type, acc, gps, nil];
-        NSDictionary *entries = [NSDictionary dictionaryWithObjects:objs forKeys:keys];
+       // NSDictionary *gps = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%.1f",[myAppDelegate course]], @"direction", [NSString stringWithFormat:@"%.2f",curSpeed], @"speed", [NSString stringWithFormat:@"%.6f",location.coordinate.latitude], @"latitude", [NSString stringWithFormat:@"%.6f",location.coordinate.longitude], @"longitude", [NSString stringWithFormat:@"%.0f",[myAppDelegate north]], @"compass", [NSString stringWithFormat:@"%.2f",distance], @"distance",    nil];
         
-        [forJSON addObject:entries];
+       // NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]*1000], type, acc, gps, nil];
+       // NSDictionary *entries = [NSDictionary dictionaryWithObjects:objs forKeys:keys];
+                
         
-        NSInteger countInArray = forJSON.count;
+        NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]*1000], type, [NSString stringWithFormat:@"%f", x], [NSString stringWithFormat:@"%f", y], [NSString stringWithFormat:@"%.0f",[myAppDelegate north]], [NSString stringWithFormat:@"%.1f",[myAppDelegate course]], [NSString stringWithFormat:@"%.2f",distance], [NSString stringWithFormat:@"%.6f",location.coordinate.latitude],[NSString stringWithFormat:@"%.6f",location.coordinate.longitude], [NSString stringWithFormat:@"%.2f",curSpeed], nil];
+        NSDictionary *entries = [NSDictionary dictionaryWithObjects: objs forKeys:keys];
+        [dataArray addObject:entries];
+        
+        NSInteger countInArray = dataArray.count;
+       
+        if (countInArray > maxEntries){ 
+            //countInArray = 0;
+            NSMutableArray *toWrite = dataArray;
+            dataArray = [[NSMutableArray alloc] init];
+            //создаем новый тред
+            NSThread* myThread = [[NSThread alloc] initWithTarget:databaseAction
+                                                         selector:@selector(addArray:)
+                                                           object:toWrite];
+            [myThread start]; 
+            
+            
+        }
+        
         NSLog(@"countInArray = %i", countInArray);
-        //NSLog(@"%@",forJSON);
-        
     }
     if ([myAppDelegate canWriteToFile]) writeLabel.text = @"+";
     else writeLabel.text = @"-";
@@ -97,7 +113,7 @@
     [super viewDidLoad];
     k=0;
     databaseAction = [[DatabaseActions alloc] initDataBase];
-    writeInDB = NO;
+    writeToDB = NO;
     userDefaults = [NSUserDefaults standardUserDefaults];
 
    // accelFileNumber = 0;
@@ -106,7 +122,7 @@
    // rightRotFileNumber = 0;
    // otherFile = 0;
        
-    keys = [NSArray arrayWithObjects:@"timestamp", @"type", @"acc", @"gps", nil];
+    keys = [NSArray arrayWithObjects:@"timestamp", @"type", @"accX", @"accY", @"compass", @"direction", @"distance", @"latitude", @"longitude",@"speed", nil];
     
     jsonConvert = [[toJSON alloc]init];
     fileController = [[FileController alloc] init];
@@ -202,30 +218,6 @@
 - (void) showGPS{
     
     
-/*    if (writeToLog) {
-      float curSpeed = location.speed*3.6;
-        if (curSpeed<0) {
-            curSpeed=0;
-        } 
-        float distance = [myAppDelegate allDistance]/1000;
-        
-        
-        NSDictionary *acc = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%f", x], @"x", [NSString stringWithFormat:@"%f", y], @"y", nil];
-        
-        NSDictionary *gps = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%.1f",[myAppDelegate course]], @"direction", [NSString stringWithFormat:@"%.2f",curSpeed], @"speed", [NSString stringWithFormat:@"%.6f",location.coordinate.latitude], @"latitude", [NSString stringWithFormat:@"%.6f",location.coordinate.longitude], @"longitude", [NSString stringWithFormat:@"%.0f",[myAppDelegate north]], @"compass", [NSString stringWithFormat:@"%.2f",distance], @"distance",   nil];
-        
-        NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]*1000], acc,gps, nil];
-        NSDictionary *entries = [NSDictionary dictionaryWithObjects:objs forKeys:keys];
-        
-        [forJSON addObject:entries];
-        
-        NSInteger countInArray = forJSON.count;
-        NSLog(@"countInArray = %i", countInArray);
-        NSLog(@"%@",forJSON);
-        
-    }
- */
-
     location = [myAppDelegate lastLoc];  
     //NSLog(@"lat = %@, lond = %@", [NSString stringWithFormat:@"%f", location.coordinate.latitude], [NSString stringWithFormat:@"%f", location.coordinate.longitude]);
     course.text = [NSString stringWithFormat:@"%.2f",location.course];
@@ -327,29 +319,39 @@
 - (IBAction)actionButton:(id)sender {
     NSLog(@"%@", action.titleLabel.text);
     if ([action.titleLabel.text isEqualToString:@"Start"]) {
-        forJSON = [[NSMutableArray alloc] init];
+        dataArray = [[NSMutableArray alloc] init];
         [action setTitle:@"Stop" forState:UIControlStateNormal];
         type = @"-";
-        writeToFile = YES;
-        fileNameCSV = [NSString stringWithFormat:@"log%i.csv", [userDefaults integerForKey:@"otherFile"]];
-        fileName = [NSString stringWithFormat:@"log%i", [userDefaults integerForKey:@"otherFile"]];
-        otherFile = [userDefaults integerForKey:@"otherFile"]+1;
-        [userDefaults setInteger:otherFile forKey:@"otherFile"];
-        [userDefaults synchronize];
+       // writeToFile = YES;
+        [NSDate date];
+        //fileNameCSV = [NSString stringWithFormat:@"log%i.csv", [userDefaults integerForKey:@"otherFile"]];
+        //fileName = [NSString stringWithFormat:@"log%i", [userDefaults integerForKey:@"otherFile"]];
+        //otherFile = [userDefaults integerForKey:@"otherFile"]+1;
+        //[userDefaults setInteger:otherFile forKey:@"otherFile"];
+        //[userDefaults synchronize];
 
         
         otherFile++;
-       // writeInDB = YES;
+        writeToDB = YES;
         //start write to database
     }
     else {
         [action setTitle:@"Start" forState:UIControlStateNormal];
-        writeToFile = NO;
-        NSString *JSON = [jsonConvert convert:forJSON];
-        NSString *CSV = [csvConverter arrayToCSVString:forJSON];
-        [fileController writeToFile:CSV fileName:fileNameCSV];
-        [fileController writeToFile:JSON fileName:fileName];
-      //  writeInDB =NO;
+      //  writeToFile = NO;
+      //  NSString *JSON = [jsonConvert convert:dataArray];
+      //  NSString *CSV = [csvConverter arrayToCSVString:dataArray];
+      //  [fileController writeToFile:CSV fileName:fileNameCSV];
+      //  [fileController writeToFile:JSON fileName:fileName];
+        writeToDB =NO;
+        
+        NSMutableArray *toWrite = dataArray;
+        dataArray = [[NSMutableArray alloc] init];
+        //создаем новый тред
+        NSThread* myThread = [[NSThread alloc] initWithTarget:databaseAction
+                                                     selector:@selector(addArray:)
+                                                       object:toWrite];
+        [myThread start]; 
+        
         //stop write to database
     }
     NSLog(@"push action");
@@ -376,8 +378,8 @@
         //[fileController sendFile];
     }
     else if (buttonIndex ==1) {
-        //[databaseAction clearDatabase];
-       [fileController deleteFile]; 
+        [databaseAction clearDatabase];
+       //[fileController deleteFile]; 
     }
     
 	//NSLog(@"Index - %i, title - %@", buttonIndex, [alertView buttonTitleAtIndex:buttonIndex]);
@@ -387,14 +389,11 @@
 
 
 - (IBAction)sendFile:(id)sender {
+    [databaseAction readDatabase];
+    
     
     //[self sendFile];
-    [self infoAboutFiles];
-    
-    
-  //  NSLog(@"tampampam");
-  //  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Запрос на удаление" message:@"Вы хотите удалить отправленные файлы?" delegate:self cancelButtonTitle:@"Отмена" otherButtonTitles:@"Да",nil];
-  //  [alert show];
+    //[self infoAboutFiles];
     
 }
 
@@ -470,13 +469,14 @@
 }
 
 -(void) sendToServer{
-    ServerCommunication *serverCommunication = [[ServerCommunication alloc] init];
-    NSMutableArray *allFiles = [fileController getAllFiles];
-    for (NSString *file in allFiles) {
-        NSLog(@"%@",file);
-        NSString *content = [fileController readFile:file];
-        [serverCommunication uploadData:content];
-    }
+    [databaseAction readDatabase];
+    //ServerCommunication *serverCommunication = [[ServerCommunication alloc] init];
+    //NSMutableArray *allFiles = [fileController getAllFiles];
+    //for (NSString *file in allFiles) {
+    //    NSLog(@"%@",file);
+    //    NSString *content = [fileController readFile:file];
+    //    [serverCommunication uploadData:content];
+    //}
 }
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error 
