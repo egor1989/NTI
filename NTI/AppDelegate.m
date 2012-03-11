@@ -72,7 +72,8 @@
     //else self.window.rootViewController = self.tabBarController;
     
     [self.window makeKeyAndVisible];
-    
+
+    [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
 
     return YES;
     

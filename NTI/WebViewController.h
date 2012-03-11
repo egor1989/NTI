@@ -14,4 +14,6 @@
 
 @property (nonatomic, retain) UIWebView *webView;
 
+- (IBAction)backButton:(id)sender;
+
 @end
