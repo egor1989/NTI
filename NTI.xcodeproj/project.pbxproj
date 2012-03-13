@@ -18,6 +18,7 @@
 		2775F55615068A7900FE08BC /* NTI_StatMenuIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2775F55015068A7900FE08BC /* NTI_StatMenuIcon@2x.png */; };
 		2775F5601507D01900FE08BC /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2775F55E1507D01900FE08BC /* MainStoryboard.storyboard */; };
 		2775F5641507D48C00FE08BC /* StatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2775F5631507D48C00FE08BC /* StatViewController.m */; };
+		278FE5C6150CE2EE0098BA74 /* DatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 278FE5C5150CE2EE0098BA74 /* DatePickerViewController.m */; };
 		27F218B114E8238000E22C44 /* Plot.m in Sources */ = {isa = PBXBuildFile; fileRef = 27F218B014E8238000E22C44 /* Plot.m */; };
 		532A46991502623A0070340D /* CSVConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 532A46981502623A0070340D /* CSVConverter.m */; };
 		536E026F14F00625003A2B15 /* compass.png in Resources */ = {isa = PBXBuildFile; fileRef = 536E026E14F00625003A2B15 /* compass.png */; };
@@ -89,6 +90,8 @@
 		2775F55F1507D01900FE08BC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		2775F5621507D48C00FE08BC /* StatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatViewController.h; sourceTree = "<group>"; };
 		2775F5631507D48C00FE08BC /* StatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatViewController.m; sourceTree = "<group>"; };
+		278FE5C4150CE2EE0098BA74 /* DatePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatePickerViewController.h; sourceTree = "<group>"; };
+		278FE5C5150CE2EE0098BA74 /* DatePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatePickerViewController.m; sourceTree = "<group>"; };
 		27F218AF14E8238000E22C44 /* Plot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Plot.h; sourceTree = "<group>"; };
 		27F218B014E8238000E22C44 /* Plot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Plot.m; sourceTree = "<group>"; };
 		532A46971502623A0070340D /* CSVConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSVConverter.h; sourceTree = "<group>"; };
@@ -205,16 +208,10 @@
 			isa = PBXGroup;
 			children = (
 				2775F55E1507D01900FE08BC /* MainStoryboard.storyboard */,
-				2775F5621507D48C00FE08BC /* StatViewController.h */,
-				2775F5631507D48C00FE08BC /* StatViewController.m */,
-				53E0A77F14DEC75D004E3E1B /* DevelopViewController.h */,
-				53E0A78014DEC75D004E3E1B /* DevelopViewController.m */,
-				53E0A78614DEC75D004E3E1B /* PlotViewController.h */,
-				53E0A78714DEC75D004E3E1B /* PlotViewController.m */,
-				27F218AF14E8238000E22C44 /* Plot.h */,
-				27F218B014E8238000E22C44 /* Plot.m */,
-				2775F52F15067E9E00FE08BC /* WebViewController.h */,
-				2775F53015067E9E00FE08BC /* WebViewController.m */,
+				27CE0BCB150CDEFF0016F4BA /* Statistic */,
+				27CE0BCC150CDF0D0016F4BA /* Develop */,
+				27CE0BCA150CDEEF0016F4BA /* Plot */,
+				27CE0BC9150CDEE00016F4BA /* Map */,
 				53F0062E1507A8EB0074156E /* Auth&Registration */,
 			);
 			name = ViewControllers;
@@ -252,6 +249,46 @@
 			);
 			name = "TabBar Icons";
 			path = "Images/TabBar Icons";
+			sourceTree = "<group>";
+		};
+		27CE0BC9150CDEE00016F4BA /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				2775F52F15067E9E00FE08BC /* WebViewController.h */,
+				2775F53015067E9E00FE08BC /* WebViewController.m */,
+				278FE5C4150CE2EE0098BA74 /* DatePickerViewController.h */,
+				278FE5C5150CE2EE0098BA74 /* DatePickerViewController.m */,
+			);
+			name = Map;
+			sourceTree = "<group>";
+		};
+		27CE0BCA150CDEEF0016F4BA /* Plot */ = {
+			isa = PBXGroup;
+			children = (
+				53E0A78614DEC75D004E3E1B /* PlotViewController.h */,
+				53E0A78714DEC75D004E3E1B /* PlotViewController.m */,
+				27F218AF14E8238000E22C44 /* Plot.h */,
+				27F218B014E8238000E22C44 /* Plot.m */,
+			);
+			name = Plot;
+			sourceTree = "<group>";
+		};
+		27CE0BCB150CDEFF0016F4BA /* Statistic */ = {
+			isa = PBXGroup;
+			children = (
+				2775F5621507D48C00FE08BC /* StatViewController.h */,
+				2775F5631507D48C00FE08BC /* StatViewController.m */,
+			);
+			name = Statistic;
+			sourceTree = "<group>";
+		};
+		27CE0BCC150CDF0D0016F4BA /* Develop */ = {
+			isa = PBXGroup;
+			children = (
+				53E0A77F14DEC75D004E3E1B /* DevelopViewController.h */,
+				53E0A78014DEC75D004E3E1B /* DevelopViewController.m */,
+			);
+			name = Develop;
 			sourceTree = "<group>";
 		};
 		532A46951502621A0070340D /* CSV */ = {
@@ -577,6 +614,7 @@
 				53F8832D1507E70F000F7FE3 /* EncryptionData.m in Sources */,
 				53F8832E1507E70F000F7FE3 /* NSData+CommonCrypto.m in Sources */,
 				2775F5641507D48C00FE08BC /* StatViewController.m in Sources */,
+				278FE5C6150CE2EE0098BA74 /* DatePickerViewController.m in Sources */,
 				53F88364150A53D6000F7FE3 /* NSObject+SBJson.m in Sources */,
 				53F88365150A53D6000F7FE3 /* SBJsonParser.m in Sources */,
 				53F88366150A53D6000F7FE3 /* SBJsonStreamParser.m in Sources */,

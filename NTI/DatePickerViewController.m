@@ -1,24 +1,35 @@
 //
-//  WebViewController.m
+//  DatePickerViewController.m
 //  NTI
 //
-//  Created by Mike on 06.03.12.
+//  Created by Mike on 11.03.12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "WebViewController.h"
+#import "DatePickerViewController.h"
 
-@implementation WebViewController
-
-@synthesize webView;
+@implementation DatePickerViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
     }
     return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    NSDate *today = [NSDate date];
+    NSDate *twoDayBefore = [today dateByAddingTimeInterval: -172800];
+    datePicker.minimumDate = twoDayBefore;
+    datePicker.maximumDate = today;
+}
+
+- (IBAction)doneButton:(id)sender {
+    NSDate *myDate = datePicker.date;
+    NSLog(@"%f",[myDate timeIntervalSinceNow]);
 }
 
 - (void)didReceiveMemoryWarning
@@ -38,25 +49,13 @@
 }
 */
 
+/*
+// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSString *urlAddress = @"http://peacockteam.org/test/nti.html";
-    
-    //Create a URL object.
-    NSURL *url = [NSURL URLWithString:urlAddress];
-    
-    //URL Requst Object
-    NSURLRequest *requestObj = [NSURLRequest requestWithURL:url];
-    
-    //Load the request in the UIWebView.
-    [webView loadRequest:requestObj];
-	// Do any additional setup after loading the view, typically from a nib.
 }
-
-- (IBAction)backButton:(id)sender{
-    [self dismissModalViewControllerAnimated:YES];
-}
+*/
 
 - (void)viewDidUnload
 {
