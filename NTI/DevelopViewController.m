@@ -390,10 +390,9 @@
 
 - (IBAction)sendFile:(id)sender {
     [databaseAction readDatabase];
+    [self infoAboutFiles];
     
-    
-    //[self sendFile];
-    //[self infoAboutFiles];
+
     
 }
 

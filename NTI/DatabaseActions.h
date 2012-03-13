@@ -11,7 +11,10 @@
 #import <CoreMotion/CoreMotion.h>
 #import <sqlite3.h> 
 #import "Record.h"
-
+#import "FileController.h"
+#import "toJSON.h"
+#import "ServerCommunication.h"
+#import "CSVConverter.h"
 
 @interface DatabaseActions : NSObject{
     // Database variables
@@ -28,6 +31,12 @@
    // NSMutableDictionary *acc;
    // NSMutableDictionary *gps;
     NSMutableArray *dataArray;
+    NSUserDefaults *userDefaults;
+    CSVConverter *csvConverter;
+    ServerCommunication *serverCommunication;
+    toJSON *jsonConvert;
+    FileController *fileController;
+
     
 }
 
@@ -37,5 +46,5 @@
 - (BOOL)addArray: (NSMutableArray *)data;
 - (void) readDatabase;
 + (void) finalizeStatements;
-- (void) arrayConvert;
+- (BOOL) convertAndWrite;
 @end
