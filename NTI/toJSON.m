@@ -30,7 +30,7 @@
     NSData  *jsonArray = [NSJSONSerialization dataWithJSONObject:arrayForConvert options:NSJSONWritingPrettyPrinted error:&error]; 
     
     NSString *JSON = [[NSString alloc] initWithData:jsonArray encoding:NSASCIIStringEncoding]; 
-    NSLog(@"JSON %@", JSON);
+    //NSLog(@"JSON %@", JSON);
     
     
     return JSON;
