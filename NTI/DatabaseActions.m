@@ -143,6 +143,7 @@ static sqlite3_stmt *readStmt = nil;
         for (NSInteger i=1;i<=([userDefaults integerForKey:@"pk"]/maxEntries)+1;i++) {
 
             const char * sql = [[NSString stringWithFormat:@"SELECT * FROM log WHERE rowid BETWEEN %i AND %i", (i-1)*maxEntries, i*maxEntries] UTF8String];
+           
             NSLog(@"%s", sql);
             
             if(sqlite3_prepare_v2(database, sql, -1, &readStmt, NULL) == SQLITE_OK){
@@ -176,32 +177,53 @@ static sqlite3_stmt *readStmt = nil;
 
                 }
             } else NSLog(@"не выполнилась команда");
-           if ([self convertAndWrite]) dataArray = [[NSMutableArray alloc]init];;
+            if ([self convertAndWrite]) dataArray = [[NSMutableArray alloc]init];
+              
         }
      }
-   
+    
     sqlite3_finalize(readStmt);
 }
 
 - (BOOL) convertAndWrite{
-    
-    
     NSInteger size = [dataArray count];
     NSLog(@"%i",size);
-   // NSString *JSON = [jsonConvert convert:dataArray];
     NSString *CSV = [csvConverter arrayToCSVString:dataArray];
-    if ([fileController writeToFile:CSV fileName: [NSString stringWithFormat:@"%@", [NSDate date]]]) return YES;
-    // конвентировать и отправлять
-    // удалять записи 
+    NSString *JSON = [jsonConvert convert:dataArray];
     
+    NSDateFormatter * date_format = [[NSDateFormatter alloc] init];
+    [date_format setDateFormat: @"dd.MM.YYYY"]; 
+    NSLog (@"Date: %@", [date_format stringFromDate:[NSDate date]]);
+     
+    
+    if ([serverCommunication checkInternetConnection]) NSLog(@"стефу");
+    else 
+    [fileController writeToFile:JSON fileName:[[date_format stringFromDate:[NSDate date]] stringByAppendingString:@".json"]];
+    
+    if ([fileController writeToFile:CSV fileName: [date_format stringFromDate:[NSDate date]]]) return YES;
+    else return NO;
+}
+
+- (BOOL) deleteRowsFrom: (NSInteger)start To: (NSInteger)end{
+    
+    NSLog(@"from %i to %i", start, end);
+    const char *sql = [[NSString stringWithFormat:@"DELETE FROM log WHERE rowid BETWEEN %i AND %i", start, end] UTF8String];
+    if(sqlite3_prepare_v2(database, sql, -1, &deleteStmt, NULL) != SQLITE_OK){
+        NSAssert1(0, @"Error while creating delete statement. '%s'", sqlite3_errmsg(database));
+        return NO;
+    }
+    
+    if (SQLITE_DONE != sqlite3_step(deleteStmt)) {
+        NSAssert1(0, @"Error while deleting. '%s'", sqlite3_errmsg(database));
+        return NO;
+    }
+    
+    sqlite3_reset(deleteStmt); 
     return YES;
 }
 
 
-//  NSString *JSON = [jsonConvert convert:dataArray];
-//  NSString *CSV = [csvConverter arrayToCSVString:dataArray];
-//  [fileController writeToFile:CSV fileName:fileNameCSV];
-//  [fileController writeToFile:JSON fileName:fileName];
+
 
 
 + (void) finalizeStatements {

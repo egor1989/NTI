@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "SBJson.h"
+#import "Reachability.h"
 
 @interface ServerCommunication : NSObject {
     NSString *returnString; 
@@ -22,6 +23,7 @@
 - (NSString *)authUser:(NSString *)login secret:(NSString *)message;
 - (BOOL)checkErrors:(NSString *)answerString;
 - (void)showResult: (NSString *)info;
+- (BOOL) checkInternetConnection;
 
 @property (nonatomic) BOOL errors;
 

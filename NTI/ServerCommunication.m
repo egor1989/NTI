@@ -168,6 +168,18 @@
     //return serverAnswer;
 }
 
+- (BOOL) checkInternetConnection{
+    Reachability* reach = [Reachability reachabilityWithHostname:@"www.google.com"];
+
+    NetworkStatus hostStatus = [reach currentReachabilityStatus];
+    
+    if (hostStatus == NotReachable){
+        NSLog(@"internet: -");
+        return NO;
+    } 
+    else return YES;
+}
+
 
 
 @end

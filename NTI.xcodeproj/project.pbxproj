@@ -21,6 +21,8 @@
 		278FE5C6150CE2EE0098BA74 /* DatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 278FE5C5150CE2EE0098BA74 /* DatePickerViewController.m */; };
 		27F218B114E8238000E22C44 /* Plot.m in Sources */ = {isa = PBXBuildFile; fileRef = 27F218B014E8238000E22C44 /* Plot.m */; };
 		532A46991502623A0070340D /* CSVConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 532A46981502623A0070340D /* CSVConverter.m */; };
+		5361751D1510FE6A00D290F1 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 5361751B1510FE6A00D290F1 /* Reachability.m */; };
+		536175231511098000D290F1 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 536175221511098000D290F1 /* SystemConfiguration.framework */; };
 		536E026F14F00625003A2B15 /* compass.png in Resources */ = {isa = PBXBuildFile; fileRef = 536E026E14F00625003A2B15 /* compass.png */; };
 		539B29BE14F305C3007E6977 /* gps.png in Resources */ = {isa = PBXBuildFile; fileRef = 539B29BC14F305C3007E6977 /* gps.png */; };
 		539B29BF14F305C3007E6977 /* north.png in Resources */ = {isa = PBXBuildFile; fileRef = 539B29BD14F305C3007E6977 /* north.png */; };
@@ -96,6 +98,9 @@
 		27F218B014E8238000E22C44 /* Plot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Plot.m; sourceTree = "<group>"; };
 		532A46971502623A0070340D /* CSVConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSVConverter.h; sourceTree = "<group>"; };
 		532A46981502623A0070340D /* CSVConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSVConverter.m; sourceTree = "<group>"; };
+		5361751B1510FE6A00D290F1 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		5361751C1510FE6A00D290F1 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		536175221511098000D290F1 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		536E026E14F00625003A2B15 /* compass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = compass.png; sourceTree = "<group>"; };
 		539B29BC14F305C3007E6977 /* gps.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gps.png; sourceTree = "<group>"; };
 		539B29BD14F305C3007E6977 /* north.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = north.png; sourceTree = "<group>"; };
@@ -188,6 +193,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				536175231511098000D290F1 /* SystemConfiguration.framework in Frameworks */,
 				53E0A82914E6DC49004E3E1B /* libz.1.2.5.dylib in Frameworks */,
 				53E0A81F14E6AC6F004E3E1B /* MessageUI.framework in Frameworks */,
 				53E0A7FA14E69A3A004E3E1B /* CFNetwork.framework in Frameworks */,
@@ -300,6 +306,15 @@
 			name = CSV;
 			sourceTree = "<group>";
 		};
+		5361751A1510F8DB00D290F1 /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				5361751B1510FE6A00D290F1 /* Reachability.m */,
+				5361751C1510FE6A00D290F1 /* Reachability.h */,
+			);
+			name = Reachability;
+			sourceTree = "<group>";
+		};
 		53AAF04314FE26D700E12486 /* ServerCommunication */ = {
 			isa = PBXGroup;
 			children = (
@@ -329,6 +344,7 @@
 		53E0A76914DEC75D004E3E1B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				536175221511098000D290F1 /* SystemConfiguration.framework */,
 				53E0A82814E6DC49004E3E1B /* libz.1.2.5.dylib */,
 				53E0A81E14E6AC6F004E3E1B /* MessageUI.framework */,
 				53E0A7F914E69A3A004E3E1B /* CFNetwork.framework */,
@@ -344,6 +360,7 @@
 		53E0A77014DEC75D004E3E1B /* NTI */ = {
 			isa = PBXGroup;
 			children = (
+				5361751A1510F8DB00D290F1 /* Reachability */,
 				53F8834C150A53D5000F7FE3 /* JSON framework */,
 				532A46951502621A0070340D /* CSV */,
 				53AAF04314FE26D700E12486 /* ServerCommunication */,
@@ -627,6 +644,7 @@
 				53F8836D150A53D6000F7FE3 /* SBJsonUTF8Stream.m in Sources */,
 				53F8836E150A53D6000F7FE3 /* SBJsonWriter.m in Sources */,
 				53F88378150BD312000F7FE3 /* Record.m in Sources */,
+				5361751D1510FE6A00D290F1 /* Reachability.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

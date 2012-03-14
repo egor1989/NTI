@@ -16,6 +16,7 @@
 #import "ServerCommunication.h"
 #import "CSVConverter.h"
 
+
 @interface DatabaseActions : NSObject{
     // Database variables
 	NSString *databaseName;
@@ -36,6 +37,7 @@
     ServerCommunication *serverCommunication;
     toJSON *jsonConvert;
     FileController *fileController;
+    
 
     
 }
@@ -47,4 +49,5 @@
 - (void) readDatabase;
 + (void) finalizeStatements;
 - (BOOL) convertAndWrite;
+- (BOOL) deleteRowsFrom: (NSInteger)start To: (NSInteger)end;
 @end
