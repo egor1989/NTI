@@ -58,17 +58,22 @@
 }
 
 - (IBAction)goButton:(id)sender {
+    ServerCommunication *serverCommunication = [[ServerCommunication alloc] init];
+    if (![serverCommunication checkInternetConnection]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Отсутствует Интернет-соединение. Включите Интернет и повторите попытку" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
+        [alert show];
+    }
     
-    if ([self checkData]) {
+    else if ([self checkData]) {
         NSData *password = [passwordField.text dataUsingEncoding:NSUTF8StringEncoding];
         EncryptionData *encryptionData = [[EncryptionData alloc] init];
         NSString *encryptedPass = [encryptionData encryptionPassword:password];
         //  NSLog(@"%@", encryptedPass);
         
         // отправка на сервер
-        ServerCommunication *serverCommunication = [[ServerCommunication alloc] init];
-        NSString *serverAnswer = [serverCommunication authUser:loginField.text secret:encryptedPass];
-        NSLog(@"auth %@", serverAnswer);
+        
+        [serverCommunication authUser:loginField.text secret:encryptedPass];
+     /*   NSLog(@"auth %@", serverAnswer);
         BOOL ok = [serverCommunication checkErrors: serverAnswer];
         if (ok) {
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -76,6 +81,7 @@
             [userDefaults setValue: passwordField.text forKey:@"password"];
             [userDefaults synchronize];
         }
+      */
         
     }
 

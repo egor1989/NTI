@@ -28,16 +28,15 @@
     [request setHTTPBody: requestData];
 //    [request setAllHTTPHeaderFields:headers];
     
-    //send without answer [NSURLConnection connectionWithRequest:request delegate: self];
-
-    
+        
     [NSURLConnection sendAsynchronousRequest:request
                                        queue:[NSOperationQueue mainQueue]
                            completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *error) {
                                returnString = [[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding];
                                NSLog(@"returnData: %@", returnString);
+                               [self checkErrors:returnString];
                            }];
-   // [self checkErrors:returnString];
+
 }
 
 
@@ -48,7 +47,7 @@
     NSArray *error = [answer valueForKey:@"error"];
     NSInteger code =[[error valueForKey:@"code"] intValue];
     
-    NSString *info = nil;
+    info = nil;
     forgotPassword = NO;
     errors = YES;
     
@@ -79,11 +78,11 @@
             break;
     }
 
-    [self showResult:info];
     return errors;
 }
 
-- (void)showResult: (NSString *)info {
+
+- (void)showResult{
     if (forgotPassword) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:info delegate:self cancelButtonTitle:@"Еще раз" otherButtonTitles:@"Забыл пароль",nil];
         [alert show];
@@ -94,6 +93,7 @@
     }
     
 }
+
  
  
 
@@ -114,26 +114,30 @@
     NSError *requestError = nil;
     NSURLResponse *response = nil;
     NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: &response error: &requestError ];
+    
+    if (requestError!=nil) {
+        NSLog(@"%@", requestError);
+        NSLog(@"ERROR!ERROR!ERROR!");
+    }
+    
     returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
+    NSLog(@"returnData: %@", returnString);
+    
     
     NSDictionary *fields = [(NSHTTPURLResponse *)response allHeaderFields];
     NSString *cookie = [fields valueForKey:@"Set-Cookie"];
     
     NSLog(@"Cookie: %@", cookie);
- 
-    NSLog(@"returnData: %@", returnString);
-    
-    
-    
+
     return returnString;
 }
 
 
-- (NSString *) authUser:(NSString *)login secret:(NSString *)message{
+- (void) authUser:(NSString *)login secret:(NSString *)message{
     
     // NSLog(@"sendData login = %@ message = %@", login, message);
     
-    NSString *data = [NSString stringWithFormat:(@"%@%@%@%@%@"),@"data={\"method\":\"NTIauth\",\"params\":{\"login\":\"",login, @"\",\"secret\":\"", message,@"\"}}"];
+    NSString *data = [NSString stringWithFormat:(@"data={\"method\":\"NTIauth\",\"params\":{\"login\":\"%@%@%@%@"),login, @"\",\"secret\":\"", message,@"\"}}"];
     
     NSLog(@"Request: %@", data);
     
@@ -152,24 +156,28 @@
         NSLog(@"%@", requestError);
         NSLog(@"ERROR!ERROR!ERROR!");
     }
-    
-    NSDictionary *fields = [(NSHTTPURLResponse *)response allHeaderFields];
-    NSString *cookie = [fields valueForKey:@"Set-Cookie"];
-    
-    NSLog(@"Cookie: %@", cookie);
-    
     returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
     NSLog(@"returnData: %@", returnString);
-    return returnString;
+    [self checkErrors: returnString];
+    if (!errors) {
+        NSDictionary *fields = [(NSHTTPURLResponse *)response allHeaderFields];
+        NSString *cookie = [fields valueForKey:@"Set-Cookie"];
+        NSLog(@"Cookie: %@", cookie);
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setValue: login forKey:@"login"];
+        [userDefaults setValue: message forKey:@"password"];
+        [userDefaults setValue:cookie forKey:@"cookie"];
+        [userDefaults synchronize];
+        info = @"Поздравляем! Авторизация прошла успешно";
+        
+        //на таб
+    }
+    [self showResult];
     
-    [self checkErrors:returnString];
-    //[self parseAuthJSON:returnString cookie: cookie method:@"sendData"];
-    //parse json
-    //return serverAnswer;
 }
 
 - (BOOL) checkInternetConnection{
-    Reachability* reach = [Reachability reachabilityWithHostname:@"www.google.com"];
+    Reachability* reach = [Reachability reachabilityWithHostname:@"www.goodroads.ru"];
 
     NetworkStatus hostStatus = [reach currentReachabilityStatus];
     

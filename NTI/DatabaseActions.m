@@ -196,9 +196,14 @@ static sqlite3_stmt *readStmt = nil;
     NSLog (@"Date: %@", [date_format stringFromDate:[NSDate date]]);
      
     
-    if ([serverCommunication checkInternetConnection]) NSLog(@"стефу");
-    else 
+    if ([serverCommunication checkInternetConnection]) {
+        NSLog(@"стефу");
+        [serverCommunication uploadData: JSON]; 
+    }
+    else {
     [fileController writeToFile:JSON fileName:[[date_format stringFromDate:[NSDate date]] stringByAppendingString:@".json"]];
+        NSLog(@"интернета нет - записано в локальный файл");
+    }
     
     if ([fileController writeToFile:CSV fileName: [date_format stringFromDate:[NSDate date]]]) return YES;
     else return NO;
