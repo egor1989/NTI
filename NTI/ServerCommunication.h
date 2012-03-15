@@ -19,7 +19,7 @@
     NSString *info;
     
 }
-- (NSString *)regUser:(NSString *)login password:(NSString *)password email:(NSString *)email;
+- (void)regUser:(NSString *)login password:(NSString *)password email:(NSString *)email;
 - (void)uploadData:(NSString *)fileContent;
 - (void)authUser:(NSString *)login secret:(NSString *)message;
 - (BOOL)checkErrors:(NSString *)answerString;

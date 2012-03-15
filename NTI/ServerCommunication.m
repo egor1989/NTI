@@ -14,7 +14,7 @@
 
 - (void)uploadData:(NSString *)fileContent{
     
-
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     fileContent=[@"data={\"method\":\"addNTIFile\",\"params\":{\"ntifile\":" stringByAppendingString:fileContent];
     fileContent=[fileContent stringByAppendingString:@"}}"];
     
@@ -25,10 +25,22 @@
 
     requestData = [NSData dataWithBytes:[fileContent UTF8String] length:[fileContent length]];
     [request setHTTPMethod:@"POST"];
-    [request setHTTPBody: requestData];
-//    [request setAllHTTPHeaderFields:headers];
+    [request setHTTPBody: requestData];    
     
-        
+     NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
+     @"http://nti.goodroads.ru/api/", NSHTTPCookieDomain,
+     @"key", NSHTTPCookieName,
+     [userDefaults valueForKey:@"cookie"], NSHTTPCookieValue,
+     @"/", NSHTTPCookiePath,
+     nil];
+     
+     [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:[NSHTTPCookie cookieWithProperties:properties]];
+     NSHTTPCookie *fcookie = [NSHTTPCookie cookieWithProperties:properties]; //?
+     NSArray* fcookies = [NSArray arrayWithObjects: fcookie, nil];   //?
+     NSDictionary * headers = [NSHTTPCookie requestHeaderFieldsWithCookies:fcookies]; //?
+     
+     [request setAllHTTPHeaderFields:headers];
+     
     [NSURLConnection sendAsynchronousRequest:request
                                        queue:[NSOperationQueue mainQueue]
                            completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *error) {
@@ -97,7 +109,7 @@
  
  
 
-- (NSString *)regUser:(NSString *)login password:(NSString *)password email:(NSString *)email{
+- (void)regUser:(NSString *)login password:(NSString *)password email:(NSString *)email{
     
     NSLog(@"sendData login = %@ message = %@ email = %@", login, password, email);
     
@@ -122,14 +134,24 @@
     
     returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
     NSLog(@"returnData: %@", returnString);
+    [self checkErrors:returnString];
+    
+    if (!errors) {
+        NSDictionary *fields = [(NSHTTPURLResponse *)response allHeaderFields];
+        NSString *cookie = [fields valueForKey:@"Set-Cookie"];
+        NSLog(@"Cookie: %@", cookie);
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setValue: login forKey:@"login"];
+        [userDefaults setValue: password forKey:@"password"];
+        [userDefaults setValue:cookie forKey:@"cookie"];
+        [userDefaults synchronize];
+        info = @"Поздравляем! Регистрация прошла успешно";
+        
+        //на таб
+    }
+    [self showResult];
     
     
-    NSDictionary *fields = [(NSHTTPURLResponse *)response allHeaderFields];
-    NSString *cookie = [fields valueForKey:@"Set-Cookie"];
-    
-    NSLog(@"Cookie: %@", cookie);
-
-    return returnString;
 }
 
 
