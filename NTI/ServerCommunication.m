@@ -13,8 +13,10 @@
 
 
 - (void)uploadData:(NSString *)fileContent{
-    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSLog(@"cookie = %@", [userDefaults valueForKey:@"cookie"]);
+    
+    
     fileContent=[@"data={\"method\":\"addNTIFile\",\"params\":{\"ntifile\":" stringByAppendingString:fileContent];
     fileContent=[fileContent stringByAppendingString:@"}}"];
     
@@ -49,6 +51,11 @@
                                [self checkErrors:returnString];
                            }];
 
+}
+
+- (NSString *) refreshCookie{
+    NSString *newCookie;
+    return newCookie;
 }
 
 

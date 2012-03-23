@@ -231,6 +231,9 @@
   
     if (location.speed <= 0) speed.text = @"0";
     else speed.text =  [NSString stringWithFormat:@"%.2f", location.speed*3.6];
+    
+    
+    //
 
 
 }
@@ -322,28 +325,13 @@
         dataArray = [[NSMutableArray alloc] init];
         [action setTitle:@"Stop" forState:UIControlStateNormal];
         type = @"-";
-       // writeToFile = YES;
-        [NSDate date];
-        //fileNameCSV = [NSString stringWithFormat:@"log%i.csv", [userDefaults integerForKey:@"otherFile"]];
-        //fileName = [NSString stringWithFormat:@"log%i", [userDefaults integerForKey:@"otherFile"]];
-        //otherFile = [userDefaults integerForKey:@"otherFile"]+1;
-        //[userDefaults setInteger:otherFile forKey:@"otherFile"];
-        //[userDefaults synchronize];
 
-        
-        otherFile++;
         writeToDB = YES;
         //start write to database
     }
     else {
         [action setTitle:@"Start" forState:UIControlStateNormal];
-      //  writeToFile = NO;
-      //  NSString *JSON = [jsonConvert convert:dataArray];
-      //  NSString *CSV = [csvConverter arrayToCSVString:dataArray];
-      //  [fileController writeToFile:CSV fileName:fileNameCSV];
-      //  [fileController writeToFile:JSON fileName:fileName];
         writeToDB =NO;
-        
         NSMutableArray *toWrite = dataArray;
         dataArray = [[NSMutableArray alloc] init];
         //создаем новый тред

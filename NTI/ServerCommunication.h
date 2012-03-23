@@ -25,6 +25,7 @@
 - (BOOL)checkErrors:(NSString *)answerString;
 - (void)showResult;
 - (BOOL) checkInternetConnection;
+- (NSString *) refreshCookie;
 
 @property (nonatomic) BOOL errors;
 

@@ -21,7 +21,7 @@
         NSDictionary *gps = [entries objectForKey:@"gps"];
 
         NSString *string = [NSString stringWithFormat: @"%@,%@,%@,%@,%@,%@,\n",[gps objectForKey:@"latitude"],[gps objectForKey:@"longitude"],[gps objectForKey:@"compass"],[gps objectForKey:@"speed"],[gps objectForKey:@"distance"], [entries objectForKey:@"timestamp"]];
-        NSLog(@"%@",string);
+       // NSLog(@"%@",string);
         
         csv = [csv stringByAppendingString:string];
         

@@ -112,8 +112,11 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSString *name = [[NSUserDefaults standardUserDefaults] objectForKey:@"login"];
+             
     switch( [indexPath row] ) {
         case 0: {
+            
             static NSString *CellIdentifier = @"Name";
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -121,7 +124,11 @@
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
                 cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
                 cell.textLabel.text=@"Имя";
-                cell.detailTextLabel.text = @"ИМЯ";
+                if (name == nil) {
+                    cell.detailTextLabel.text = @"";
+                }
+                else cell.detailTextLabel.text = name;
+                
             }
             return cell;
         }

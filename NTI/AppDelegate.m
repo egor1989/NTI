@@ -89,7 +89,7 @@
     NSLog(@"m=%i l=%i", m5Km,l5Km);
     NSLog(@"30sec");
     if (l5Km>m5Km) {
-        [self stopGPSDetect];
+        //[self stopGPSDetect];
         [self fiveMinTimer];
 
     }
@@ -240,26 +240,6 @@
                                        }];
 }
 
-//accelerometer
-//- (void)stopAccelerometerDetect {
-//    [motionManager stopAccelerometerUpdates];
-//}
-//
-//- (void)startAccelerometerDetect
-//{
-//    [motionManager startAccelerometerUpdatesToQueue:[[NSOperationQueue alloc] init]
-//                                        withHandler:^(CMAccelerometerData *data, NSError *error) {
-//                                            dispatch_async(dispatch_get_main_queue(), ^{
-//                                                NSDictionary* accDict = [NSDictionary dictionaryWithObject: data
-//                                                                                                    forKey: @"accel"];
-//                                                [[NSNotificationCenter defaultCenter]	postNotificationName:@"accelNotification" 
-//                                                                                                    object:  nil
-//                                                                                                  userInfo:accDict];
-//                                            });
-//                                        }
-//     ];
-//}
-//
 
 
 

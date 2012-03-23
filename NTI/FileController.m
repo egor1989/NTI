@@ -50,7 +50,7 @@
     NSData* myData = [myString dataUsingEncoding:NSUTF8StringEncoding];
     [fileHandle writeData:myData];
     [fileHandle closeFile];
-
+    NSLog(@"записалось");
     return TRUE;
 }
 
