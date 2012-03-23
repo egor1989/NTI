@@ -15,7 +15,7 @@
 - (void)uploadData:(NSString *)fileContent{
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSLog(@"cookie = %@", [userDefaults valueForKey:@"cookie"]);
-    
+    NSString * cookie = [self refreshCookie];
     
     fileContent=[@"data={\"method\":\"addNTIFile\",\"params\":{\"ntifile\":" stringByAppendingString:fileContent];
     fileContent=[fileContent stringByAppendingString:@"}}"];
@@ -32,7 +32,7 @@
      NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
      @"http://nti.goodroads.ru/api/", NSHTTPCookieDomain,
      @"key", NSHTTPCookieName,
-     [userDefaults valueForKey:@"cookie"], NSHTTPCookieValue,
+     cookie, NSHTTPCookieValue,
      @"/", NSHTTPCookiePath,
      nil];
      
@@ -54,7 +54,13 @@
 }
 
 - (NSString *) refreshCookie{
-    NSString *newCookie;
+    NSString *newCookie = nil;
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if ([userDefaults objectForKey:@"cookie"]!=nil) {
+        [self authUser:[userDefaults objectForKey:@"login"] secret:[userDefaults objectForKey:@"password"]];
+    }
+    newCookie = [userDefaults objectForKey:@"cookie"];
+    NSLog(@"newCookie = %@", newCookie);
     return newCookie;
 }
 
@@ -195,13 +201,15 @@
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setValue: login forKey:@"login"];
         [userDefaults setValue: message forKey:@"password"];
-        [userDefaults setValue:cookie forKey:@"cookie"];
+        [userDefaults removeObjectForKey:@"cookie"];
         [userDefaults synchronize];
+        [userDefaults setValue:cookie forKey:@"cookie"];
+        
         info = @"Поздравляем! Авторизация прошла успешно";
         
         //на таб
     }
-    [self showResult];
+   // [self showResult];
     
 }
 

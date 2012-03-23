@@ -73,6 +73,7 @@
         // отправка на сервер
         
         [serverCommunication authUser:loginField.text secret:encryptedPass];
+        [serverCommunication showResult];
      /*   NSLog(@"auth %@", serverAnswer);
         BOOL ok = [serverCommunication checkErrors: serverAnswer];
         if (ok) {
