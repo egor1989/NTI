@@ -27,6 +27,8 @@
 		539B29BE14F305C3007E6977 /* gps.png in Resources */ = {isa = PBXBuildFile; fileRef = 539B29BC14F305C3007E6977 /* gps.png */; };
 		539B29BF14F305C3007E6977 /* north.png in Resources */ = {isa = PBXBuildFile; fileRef = 539B29BD14F305C3007E6977 /* north.png */; };
 		53AAF04B14FE2CF000E12486 /* ServerCommunication.m in Sources */ = {isa = PBXBuildFile; fileRef = 53AAF04A14FE2CF000E12486 /* ServerCommunication.m */; };
+		53D8F580151DFC7C00589D67 /* HelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D8F57F151DFC7C00589D67 /* HelpViewController.m */; };
+		53D8F584151E0EBA00589D67 /* IterviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D8F583151E0EBA00589D67 /* IterviewViewController.m */; };
 		53E0A76B14DEC75D004E3E1B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53E0A76A14DEC75D004E3E1B /* UIKit.framework */; };
 		53E0A76D14DEC75D004E3E1B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53E0A76C14DEC75D004E3E1B /* Foundation.framework */; };
 		53E0A76F14DEC75D004E3E1B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53E0A76E14DEC75D004E3E1B /* CoreGraphics.framework */; };
@@ -106,6 +108,10 @@
 		539B29BD14F305C3007E6977 /* north.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = north.png; sourceTree = "<group>"; };
 		53AAF04914FE2CF000E12486 /* ServerCommunication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerCommunication.h; sourceTree = "<group>"; };
 		53AAF04A14FE2CF000E12486 /* ServerCommunication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerCommunication.m; sourceTree = "<group>"; };
+		53D8F57E151DFC7C00589D67 /* HelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpViewController.h; sourceTree = "<group>"; };
+		53D8F57F151DFC7C00589D67 /* HelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpViewController.m; sourceTree = "<group>"; };
+		53D8F582151E0EBA00589D67 /* IterviewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IterviewViewController.h; sourceTree = "<group>"; };
+		53D8F583151E0EBA00589D67 /* IterviewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IterviewViewController.m; sourceTree = "<group>"; };
 		53E0A76614DEC75D004E3E1B /* NTI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NTI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		53E0A76A14DEC75D004E3E1B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		53E0A76C14DEC75D004E3E1B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -213,6 +219,8 @@
 		276C4C9014DEE6D500C469A6 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				53D8F581151E0E8300589D67 /* Interview */,
+				53D8F57C151DFC3400589D67 /* Help */,
 				2775F55E1507D01900FE08BC /* MainStoryboard.storyboard */,
 				27CE0BCB150CDEFF0016F4BA /* Statistic */,
 				27CE0BCC150CDF0D0016F4BA /* Develop */,
@@ -322,6 +330,24 @@
 				53AAF04A14FE2CF000E12486 /* ServerCommunication.m */,
 			);
 			name = ServerCommunication;
+			sourceTree = "<group>";
+		};
+		53D8F57C151DFC3400589D67 /* Help */ = {
+			isa = PBXGroup;
+			children = (
+				53D8F57E151DFC7C00589D67 /* HelpViewController.h */,
+				53D8F57F151DFC7C00589D67 /* HelpViewController.m */,
+			);
+			name = Help;
+			sourceTree = "<group>";
+		};
+		53D8F581151E0E8300589D67 /* Interview */ = {
+			isa = PBXGroup;
+			children = (
+				53D8F582151E0EBA00589D67 /* IterviewViewController.h */,
+				53D8F583151E0EBA00589D67 /* IterviewViewController.m */,
+			);
+			name = Interview;
 			sourceTree = "<group>";
 		};
 		53E0A75B14DEC75D004E3E1B = {
@@ -645,6 +671,8 @@
 				53F8836E150A53D6000F7FE3 /* SBJsonWriter.m in Sources */,
 				53F88378150BD312000F7FE3 /* Record.m in Sources */,
 				5361751D1510FE6A00D290F1 /* Reachability.m in Sources */,
+				53D8F580151DFC7C00589D67 /* HelpViewController.m in Sources */,
+				53D8F584151E0EBA00589D67 /* IterviewViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -704,8 +732,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Vladislav Efremov";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Vladislav Efremov";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Vladislav Efremov (MBL7632743)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vladislav Efremov (MBL7632743)";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -714,8 +742,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "680C7ECD-FF73-45EE-A34D-7198EC3BBD1B";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "680C7ECD-FF73-45EE-A34D-7198EC3BBD1B";
+				PROVISIONING_PROFILE = "945ACF9E-A880-4572-8BB2-D9BAB10DAAE6";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "945ACF9E-A880-4572-8BB2-D9BAB10DAAE6";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -739,14 +767,14 @@
 		53E0A79114DEC75D004E3E1B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Vladislav Efremov";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Vladislav Efremov";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Vladislav Efremov (MBL7632743)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vladislav Efremov (MBL7632743)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NTI/NTI-Prefix.pch";
 				INFOPLIST_FILE = "NTI/NTI-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "680C7ECD-FF73-45EE-A34D-7198EC3BBD1B";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "680C7ECD-FF73-45EE-A34D-7198EC3BBD1B";
+				PROVISIONING_PROFILE = "945ACF9E-A880-4572-8BB2-D9BAB10DAAE6";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "945ACF9E-A880-4572-8BB2-D9BAB10DAAE6";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
