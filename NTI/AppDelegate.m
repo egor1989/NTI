@@ -19,9 +19,11 @@
 
 #define accelUpdateFrequency 3.0	
 
+
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+
     
     
         //[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:YES];
@@ -59,17 +61,19 @@
     oldHeading          = 0;
     offsetG             = 0;
     newCompassTarget    = 0;
-    //FirstViewController *firstViewController = [[FirstViewController alloc] init];
-    //UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+ 
     //firstViewController = [storyboard instantiateViewControllerWithIdentifier:@"authAndRegView"];
-    if ([userDefaults stringForKey:@"login"] == nil)  {
-       // _window.rootViewController = firstViewController;
-        //[_window addSubview:firstViewController.view];
-        //[self.window setRootViewController: firstViewController];
+   // if ([userDefaults stringForKey:@"login"] == nil)  {        
+        //[self.window.rootViewController performSegueWithIdentifier:@"authAndRegView" sender:self];
+        //[self.window.rootViewController.storyboard instantiateViewControllerWithIdentifier:@"TabBarController"];
+       // AuthViewController *authView = [[UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil] instantiateViewControllerWithIdentifier:@"StatViewController"];
+       // [self.window.rootViewController performSegueWithIdentifier:@"authView" sender:self];
+      //  UIStoryboard *storyboard = self.window.rootViewController.storyboard;
+      //  UIViewController *loginController = [storyboard instantiateViewControllerWithIdentifier:@"AuthViewController"];
+       // [self.window.rootViewController presentModalViewController:loginController animated:NO];
         
-        //[self.window.rootViewController performSegueWithIdentifier:@"authAndRegView" sender:self];    
-    }
-    //else self.window.rootViewController = self.tabBarController;
+    //}
+
     
     [self.window makeKeyAndVisible];
 
@@ -269,9 +273,11 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    /*
-     Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-     */
+    if ([[NSUserDefaults standardUserDefaults] stringForKey:@"login"] == nil){
+    UIStoryboard *storyboard = self.window.rootViewController.storyboard;
+    UIViewController *loginController = [storyboard instantiateViewControllerWithIdentifier:@"AuthViewController"];
+    [self.window.rootViewController presentModalViewController:loginController animated:NO];
+    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
