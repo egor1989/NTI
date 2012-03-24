@@ -129,6 +129,15 @@
                 }
                 else cell.detailTextLabel.text = name;
                 
+                loginButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+                [loginButton setFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];
+                loginButton.titleLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:15];
+                cell.accessoryView = loginButton;
+                //loginButton.titleLabel.text = @"Выйти";
+                [loginButton setTitle:@"Выйти" forState:UIControlStateNormal];
+                [loginButton addTarget:self action:@selector(loginButton:) forControlEvents:UIControlEventTouchDown];
+                
+                
             }
             return cell;
         }
@@ -199,6 +208,16 @@
     return YES;
 }
 */
+- (IBAction)loginButton:(id)sender{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults removeObjectForKey:@"login"];
+    [userDefaults removeObjectForKey:@"password"];
+    [userDefaults removeObjectForKey:@"cookie"];
+    
+    AuthViewController *authView = [self.storyboard instantiateViewControllerWithIdentifier: @"AuthViewController"];
+    authView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+    [self presentModalViewController: authView animated:YES];
+}
 
 #pragma mark - Table view delegate
 

@@ -8,13 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
+#import "AuthViewController.h"
 
 #define myAppDelegate (AppDelegate*) [[UIApplication sharedApplication] delegate]
 
 @interface StatViewController : UITableViewController{
     UILabel *speedLabel;
+    IBOutlet UIButton *loginButton;
 }
 
 - (void) speedUpdate;
+- (IBAction)loginButton:(id)sender;
 
 @end
