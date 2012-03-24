@@ -8,7 +8,7 @@
 
 #import "StatViewController.h"
 
-#define ROWSNUMBER 3
+#define ROWSNUMBER 4
 
 @implementation StatViewController
 
@@ -39,7 +39,7 @@
     speedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];
     speedLabel.font =            [UIFont fontWithName:@"Trebuchet MS" size:16];
     speedLabel.textAlignment =   UITextAlignmentRight;
-    speedLabel.text =            [NSString stringWithFormat:@"%d", 0];
+    speedLabel.text =            [NSString stringWithFormat:@"%d км/ч", 0];
     
 
     // Uncomment the following line to preserve selection between presentations.
@@ -117,7 +117,28 @@
     NSString *name = [[NSUserDefaults standardUserDefaults] objectForKey:@"login"];
              
     switch( [indexPath row] ) {
+            
         case 0: {
+            static NSString *CellIdentifier = @"change";
+            
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            
+            if (cell == nil) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
+                cell.textLabel.text=@" ";
+            
+            UISegmentedControl *segmentedControl = [[UISegmentedControl alloc]  initWithItems: [NSArray arrayWithObjects: @"Last", @"All", nil]];
+            segmentedControl.frame = CGRectMake(0, 0, 250, 35);
+            segmentedControl.segmentedControlStyle = UISegmentedControlStylePlain;
+            segmentedControl.selectedSegmentIndex = 0;
+            //[segmentedControl addTarget:self action:@selector(pickOne:) forControlEvents:UIControlEventValueChanged];
+            cell.accessoryView = segmentedControl;
+            
+            }
+            return cell; 
+             
+        }
+        case 1: {
             
             static NSString *CellIdentifier = @"Name";
             
@@ -143,7 +164,7 @@
             }
             return cell;
         }
-        case 1: {
+        case 2: {
             static NSString *CellIdentifier = @"Speed";
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -155,7 +176,7 @@
             }
             return cell;
         }
-        case 2:{
+        case 3:{
             static NSString *CellIdentifier = @"Driving Score";
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -215,6 +236,7 @@
     [userDefaults removeObjectForKey:@"login"];
     [userDefaults removeObjectForKey:@"password"];
     [userDefaults removeObjectForKey:@"cookie"];
+    [userDefaults synchronize];
     
     AuthViewController *authView = [self.storyboard instantiateViewControllerWithIdentifier: @"AuthViewController"];
     authView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
