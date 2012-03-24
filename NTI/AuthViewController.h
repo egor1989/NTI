@@ -9,16 +9,19 @@
 #import <UIKit/UIKit.h>
 #import "EncryptionData.h"
 #import "ServerCommunication.h"
+#import "HelpViewController.h"
 
 @interface AuthViewController : UIViewController {
     
     IBOutlet UITextField *passwordField;
     IBOutlet UITextField *loginField;
+    
 }
 
-- (IBAction)cancelButton:(id)sender;
-- (IBAction)goButton:(id)sender;
+
+
 - (BOOL)checkData;
-- (void)showResult: (NSString *)answer;
+- (IBAction)authButton:(id)sender;
+- (IBAction)regButton:(id)sender;
 
 @end

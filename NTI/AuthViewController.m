@@ -53,11 +53,8 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
-- (IBAction)cancelButton:(id)sender {
-      [self dismissModalViewControllerAnimated:YES];
-}
 
-- (IBAction)goButton:(id)sender {
+- (IBAction)authButton:(id)sender {
     ServerCommunication *serverCommunication = [[ServerCommunication alloc] init];
     if (![serverCommunication checkInternetConnection]) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Отсутствует Интернет-соединение. Включите Интернет и повторите попытку" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
@@ -74,33 +71,27 @@
         
         [serverCommunication authUser:loginField.text secret:encryptedPass];
         [serverCommunication showResult];
-     /*   NSLog(@"auth %@", serverAnswer);
-        BOOL ok = [serverCommunication checkErrors: serverAnswer];
-        if (ok) {
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            [userDefaults setValue: loginField.text forKey:@"login"];
-            [userDefaults setValue: passwordField.text forKey:@"password"];
-            [userDefaults synchronize];
-        }
-      */
+        
+        HelpViewController *helpView = [self.storyboard instantiateViewControllerWithIdentifier: @"HelpViewController"];
+        helpView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+        [self presentModalViewController: helpView animated:YES];
         
     }
-
-    
     
 }
 
 - (BOOL)checkData{
     if (![loginField.text isEqual:@""]&&![passwordField.text isEqual:@""]) return YES;
     else {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"заполните все поля" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Заполните все поля" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
         [alert show];
         return NO;  
     }
 }
 
-- (void)showResult: (NSString *)answer{
-    
+- (IBAction)regButton:(id)sender{
     
 }
+
+
 @end

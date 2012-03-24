@@ -464,11 +464,11 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
             </objects>
             <point key="canvasLocation" x="1513" y="-892"/>
         </scene>
-        <!--Help View Controller-->
+        <!--helpView-->
         <scene sceneID="zqs-27-2pC">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="DiC-Vp-zsw" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController id="B5v-hK-Ej2" customClass="HelpViewController" sceneMemberID="viewController">
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DiC-Vp-zsw" userLabel="helpView" sceneMemberID="firstResponder"/>
+                <viewController storyboardIdentifier="HelpViewController" modalTransitionStyle="flipHorizontal" id="B5v-hK-Ej2" userLabel="helpView" customClass="HelpViewController" colorLabel="IBBuiltInLabel-Red" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="PNB-Ut-zOm">
                         <rect key="frame" x="0.0" y="20" width="320" height="460"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -523,61 +523,47 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                         <rect key="frame" x="0.0" y="20" width="320" height="460"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Имя" lineBreakMode="tailTruncation" minimumFontSize="10" id="Cxc-kH-HfA">
-                                <rect key="frame" x="20" y="20" width="42" height="21"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Имя/Почта" lineBreakMode="tailTruncation" minimumFontSize="10" id="Cxc-kH-HfA">
+                                <rect key="frame" x="20" y="40" width="85" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="TrebuchetMS" family="Trebuchet MS" pointSize="15"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Пароль" lineBreakMode="tailTruncation" minimumFontSize="10" id="qJI-CT-h7Z">
-                                <rect key="frame" x="20" y="60" width="65" height="21"/>
+                                <rect key="frame" x="20" y="84" width="65" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="TrebuchetMS" family="Trebuchet MS" pointSize="15"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Еще раз" lineBreakMode="tailTruncation" minimumFontSize="10" id="8E6-z9-Bs3">
-                                <rect key="frame" x="20" y="99" width="65" height="21"/>
+                                <rect key="frame" x="20" y="128" width="65" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="TrebuchetMS" family="Trebuchet MS" pointSize="15"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Почта" lineBreakMode="tailTruncation" minimumFontSize="10" id="Ux5-V0-wtz">
-                                <rect key="frame" x="20" y="140" width="42" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="UHs-cb-JFA">
-                                <rect key="frame" x="102" y="15" width="180" height="31"/>
+                                <rect key="frame" x="113" y="35" width="180" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.26659891060000002" green="0.61288265310000001" blue="0.0" alpha="0.34999999999999998" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="EXf-uR-Zae">
-                                <rect key="frame" x="102" y="55" width="180" height="31"/>
+                                <rect key="frame" x="113" y="79" width="180" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.26659891060000002" green="0.61288265310000001" blue="0.0" alpha="0.34999999999999998" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="Xvx-CC-2vS">
-                                <rect key="frame" x="102" y="94" width="180" height="31"/>
+                                <rect key="frame" x="113" y="123" width="180" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.26659891060000002" green="0.61288265310000001" blue="0.0" alpha="0.34999999999999998" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
-                            </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="4Mc-jh-4hf">
-                                <rect key="frame" x="102" y="135" width="180" height="31"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" enablesReturnKeyAutomatically="YES"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Rsp-33-Toe">
                                 <rect key="frame" x="20" y="177" width="114" height="37"/>
@@ -615,7 +601,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                     </view>
                     <connections>
                         <outlet property="againPasswordField" destination="Xvx-CC-2vS" id="kL4-Ez-Pin"/>
-                        <outlet property="emailField" destination="4Mc-jh-4hf" id="Cf0-Gh-gCa"/>
                         <outlet property="nameField" destination="UHs-cb-JFA" id="Emx-gX-Tvi"/>
                         <outlet property="passwordField" destination="EXf-uR-Zae" id="udy-pt-mgG"/>
                     </connections>
@@ -623,17 +608,17 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
             </objects>
             <point key="canvasLocation" x="575" y="-939"/>
         </scene>
-        <!--First View Controller-->
+        <!--Auth View Controller-->
         <scene sceneID="Xpe-hI-8Qz">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jaw-vu-xTK" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController id="fQO-OE-dPw" customClass="FirstViewController" sceneMemberID="viewController">
+                <viewController id="fQO-OE-dPw" customClass="AuthViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jJ3-Qo-uXE">
                         <rect key="frame" x="0.0" y="20" width="320" height="460"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="58K-YR-UGl">
-                                <rect key="frame" x="15" y="211" width="124" height="37"/>
+                                <rect key="frame" x="15" y="198" width="124" height="37"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" title="Регистрация">
@@ -649,7 +634,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="BqY-wN-p09">
-                                <rect key="frame" x="177" y="211" width="123" height="37"/>
+                                <rect key="frame" x="177" y="198" width="123" height="37"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" title="Войти">
@@ -661,32 +646,31 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                                 </state>
                                 <connections>
                                     <action selector="authButton:" destination="fQO-OE-dPw" eventType="touchUpInside" id="SFC-Fn-hmL"/>
-                                    <segue destination="B5v-hK-Ej2" kind="modal" id="be5-Xa-MHn"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="fnG-O3-DEC">
-                                <rect key="frame" x="112" y="134" width="188" height="31"/>
+                                <rect key="frame" x="112" y="117" width="188" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.26659891064595037" green="0.61288265306122447" blue="0.0" alpha="0.35000000000000003" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Логин/Почта" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="zx4-V3-wXe">
-                                <rect key="frame" x="9" y="87" width="95" height="21"/>
+                                <rect key="frame" x="9" y="63" width="95" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="TrebuchetMS" family="Trebuchet MS" pointSize="15"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Пароль" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="efm-1H-DIK">
-                                <rect key="frame" x="30" y="139" width="95" height="21"/>
+                                <rect key="frame" x="30" y="122" width="95" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="TrebuchetMS" family="Trebuchet MS" pointSize="15"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="524-se-c3c">
-                                <rect key="frame" x="112" y="82" width="188" height="31"/>
+                                <rect key="frame" x="112" y="58" width="188" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.26659891060000002" green="0.61288265310000001" blue="0.0" alpha="0.34999999999999998" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -695,6 +679,10 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <connections>
+                        <outlet property="loginField" destination="524-se-c3c" id="aXP-9P-6ZZ"/>
+                        <outlet property="passwordField" destination="fnG-O3-DEC" id="Rli-Ms-NxS"/>
+                    </connections>
                 </viewController>
             </objects>
             <point key="canvasLocation" x="118" y="-764"/>
@@ -734,92 +722,9 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <image name="north.png" width="40" height="80"/>
         <image name="second.png" width="30" height="30"/>
     </resources>
-    <classes>
-        <class className="DatePickerViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/DatePickerViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="doneButton:"/>
-                <relationship kind="outlet" name="datePicker" candidateClass="UIDatePicker"/>
-            </relationships>
-        </class>
-        <class className="DevelopViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/DevelopViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="acceleration:"/>
-                <relationship kind="action" name="actionButton:"/>
-                <relationship kind="action" name="clearDB:"/>
-                <relationship kind="action" name="deceleration:"/>
-                <relationship kind="action" name="leftRot:"/>
-                <relationship kind="action" name="rightRot:"/>
-                <relationship kind="action" name="sendFile:"/>
-                <relationship kind="outlet" name="accX" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="accY" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="accZ" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="accelButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="action" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="course" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="decelButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="gpsRow" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="leftButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="northRow" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="northValue" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="rightButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="rowCourse" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="rowDegrees" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="speed" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="time" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="timerLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="writeLabel" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="FirstViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/FirstViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="authButton:"/>
-                <relationship kind="action" name="regButton:"/>
-                <relationship kind="action" name="tabBarButton:"/>
-            </relationships>
-        </class>
-        <class className="HelpViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/HelpViewController.h"/>
-        </class>
-        <class className="IterviewViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/IterviewViewController.h"/>
-        </class>
-        <class className="Plot" superclassName="UIView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/Plot.h"/>
-        </class>
-        <class className="PlotViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/PlotViewController.h"/>
-        </class>
-        <class className="RegistrationViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/RegistrationViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="cancelButton:"/>
-                <relationship kind="action" name="goButton:"/>
-                <relationship kind="outlet" name="againPasswordField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="emailField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="nameField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="passwordField" candidateClass="UITextField"/>
-            </relationships>
-        </class>
-        <class className="StatViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/StatViewController.h"/>
-        </class>
-        <class className="WebViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/WebViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="backButton:"/>
-                <relationship kind="outlet" name="webView" candidateClass="UIWebView"/>
-            </relationships>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
-    <inferredMetricsTieBreakers>
-        <segue reference="z6u-ja-GLn"/>
-    </inferredMetricsTieBreakers>
 </document>
