@@ -19,5 +19,6 @@
 
 - (void) speedUpdate;
 - (IBAction)loginButton:(id)sender;
+- (void) pickOne:(id)sender;
 
 @end

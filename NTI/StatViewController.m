@@ -128,10 +128,11 @@
                 cell.textLabel.text=@" ";
             
             UISegmentedControl *segmentedControl = [[UISegmentedControl alloc]  initWithItems: [NSArray arrayWithObjects: @"Last", @"All", nil]];
-            segmentedControl.frame = CGRectMake(0, 0, 250, 35);
+            segmentedControl.frame = CGRectMake(50, 0, 250, 35);//x,y,widht, height
             segmentedControl.segmentedControlStyle = UISegmentedControlStylePlain;
+            
             segmentedControl.selectedSegmentIndex = 0;
-            //[segmentedControl addTarget:self action:@selector(pickOne:) forControlEvents:UIControlEventValueChanged];
+            [segmentedControl addTarget:self action:@selector(pickOne:) forControlEvents:UIControlEventValueChanged];
             cell.accessoryView = segmentedControl;
             
             }
@@ -191,6 +192,18 @@
             break;
     }
     return nil;
+}
+
+
+- (void) pickOne:(id)sender{
+    UISegmentedControl *segmentedControl = (UISegmentedControl *)sender;
+    if ([segmentedControl selectedSegmentIndex]==0) {
+        NSLog(@"показывать за последнюю поездку");
+    }
+    else {
+        NSLog(@"показывать за все время");
+    }
+    //[segmentedControl titleForSegmentAtIndex: [segmentedControl selectedSegmentIndex]];
 }
 
 /*
