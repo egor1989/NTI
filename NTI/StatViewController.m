@@ -86,7 +86,9 @@
 }
 
 - (void) speedUpdate{
-    speedLabel.text =[NSString stringWithFormat:@"%.0f км/ч", [myAppDelegate lastLoc].speed*3.6];
+    double speed =  [myAppDelegate lastLoc].speed*3.6;
+    if (speed < 0) speed = 0;
+    else speedLabel.text =[NSString stringWithFormat:@"%.0f км/ч", speed];
 }
 
 #pragma mark - Table view data source
