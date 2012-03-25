@@ -8,7 +8,7 @@
 
 #import "StatViewController.h"
 
-#define ROWSNUMBER 4
+#define ROWSNUMBER 8
 
 @implementation StatViewController
 
@@ -178,17 +178,71 @@
             return cell;
         }
         case 3:{
-            static NSString *CellIdentifier = @"Driving Score";
+            static NSString *CellIdentifier = @"1";
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             if (cell == nil) {
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
                 cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
-                cell.textLabel.text=@"Driving Score";
-                cell.detailTextLabel.text=@"0";
+                cell.textLabel.text=@"Общая оценка";
+                cell.detailTextLabel.text=@"?";
             }
             return cell;
         }
+        
+        case 4:{
+            static NSString *CellIdentifier = @"2";
+            
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            if (cell == nil) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+                cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
+                cell.textLabel.text=@"Соблюдение скор. режима";
+                cell.detailTextLabel.text=@"?";
+            }
+            return cell;
+        }
+            
+        case 5:{
+            static NSString *CellIdentifier = @"3";
+            
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            if (cell == nil) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+                cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
+                cell.textLabel.text=@"Качество разгонов";
+                cell.detailTextLabel.text=@"?";
+            }
+            return cell;
+        }
+        case 6:{
+            static NSString *CellIdentifier = @"4";
+            
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            if (cell == nil) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+                cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
+                cell.textLabel.text=@"Качество торможения";
+                cell.detailTextLabel.text=@"?";
+            }
+            return cell;
+        }
+        case 7:{
+            static NSString *CellIdentifier = @"5";
+            
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            if (cell == nil) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+                cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
+                cell.textLabel.text=@"Качество поворотов";
+                cell.detailTextLabel.text=@"?";
+            }
+            return cell;
+        }
+
+        
+
+        
             break;
     }
     return nil;
