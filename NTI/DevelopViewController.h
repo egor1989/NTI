@@ -57,7 +57,7 @@
     IBOutlet UIButton *rightButton;
     IBOutlet UIButton *leftButton;
 
-    
+    IBOutlet UIButton *feedBackButton;
     BOOL writeToFile;
     NSString *fileName;
 
@@ -92,6 +92,7 @@
 - (IBAction)actionButton:(id)sender;
 - (IBAction)clearDB:(id)sender;
 - (IBAction)sendFile:(id)sender;
+- (IBAction)feedBackButton:(id)sender;
 
 
 

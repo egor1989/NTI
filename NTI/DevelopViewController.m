@@ -252,6 +252,10 @@
 }
 
 
+- (IBAction)feedBackButton:(id)sender{
+    
+}
+
 - (IBAction)acceleration:(id)sender {
     NSLog(@"push acceleration");
     if (![accelButton.titleLabel.text isEqualToString:@"Stop"]) {
