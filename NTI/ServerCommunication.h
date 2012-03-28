@@ -26,6 +26,8 @@
 - (void)showResult;
 - (BOOL) checkInternetConnection;
 - (NSString *) refreshCookie;
+- (BOOL)checkCookieExpires;
+- (NSString*) getStringBetweenStrings: (NSString *) main first:(NSString *)first second: (NSString*) second;
 
 @property (nonatomic) BOOL errors;
 
