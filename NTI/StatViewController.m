@@ -8,7 +8,7 @@
 
 #import "StatViewController.h"
 
-#define ROWSNUMBER 8
+#define ROWSNUMBER 9
 
 @implementation StatViewController
 
@@ -190,7 +190,28 @@
             }
             return cell;
         }
+            
         case 2: {
+            static NSString *CellIdentifier = @"Record";
+            
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            if (cell == nil) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+                cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
+                cell.textLabel.text=@"Запись";
+                cell.accessoryView = recordLabel;
+                
+                recordButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+                [recordButton setFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];
+                recordButton.titleLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:15];
+                cell.accessoryView = recordButton;
+                [recordButton setTitle:@"Start" forState:UIControlStateNormal];
+                [recordButton addTarget:self action:@selector(recordButton:) forControlEvents:UIControlEventTouchDown];
+            }
+            return cell;
+        }
+
+        case 3: {
             static NSString *CellIdentifier = @"Speed";
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -202,7 +223,7 @@
             }
             return cell;
         }
-        case 3:{
+        case 4:{
             static NSString *CellIdentifier = @"1";
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -215,7 +236,7 @@
             return cell;
         }
         
-        case 4:{
+        case 5:{
             static NSString *CellIdentifier = @"2";
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -228,7 +249,7 @@
             return cell;
         }
             
-        case 5:{
+        case 6:{
             static NSString *CellIdentifier = @"3";
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -240,7 +261,7 @@
             }
             return cell;
         }
-        case 6:{
+        case 7:{
             static NSString *CellIdentifier = @"4";
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -252,7 +273,7 @@
             }
             return cell;
         }
-        case 7:{
+        case 8:{
             static NSString *CellIdentifier = @"5";
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -343,6 +364,13 @@
     AuthViewController *authView = [self.storyboard instantiateViewControllerWithIdentifier: @"AuthViewController"];
     authView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
     [self presentModalViewController: authView animated:YES];
+}
+
+- (IBAction)recordButton:(id)sender{
+    if([recordButton.titleLabel.text isEqualToString:@"Start"]) [recordButton setTitle:@"Stop" forState:UIControlStateNormal];
+    else {
+        [recordButton setTitle:@"Start" forState:UIControlStateNormal];
+    }
 }
 
 #pragma mark - Table view delegate
