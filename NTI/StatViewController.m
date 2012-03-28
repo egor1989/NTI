@@ -34,22 +34,40 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    UIFont *fontForLabel = [UIFont fontWithName:@"Trebuchet MS" size:16]; 
     
     //инициализация лейблов для таблицы
-    speedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];
-    speedLabel.font =            [UIFont fontWithName:@"Trebuchet MS" size:16];
+    speedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];;
+    speedLabel.font =            fontForLabel;
     speedLabel.textAlignment =   UITextAlignmentRight;
     speedLabel.text =            [NSString stringWithFormat:@"%d км/ч", 0];
     
+    qualityDriving = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];;
+    qualityDriving.font = fontForLabel;
+    qualityDriving.textAlignment = UITextAlignmentRight;
+    qualityDriving.text = @"?";
     
-    
-    
+    speedMode = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];;
+    speedMode.font = fontForLabel;
+    speedMode.textAlignment = UITextAlignmentRight;
+    speedMode.text = @"?";
 
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    acceleration = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];;
+    acceleration.font = fontForLabel;
+    acceleration.textAlignment = UITextAlignmentRight;
+    acceleration.text = @"?";
+    
+    deceleration = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];;
+    deceleration.font = fontForLabel;
+    deceleration.textAlignment = UITextAlignmentRight;
+    deceleration.text = @"?";
+    
+    rotation = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];;
+    rotation.font = fontForLabel;
+    rotation.textAlignment = UITextAlignmentRight;
+    rotation.text = @"?";
+
+
 }
 
 - (void)viewDidUnload
@@ -192,7 +210,7 @@
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
                 cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
                 cell.textLabel.text=@"Общая оценка";
-                cell.detailTextLabel.text=@"нет";
+                cell.accessoryView = qualityDriving;
             }
             return cell;
         }
@@ -205,7 +223,7 @@
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
                 cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
                 cell.textLabel.text=@"Соблюдение скор. режима";
-                cell.detailTextLabel.text=@"нет";
+                cell.accessoryView = speedMode;
             }
             return cell;
         }
@@ -218,7 +236,7 @@
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
                 cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
                 cell.textLabel.text=@"Качество разгонов";
-                cell.detailTextLabel.text=@"нет";
+                cell.accessoryView = acceleration;
             }
             return cell;
         }
@@ -230,7 +248,7 @@
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
                 cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
                 cell.textLabel.text=@"Качество торможения";
-                cell.detailTextLabel.text=@"нет";
+                cell.accessoryView = deceleration;
             }
             return cell;
         }
@@ -242,7 +260,7 @@
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
                 cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
                 cell.textLabel.text=@"Качество поворотов";
-                cell.detailTextLabel.text=@"нет";
+                cell.accessoryView = rotation;
             }
             return cell;
         }
@@ -259,10 +277,20 @@
 - (void) pickOne:(id)sender{
     UISegmentedControl *segmentedControl = (UISegmentedControl *)sender;
     if ([segmentedControl selectedSegmentIndex]==0) {
-        NSLog(@"показывать за последнюю поездку");
+        NSLog(@"за последнюю поездку");
+        qualityDriving.text = @"?";
+        speedMode.text = @"?";
+        acceleration.text = @"?";
+        deceleration.text = @"?";
+        rotation.text = @"?";
     }
     else {
-        NSLog(@"показывать за все время");
+        NSLog(@"за все время");
+        qualityDriving.text = @"???";
+        speedMode.text = @"???";
+        acceleration.text = @"???";
+        deceleration.text = @"???";
+        rotation.text = @"???";
     }
     //[segmentedControl titleForSegmentAtIndex: [segmentedControl selectedSegmentIndex]];
 }
