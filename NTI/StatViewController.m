@@ -132,7 +132,7 @@
                 cell = [[UITableViewCell alloc] initWithFrame:CGRectMake(50, 50, 250, 35)];
             
             UISegmentedControl *segmentedControl = [[UISegmentedControl alloc]  initWithItems: [NSArray arrayWithObjects: @"Last", @"All", nil]];
-            segmentedControl.frame = CGRectMake(35, 5, 250, 35);//x,y,widht, height viewObject.frame = CGRectMake(280, 10, 25, 25)
+            segmentedControl.frame = CGRectMake(35, 5, 250, 35);//x,y,widht, height 
             segmentedControl.segmentedControlStyle = UISegmentedControlStylePlain;
             
             segmentedControl.selectedSegmentIndex = 0;

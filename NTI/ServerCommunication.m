@@ -55,6 +55,18 @@
 
 - (NSString *) refreshCookie{
     NSString *newCookie = nil;
+    //сравниваем старые и дату
+    NSDate * today = [NSDate date];
+    NSDateFormatter * date_format = [[NSDateFormatter alloc] init];
+    [date_format setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
+    [date_format setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"GMT"]];
+    
+    [date_format setDateFormat: @"EEE, dd-MMM-YYYY HH:mm:ss zzz"]; //
+    NSString * date_string = [date_format stringFromDate: today];
+    NSLog (@"Date: %@", date_string);
+    
+    //NSLog(@"%@",[NSDate date]);
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     if ([userDefaults objectForKey:@"cookie"]!=nil) {
         [self authUser:[userDefaults objectForKey:@"login"] secret:[userDefaults objectForKey:@"password"]];
