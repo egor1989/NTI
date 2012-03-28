@@ -41,6 +41,9 @@
     speedLabel.textAlignment =   UITextAlignmentRight;
     speedLabel.text =            [NSString stringWithFormat:@"%d км/ч", 0];
     
+    
+    
+    
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -122,16 +125,18 @@
             static NSString *CellIdentifier = @"change";
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-            
+        
             if (cell == nil) {
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
                 cell.textLabel.text=@" ";
+                
             
             UISegmentedControl *segmentedControl = [[UISegmentedControl alloc]  initWithItems: [NSArray arrayWithObjects: @"Last", @"All", nil]];
             segmentedControl.frame = CGRectMake(50, 0, 250, 35);//x,y,widht, height
             segmentedControl.segmentedControlStyle = UISegmentedControlStylePlain;
             
             segmentedControl.selectedSegmentIndex = 0;
+             
             [segmentedControl addTarget:self action:@selector(pickOne:) forControlEvents:UIControlEventValueChanged];
             cell.accessoryView = segmentedControl;
             
@@ -157,7 +162,6 @@
                 [loginButton setFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];
                 loginButton.titleLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:15];
                 cell.accessoryView = loginButton;
-                //loginButton.titleLabel.text = @"Выйти";
                 [loginButton setTitle:@"Выйти" forState:UIControlStateNormal];
                 [loginButton addTarget:self action:@selector(loginButton:) forControlEvents:UIControlEventTouchDown];
                 
@@ -185,7 +189,7 @@
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
                 cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
                 cell.textLabel.text=@"Общая оценка";
-                cell.detailTextLabel.text=@"?";
+                cell.detailTextLabel.text=@"нет";
             }
             return cell;
         }
@@ -198,7 +202,7 @@
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
                 cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
                 cell.textLabel.text=@"Соблюдение скор. режима";
-                cell.detailTextLabel.text=@"?";
+                cell.detailTextLabel.text=@"нет";
             }
             return cell;
         }
@@ -211,7 +215,7 @@
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
                 cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
                 cell.textLabel.text=@"Качество разгонов";
-                cell.detailTextLabel.text=@"?";
+                cell.detailTextLabel.text=@"нет";
             }
             return cell;
         }
@@ -223,7 +227,7 @@
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
                 cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
                 cell.textLabel.text=@"Качество торможения";
-                cell.detailTextLabel.text=@"?";
+                cell.detailTextLabel.text=@"нет";
             }
             return cell;
         }
@@ -235,7 +239,7 @@
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
                 cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
                 cell.textLabel.text=@"Качество поворотов";
-                cell.detailTextLabel.text=@"?";
+                cell.detailTextLabel.text=@"нет";
             }
             return cell;
         }
