@@ -14,7 +14,8 @@
 
 -(void)viewDidLoad
 {
-	[super viewDidLoad];  
+	[super viewDidLoad]; 
+    [textField becomeFirstResponder];
 }
 // called after the view controller's view is released and set to nil.
 // For example, a memory warning which causes the view to be purged. Not invoked as a result of -dealloc.
@@ -23,6 +24,7 @@
 -(void)viewDidUnload
 {
 	[super viewDidUnload];
+    
 //	self.textView = nil;
 }
 
@@ -36,7 +38,7 @@
 -(void)viewDidDisappear:(BOOL)animated 
 {
     [super viewDidDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    //[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
@@ -58,6 +60,7 @@
     navItem.leftBarButtonItem = previewItem;
     
 }
+ 
 
 -(void)keyboardWillHide:(NSNotification *)aNotification
 {
@@ -76,6 +79,8 @@
     textView.text = @"";
     textField.text = @"";
     [self doneAction];
+    
+    //alert сообщение отправлено
 }
 
 #pragma mark -

@@ -125,20 +125,23 @@
             static NSString *CellIdentifier = @"change";
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        
+            
             if (cell == nil) {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
-                cell.textLabel.text=@" ";
-                
+                //cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:CellIdentifier];
+                //cell.textLabel.text=@" ";
+                cell = [[UITableViewCell alloc] initWithFrame:CGRectMake(50, 50, 250, 35)];
             
             UISegmentedControl *segmentedControl = [[UISegmentedControl alloc]  initWithItems: [NSArray arrayWithObjects: @"Last", @"All", nil]];
-            segmentedControl.frame = CGRectMake(50, 0, 250, 35);//x,y,widht, height
+            segmentedControl.frame = CGRectMake(35, 5, 250, 35);//x,y,widht, height viewObject.frame = CGRectMake(280, 10, 25, 25)
             segmentedControl.segmentedControlStyle = UISegmentedControlStylePlain;
             
             segmentedControl.selectedSegmentIndex = 0;
              
             [segmentedControl addTarget:self action:@selector(pickOne:) forControlEvents:UIControlEventValueChanged];
-            cell.accessoryView = segmentedControl;
+        
+            [cell addSubview:segmentedControl];
+           // cell.accessoryView = segmentedControl;
+                //cell.textLabel.textAlignment = UITextAlignmentCenter;
             
             }
             return cell; 
