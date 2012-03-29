@@ -15,10 +15,18 @@
 @interface StatViewController : UITableViewController{
     UILabel *speedLabel;
     IBOutlet UIButton *loginButton;
+    UILabel *qualityDriving;
+    UILabel *speedMode;
+    UILabel *acceleration;
+    UILabel *deceleration;
+    UILabel *rotation;
+    UILabel *recordLabel;
+    IBOutlet UIButton *recordButton;
 }
 
 - (void) speedUpdate;
 - (IBAction)loginButton:(id)sender;
+- (IBAction)recordButton:(id)sender;
 - (void) pickOne:(id)sender;
 
 @end

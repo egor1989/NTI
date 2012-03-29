@@ -15,6 +15,7 @@
 - (void)uploadData:(NSString *)fileContent{
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSLog(@"cookie = %@", [userDefaults valueForKey:@"cookie"]);
+
     NSString * cookie = [self refreshCookie];
     
     fileContent=[@"data={\"method\":\"addNTIFile\",\"params\":{\"ntifile\":" stringByAppendingString:fileContent];
@@ -53,16 +54,53 @@
 
 }
 
-- (NSString *) refreshCookie{
-    NSString *newCookie = nil;
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    if ([userDefaults objectForKey:@"cookie"]!=nil) {
-        [self authUser:[userDefaults objectForKey:@"login"] secret:[userDefaults objectForKey:@"password"]];
-    }
-    newCookie = [userDefaults objectForKey:@"cookie"];
-    NSLog(@"newCookie = %@", newCookie);
-    return newCookie;
+- (BOOL)checkCookieExpires{
+    //текущая дата в нужном формате
+    NSDate * now = [NSDate date];
+    NSDateFormatter * date_format = [[NSDateFormatter alloc] init];
+    [date_format setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
+    [date_format setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"GMT"]];
+    
+    [date_format setDateFormat: @"EEE, dd-MMM-YYYY HH:mm:ss"]; //Wed, 28-Mar-2012 12:05:35
+    NSString * date_string = [date_format stringFromDate: now];
+    NSLog (@"Date: %@", date_string);
+    
+    //берем дату из текущих cookie
+    NSLog(@"cookie = %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"cookie"]);
+    NSString *cookieDate = [self getStringBetweenStrings:[[NSUserDefaults standardUserDefaults] objectForKey:@"cookie"] first:@"expires=" second:@"GMT"];
+    NSLog(@"cookie date = %@",cookieDate);
+    NSDate * result = [date_format dateFromString: cookieDate]; 
+    NSLog (@"%@", result); 
+
+    return YES;
 }
+
+- (NSString *) refreshCookie{
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if ([self checkCookieExpires]){
+
+        if ([userDefaults objectForKey:@"cookie"]!=nil) {
+            [self authUser:[userDefaults objectForKey:@"login"] secret:[userDefaults objectForKey:@"password"]];
+        }
+    }
+    return [userDefaults objectForKey:@"cookie"];
+    
+}
+
+
+- (NSString*) getStringBetweenStrings: (NSString *) main first:(NSString *)first second: (NSString*) second{
+	NSRange rangeofFirst = [main rangeOfString:first];
+	NSRange rangeOfSecond = [main rangeOfString:second];
+	if ((rangeofFirst.length == 0) || (rangeOfSecond.length == 0)) {
+		return nil;
+	}
+	NSString *result = [[main substringFromIndex:rangeofFirst.location+rangeofFirst.length] 
+						substringToIndex:
+						[[main substringFromIndex:rangeofFirst.location+rangeofFirst.length] rangeOfString:second].location];
+	return result;
+}
+
 
 
 - (BOOL)checkErrors:(NSString *)answerString{

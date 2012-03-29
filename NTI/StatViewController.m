@@ -8,7 +8,7 @@
 
 #import "StatViewController.h"
 
-#define ROWSNUMBER 8
+#define ROWSNUMBER 9
 
 @implementation StatViewController
 
@@ -34,19 +34,40 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    UIFont *fontForLabel = [UIFont fontWithName:@"Trebuchet MS" size:16]; 
     
     //инициализация лейблов для таблицы
-    speedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];
-    speedLabel.font =            [UIFont fontWithName:@"Trebuchet MS" size:16];
+    speedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];;
+    speedLabel.font =            fontForLabel;
     speedLabel.textAlignment =   UITextAlignmentRight;
     speedLabel.text =            [NSString stringWithFormat:@"%d км/ч", 0];
     
+    qualityDriving = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];;
+    qualityDriving.font = fontForLabel;
+    qualityDriving.textAlignment = UITextAlignmentRight;
+    qualityDriving.text = @"?";
+    
+    speedMode = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];;
+    speedMode.font = fontForLabel;
+    speedMode.textAlignment = UITextAlignmentRight;
+    speedMode.text = @"?";
 
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    acceleration = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];;
+    acceleration.font = fontForLabel;
+    acceleration.textAlignment = UITextAlignmentRight;
+    acceleration.text = @"?";
+    
+    deceleration = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];;
+    deceleration.font = fontForLabel;
+    deceleration.textAlignment = UITextAlignmentRight;
+    deceleration.text = @"?";
+    
+    rotation = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];;
+    rotation.font = fontForLabel;
+    rotation.textAlignment = UITextAlignmentRight;
+    rotation.text = @"?";
+
+
 }
 
 - (void)viewDidUnload
@@ -124,16 +145,21 @@
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             
             if (cell == nil) {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
-                cell.textLabel.text=@" ";
+                //cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:CellIdentifier];
+                //cell.textLabel.text=@" ";
+                cell = [[UITableViewCell alloc] initWithFrame:CGRectMake(50, 50, 250, 35)];
             
             UISegmentedControl *segmentedControl = [[UISegmentedControl alloc]  initWithItems: [NSArray arrayWithObjects: @"Last", @"All", nil]];
-            segmentedControl.frame = CGRectMake(50, 0, 250, 35);//x,y,widht, height
+            segmentedControl.frame = CGRectMake(35, 5, 250, 35);//x,y,widht, height 
             segmentedControl.segmentedControlStyle = UISegmentedControlStylePlain;
             
             segmentedControl.selectedSegmentIndex = 0;
+             
             [segmentedControl addTarget:self action:@selector(pickOne:) forControlEvents:UIControlEventValueChanged];
-            cell.accessoryView = segmentedControl;
+        
+            [cell addSubview:segmentedControl];
+           // cell.accessoryView = segmentedControl;
+                //cell.textLabel.textAlignment = UITextAlignmentCenter;
             
             }
             return cell; 
@@ -157,7 +183,6 @@
                 [loginButton setFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];
                 loginButton.titleLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:15];
                 cell.accessoryView = loginButton;
-                //loginButton.titleLabel.text = @"Выйти";
                 [loginButton setTitle:@"Выйти" forState:UIControlStateNormal];
                 [loginButton addTarget:self action:@selector(loginButton:) forControlEvents:UIControlEventTouchDown];
                 
@@ -165,7 +190,28 @@
             }
             return cell;
         }
+            
         case 2: {
+            static NSString *CellIdentifier = @"Record";
+            
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            if (cell == nil) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+                cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
+                cell.textLabel.text=@"Запись";
+                cell.accessoryView = recordLabel;
+                
+                recordButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+                [recordButton setFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];
+                recordButton.titleLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:15];
+                cell.accessoryView = recordButton;
+                [recordButton setTitle:@"Start" forState:UIControlStateNormal];
+                [recordButton addTarget:self action:@selector(recordButton:) forControlEvents:UIControlEventTouchDown];
+            }
+            return cell;
+        }
+
+        case 3: {
             static NSString *CellIdentifier = @"Speed";
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -177,7 +223,7 @@
             }
             return cell;
         }
-        case 3:{
+        case 4:{
             static NSString *CellIdentifier = @"1";
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -185,12 +231,12 @@
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
                 cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
                 cell.textLabel.text=@"Общая оценка";
-                cell.detailTextLabel.text=@"?";
+                cell.accessoryView = qualityDriving;
             }
             return cell;
         }
         
-        case 4:{
+        case 5:{
             static NSString *CellIdentifier = @"2";
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -198,12 +244,12 @@
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
                 cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
                 cell.textLabel.text=@"Соблюдение скор. режима";
-                cell.detailTextLabel.text=@"?";
+                cell.accessoryView = speedMode;
             }
             return cell;
         }
             
-        case 5:{
+        case 6:{
             static NSString *CellIdentifier = @"3";
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -211,11 +257,11 @@
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
                 cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
                 cell.textLabel.text=@"Качество разгонов";
-                cell.detailTextLabel.text=@"?";
+                cell.accessoryView = acceleration;
             }
             return cell;
         }
-        case 6:{
+        case 7:{
             static NSString *CellIdentifier = @"4";
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -223,11 +269,11 @@
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
                 cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
                 cell.textLabel.text=@"Качество торможения";
-                cell.detailTextLabel.text=@"?";
+                cell.accessoryView = deceleration;
             }
             return cell;
         }
-        case 7:{
+        case 8:{
             static NSString *CellIdentifier = @"5";
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -235,7 +281,7 @@
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
                 cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
                 cell.textLabel.text=@"Качество поворотов";
-                cell.detailTextLabel.text=@"?";
+                cell.accessoryView = rotation;
             }
             return cell;
         }
@@ -252,10 +298,20 @@
 - (void) pickOne:(id)sender{
     UISegmentedControl *segmentedControl = (UISegmentedControl *)sender;
     if ([segmentedControl selectedSegmentIndex]==0) {
-        NSLog(@"показывать за последнюю поездку");
+        NSLog(@"за последнюю поездку");
+        qualityDriving.text = @"?";
+        speedMode.text = @"?";
+        acceleration.text = @"?";
+        deceleration.text = @"?";
+        rotation.text = @"?";
     }
     else {
-        NSLog(@"показывать за все время");
+        NSLog(@"за все время");
+        qualityDriving.text = @"???";
+        speedMode.text = @"???";
+        acceleration.text = @"???";
+        deceleration.text = @"???";
+        rotation.text = @"???";
     }
     //[segmentedControl titleForSegmentAtIndex: [segmentedControl selectedSegmentIndex]];
 }
@@ -308,6 +364,13 @@
     AuthViewController *authView = [self.storyboard instantiateViewControllerWithIdentifier: @"AuthViewController"];
     authView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
     [self presentModalViewController: authView animated:YES];
+}
+
+- (IBAction)recordButton:(id)sender{
+    if([recordButton.titleLabel.text isEqualToString:@"Start"]) [recordButton setTitle:@"Stop" forState:UIControlStateNormal];
+    else {
+        [recordButton setTitle:@"Start" forState:UIControlStateNormal];
+    }
 }
 
 #pragma mark - Table view delegate

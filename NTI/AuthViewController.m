@@ -71,10 +71,12 @@
         
         [serverCommunication authUser:loginField.text secret:encryptedPass];
         [serverCommunication showResult];
+        if (![serverCommunication errors]) {
         
-        HelpViewController *helpView = [self.storyboard instantiateViewControllerWithIdentifier: @"HelpViewController"];
-        helpView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-        [self presentModalViewController: helpView animated:YES];
+            HelpViewController *helpView = [self.storyboard instantiateViewControllerWithIdentifier: @"HelpViewController"];
+            helpView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+            [self presentModalViewController: helpView animated:YES];
+        }
         
     }
     
