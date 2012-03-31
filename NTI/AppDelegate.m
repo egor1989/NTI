@@ -35,7 +35,7 @@
     locationManager.distanceFilter = kCLDistanceFilterNone;
     
 
-    
+
     lastLoc = [[CLLocation alloc] init];
     kmch5 = NO;
     l5Km = 0;
@@ -103,6 +103,8 @@
         [self startGPSDetect];
         kmch5 = YES;
         canWriteToFile = YES;
+        [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
+        
         NSLog(@"canWriteToFile = YES");
     }
     
@@ -124,6 +126,7 @@
     if (l5Km>m5Km) {
         [self checkSpeedTimer];
         canWriteToFile = NO;
+        [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
         NSLog(@"canWriteToFile = NO");
     }
     else kmch5 = YES;

@@ -33,5 +33,6 @@
 - (IBAction)loginButton:(id)sender;
 - (IBAction)recordButton:(id)sender;
 - (void) pickOne:(id)sender;
+- (void)changeImage;
 
 @end

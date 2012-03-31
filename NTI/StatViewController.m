@@ -68,12 +68,21 @@
     rotation.text = @"?";
     
     recordImage = [[UIImageView alloc] initWithFrame:CGRectMake(200.0f, 7.0f, 27.0f, 27.0f)];
-    [recordImage setImage:[UIImage imageNamed:@"red.png"]];
     
+    if ([myAppDelegate canWriteToFile]) [recordImage setImage:[UIImage imageNamed:@"green.png"]];
+    else [recordImage setImage:[UIImage imageNamed:@"red.png"]];
+    
+    [[NSNotificationCenter defaultCenter]	
+     addObserver: self
+     selector: @selector(changeImage)
+     name: @"canWriteToFile"
+     object: nil];
+}
 
-    
-    
-    
+
+- (void)changeImage{
+    if ([myAppDelegate canWriteToFile]) [recordImage setImage:[UIImage imageNamed:@"green.png"]];
+    else [recordImage setImage:[UIImage imageNamed:@"red.png"]];
 }
 
 - (void)viewDidUnload
