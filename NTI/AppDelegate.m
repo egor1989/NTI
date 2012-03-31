@@ -42,6 +42,8 @@
     m5Km = 0;
     allDistance = 0;
     [self checkSpeedTimer];
+    
+   // recordAction *recording = [[recordAction alloc] initRecording];
         
     motionManager = [[CMMotionManager alloc] init];
     if ([motionManager isGyroAvailable]) {

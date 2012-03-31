@@ -11,7 +11,7 @@
 #define ROWSNUMBER 9
 
 @implementation StatViewController
-
+@synthesize writeAction;
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -70,7 +70,10 @@
     recordImage = [[UIImageView alloc] initWithFrame:CGRectMake(200.0f, 7.0f, 27.0f, 27.0f)];
     [recordImage setImage:[UIImage imageNamed:@"red.png"]];
     
-    DevelopViewController *develop = [[DevelopViewController alloc] init];
+
+    
+    
+    
 }
 
 - (void)viewDidUnload
@@ -370,18 +373,22 @@
 }
 
 - (IBAction)recordButton:(id)sender{
+    BOOL writeAction;
     if([recordButton.titleLabel.text isEqualToString:@"Start"]) {
          [recordButton setTitle:@"Stop" forState:UIControlStateNormal];
+        writeAction = YES;
+        
         [[NSNotificationCenter defaultCenter]	postNotificationName:	@"recordAction" 
                                                             object:  nil
-                                                          userInfo: YES];
+                                                          userInfo: nil];
         
      }
     else {
         [recordButton setTitle:@"Start" forState:UIControlStateNormal];
+        writeAction = NO;
         [[NSNotificationCenter defaultCenter]	postNotificationName:	@"recordAction" 
                                                             object:  nil
-                                                          userInfo: NO];
+                                                          userInfo: nil];
     }
 }
 

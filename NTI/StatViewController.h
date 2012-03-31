@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
 #import "AuthViewController.h"
-#import "DevelopViewController.h"
+
 
 #define myAppDelegate (AppDelegate*) [[UIApplication sharedApplication] delegate]
 
@@ -24,7 +24,10 @@
     UILabel *recordLabel;
     IBOutlet UIButton *recordButton;
     UIImageView *recordImage;
+    
 }
+
+@property (nonatomic) BOOL *writeAction;
 
 - (void) speedUpdate;
 - (IBAction)loginButton:(id)sender;
