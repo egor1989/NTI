@@ -66,8 +66,11 @@
     rotation.font = fontForLabel;
     rotation.textAlignment = UITextAlignmentRight;
     rotation.text = @"?";
-
-
+    
+    recordImage = [[UIImageView alloc] initWithFrame:CGRectMake(200.0f, 7.0f, 27.0f, 27.0f)];
+    [recordImage setImage:[UIImage imageNamed:@"red.png"]];
+    
+    DevelopViewController *develop = [[DevelopViewController alloc] init];
 }
 
 - (void)viewDidUnload
@@ -199,7 +202,7 @@
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
                 cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
                 cell.textLabel.text=@"Запись";
-                cell.accessoryView = recordLabel;
+                [cell addSubview:recordImage];
                 
                 recordButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
                 [recordButton setFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];
@@ -367,9 +370,18 @@
 }
 
 - (IBAction)recordButton:(id)sender{
-    if([recordButton.titleLabel.text isEqualToString:@"Start"]) [recordButton setTitle:@"Stop" forState:UIControlStateNormal];
+    if([recordButton.titleLabel.text isEqualToString:@"Start"]) {
+         [recordButton setTitle:@"Stop" forState:UIControlStateNormal];
+        [[NSNotificationCenter defaultCenter]	postNotificationName:	@"recordAction" 
+                                                            object:  nil
+                                                          userInfo: YES];
+        
+     }
     else {
         [recordButton setTitle:@"Start" forState:UIControlStateNormal];
+        [[NSNotificationCenter defaultCenter]	postNotificationName:	@"recordAction" 
+                                                            object:  nil
+                                                          userInfo: NO];
     }
 }
 

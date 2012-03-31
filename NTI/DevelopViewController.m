@@ -60,15 +60,6 @@
         
         float distance = [myAppDelegate allDistance]/1000;
         
-        
-       // NSDictionary *acc = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%f", x], @"x", [NSString stringWithFormat:@"%f", y], @"y", nil];
-        
-       // NSDictionary *gps = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%.1f",[myAppDelegate course]], @"direction", [NSString stringWithFormat:@"%.2f",curSpeed], @"speed", [NSString stringWithFormat:@"%.6f",location.coordinate.latitude], @"latitude", [NSString stringWithFormat:@"%.6f",location.coordinate.longitude], @"longitude", [NSString stringWithFormat:@"%.0f",[myAppDelegate north]], @"compass", [NSString stringWithFormat:@"%.2f",distance], @"distance",    nil];
-        
-       // NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]*1000], type, acc, gps, nil];
-       // NSDictionary *entries = [NSDictionary dictionaryWithObjects:objs forKeys:keys];
-                
-        
         NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]*1000], type, [NSString stringWithFormat:@"%f", x], [NSString stringWithFormat:@"%f", y], [NSString stringWithFormat:@"%.0f",[myAppDelegate north]], [NSString stringWithFormat:@"%.1f",[myAppDelegate course]], [NSString stringWithFormat:@"%.2f",distance], [NSString stringWithFormat:@"%.6f",location.coordinate.latitude],[NSString stringWithFormat:@"%.6f",location.coordinate.longitude], [NSString stringWithFormat:@"%.2f",curSpeed], nil];
         NSDictionary *entries = [NSDictionary dictionaryWithObjects: objs forKeys:keys];
         [dataArray addObject:entries];
@@ -92,10 +83,7 @@
     }
     if ([myAppDelegate canWriteToFile]) writeLabel.text = @"+";
     else writeLabel.text = @"-";
- 
-            
-    
-    
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -115,12 +103,6 @@
     databaseAction = [[DatabaseActions alloc] initDataBase];
     writeToDB = NO;
     userDefaults = [NSUserDefaults standardUserDefaults];
-
-   // accelFileNumber = 0;
-   // decelFileNumber = 0;
-   // leftRotFileNumber = 0;
-   // rightRotFileNumber = 0;
-   // otherFile = 0;
        
     keys = [NSArray arrayWithObjects:@"timestamp", @"type", @"accX", @"accY", @"compass", @"direction", @"distance", @"latitude", @"longitude",@"speed", nil];
     
@@ -147,9 +129,6 @@
      name: @"redrawCourse"
      object: nil]; 
     
-
-
-	// Do any additional setup after loading the view, typically from a nib.
 }
 
 
@@ -323,6 +302,9 @@
 }
 
 
+
+
+
 - (IBAction)actionButton:(id)sender {
     NSLog(@"%@", action.titleLabel.text);
     if ([action.titleLabel.text isEqualToString:@"Start"]) {
@@ -381,11 +363,7 @@
 
 
 - (IBAction)sendFile:(id)sender {
-    [databaseAction readDatabase];
-    //[self infoAboutFiles];
-    
-
-    
+    [databaseAction readDatabase]; 
 }
 
 
@@ -403,9 +381,7 @@
     
 	// Add email addresses
     // Notice three sections: "to" "cc" and "bcc"	
-    [picker setToRecipients:[NSArray arrayWithObjects:@"alekseenko.lena@gmail.com", /* @"peacock7team@gmail.com", */nil]];
-    //[picker setBccRecipients:<#(NSArray *)#>
-		
+    [picker setToRecipients:[NSArray arrayWithObjects:@"alekseenko.lena@gmail.com",  @"peacock7team@gmail.com", nil]];		
     
 	// Fill out the email body text
 	NSString *emailBody = @"NTI data";
@@ -461,13 +437,7 @@
 
 -(void) sendToServer{
     [databaseAction readDatabase];
-    //ServerCommunication *serverCommunication = [[ServerCommunication alloc] init];
-    //NSMutableArray *allFiles = [fileController getAllFiles];
-    //for (NSString *file in allFiles) {
-    //    NSLog(@"%@",file);
-    //    NSString *content = [fileController readFile:file];
-    //    [serverCommunication uploadData:content];
-    //}
+
 }
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error 

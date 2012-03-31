@@ -27,6 +27,9 @@
 		536E026F14F00625003A2B15 /* compass.png in Resources */ = {isa = PBXBuildFile; fileRef = 536E026E14F00625003A2B15 /* compass.png */; };
 		539B29BE14F305C3007E6977 /* gps.png in Resources */ = {isa = PBXBuildFile; fileRef = 539B29BC14F305C3007E6977 /* gps.png */; };
 		539B29BF14F305C3007E6977 /* north.png in Resources */ = {isa = PBXBuildFile; fileRef = 539B29BD14F305C3007E6977 /* north.png */; };
+		53A5AE341527593C0093E552 /* green.png in Resources */ = {isa = PBXBuildFile; fileRef = 53A5AE321527593C0093E552 /* green.png */; };
+		53A5AE351527593C0093E552 /* red.png in Resources */ = {isa = PBXBuildFile; fileRef = 53A5AE331527593C0093E552 /* red.png */; };
+		53A5AE5D1527743A0093E552 /* recordAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A5AE5C1527743A0093E552 /* recordAction.m */; };
 		53AAF04B14FE2CF000E12486 /* ServerCommunication.m in Sources */ = {isa = PBXBuildFile; fileRef = 53AAF04A14FE2CF000E12486 /* ServerCommunication.m */; };
 		53D8F580151DFC7C00589D67 /* HelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D8F57F151DFC7C00589D67 /* HelpViewController.m */; };
 		53D8F584151E0EBA00589D67 /* IterviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D8F583151E0EBA00589D67 /* IterviewViewController.m */; };
@@ -108,6 +111,10 @@
 		536E026E14F00625003A2B15 /* compass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = compass.png; sourceTree = "<group>"; };
 		539B29BC14F305C3007E6977 /* gps.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gps.png; sourceTree = "<group>"; };
 		539B29BD14F305C3007E6977 /* north.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = north.png; sourceTree = "<group>"; };
+		53A5AE321527593C0093E552 /* green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = green.png; path = Images/green.png; sourceTree = "<group>"; };
+		53A5AE331527593C0093E552 /* red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = red.png; path = Images/red.png; sourceTree = "<group>"; };
+		53A5AE5B1527743A0093E552 /* recordAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = recordAction.h; sourceTree = "<group>"; };
+		53A5AE5C1527743A0093E552 /* recordAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = recordAction.m; sourceTree = "<group>"; };
 		53AAF04914FE2CF000E12486 /* ServerCommunication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerCommunication.h; sourceTree = "<group>"; };
 		53AAF04A14FE2CF000E12486 /* ServerCommunication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerCommunication.m; sourceTree = "<group>"; };
 		53D8F57E151DFC7C00589D67 /* HelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpViewController.h; sourceTree = "<group>"; };
@@ -235,6 +242,8 @@
 		276C4C9214DEE6EA00C469A6 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				53A5AE321527593C0093E552 /* green.png */,
+				53A5AE331527593C0093E552 /* red.png */,
 				53F006341507A94F0074156E /* first_screen.jpg */,
 				53F00622150784310074156E /* GoButton@2x.png */,
 				53F00623150784310074156E /* GoButton.png */,
@@ -291,6 +300,8 @@
 		27CE0BCB150CDEFF0016F4BA /* Statistic */ = {
 			isa = PBXGroup;
 			children = (
+				53A5AE5B1527743A0093E552 /* recordAction.h */,
+				53A5AE5C1527743A0093E552 /* recordAction.m */,
 				2775F5621507D48C00FE08BC /* StatViewController.h */,
 				2775F5631507D48C00FE08BC /* StatViewController.m */,
 			);
@@ -617,6 +628,8 @@
 				53F006351507A94F0074156E /* first_screen.jpg in Resources */,
 				2775F5601507D01900FE08BC /* MainStoryboard.storyboard in Resources */,
 				53F88371150B9740000F7FE3 /* log.sqlite in Resources */,
+				53A5AE341527593C0093E552 /* green.png in Resources */,
+				53A5AE351527593C0093E552 /* red.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -681,6 +694,7 @@
 				53D8F580151DFC7C00589D67 /* HelpViewController.m in Sources */,
 				53D8F584151E0EBA00589D67 /* IterviewViewController.m in Sources */,
 				27CFA5301521EBA300F9AC21 /* FeedBackViewController.m in Sources */,
+				53A5AE5D1527743A0093E552 /* recordAction.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
