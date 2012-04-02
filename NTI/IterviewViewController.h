@@ -8,6 +8,29 @@
 
 #import <UIKit/UIKit.h>
 
-@interface IterviewViewController : UIViewController
+@interface IterviewViewController : UIViewController <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource> 
+{
+    IBOutlet UIScrollView *scrollView;
+    
+    UIPickerView *insuranceCompanyPicker;
+    UIPickerView *sexPicker;
+    UIPickerView *autoCategoryPicker;
+    UIPickerView *autoPowerPicker;
+    
+    UIToolbar *insuranceCompanyToolbar;
+    
+    IBOutlet UITextField *insuranceCompanyField;
+    IBOutlet UITextField *sexField;
+    IBOutlet UITextField *ageField;
+    IBOutlet UITextField *numberOfDtpField;
+    IBOutlet UITextField *autoCategoryField;
+    IBOutlet UITextField *autoPowerField;
+    
+    //содержание пикеров
+    NSArray *insuranceCompanyPickerOptions;
+    NSArray *sexPickerOptions;
+    NSArray *autoCategoryPickerOptions;
+    NSArray *autoPowerPickerOptions;
+}
 
 @end

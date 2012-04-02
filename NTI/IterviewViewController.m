@@ -8,32 +8,147 @@
 
 #import "IterviewViewController.h"
 
-@interface IterviewViewController ()
-
-@end
+const int insuranceCompanyPickerTag = 1;
+const int sexPickerTag = 2;
+const int autoCategoryPickerTag = 3;
+const int autoPowerPickerTag = 4;
 
 @implementation IterviewViewController
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
+    
+    scrollView.contentSize = CGSizeMake(320, 545);
+    
+    //insuranceCompanyPicker
+    insuranceCompanyPicker = [[UIPickerView alloc] initWithFrame:CGRectZero];
+    insuranceCompanyPicker.tag = insuranceCompanyPickerTag;
+    insuranceCompanyPicker.delegate = self;
+    insuranceCompanyPicker.dataSource = self;
+    [insuranceCompanyPicker setShowsSelectionIndicator:YES];
+    insuranceCompanyField.inputView = insuranceCompanyPicker;
+    
+    
+    //sexPicker
+    sexPicker = [[UIPickerView alloc] initWithFrame:CGRectZero];
+    sexPicker.tag = sexPickerTag;
+    sexPicker.delegate = self;
+    sexPicker.dataSource = self;
+    [sexPicker setShowsSelectionIndicator:YES];
+    sexField.inputView = sexPicker;
+    
+    
+    //autoCategoryPicker
+    autoCategoryPicker = [[UIPickerView alloc] initWithFrame:CGRectZero];
+    autoCategoryPicker.tag = autoCategoryPickerTag;
+    autoCategoryPicker.delegate = self;
+    autoCategoryPicker.dataSource = self;
+    [autoCategoryPicker setShowsSelectionIndicator:YES];
+    autoCategoryField.inputView = autoCategoryPicker;
+    
+    
+    //autoPowerPicker
+    autoPowerPicker = [[UIPickerView alloc] initWithFrame:CGRectZero];
+    autoPowerPicker.tag = autoPowerPickerTag;
+    autoPowerPicker.delegate = self;
+    autoPowerPicker.dataSource = self;
+    [autoPowerPicker setShowsSelectionIndicator:YES];
+    autoPowerField.inputView = autoPowerPicker;
+    
+    
+    
+    //содержание пикеров
+    //    ThemesOptions = [ThemesOptionsUnsorted sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    insuranceCompanyPickerOptions   = [NSArray arrayWithObjects:@"РосГосСтрах", @"Intouch", nil];
+    sexPickerOptions                = [NSArray arrayWithObjects:@"Мужской", @"Женский", nil];
+    autoCategoryPickerOptions       = [NSArray arrayWithObjects:@"A", @"B", @"C", @"D", @"E", nil];
+    autoPowerPickerOptions          = [NSArray arrayWithObjects:@"80-100 л.с.", @"100-120 л.с.", @"120-140 л.с.", nil];
+    
 }
 
-- (void)viewDidUnload
+
+
+#pragma mark -
+#pragma mark UIPickerViewDelegate
+
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
+    if (pickerView.tag == insuranceCompanyPickerTag)
+    {
+        return [insuranceCompanyPickerOptions objectAtIndex:row];
+    }
+    else if (pickerView.tag == sexPickerTag)
+    {
+        return [sexPickerOptions objectAtIndex:row];
+    }
+    else if (pickerView.tag == autoCategoryPickerTag)
+    {
+        return [autoCategoryPickerOptions objectAtIndex:row];
+    }
+    else if (pickerView.tag == autoPowerPickerTag)
+    {
+        return [autoPowerPickerOptions objectAtIndex:row];
+    }
+    
+    return @"Unknown title";
 }
+
+- (void) pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    if (pickerView.tag == insuranceCompanyPickerTag)
+    {
+        insuranceCompanyField.text = (NSString *)[insuranceCompanyPickerOptions objectAtIndex:row];
+    }
+    else if (pickerView.tag == sexPickerTag)
+    {
+        sexField.text = (NSString *)[sexPickerOptions objectAtIndex:row];
+    }
+    else if (pickerView.tag == autoCategoryPickerTag)
+    {
+        autoCategoryField.text = (NSString *)[autoCategoryPickerOptions objectAtIndex:row];
+    }
+    else if (pickerView.tag == autoPowerPickerTag)
+    {
+        autoPowerField.text = (NSString *)[autoPowerPickerOptions objectAtIndex:row];
+    }
+}
+
+
+
+#pragma mark -
+#pragma mark UIPickerViewDataSource
+
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 1;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    if (pickerView.tag == insuranceCompanyPickerTag)
+    {
+        return insuranceCompanyPickerOptions.count;
+    }
+    else if (pickerView.tag == sexPickerTag)
+    {
+        return sexPickerOptions.count;
+    }
+    else if (pickerView.tag == autoCategoryPickerTag)
+    {
+        return autoCategoryPickerOptions.count;
+    }
+    else if (pickerView.tag == autoPowerPickerTag)
+    {
+        return autoPowerPickerOptions.count;
+    }
+    
+    return 1;
+}
+
+#pragma mark -
+
+
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
