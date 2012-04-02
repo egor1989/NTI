@@ -82,6 +82,11 @@
 		2745ACFE152A344400253BF2 /* CrittercismRootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2745ACB4152A344400253BF2 /* CrittercismRootViewController.xib */; };
 		2745ACFF152A344400253BF2 /* CrittercismViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2745ACB5152A344400253BF2 /* CrittercismViewController.xib */; };
 		2745AD01152A347300253BF2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2745AD00152A347300253BF2 /* QuartzCore.framework */; };
+		27637148152A4E8E003FE70B /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 27637145152A4E8E003FE70B /* Icon.png */; };
+		27637149152A4E8E003FE70B /* icon-original.png in Resources */ = {isa = PBXBuildFile; fileRef = 27637146152A4E8E003FE70B /* icon-original.png */; };
+		2763714A152A4E8E003FE70B /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 27637147152A4E8E003FE70B /* Icon@2x.png */; };
+		2763714E152A4F0F003FE70B /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2763714D152A4F0F003FE70B /* Icon.png */; };
+		27637150152A4F16003FE70B /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2763714F152A4F16003FE70B /* Icon@2x.png */; };
 		276C4C9814DEE94D00C469A6 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 276C4C9714DEE94D00C469A6 /* CoreMotion.framework */; };
 		276C4C9B14DEF4FF00C469A6 /* DatabaseActions.m in Sources */ = {isa = PBXBuildFile; fileRef = 276C4C9A14DEF4FF00C469A6 /* DatabaseActions.m */; };
 		2775F53115067E9E00FE08BC /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2775F53015067E9E00FE08BC /* WebViewController.m */; };
@@ -262,6 +267,11 @@
 		2745ACB4152A344400253BF2 /* CrittercismRootViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CrittercismRootViewController.xib; sourceTree = "<group>"; };
 		2745ACB5152A344400253BF2 /* CrittercismViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CrittercismViewController.xib; sourceTree = "<group>"; };
 		2745AD00152A347300253BF2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		27637145152A4E8E003FE70B /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Images/icons/Icon.png; sourceTree = "<group>"; };
+		27637146152A4E8E003FE70B /* icon-original.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon-original.png"; path = "Images/icons/icon-original.png"; sourceTree = "<group>"; };
+		27637147152A4E8E003FE70B /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Images/icons/Icon@2x.png"; sourceTree = "<group>"; };
+		2763714D152A4F0F003FE70B /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = ../Icon.png; sourceTree = "<group>"; };
+		2763714F152A4F16003FE70B /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "../Icon@2x.png"; sourceTree = "<group>"; };
 		276C4C9714DEE94D00C469A6 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		276C4C9914DEF4FF00C469A6 /* DatabaseActions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatabaseActions.h; sourceTree = "<group>"; };
 		276C4C9A14DEF4FF00C469A6 /* DatabaseActions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseActions.m; sourceTree = "<group>"; };
@@ -538,6 +548,18 @@
 			path = Nibs;
 			sourceTree = "<group>";
 		};
+		2763714C152A4E94003FE70B /* Icons */ = {
+			isa = PBXGroup;
+			children = (
+				2763714F152A4F16003FE70B /* Icon@2x.png */,
+				2763714D152A4F0F003FE70B /* Icon.png */,
+				27637145152A4E8E003FE70B /* Icon.png */,
+				27637146152A4E8E003FE70B /* icon-original.png */,
+				27637147152A4E8E003FE70B /* Icon@2x.png */,
+			);
+			name = Icons;
+			sourceTree = "<group>";
+		};
 		276C4C9014DEE6D500C469A6 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -557,6 +579,7 @@
 		276C4C9214DEE6EA00C469A6 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				2763714C152A4E94003FE70B /* Icons */,
 				53A5AE321527593C0093E552 /* green.png */,
 				53A5AE331527593C0093E552 /* red.png */,
 				53F006341507A94F0074156E /* first_screen.jpg */,
@@ -1020,6 +1043,11 @@
 				2745ACFD152A344400253BF2 /* CrittercismGridViewController.xib in Resources */,
 				2745ACFE152A344400253BF2 /* CrittercismRootViewController.xib in Resources */,
 				2745ACFF152A344400253BF2 /* CrittercismViewController.xib in Resources */,
+				27637148152A4E8E003FE70B /* Icon.png in Resources */,
+				27637149152A4E8E003FE70B /* icon-original.png in Resources */,
+				2763714A152A4E8E003FE70B /* Icon@2x.png in Resources */,
+				2763714E152A4F0F003FE70B /* Icon.png in Resources */,
+				27637150152A4F16003FE70B /* Icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
