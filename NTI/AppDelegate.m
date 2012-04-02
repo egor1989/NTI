@@ -80,6 +80,13 @@
     [self.window makeKeyAndVisible];
 
     [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+    
+    
+    [Crittercism initWithAppID:@"4f79a143b093154557000355" 
+                        andKey:@"czvj5ewmgoxin8qsxzrjrgnd1y2b" 
+                     andSecret:@"yjqmmg4ztbnoodvph29cldqvx3ialn1p" 
+         andMainViewController:nil ];
+
 
     return YES;
     

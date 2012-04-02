@@ -110,4 +110,15 @@
     navItem.leftBarButtonItem = nil;	// this will remove the "save" button
 }
 
+-(IBAction) crittercismPressed:(id) sender {
+    [Crittercism showCrittercism:self];
+    NSLog(@"llldldl");
+}
+-(IBAction) crashPressed:(id) sender {
+    [NSException raise:NSInvalidArgumentException
+                format:@"Foo must not be nil"];
+}
+
+
+
 @end

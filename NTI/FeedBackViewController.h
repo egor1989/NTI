@@ -6,6 +6,7 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
+#import "Crittercism.h"
 #import <UIKit/UIKit.h>
 
 @interface FeedBackViewController : UIViewController <UITextViewDelegate, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource> 
@@ -20,6 +21,9 @@
 @property (nonatomic, retain) UITextView *textView;
 
 - (IBAction)rightItem:(id)sender;
+-(IBAction) crittercismPressed:(id) sender;
+-(IBAction) crashPressed:(id) sender;
+
 - (void)doneAction;
 @end
 
