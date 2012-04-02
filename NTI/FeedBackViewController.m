@@ -16,6 +16,20 @@
 {
 	[super viewDidLoad]; 
     [textField becomeFirstResponder];
+    
+    
+    UIPickerView *picker = [[UIPickerView alloc] 
+                            initWithFrame:CGRectZero];
+    picker.delegate = self;
+    picker.dataSource = self;
+    [picker setShowsSelectionIndicator:YES];
+    textField.inputView = picker;
+    
+    NSArray *ThemesOptionsUnsorted = [NSArray arrayWithObjects:@"Germany", @"Austria", @"Swiss", @"Luxembourg", 
+                                  @"Spain", @"Netherlands", @"USA", @"Canada", @"Denmark", @"Great Britain",
+                                  @"Finland", @"France", @"Greece", @"Ireland", @"Italy", @"Norway", @"Portugal",
+                                  @"Poland", @"Slovenia", @"Sweden", nil];
+    ThemesOptions = [ThemesOptionsUnsorted sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
 }
 // called after the view controller's view is released and set to nil.
 // For example, a memory warning which causes the view to be purged. Not invoked as a result of -dealloc.
@@ -32,26 +46,18 @@
 {
 	[super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
 -(void)viewDidDisappear:(BOOL)animated 
 {
     [super viewDidDisappear:animated];
-    //[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
 -(void)keyboardWillShow:(NSNotification *)aNotification 
 {
-	CGRect keyboardRect = [[[aNotification userInfo] objectForKey:UIKeyboardBoundsUserInfoKey] CGRectValue];
-    NSTimeInterval animationDuration = [[[aNotification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-    CGRect frame = self.view.frame;
-    frame.size.height -= keyboardRect.size.height;
-    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
-    [UIView setAnimationDuration:animationDuration];
-    self.view.frame = frame;
-    [UIView commitAnimations];
     
 //	// provide my own Save button to dismiss the keyboard
 	UIBarButtonItem* previewItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
@@ -60,19 +66,6 @@
     navItem.leftBarButtonItem = previewItem;
     
 }
- 
-
--(void)keyboardWillHide:(NSNotification *)aNotification
-{
-   	CGRect keyboardRect = [[[aNotification userInfo] objectForKey:UIKeyboardBoundsUserInfoKey] CGRectValue];
-    NSTimeInterval animationDuration = [[[aNotification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-    CGRect frame = self.view.frame;
-    frame.size.height += keyboardRect.size.height;
-    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
-    [UIView setAnimationDuration:animationDuration];
-    self.view.frame = frame;
-    [UIView commitAnimations];
-}
 
 - (IBAction)rightItem:(id)sender{
     //вставить сюда код отправки текста стефу
@@ -80,7 +73,30 @@
     textField.text = @"";
     [self doneAction];
     
-    //alert сообщение отправлено
+    //сделать alert сообщение отправлено
+}
+#pragma mark -
+#pragma mark UIPickerViewDataSource
+
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 1;
+}
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    return [ThemesOptions count];
+}
+
+#pragma mark -
+#pragma mark UIPickerViewDelegate
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    return [ThemesOptions objectAtIndex:row];
+}
+
+- (void) pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    textField.text = (NSString *)[ThemesOptions objectAtIndex:row];
 }
 
 #pragma mark -

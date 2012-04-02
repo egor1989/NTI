@@ -8,13 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FeedBackViewController : UIViewController <UITextViewDelegate, UITextFieldDelegate> 
+@interface FeedBackViewController : UIViewController <UITextViewDelegate, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource> 
 {
 	IBOutlet UITextView *textView;
     IBOutlet UINavigationItem *navItem; 
     IBOutlet UITextField *textField;
     IBOutlet UIBarButtonItem *rightItem;
-//    IBOutlet UIBarButtonItem *barButton;
+    
+    NSArray *ThemesOptions;
 }
 @property (nonatomic, retain) UITextView *textView;
 
