@@ -83,18 +83,26 @@ const int autoPowerPickerTag = 4;
 {
     if (pickerView.tag == insuranceCompanyPickerTag)
     {
+        if ([insuranceCompanyField.text isEqualToString:@""]) 
+            insuranceCompanyField.text = [insuranceCompanyPickerOptions objectAtIndex:row];
         return [insuranceCompanyPickerOptions objectAtIndex:row];
     }
     else if (pickerView.tag == sexPickerTag)
     {
+        if ([sexField.text isEqualToString:@""]) 
+            sexField.text = [sexPickerOptions objectAtIndex:row];
         return [sexPickerOptions objectAtIndex:row];
     }
     else if (pickerView.tag == autoCategoryPickerTag)
     {
+        if ([autoCategoryField.text isEqualToString:@""]) 
+            autoCategoryField.text = [autoCategoryPickerOptions objectAtIndex:row];
         return [autoCategoryPickerOptions objectAtIndex:row];
     }
     else if (pickerView.tag == autoPowerPickerTag)
     {
+        if ([autoPowerField.text isEqualToString:@""]) 
+            autoPowerField.text = [autoPowerPickerOptions objectAtIndex:row];
         return [autoPowerPickerOptions objectAtIndex:row];
     }
     
