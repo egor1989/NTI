@@ -6,6 +6,7 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
+
 #import "IterviewViewController.h"
 
 const int insuranceCompanyPickerTag = 1;
@@ -65,6 +66,12 @@ const int autoPowerPickerTag = 4;
     autoCategoryPickerOptions       = [NSArray arrayWithObjects:@"A", @"B", @"C", @"D", @"E", nil];
     autoPowerPickerOptions          = [NSArray arrayWithObjects:@"80-100 л.с.", @"100-120 л.с.", @"120-140 л.с.", nil];
     
+    
+    [[NSNotificationCenter defaultCenter]	
+     addObserver: self
+     selector: @selector(sync)
+     name: @"sync"
+     object: nil];
 }
 
 
@@ -94,6 +101,7 @@ const int autoPowerPickerTag = 4;
     return @"Unknown title";
 }
 
+
 - (void) pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
     if (pickerView.tag == insuranceCompanyPickerTag)
@@ -113,8 +121,6 @@ const int autoPowerPickerTag = 4;
         autoPowerField.text = (NSString *)[autoPowerPickerOptions objectAtIndex:row];
     }
 }
-
-
 
 #pragma mark -
 #pragma mark UIPickerViewDataSource
