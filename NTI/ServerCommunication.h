@@ -17,6 +17,9 @@
     BOOL forgotPassword;
     BOOL errors;
     NSString *info;
+    NSString *deviceName;
+    NSString *systemVersion;
+    NSString *model;
     
 }
 - (void)regUser:(NSString *)login password:(NSString *)password email:(NSString *)email;
@@ -28,6 +31,7 @@
 - (NSString *) refreshCookie;
 - (BOOL)checkCookieExpires;
 - (NSString*) getStringBetweenStrings: (NSString *) main first:(NSString *)first second: (NSString*) second;
+- (void)infoAboutDevice;
 
 @property (nonatomic) BOOL errors;
 

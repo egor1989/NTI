@@ -207,7 +207,7 @@
 
 
 - (void) authUser:(NSString *)login secret:(NSString *)message{
-    
+    [self infoAboutDevice];
     
     NSString *data = [NSString stringWithFormat:(@"data={\"method\":\"NTIauth\",\"params\":{\"login\":\"%@%@%@%@"),login, @"\",\"secret\":\"", message,@"\"}}"];
     
@@ -260,6 +260,17 @@
         return NO;
     } 
     else return YES;
+}
+
+- (void) infoAboutDevice{
+
+    deviceName = [[UIDevice currentDevice] name];
+    //systemVersion = [[[UIDevice currentDevice] systemName] stringByAppendingFormat: [[UIDevice currentDevice] systemVersion], nil];
+    systemVersion = [[UIDevice currentDevice] systemVersion];
+    model = [[UIDevice currentDevice] model];
+    
+    NSLog(@"%@; %@; %@", deviceName, model, systemVersion);
+    
 }
 
 
