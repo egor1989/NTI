@@ -67,7 +67,7 @@
     rotation.textAlignment = UITextAlignmentRight;
     rotation.text = @"?";
     
-    recordImage = [[UIImageView alloc] initWithFrame:CGRectMake(200.0f, 7.0f, 27.0f, 27.0f)];
+    recordImage = [[UIImageView alloc] initWithFrame:CGRectMake(280.0f, 7.0f, 27.0f, 27.0f)];
     
     if ([myAppDelegate canWriteToFile]) [recordImage setImage:[UIImage imageNamed:@"green.png"]];
     else [recordImage setImage:[UIImage imageNamed:@"red.png"]];
@@ -216,12 +216,7 @@
                 cell.textLabel.text=@"Запись";
                 [cell addSubview:recordImage];
                 
-                recordButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-                [recordButton setFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];
-                recordButton.titleLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:15];
-                cell.accessoryView = recordButton;
-                [recordButton setTitle:@"Start" forState:UIControlStateNormal];
-                [recordButton addTarget:self action:@selector(recordButton:) forControlEvents:UIControlEventTouchDown];
+                
             }
             return cell;
         }
@@ -381,25 +376,7 @@
     [self presentModalViewController: authView animated:YES];
 }
 
-- (IBAction)recordButton:(id)sender{
-    BOOL writeAction;
-    if([recordButton.titleLabel.text isEqualToString:@"Start"]) {
-         [recordButton setTitle:@"Stop" forState:UIControlStateNormal];
-        writeAction = YES;
-        
-        [[NSNotificationCenter defaultCenter]	postNotificationName:	@"recordAction" 
-                                                            object:  nil
-                                                          userInfo: nil];
-        
-     }
-    else {
-        [recordButton setTitle:@"Start" forState:UIControlStateNormal];
-        writeAction = NO;
-        [[NSNotificationCenter defaultCenter]	postNotificationName:	@"recordAction" 
-                                                            object:  nil
-                                                          userInfo: nil];
-    }
-}
+
 
 #pragma mark - Table view delegate
 

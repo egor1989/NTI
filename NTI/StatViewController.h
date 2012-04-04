@@ -22,7 +22,7 @@
     UILabel *deceleration;
     UILabel *rotation;
     UILabel *recordLabel;
-    IBOutlet UIButton *recordButton;
+
     UIImageView *recordImage;
     
 }

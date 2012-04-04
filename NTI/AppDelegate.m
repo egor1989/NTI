@@ -42,8 +42,7 @@
     canWriteToFile = YES;//?
     [self checkSpeedTimer];
     
-   // recordAction *recording = [[recordAction alloc] initRecording];
-        
+           
     motionManager = [[CMMotionManager alloc] init];
     if ([motionManager isGyroAvailable]) {
         motionManager.deviceMotionUpdateInterval = 1.0/accelUpdateFrequency;
