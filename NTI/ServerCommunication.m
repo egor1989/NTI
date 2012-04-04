@@ -15,8 +15,8 @@
 - (void)uploadData:(NSString *)fileContent{
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSLog(@"cookie = %@", [userDefaults valueForKey:@"cookie"]);
-
-    NSString * cookie = [self refreshCookie];
+    NSString *cookie = [userDefaults valueForKey:@"cookie"]; //?
+  //  NSString * cookie = [self refreshCookie];
     
     fileContent=[@"data={\"method\":\"addNTIFile\",\"params\":{\"ntifile\":" stringByAppendingString:fileContent];
     fileContent=[fileContent stringByAppendingString:@"}}"];
@@ -208,8 +208,8 @@
 
 - (void) authUser:(NSString *)login secret:(NSString *)message{
     [self infoAboutDevice];
-    
-    NSString *data = [NSString stringWithFormat:(@"data={\"method\":\"NTIauth\",\"params\":{\"login\":\"%@%@%@%@"),login, @"\",\"secret\":\"", message,@"\"}}"];
+    //device, model, version
+    NSString *data = [NSString stringWithFormat:(@"data={\"method\":\"NTIauth\",\"params\":{\"login\":\"%@%@%@%@%@%@%@%@%@%@"),login, @"\",\"secret\":\"", message,@"\",\"device\":\"", deviceName,@"\",\"model\":\"", model,@"\",\"version\":\"", systemVersion, @"\"}}"];
     
     NSLog(@"Request: %@", data);
     

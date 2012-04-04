@@ -23,7 +23,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {
-
+    NSLog(@"open2");
     
     
         //[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:YES];
@@ -263,6 +263,7 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
+    NSLog(@"background");
     /*
      Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
      If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
@@ -278,6 +279,7 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+    NSLog(@"open");
     if ([[NSUserDefaults standardUserDefaults] stringForKey:@"login"] == nil){
     UIStoryboard *storyboard = self.window.rootViewController.storyboard;
     UIViewController *loginController = [storyboard instantiateViewControllerWithIdentifier:@"AuthViewController"];
@@ -287,11 +289,15 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
+    
+    NSLog(@"close");
     /*
      Called when the application is about to terminate.
      Save data if appropriate.
      See also applicationDidEnterBackground:.
      */
 }
+
+
 
 @end
