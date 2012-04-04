@@ -38,9 +38,8 @@
 
     lastLoc = [[CLLocation alloc] init];
     kmch5 = NO;
-    l5Km = 0;
-    m5Km = 0;
     allDistance = 0;
+    canWriteToFile = YES;//?
     [self checkSpeedTimer];
     
    // recordAction *recording = [[recordAction alloc] initRecording];
@@ -63,19 +62,6 @@
     oldHeading          = 0;
     offsetG             = 0;
     newCompassTarget    = 0;
- 
-    //firstViewController = [storyboard instantiateViewControllerWithIdentifier:@"authAndRegView"];
-   // if ([userDefaults stringForKey:@"login"] == nil)  {        
-        //[self.window.rootViewController performSegueWithIdentifier:@"authAndRegView" sender:self];
-        //[self.window.rootViewController.storyboard instantiateViewControllerWithIdentifier:@"TabBarController"];
-       // AuthViewController *authView = [[UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil] instantiateViewControllerWithIdentifier:@"StatViewController"];
-       // [self.window.rootViewController performSegueWithIdentifier:@"authView" sender:self];
-      //  UIStoryboard *storyboard = self.window.rootViewController.storyboard;
-      //  UIViewController *loginController = [storyboard instantiateViewControllerWithIdentifier:@"AuthViewController"];
-       // [self.window.rootViewController presentModalViewController:loginController animated:NO];
-        
-    //}
-
     
     [self.window makeKeyAndVisible];
 
@@ -93,21 +79,24 @@
 }
 
 - (void)checkSpeedTimer{
-    [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(timerFired:) userInfo:nil repeats:NO];
-
+    moreThanLimit = NO;
     [self startGPSDetect];
+    [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(timerFired:) userInfo:nil repeats:NO];
 }
 
 -(void) timerFired: (NSTimer *)timer{
-    NSLog(@"m=%i l=%i", m5Km,l5Km);
+    NSLog(@"moreThanLimit = %@", moreThanLimit?@"YES":@"NO");
     NSLog(@"30sec");
-    if (l5Km>m5Km) {
-        //[self stopGPSDetect];
+    if (!moreThanLimit) {
+        [self stopGPSDetect];
+        [self stopMotionDetect];
+        canWriteToFile = NO;
+        [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
         [self fiveMinTimer];
 
     }
     else {
-        [self startGPSDetect];
+        [self startMotionDetect];
         kmch5 = YES;
         canWriteToFile = YES;
         [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
@@ -119,9 +108,9 @@
 
 -(void)fiveMinTimer{
     NSLog(@"5min");
+    
     if (kmch5) {
-        l5Km = 0;
-        m5Km = 0;
+        moreThanLimit = NO;
         kmch5 = NO;
         [NSTimer scheduledTimerWithTimeInterval:300 target:self selector:@selector(checkAfterFiveMin) userInfo:nil repeats:NO];
     }
@@ -129,8 +118,8 @@
 }
 
 -(void)checkAfterFiveMin{
-    NSLog(@"after 5 min m=%i l=%i", m5Km,l5Km);
-    if (l5Km>m5Km) {
+    NSLog(@"after 5 min moreThanLimit = %@", moreThanLimit?@"YES":@"NO");
+    if (!moreThanLimit) {
         [self checkSpeedTimer];
         canWriteToFile = NO;
         [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
@@ -167,9 +156,8 @@
     CLLocationDistance meters = [newLocation distanceFromLocation:oldLocation];
     if (meters<0) meters = 0;
     allDistance += meters;
-    if (newLocation.speed > SPEED) m5Km++;
-    else l5Km++;
-    
+    if (newLocation.speed > SPEED) moreThanLimit = YES;
+
     if (kmch5) 
         if (newLocation.speed < SPEED) [self fiveMinTimer];
     
@@ -231,6 +219,7 @@
 //motion
 
 -(void) startMotionDetect{
+    NSLog(@"startMotionDetect");
     [motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue currentQueue] 
                                        withHandler:^(CMDeviceMotion *motion, NSError *error) {
                                            CMAttitude *currentAttitude = motion.attitude;
@@ -254,6 +243,11 @@
                                                                                                object:  nil
                                                                                              userInfo:dict];
                                        }];
+}
+
+- (void)stopMotionDetect {
+    NSLog(@"stopMotionDetect");
+    [motionManager stopDeviceMotionUpdates];
 }
 
 

@@ -164,7 +164,7 @@
     
     NSLog(@"sendData login = %@ message = %@ email = %@", login, password, email);
     
-    NSString *data = [NSString stringWithFormat:(@"%@%@%@%@%@%@%@"),@"data={\"method\":\"NTIregister\",\"params\":{\"login\":\"",login, @"\",\"password\":\"", password,@"\",\"email\":\"",email, @"\"}}"];
+    NSString *data = [NSString stringWithFormat:(@"%@%@%@%@%@"),@"data={\"method\":\"NTIregister\",\"params\":{\"login\":\"",login, @"\",\"password\":\"", password, @"\"}}"];
     NSLog(@"Request: %@", data);
     request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
                                   timeoutInterval:60.0];
@@ -208,7 +208,6 @@
 
 - (void) authUser:(NSString *)login secret:(NSString *)message{
     
-    // NSLog(@"sendData login = %@ message = %@", login, message);
     
     NSString *data = [NSString stringWithFormat:(@"data={\"method\":\"NTIauth\",\"params\":{\"login\":\"%@%@%@%@"),login, @"\",\"secret\":\"", message,@"\"}}"];
     
@@ -247,7 +246,7 @@
         
         //на таб
     }
-   // [self showResult];
+
     
 }
 

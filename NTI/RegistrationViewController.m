@@ -76,7 +76,15 @@
         // отправка на сервер
         ServerCommunication *serverCommunication = [[ServerCommunication alloc] init];
         [serverCommunication regUser:nameField.text password:encryptedPass email:emailField.text];
-        //[serverCommunication checkErrors: serverAnswer];
+        
+        
+        if (![serverCommunication errors]) {
+            
+            IterviewViewController *interviewView = [self.storyboard instantiateViewControllerWithIdentifier: @"InterviewViewController"];
+            interviewView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+            [self presentModalViewController: interviewView animated:YES];
+        }
+
 
     }
     

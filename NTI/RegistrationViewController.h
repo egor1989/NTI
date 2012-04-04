@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "EncryptionData.h"
 #import "ServerCommunication.h"
-
+#import "IterviewViewController.h"
 @interface RegistrationViewController : UIViewController{
     
     IBOutlet UITextField *emailField;
