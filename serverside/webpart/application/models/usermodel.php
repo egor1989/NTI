@@ -43,8 +43,19 @@
 				return false;
 			}
 		}
-		
-		
+		function get_all_unregdata()
+		{
+			$query = $this->db->query("Select Id,Insert_Time from NTIFile where UID=-3 group by Insert_Time");
+			if($query->num_rows()>0)
+			{
+			
+			   return $query->result_array();
+			}
+			else
+			{
+				return 0;
+			}
+		}
 		
 		function checkrealation($id,$username)
 		{
@@ -119,6 +130,7 @@
 				//Теперь сортируем его !
 				$k=0;
 				//Для начала удалим всё, что содержит приоритет 0
+		
 				for($i=0;$i<count($user);$i++)
 				{
 						for($j=0;$j<count($user)-1;$j++)
@@ -127,7 +139,7 @@
 						{
 							$temp=$user[$j+1];
 							$user[$j+1]=$user[$j];
-							$user[$j]=$user[$j+1];
+							$user[$j]=$temp;
 						}
 						
 					
@@ -135,6 +147,7 @@
 				}
 				//Отсортировали пузырьком 
 				//Формируем новый массив, в котором только самые нужные значения 
+	
 				$j=0;
 				
 				for($i=0;$i<count($user);$i++)
@@ -146,8 +159,7 @@
 					}
 					
 				}
-				echo "array";
-				print_r($ret_arr);
+
 				if(empty($ret_arr))return false;
 				else
 				 return $ret_arr;
@@ -198,7 +210,7 @@
 			if($query->num_rows()>0)return -2;
 			
 			//Теперь проверяем на возможнось создания повторной заявки 
-			$query = $this->db->query("Select * from NTIRequests where UserId=$userid and ExpertId=$id and Status<3");
+			$query = $this->db->query("Select * from NTIRequests where UserId=$userid and ExpertId=$id and (Status=1 or Status=2)");
 			if($query->num_rows()>0)return -3;
 		
 			//Отлично , значит заявка у нас не создана и отношения нет
@@ -215,22 +227,186 @@
 			
 		}
 		
+			
+		function RemoveRelationQuery($id,$username)
+		{
+			//Сначала получаем id пользователя относительно его имени
+			$query = $this->db->query("Select * from NTIUsers where Login=".$this->db->escape($username));
+			if($query->num_rows()>0){
+			
+				foreach($query->result() as $row){
+					$userid= $row->Id;
+					
+				}
+			}
+			else
+			{
+				return -1;
+			}
+			//Теперь проверяем , может уже была создано отношение?
+			$query = $this->db->query("Select * from NTIRelations where UserID=$userid and ExpertID=$id");
+			if($query->num_rows()>0)return -2;
+			
+			//Теперь проверяем на возможнось создания повторной заявки 
+			$query = $this->db->query("Select * from NTIRequests where UserId=$userid and ExpertId=$id and Status=1");
+			if($query->num_rows()==0)return -3;
 		
+			//Отлично , значит заявка у нас не создана и отношения нет
+			//Вставляем новую запись
+			$data = array(
+				'Status' => 4
+						);
+$this->db->where('UserId', $userid);
+$this->db->where('ExpertId', $id);
+
+				$this->db->update('NTIRequests', $data); 
+				
+				return 1;
+			
+		}
+		
+		
+		function DeleteRelation($id,$username)
+		{
+			//Сначала получаем id пользователя относительно его имени
+			$query = $this->db->query("Select * from NTIUsers where Login=".$this->db->escape($username));
+			if($query->num_rows()>0){
+			
+				foreach($query->result() as $row){
+					$userid= $row->Id;
+					
+				}
+			}
+			else
+			{
+				return -1;
+			}
+			//Теперь проверяем , есть ли такая 
+			$query = $this->db->query("Select * from NTIRelations where UserID=$userid and ExpertID=$id");
+			if($query->num_rows()==0)return -2;
+			
+			//Теперь проверяем на возможнось создания повторной заявки 
+			$query = $this->db->query("Select * from NTIRequests where UserId=$userid and ExpertId=$id and (Status=1 or Status=2)");
+			if($query->num_rows()>0)return -3;
+		
+			//Отношение есть
+			//Запросов нет
+			//Вставляем новую запись
+				$data = array(
+				'UserId' => $userid ,
+				'ExpertId' => $id  ,
+				'Status' => 2
+						);
+
+				$this->db->insert('NTIRequests', $data); 
+				
+				return 1;
+			
+		}
+		//Загружает все активные тикеты пользователя
+		function load_all_tickets($id)
+		{
+			$query = $this->db->query("SELECT * FROM `NTIRequests`  Join NTIUsers on NTIRequests.UserId=NTIUsers.Id where NTIRequests.Status<3 and  NTIRequests.ExpertID=$id order by Insert_time" );
+			if($query->num_rows()>0)
+			{
+			
+				return $query->result_array();
+			
+			}
+			else
+			{
+				return false;;
+			}
+		}
+		
+		function load_expert_users($id)
+		{
+			$query = $this->db->query("SELECT * FROM `NTIRelations`  Join NTIUsers on NTIRelations.UserId=NTIUsers.Id where NTIRelations.ExpertID=$id order by Login" );
+			if($query->num_rows()>0)
+			{
+			
+				return $query->result_array();
+			
+			}
+			else
+			{
+				return false;;
+			}
+		}
+		
+		function LoadUsers()
+		{
+			$query = $this->db->query("SELECT * FROM `NTIUsers` where Rights=0 order by Id" );
+			if($query->num_rows()>0)
+			{
+			
+				return $query->result_array();
+			
+			}
+			else
+			{
+				return false;;
+			}
+		}
+		function LoadExperts()
+		{
+			$query = $this->db->query("SELECT * FROM `NTIUsers` where Rights=2 order by Id" );
+			if($query->num_rows()>0)
+			{
+			
+				return $query->result_array();
+			
+			}
+			else
+			{
+				return false;;
+			}
+		}
+		function LoadTickets()
+		{
+			$query = $this->db->query("SELECT * FROM `NTIRequests` where Status<=2" );
+			if($query->num_rows()>0)
+			{
+			
+				return $query->result_array();
+			
+			}
+			else
+			{
+				return false;;
+			}
+		}
+		//Блокирует пользователя
+		function BlockUser($username)
+		{
+						$data = array(
+								'Deleted' => 1
+									 );
+						$this->db->where('Login', $username);
+
+				$this->db->update('NTIUsers', $data); 
+				return 1;
+		}
+	//Разблокировка  пользователя
+		function UnBlockUser($username)
+		{
+						$data = array(
+								'Deleted' => 0
+									 );
+						$this->db->where('Login', $username);
+
+				$this->db->update('NTIUsers', $data); 
+				return 1;
+		}
 		//registration
 		function registration($userData){
-			extract($userData);
-				if(!preg_match("/^[a-zA-Z0-9]+$/",$login)){return array('login' => -1, 'password' => -1,'result'=>-2);}
-				if(!preg_match("/^([a-z0-9_\.-]+)@([a-z0-9_\.-]+)\.([a-z\.]{2,6})$/",$email))return array('login' => -1, 'password' => -1,'result'=>-3);
-				$login=mysql_real_escape_string($login);
+				extract($userData);
+				$email=mysql_real_escape_string($email);
 				$name=mysql_real_escape_string($fname);
 				$surname=mysql_real_escape_string($sname);
-				
-				$email=mysql_real_escape_string($email);
-				
-				$usercheck = array('Login' => $login);
 				$emailcheck = array('Email' => $email);
 				
-				$query = $this->db->get_where('NTIUsers',$usercheck);
+				$query = $this->db->get_where('NTIUsers',$emailcheck);
 
 				if ($query->num_rows() > 0)
 				{
@@ -238,23 +414,68 @@
 					
 				}
 				
-								$query = $this->db->get_where('NTIUsers',$emailcheck);
-
-				if ($query->num_rows() > 0)
-				{
-					return array('login' => -1, 'password' => -1,'result'=>-1);
-					
-				}
+				$userData = array('Login' => $email ,'Password' => hash('sha256', $password),'FName' => $name ,'SName' => $surname,'Email'=>$email);
 				
-				$userData = array('Login' => $login ,'Password' => hash('sha256', $password),'FName' => $name ,'SName' => $surname,'Email'=>$email);
+				$query=$this->db->insert('NTIUsers', $userData);
+				//Получение ID пользователя, которого только что вставили
+				$userID=$this->db->insert_id(); 
+				//Генерируем рандомную строку 
+				$email_key= random_string('alnum', 64);
+				$unixtimestamp=time();
+				$userEmailCheck = array('UserId' => $userID ,'Unixtimestamp' => $unixtimestamp,'Key' => $email_key);
+				$query=$this->db->insert('EmailApproveKey', $userEmailCheck); 
 				
-				$query=$this->db->insert('NTIUsers', $userData); 
-				if($query){
-						return array('login' => $login, 'password' => $password,'result'=>1);
-				}
-			
-			return false;
+				
+				
+				return array('login' => $email, 'password' => $password,'result'=>1,'emailkey'=>$email_key);
+						
 		}
 	
+		
+		
+		function CheckRelation($key){
+			//Здесь также происходит с помощью Codeigniter фильтрация на инъекции
+				$emailcheck = array('Key' => $key,'Deleted'=>0);	
+				$query = $this->db->get_where('EmailApproveKey',$emailcheck);
+
+				if ($query->num_rows() > 0)
+				{
+						//Нашли значение 
+						//Теперь проверяем его на жизнеспособность
+						foreach($query->result() as $row)
+						{
+									$userid = $row->UserId;
+									$rowID = $row->Id;
+									$Live = $row->Unixtimestamp;
+						}
+						if(time()-$Live>1000000)
+						{
+							//Удаляем
+							$data = array('Deleted' => 1);
+							$this->db->where('Id', $rowID);
+							$this->db->update('EmailApproveKey', $data); 
+							return -1;
+						}
+						else
+						{
+							$data = array('Deleted' => 1);
+							$this->db->where('Id', $rowID);
+							$this->db->update('EmailApproveKey', $data); 
+							
+							$data = array('Rights' => 1);
+							$this->db->where('Id', $userid);
+							$this->db->update('NTIUsers', $data); 
+							return 1;
+						}
+						
+				}
+				else
+				{
+					return -1;
+				}
+						
+		}
+	
+		
 		
 	}

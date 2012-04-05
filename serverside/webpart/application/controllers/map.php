@@ -3,7 +3,7 @@
 class Map extends CI_Controller {
 	public function index()
 	{	
-		$new_data['map_type']=2;
+		$new_data['map_type']=3;
 		$new_data['menu']=1;
 		$new_data['library']=2;
 						$this->load->library('session');
@@ -13,7 +13,38 @@ class Map extends CI_Controller {
 		$this->load->view('footer');
     
 	}
+	public function full()
+	{	
+		$new_data['map_type']=3;
+		$new_data['menu']=1;
+		$new_data['library']=2;
+		$this->load->library('session');
+		$this->session->set_userdata('map',"beta");
+		$this->load->view('fullheader',$new_data);
+		$this->load->view('fullmap',$new_data);
+		$this->load->view('fullfooter',$new_data);
+    
+	}
+		public function viewdata()
+	{	
+		$new_data['map_type']=3;
+		$new_data['menu']=1;
+		$new_data['library']=2;
+						$this->load->library('session');
+		$this->session->set_userdata('map',"beta");
+		
+		
+		$this->load->helper('url');
+		$urls=$this->uri->segment(3);
+	$this->session->set_userdata('page',$urls);
 
+		$this->load->view('header',$new_data);
+		$this->load->view('map_content',$new_data);
+		$this->load->view('footer');
+    
+	}
+	
+	
 	function load()
 	{
 

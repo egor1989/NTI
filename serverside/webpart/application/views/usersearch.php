@@ -32,4 +32,20 @@
 			}
 		?>
 		</table>
+		
+		Ваши заявки, находящиеся в обработке<br/>
+		<?if($tickets){?>
+		<table border=1>
+		<?
+			foreach ($tickets as $row)	
+			{ 
+				echo "<tr><td><a href=/user/viewuser/".$row['Login'].">".$row['Login']."</a></td><td>".$row['FName']."</td><td>".$row['SName']."</td> </tr>";
+			}
+		?>
+		</table>
+		<?}
+		else
+		{?>
+		Заявок не найдено 
+		<?}?>
 </div>

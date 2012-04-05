@@ -92,18 +92,18 @@
           <a href="/"><div class="logo"><img src="/css/images/logo2.png"></div></a>
  <?if(!isset($show_menu))
  {//Забил хуй на хуки ядра , тк пока не надо - статичность же!
- if($rights==2)
+ if(isset($rights) && $rights==2)
  {?>         
 <div id="menu" class="menu"> 
 	<div id="menuitems" class="menuitems"> 
 		<div id="menuitem1" class="menuitem selectedItem"><a href="/user/search" class="hrefmenu" >Поиск</a></div> 
-		<div id="menuitem2" class="menuitem "><a href="/" class="hrefmenu" >Просмотр пользователей</a></div> 
+		<div id="menuitem2" class="menuitem "><a href="/user/navigate" class="hrefmenu" >Просмотр пользователей</a></div> 
 		<div id="menuitem3" class="menuitem "><a href="/" class="hrefmenu" >Изменить информацию</a></div> 
 		<div id="menuitem4" class="menuitem "><a href="/user/logout" class="hrefmenu" >Выход</a></div> 
 	</div>
 </div> 
 <?}
-else if($rights==3){?>
+else if(isset($rights) && $rights==3){?>
 <div id="menu" class="menu"> 
 	<div id="menuitems" class="menuitems"> 
 		<div id="menuitem1" class="menuitem selectedItem"><a href="/user/search" class="hrefmenu" >Поиск</a></div> 
