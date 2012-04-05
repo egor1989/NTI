@@ -9,10 +9,6 @@
 		
 		function authorization($user){
 			$login = $user['login'];
-				if(!preg_match("/^[a-zA-Z0-9]+$/",$login))return false;
-				$login= mysql_real_escape_string($login);
-
-
 			$password=hash('sha256', $user['password']);
 			$query = $this->db->get_where('NTIUsers', array('Login' => $login, 'Password' => $password));
 			if($query->num_rows()>0){
@@ -475,7 +471,84 @@ $this->db->where('ExpertId', $id);
 				}
 						
 		}
+		function passwordremember($email)
+	{
+				$password= random_string('alnum', 64);
+				$emailcheck = array('Login' => $email);
+				
+				$query = $this->db->get_where('NTIUsers',$emailcheck);
+
+				if ($query->num_rows() == 0)
+				{
+					return array('result'=>-1);
+					
+				}
+			   foreach($query->result() as $row)
+				{
+									$userid = $row->Id;
+				}
+				$unixtime=time();
+				
+				$userData = array('Key' => $password ,'UserId' => $userid ,'UnixTimeStamp' => $unixtime);
+				
+				$query=$this->db->insert('PasswordRecovery', $userData);
+					
+				return array('Key' => $password, 'result' => 1);
+			
+			
+			
+			
+	}
+			function make_new_password_by_ukey($password,$userkey)
+	{
+			
+		//Для начала проверяем существование ключа
+				$data=array('Key' => $userkey,'Deleted'=>0);
+				$query = $this->db->get_where('PasswordRecovery',$data);
+
+				if ($query->num_rows() >0)
+				{
+						foreach($query->result() as $row)
+						{
+									$userid = $row->UserId;
+									$rowID = $row->Id;
+									$Live = $row->UnixTimeStamp;
+						}
+						if(time()-$Live>1000000)
+						{
+							//Удаляем
+							$data = array('Deleted' => 1);
+							$this->db->where('Id', $rowID);
+							$this->db->update('PasswordRecovery', $data); 
+							return -1;
+						}
+						else
+						{
+							$data = array('Deleted' => 1);
+							$this->db->where('Id', $rowID);
+							$this->db->update('PasswordRecovery', $data); 
+							
+							$password=hash('sha256', $password);
+							$data = array('Password' => $password);
+							$this->db->where('Id', $userid);
+							$this->db->update('NTIUsers', $data); 
+							return 1;
+						}
+					
+				}
+				else
+				{
+					return -1;
+					
+				}
+				
+			  
+				
 	
-		
+			
+				
+			
+			
+	}
 		
 	}

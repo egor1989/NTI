@@ -18,10 +18,15 @@
 				echo "<center><td>" . form_submit(array('name'=>'registration', 'id'=>'registration', 'value'=>'Войти')). "</td></center>";
 			echo "</tr>";
 			echo "<tr>";
-				echo "<td></td>";
+				echo "<td>";
+				
+				echo "<a href='/remember'>Восстановление пароля</a>";
+				
+				echo"</td>";
 
 			echo "</tr>";
 		echo "</table>";	
 	?>
+	
 	</div>
 			</div>
