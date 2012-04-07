@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
 #import "AuthViewController.h"
+#import "RecordAction.h"
 
 
 #define myAppDelegate (AppDelegate*) [[UIApplication sharedApplication] delegate]
@@ -22,6 +23,7 @@
     UILabel *deceleration;
     UILabel *rotation;
     UILabel *recordLabel;
+    IBOutlet UIButton *sendButton;
 
     UIImageView *recordImage;
     
@@ -31,7 +33,7 @@
 
 - (void) speedUpdate;
 - (IBAction)loginButton:(id)sender;
-- (IBAction)recordButton:(id)sender;
+- (IBAction)sendButton:(id)sender;
 - (void) pickOne:(id)sender;
 - (void)changeImage;
 
