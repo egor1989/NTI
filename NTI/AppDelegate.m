@@ -15,7 +15,7 @@
 
 @implementation AppDelegate
 
-@synthesize window = _window, lastLoc, course, trueNorth, north, allDistance, canWriteToFile;
+@synthesize window = _window, lastLoc, course, trueNorth, north, allDistance, canWriteToFile, dict;
 
 #define accelUpdateFrequency 3.0	
 
@@ -26,7 +26,17 @@
     NSLog(@"open2");
     
     
+    
         //[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:YES];
+    DatabaseActions *databaseAction = [[DatabaseActions alloc] initDataBase];
+    
+    
+    if (databaseAction !=nil) {
+        NSLog(@"БД есть или создана");
+    }
+    else NSLog(@"БД сломалась");
+    
+    recordAction = [[RecordAction alloc] init];
     
     locationManager=[[CLLocationManager alloc] init];
     locationManager.delegate=self;
@@ -40,6 +50,8 @@
     kmch5 = NO;
     allDistance = 0;
     canWriteToFile = YES;//?
+    [recordAction startOfRecord];
+    
     [self checkSpeedTimer];
     
            
@@ -56,7 +68,6 @@
     
     
     [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(updater:) userInfo:nil repeats:YES];
-    //[NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(calibrate:) userInfo:nil repeats:YES];
     
     oldHeading          = 0;
     offsetG             = 0;
@@ -236,11 +247,8 @@
                                                yawDegrees = yawDegrees + 360;
 
                                            }
-                                           NSDictionary* dict = [NSDictionary dictionaryWithObject: motion
-                                                                                            forKey: @"motion"];
-                                           [[NSNotificationCenter defaultCenter]	postNotificationName:	@"motionNotification" 
-                                                                                               object:  nil
-                                                                                             userInfo:dict];
+                                          dict = [NSDictionary dictionaryWithObject: motion forKey: @"motion"];
+                                           [[NSNotificationCenter defaultCenter] postNotificationName: @"motionNotification" object:  nil];
                                        }];
 }
 

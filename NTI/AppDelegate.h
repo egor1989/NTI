@@ -11,6 +11,8 @@
 #import <CoreLocation/CoreLocation.h>
 #import <CoreMotion/CoreMotion.h>
 #import "AuthViewController.h"
+#import "DatabaseActions.h"
+#import "RecordAction.h"
 
 
 
@@ -37,7 +39,8 @@
    // NSInteger m5Km;
     BOOL canWriteToFile;
     BOOL moreThanLimit;
-
+   // NSDictionary *dict;
+    RecordAction *recordAction;
 }
 
 -(void)stopGPSDetect;
@@ -61,6 +64,7 @@
 @property (nonatomic) float north;
 @property (readonly, nonatomic) CLLocationDistance allDistance;
 @property (nonatomic) BOOL canWriteToFile;
+@property (nonatomic) NSDictionary *dict;
 
 
 

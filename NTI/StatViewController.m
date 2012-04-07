@@ -83,6 +83,7 @@
 - (void)changeImage{
     if ([myAppDelegate canWriteToFile]) [recordImage setImage:[UIImage imageNamed:@"green.png"]];
     else [recordImage setImage:[UIImage imageNamed:@"red.png"]];
+    
 }
 
 - (void)viewDidUnload

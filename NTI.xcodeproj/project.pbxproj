@@ -106,6 +106,7 @@
 		5361751D1510FE6A00D290F1 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 5361751B1510FE6A00D290F1 /* Reachability.m */; };
 		536175231511098000D290F1 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 536175221511098000D290F1 /* SystemConfiguration.framework */; };
 		536E026F14F00625003A2B15 /* compass.png in Resources */ = {isa = PBXBuildFile; fileRef = 536E026E14F00625003A2B15 /* compass.png */; };
+		5381C8F7153046380012E99D /* RecordAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 5381C8F6153046380012E99D /* RecordAction.m */; };
 		539B29BE14F305C3007E6977 /* gps.png in Resources */ = {isa = PBXBuildFile; fileRef = 539B29BC14F305C3007E6977 /* gps.png */; };
 		539B29BF14F305C3007E6977 /* north.png in Resources */ = {isa = PBXBuildFile; fileRef = 539B29BD14F305C3007E6977 /* north.png */; };
 		53A5AE341527593C0093E552 /* green.png in Resources */ = {isa = PBXBuildFile; fileRef = 53A5AE321527593C0093E552 /* green.png */; };
@@ -300,6 +301,8 @@
 		5361751C1510FE6A00D290F1 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		536175221511098000D290F1 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		536E026E14F00625003A2B15 /* compass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = compass.png; sourceTree = "<group>"; };
+		5381C8F5153046380012E99D /* RecordAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordAction.h; sourceTree = "<group>"; };
+		5381C8F6153046380012E99D /* RecordAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordAction.m; sourceTree = "<group>"; };
 		539B29BC14F305C3007E6977 /* gps.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gps.png; sourceTree = "<group>"; };
 		539B29BD14F305C3007E6977 /* north.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = north.png; sourceTree = "<group>"; };
 		53A5AE321527593C0093E552 /* green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = green.png; path = Images/green.png; sourceTree = "<group>"; };
@@ -760,6 +763,8 @@
 				276C4C9014DEE6D500C469A6 /* ViewControllers */,
 				276C4C9214DEE6EA00C469A6 /* Images */,
 				53E0A77114DEC75D004E3E1B /* Supporting Files */,
+				5381C8F5153046380012E99D /* RecordAction.h */,
+				5381C8F6153046380012E99D /* RecordAction.m */,
 			);
 			path = NTI;
 			sourceTree = "<group>";
@@ -1113,6 +1118,7 @@
 				53D8F584151E0EBA00589D67 /* IterviewViewController.m in Sources */,
 				27CFA5301521EBA300F9AC21 /* FeedBackViewController.m in Sources */,
 				27EDA63B152B117A00679B25 /* MyTextField.m in Sources */,
+				5381C8F7153046380012E99D /* RecordAction.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1172,8 +1178,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Vladislav Efremov (MBL7632743)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vladislav Efremov (MBL7632743)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Vladislav Efremov";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Vladislav Efremov";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -1182,8 +1188,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "945ACF9E-A880-4572-8BB2-D9BAB10DAAE6";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "945ACF9E-A880-4572-8BB2-D9BAB10DAAE6";
+				PROVISIONING_PROFILE = "AE775371-96C8-4B59-9FDB-68EE33146F92";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "AE775371-96C8-4B59-9FDB-68EE33146F92";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};

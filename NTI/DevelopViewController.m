@@ -10,7 +10,7 @@
 
 #define MAX3(a,b,c) ( MAX(a,b)>c ? ((a>b)? 1:2) : 3 )
 #define radianConst M_PI/180.0
-#define maxEntries 100
+#define maxEntries 10
 
 @implementation DevelopViewController
 
@@ -75,8 +75,6 @@
                                                          selector:@selector(addArray:)
                                                            object:toWrite];
             [myThread start]; 
-            
-            
         }
         
         NSLog(@"countInArray = %i", countInArray);
@@ -100,7 +98,6 @@
     
     [super viewDidLoad];
     k=0;
-    databaseAction = [[DatabaseActions alloc] initDataBase];
     writeToDB = NO;
     userDefaults = [NSUserDefaults standardUserDefaults];
        
@@ -110,11 +107,11 @@
     fileController = [[FileController alloc] init];
     csvConverter = [[CSVConverter alloc] init];
 
-    [[NSNotificationCenter defaultCenter]	
-     addObserver: self
-     selector: @selector(accelerometerReciver:)
-     name: @"motionNotification"
-     object: nil];
+    //[[NSNotificationCenter defaultCenter]	
+   // addObserver: self
+   //  selector: @selector(accelerometerReciver:)
+   //  name: @"motionNotification"
+   //  object: nil];
     
     
     [[NSNotificationCenter defaultCenter]	

@@ -20,10 +20,6 @@
 #import "ServerCommunication.h"
 #import "CSVConverter.h"
 
-
-
-
-
 @interface DevelopViewController : UIViewController <UINavigationControllerDelegate, MFMailComposeViewControllerDelegate>{
     
     IBOutlet UILabel *accX;
@@ -102,8 +98,8 @@
 
 
 - (void) showGPS;
-- (void)sendFile;
-- (void)infoAboutFiles;
+- (void) sendFile;
+- (void) infoAboutFiles;
 - (NSString *)convertSize: (NSInteger)size;
 - (void)sendToServer;
 @end
