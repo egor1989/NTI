@@ -41,6 +41,7 @@
     BOOL moreThanLimit;
    // NSDictionary *dict;
     RecordAction *recordAction;
+    DatabaseActions *databaseAction;
 }
 
 -(void)stopGPSDetect;

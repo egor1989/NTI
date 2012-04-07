@@ -24,17 +24,12 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {
     NSLog(@"open2");
+    //databaseAction = [[DatabaseActions alloc] initDataBase];
     
-    
-    
-        //[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:YES];
-    DatabaseActions *databaseAction = [[DatabaseActions alloc] initDataBase];
-    
-    
-    if (databaseAction !=nil) {
-        NSLog(@"БД есть или создана");
-    }
-    else NSLog(@"БД сломалась");
+    //if (databaseAction !=nil) {
+    //    NSLog(@"БД есть или создана");
+    //}
+    //else NSLog(@"БД сломалась");
     
     recordAction = [[RecordAction alloc] init];
     

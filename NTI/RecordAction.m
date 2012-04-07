@@ -17,7 +17,7 @@
 @implementation RecordAction
 
 - (id)init{
-    
+    databaseAction = [[DatabaseActions alloc] initDataBase];
     [[NSNotificationCenter defaultCenter]	
      addObserver: self
      selector: @selector(checkWriteRight)
