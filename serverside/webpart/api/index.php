@@ -80,10 +80,10 @@ else
 
 function NTI_Cookie_check()
 {
-		if(isset($_COOKIE['NTIKey']))
+		if(isset($_COOKIE['NTIKeys']))
 	{
-		$cooks=$_COOKIE['NTIKey'];
-		$cooks=mysql_real_escape_string($cooks);
+		$cooks=$_COOKIE['NTIKeys'];
+		$cooks=$cooks;
 		if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
 		$result = mysql_query("SELECT * from NTIKeys where SID='$cooks' and Deleted=0");
 		$cnt=mysql_num_rows($result);
@@ -117,12 +117,12 @@ function NTIregister($param)
 {
 	$username=$param['login'];
 	$password=$param['password'];
-	$email=$param['email'];
+	$email=$param['login'];
 	$name=$param['name'];
 	$surname=$param['surname'];
 	
 	if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
-		if(!isset($username) || !isset($password) || !isset($email))
+		if(!isset($username) || !isset($password))
 	{
 		mysql_close($dbcnx);
 		$errortype=array('info'=>"You dont set mail,password,login",'code'=>  2);
@@ -196,6 +196,10 @@ function NTIauth($param)
 {
 	$username=$param['login'];
 	$secret=$param['secret'];
+	
+    $device=$param['device'];
+	$model=$param['model'];
+	$version=$param['version'];
 	if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
 		if(!isset($secret) || !isset($username))
 	{
@@ -207,6 +211,10 @@ function NTIauth($param)
 	}
 	$username=mysql_real_escape_string($username);
 	$secret=mysql_real_escape_string($secret);
+	
+	$device=mysql_real_escape_string($device);
+	$model=mysql_real_escape_string($model);
+	$version=mysql_real_escape_string($version);
 	$result = mysql_query("SELECT Id from NTIUsers where Login='$username'");
 	$cnt=mysql_num_rows($result);
 	if($cnt==0)
@@ -241,7 +249,7 @@ function NTIauth($param)
 	mysql_query("UPDATE NTIKeys SET Deleted=1 where UID=$id");
 	setcookie("NTIKeys", $sid,time()+6000);
 	
-	mysql_query("INSERT into NTIKeys (UID,SID,Creation_Date) values ('$id','$sid','$tm')");
+	mysql_query("INSERT into NTIKeys (UID,SID,Creation_Date,device,model,version) values ('$id','$sid','$tm','$device','$model','$version')");
 	$errortype=array('info'=>"Al akey",'code'=>  0);
 	$res=array('result'=>$sid ,'error'=>  $errortype);
 	echo json_encode($res);
@@ -267,38 +275,9 @@ function addNTIFile($param)
 	if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
 	mysql_query("INSERT into NTIFile (UID,File) values ('$UID','$ins')");
 	
-    $entrys = json_decode($ntifile,true);
-	switch(json_last_error())
-    {
-        case JSON_ERROR_DEPTH:
-            
-			$errortype=array('info'=>" - Maximum stack depth exceeded",'code'=>  666);
-			$res=array('result'=>1,'error'=> $errortype);
-			echo json_encode($res);
-			exit();
-        break;
-        case JSON_ERROR_CTRL_CHAR:
-		$errortype=array('info'=>"  - Unexpected control character found",'code'=>  666);
-		$res=array('result'=>1,'error'=> $errortype);
-		echo json_encode($res);
-			exit();
-        break;
-        case JSON_ERROR_SYNTAX:
-			$errortype=array('info'=>" - Syntax error, malformed JSON",'code'=>  666);
-			$res=array('result'=>1,'error'=> $errortype);
-			echo json_encode($res);
-			exit();
-        break; 
-    }
 
-	for($i=0;$i<count($entrys);$i++)
-	{
+
 	
-
-		mysql_query("Insert into NTIEntry (accx,accy,distance,lat,lng,direction,compass,speed,utimestamp) values (".$entrys[$i]['acc']['x'].",".$entrys[$i]['acc']['y'].",".$entrys[$i]['gps']['distance'].",".$entrys[$i]['gps']['latitude'].",".$entrys[$i]['gps']['longitude'].",".$entrys[$i]['gps']['direction'].",".$entrys[$i]['gps']['compass'].",".$entrys[$i]['gps']['speed'].",".$entrys[$i]['timestamp'].")");
-
-	}
-
 		$errortype=array('info'=>"",'code'=>  0);
 		$res=array('result'=>1,'error'=> $errortype);
 		echo json_encode($res);	

@@ -4,7 +4,8 @@ class User extends CI_Controller {
 	
 	public function index(){
 
-		if($this->session->userdata('id')!=null && $this->session->userdata('id')>0 ){
+		if($this->session->userdata('id')!=null && $this->session->userdata('id')>0){
+			
 			$this->load->model('userModel');
 			$new_data['id'] = $this->session->userdata('id');
 			$new_data['name'] = $this->session->userdata('name');
@@ -12,15 +13,25 @@ class User extends CI_Controller {
 			$new_data['rights']= $this->session->userdata('rights');
 			$new_data['map_type'] = 2;
 			//Обработка экспертов
-			if($this->session->userdata('rights')==2)
+			if($this->session->userdata('rights')!=3)
 			{
-				$new_data['retdata']=$this->userModel->get_all_users($this->session->userdata('id'));
+				if($this->session->userdata('rights')==2)
+				{
+					$new_data['retdata']=$this->userModel->get_all_users($this->session->userdata('id'));
+					$new_data['unregistered_data']=$this->userModel->get_all_unregdata();
+				}
+				$new_data['users']=1;
+				$this->load->view('header',$new_data);
+				$this->load->view('userInfoView', $new_data);
 			}
-		
-		
-			$new_data['users']=1;
-			$this->load->view('header',$new_data);
-			$this->load->view('userInfoView', $new_data);
+			else
+			{
+				$new_data['users']=$this->userModel->LoadUsers();
+				$new_data['experts']=$this->userModel->LoadExperts();
+				$new_data['tickets']=$this->userModel->LoadTickets();
+				$this->load->view('header',$new_data);
+				$this->load->view('admin', $new_data);
+			}
 		}
 		else{
 			$new_data['rights']=0;
@@ -60,11 +71,12 @@ class User extends CI_Controller {
 		$user = $this->input->post();
 		$fname=$this->input->post('fname');
 		$sname=$this->input->post('sname');
-		$login=$this->input->post('login');
 		$password=$this->input->post('password');
 		$email=$this->input->post('email');
 		$new_data['rights']=0;
-		if ($this->security->xss_clean($email, TRUE) === FALSE || $this->security->xss_clean($fname, TRUE) === FALSE || $this->security->xss_clean($sname, TRUE) === FALSE || $this->security->xss_clean($login, TRUE) === FALSE || $this->security->xss_clean($password, TRUE) === FALSE)
+		
+		
+		if ($this->security->xss_clean($email, TRUE) === FALSE || $this->security->xss_clean($fname, TRUE) === FALSE || $this->security->xss_clean($sname, TRUE) === FALSE || $this->security->xss_clean($password, TRUE) === FALSE)
 		{
 					$new_data['map_type'] = 2;
 					$new_data['specinfo'] = "Не верный формат одно из полей";
@@ -73,7 +85,7 @@ class User extends CI_Controller {
 					$this->load->view('footer');
 					
 		}
-		else if(strlen($login)<3 || strlen($password)<3 || strlen($email)<3)
+		else if(strlen($password)<3 || strlen($email)<3)
 		{
 					$new_data['map_type'] = 2;
 					$new_data['specinfo'] = "Значения каждого поля должно быть заполнено и быть больше 3-х символов";
@@ -81,7 +93,7 @@ class User extends CI_Controller {
 					$this->load->view('registrationView',$new_data);
 					$this->load->view('footer');
 		}
-		else if(strlen($fname)>32 || strlen($sname)>32 || strlen($login)>32  || strlen($email)>32)
+		else if(strlen($fname)>32 || strlen($sname)>32 ||  strlen($email)>32)
 		{
 					$new_data['map_type'] = 2;
 					$new_data['specinfo'] = "Значения каждого поля должно быть меньше 32 символов";
@@ -96,12 +108,29 @@ class User extends CI_Controller {
 		if($response){
 			if($response['result']>0)
 			{
-				$responseAuth = $this->userModel->authorization($response);
-				if($responseAuth!=false)
-				{
-					$this->session->set_userdata($responseAuth);
-					header("Location: http://nti.goodroads.ru/user");
-				}
+				$config['mailtype'] = 'html';
+				$config['wordwrap'] = TRUE;
+
+				$this->load->library('email');
+				$this->email->initialize($config);
+				
+				$this->email->from('support@goodroads.ru', 'NTI');
+				$this->email->to($response['login']); 
+				$this->email->subject('Registration form');
+				$emailLink=$response['emailkey'];
+				
+				$subject="<html>";
+				$subject.="<head>";
+				$subject.="</head>";
+				$subject.="<body>";
+				$subject.="Вы зарегистрировались на сайте nti.goodroads.ru<br/>";
+				$subject.="Для подтверждения регистрации перейдите по ссылке:<br/>";
+				$subject.="<a href='http://nti.goodroads.ru/user/approve/$emailLink'>http://nti.goodroads.ru/user/continue/$emailLink</a><br/>";
+				$subject.="</body>";
+				$subject.="</html>";				
+				$this->email->message($subject);	
+				$this->email->send();
+				header("Location: http://nti.goodroads.ru/user");
 			}
 			else if($response['result']==-1)
 			{
@@ -135,8 +164,9 @@ class User extends CI_Controller {
 	}
 	
 	public function registrationFormView(){
-		$new_data['map_type'] = 2;
-$new_data['rights']=0;
+			$new_data['map_type'] = 2;
+			$new_data['rights']=0;
+			$new_data['show_menu']=0;
 			$this->load->view('header',$new_data);
 			$this->load->view('registrationView',$new_data);
 			$this->load->view('footer');
@@ -210,6 +240,7 @@ $new_data['rights']=0;
 				$new_data['isfounded'] = 0;
 			}
 			$new_data['users']=$this->userModel->load_users_list(5);
+			$new_data['tickets']=$this->userModel->load_all_tickets($this->session->userdata('id'));
 			$this->load->view('header',$new_data);
 			$this->load->view('usersearch',$new_data);
 			$this->load->view('footer');
@@ -241,6 +272,7 @@ $new_data['rights']=0;
 			}
 			$new_data['isfounded']=-3;
 			$new_data['users']=$this->userModel->load_users_list(5);
+			$new_data['tickets']=$this->userModel->load_all_tickets($this->session->userdata('id'));
 			$this->load->view('header',$new_data);
 			$this->load->view('usersearch',$new_data);
 			$this->load->view('footer');
@@ -251,4 +283,178 @@ $new_data['rights']=0;
 		}
 		
 	}
+	
+	
+	public function removeaccept()
+	{
+		if($this->session->userdata('rights')>=2)
+		{
+			$new_data['rights']=$this->session->userdata('rights');
+			$new_data['map_type'] = 2;	
+			$this->load->helper('url');
+			$urls=$this->uri->segment(3);
+			$this->load->model('userModel');
+			//1) Check if he can see		
+			$checker=$this->userModel->RemoveRelationQuery($this->session->userdata('id'),$urls);
+			if($checker==1)
+			{
+				$new_data['some_info']="Заявка удалена";	
+			}
+			else
+			{
+				$new_data['some_info']="Заявка не может быть удалена.";
+			}
+			$new_data['isfounded']=-3;
+			$new_data['users']=$this->userModel->load_users_list(5);
+			$new_data['tickets']=$this->userModel->load_all_tickets($this->session->userdata('id'));
+			$this->load->view('header',$new_data);
+			$this->load->view('usersearch',$new_data);
+			$this->load->view('footer');
+		}
+		else
+		{
+			header("Location: http://nti.goodroads.ru/");
+		}
+	}
+	
+		public function delete()
+	{
+		if($this->session->userdata('rights')>=2)
+		{
+			$new_data['rights']=$this->session->userdata('rights');
+			$new_data['map_type'] = 2;	
+			$this->load->helper('url');
+			$urls=$this->uri->segment(3);
+			$this->load->model('userModel');
+			//1) Check if he can see		
+			$checker=$this->userModel->DeleteRelation($this->session->userdata('id'),$urls);
+			if($checker==1)
+			{
+				$new_data['some_info']="Заявка на удаление подана";	
+			}
+			else
+			{
+				$new_data['some_info']="Заявка не может быть удалена.";
+			}
+			$new_data['isfounded']=-3;
+			$new_data['users']=$this->userModel->load_users_list(5);
+			$new_data['tickets']=$this->userModel->load_all_tickets($this->session->userdata('id'));
+			$this->load->view('header',$new_data);
+			$this->load->view('usersearch',$new_data);
+			$this->load->view('footer');
+		}
+		else
+		{
+			header("Location: http://nti.goodroads.ru/");
+		}
+	}
+	
+		public function navigate()
+		{
+			if($this->session->userdata('rights')>=2)
+			{
+			$new_data['rights']=$this->session->userdata('rights');
+			$new_data['map_type'] = 2;	
+			$this->load->model('userModel');
+			//1) Check if he can see		
+			$new_data['isfounded']=-3;
+			$new_data['users']=$this->userModel->load_expert_users($this->session->userdata('id'));
+			$this->load->view('header',$new_data);
+			$this->load->view('usertable',$new_data);
+			$this->load->view('footer');
+		}
+		else
+		{
+			header("Location: http://nti.goodroads.ru/");
+		}
+	}
+	
+	
+			public function changeinfo()
+		{
+			if($this->session->userdata('rights')>=2)
+			{
+			$new_data['rights']=$this->session->userdata('rights');
+			$new_data['map_type'] = 2;	
+			$this->load->model('userModel');
+			//1) Check if he can see		
+			$new_data['isfounded']=-3;
+			$new_data['users']=$this->userModel->load_expert_users($this->session->userdata('id'));
+			$this->load->view('header',$new_data);
+			$this->load->view('usertable',$new_data);
+			$this->load->view('footer');
+		}
+		else
+		{
+			header("Location: http://nti.goodroads.ru/");
+		}
+	}
+	
+				public function block()
+		{
+			if($this->session->userdata('rights')==3)
+			{
+				$this->load->helper('url');
+				$urls=$this->uri->segment(3);
+				$new_data['users']=$this->userModel->BlockUser($urls);
+				header("Location: http://nti.goodroads.ru/");
+			}
+			else
+			{
+				header("Location: http://nti.goodroads.ru/");
+			}
+	}
+					public function unblock()
+		{
+			if($this->session->userdata('rights')==3)
+			{
+				$this->load->helper('url');
+				$urls=$this->uri->segment(3);
+				$new_data['users']=$this->userModel->UnBlockUser($urls);
+				header("Location: http://nti.goodroads.ru/");
+			}
+			else
+			{
+				header("Location: http://nti.goodroads.ru/");
+			}
+	}
+	
+	//Функция отвечает за продолжение регистрации
+	
+	public function approve(){
+			//1 выделеем снача ключ пользваотеля , который нам пришел
+			$this->load->helper('url');
+			$user_key=$this->uri->segment(3);
+			$this->load->model('userModel');
+			//1) Check if he can see		
+			$checker=$this->userModel->CheckRelation($user_key);
+			if($checker==1)
+			{
+						$new_data['map_type'] = 2;
+			$new_data['rights']=0;
+			$new_data['show_menu']=0;
+					$new_data['info']="Спасибо за подтверждение регистрации.";
+					$this->load->view('header',$new_data);
+					$this->load->view('temp_page',$new_data);
+					$this->load->view('footer');
+	
+			}
+			else
+			{
+					$new_data['map_type'] = 2;
+					$new_data['rights']=0;
+					$new_data['show_menu']=0;
+					$new_data['info']="Извините, но ссылка, по которой Вы перешли, не существует.";
+					$this->load->view('header',$new_data);
+					$this->load->view('temp_page',$new_data);
+					$this->load->view('footer');
+			
+			}
+			
+
+	}
+	
+	
+	
+	
 }

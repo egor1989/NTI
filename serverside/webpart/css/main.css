@@ -526,6 +526,13 @@ a.languagebox_item_active
     overflow: hidden;
     height: 700px;
 }
+.mapfull
+{
+    width: 100%;
+    position: absolute;
+    float: right;
+    height: 100%;
+}
 
 .iepageFooter
 {

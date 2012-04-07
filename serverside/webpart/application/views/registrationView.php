@@ -1,5 +1,6 @@
 <div id="content" class="pageContent">
 	<div  id="regform" class="regform">
+		После регистрации Вам будет выслана ссылка для подтверждения аккаунта.
 		<?if(isset($specinfo))echo $specinfo."<br/><br/><br/>";?>
 		 <form action="http://nti.goodroads.ru/user/registration" method="post" accept-charset="utf-8" id="registrationForm">
 		<table>
@@ -13,10 +14,6 @@
 			<tr>
 				<td> Email </td>
 				<td><td><input type="text" name="email" value="" id="email"  /></td>
-			</tr>
-			<tr>
-				<td> Логин </td>
-				<td><td><input type="text" name="login" value="" id="login"  /></td>
 			</tr>
 			<tr>
 				<td> Пароль </td>

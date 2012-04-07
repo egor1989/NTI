@@ -233,8 +233,6 @@ function handler(request)
   	// Center
 	var e = this.amLayer.getDataExtent();
 	if (e) this.zoomToExtent(e);
-
-	   document.getElementById("drs").innerHTML = "<b>Total Score:"+drivingScore+"</b>";
 }
 
 function init()
@@ -271,7 +269,6 @@ function init()
     });
     map.addControl(select);
     select.activate();
-    
     // Show information when select
     layer.events.on
     ({  "featureselected": function(e) {
