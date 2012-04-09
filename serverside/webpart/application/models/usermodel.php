@@ -13,7 +13,8 @@
 			$query = $this->db->get_where('NTIUsers', array('Login' => $login, 'Password' => $password));
 			if($query->num_rows()>0){
 			
-				foreach($query->result() as $row){
+				foreach($query->result() as $row)
+				{
 					$userData['id'] = $row->Id;
 					$Id=$row->Id;
 					$userData['login'] = $row->Login;
@@ -23,7 +24,8 @@
 				}
 				return $userData;
 			}
-			else{
+			else
+			{
 				return false;
 			}
 		}
@@ -360,7 +362,7 @@ $this->db->where('ExpertId', $id);
 		}
 		function LoadTickets()
 		{
-			$query = $this->db->query("SELECT * FROM `NTIRequests` where Status<=2" );
+			$query = $this->db->query("select al.RequestId,al.Eid,al.Uid,al.Status,al.FName as CKName,al.SName as CKSName,al.Login as CKLogin,al.Rights as CKRights,us.Login as ULogin,us.FName as UFName,us.SName as USName,us.Rights as URights from (SELECT NTIRequests.Id as RequestId,NTIRequests.`ExpertId` as Eid,NTIRequests.`UserId` as Uid,NTIRequests.`Status` as Status,exp.* FROM `NTIRequests` join (select Id,Login,FName,SName,Rights from NTIUsers) as exp on NTIRequests.`ExpertId`=exp.Id) as al join (select Id,Login,FName,SName,Rights from NTIUsers) as us on al.`Uid`=us.Id where Status<=2" );
 			if($query->num_rows()>0)
 			{
 			
