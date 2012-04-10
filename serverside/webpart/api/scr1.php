@@ -45,24 +45,39 @@ function gCercle ($lon1, $lat1, $lon2, $lat2)
 	return 2 * 6367 * sin(sqrt(pow(sin(($lat1-$lat2)/2),2)+(cos($lat1)*cos($lat2)*pow(sin(($lon1-$lon2)/2),2))));
 }
 
-$query = 'SELECT File FROM NTIFile';
+$query = 'SELECT Id,	File FROM NTIFile';
 $result = mysql_query($query);
 $c = 0;
 $n = 0;
 while ($row = mysql_fetch_array($result)) 
 {
 	$someArr[$c] = json_decode($row['File'],true);
-	$k = 0;
+	$k = 0;	$fileid = $row['Id'];
 	while ($someArr[$c][$k]) 
 	{
-		$encData[$n]['lat'] = $someArr[$c][$k]['gps']['latitude'];
-		$encData[$n]['lng'] = $someArr[$c][$k]['gps']['longitude'];
-		$encData[$n]['compass'] = $someArr[$c][$k]['gps']['compass'];
-		$encData[$n]['speed'] = $someArr[$c][$k]['gps']['speed'];
-		$encData[$n]['distance'] = $someArr[$c][$k]['gps']['distance'];
-		$encData[$n]['utimestamp'] = $someArr[$c][$k]['timestamp'];
+		//$encData[$n]['accx'] = $someArr[$c][$k]['acc']['x'];
+		//$encData[$n]['accy'] = $someArr[$c][$k]['acc']['y'];
+		//$encData[$n]['lat'] = $someArr[$c][$k]['gps']['latitude'];
+		//$encData[$n]['lng'] = $someArr[$c][$k]['gps']['longitude'];
+		//$encData[$n]['compass'] = $someArr[$c][$k]['gps']['compass'];
+		//$encData[$n]['speed'] = $someArr[$c][$k]['gps']['speed'];
+		//$encData[$n]['distance'] = $someArr[$c][$k]['gps']['distance'];
+		//$encData[$n]['utimestamp'] = $someArr[$c][$k]['timestamp'];
+		//$encData[$n]['fileid'] = $k;
+		$accx = $someArr[$c][$k]['acc']['x'];
+		$accy = $someArr[$c][$k]['acc']['y'];
+		$lat =  $someArr[$c][$k]['gps']['latitude'];
+		$lng = $someArr[$c][$k]['gps']['longitude'];
+		$direction = $someArr[$c][$k]['gps']['direction'];
+		$compass = $someArr[$c][$k]['gps']['compass'];
+		$speed = $someArr[$c][$k]['gps']['speed'];
+		$distance = $someArr[$c][$k]['gps']['distance'];
+		$utimestamp = $someArr[$c][$k]['timestamp'];
+	
+		$str = "INSERT INTO NTIEntry (UID, accx, accy, distance, lat, lng, direction, compass, speed, utimestamp, FileId) VALUES (-3, $accx, $accy, $distance, $lat, $lng, $direction, $compass, $speed, $utimestamp, $fileid)";
 		$k++;
 		$n++;
+		mysql_query($str);
 	}
 	$c++;
 }
@@ -88,6 +103,8 @@ for ($i = 0; $i < $n; $i++)
 	}
 }
 
+
+/*
 
 for ($i = 1; $i < $j; $i++)
 {
@@ -195,9 +212,8 @@ for ($i = 1; $i < $j; $i++)
 
 $fullTime = ($filteredPt[$j - 1]['utimestamp'] - $filteredPt[0]['utimestamp']) /1000 / 60 / 60;
 $drivingScore = ($coef1 * ($speed1 + $turn1 + $acc1 + $brake1) + $coef2 * ($speed2 + $turn2 + $acc2 + $brake2) + $coef3 * ($speed3 + $turn3 + $acc3 + $brake3)) / $fullTime;
-
+*/
 //lolcheck
-echo $fullTime . "<br>";
-echo $drivingScore . "<br>";
+//echo "123" . "<br>";
 
 ?>

@@ -1,5 +1,6 @@
 ﻿<div id="content" class="pageContent">
 	<center><? echo $name." ". $sname;?>, PeacockTeam приветствует Вас!</center><br/>
+	
 	<?if($rights!=2){?><center><a href="/map">Карта ваших маршрутов</a></center><?}?>
 	<?
 if($rights==2)

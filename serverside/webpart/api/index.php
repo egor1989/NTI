@@ -67,7 +67,8 @@ switch(json_last_error())
     }
     
    
-if(!isset($json['method'])){ $errortype=array('info'=>"No difintion state set, or function is incorrect",'code'=>  1);$res=array('result'=>2,'error'=>  $errortype);echo json_encode($res);exit();}
+if(!isset($json['method'])){ $errortype=array('info'=>"No difintion state set, or function is incorrect",'code'=>  1);
+$res=array('result'=>2,'error'=>  $errortype);echo json_encode($res);exit();}
 
 if($json['method']=="NTIauth"){NTIauth($json['params']);}//-
 else if($json['method']=="addNTIFile"){addNTIFile($json['params']);}//-
@@ -80,17 +81,16 @@ else
 
 function NTI_Cookie_check()
 {
-		if(isset($_COOKIE['NTIKeys']))
-	{
 		$cooks=$_COOKIE['NTIKeys'];
-		$cooks=$cooks;
 		if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
+		$cooks=mysql_real_escape_string($cooks);
 		$result = mysql_query("SELECT * from NTIKeys where SID='$cooks' and Deleted=0");
 		$cnt=mysql_num_rows($result);
 		if($cnt==0)
 		{
+		
 			mysql_close($dbcnx);
-			return -1;
+			return -3;
 		}
 		else
 		{
@@ -107,8 +107,7 @@ function NTI_Cookie_check()
 				return $row['UID'];
 			} 
 		}
-	}
-return -3;
+	
 
 }
 
@@ -260,29 +259,78 @@ function NTIauth($param)
 function addNTIFile($param)
 {
 	$ntifile=$param['ntifile'];
-	$UID=NTI_Cookie_check();
-	$m = new Mongo(); 
-	$db = $m->NTI;
-	$NTIInfo=$db->NTIInfo;
-	$utmstamp=time();
 	$ins=json_encode($ntifile);
-	$insert_data=array(
-		'UID'=>$UID,
-		'UnixTimeStamp'=>$utmstamp,
-		'NTIFile'=>$ntifile
-		);
-	$NTIInfo->insert($insert_data);		
-	if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
-	mysql_query("INSERT into NTIFile (UID,File) values ('$UID','$ins')");
+	if (strlen($ins) > 10) 
+	{
+		$UID=NTI_Cookie_check();
+		$m = new Mongo(); 
+		$db = $m->NTI;
+		$NTIInfo=$db->NTIInfo;
+		$utmstamp=time();
+		
+		
+		$qq = json_decode($ins,true);	
+		if ($qq != NULL) 
+		{
+			$insert_data=array(
+				'UID'=>$UID,
+				'UnixTimeStamp'=>$utmstamp,
+				'NTIFile'=>$ntifile
+				);
+			$NTIInfo->insert($insert_data);		
+			
+			if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
+			mysql_query("INSERT into NTIFile (UID,File) values ('$UID','$ins')");
+			$fileid = mysql_insert_id();
+			$k = 0;
+			while ($qq[$k]) 
+			{
+				$accx = $qq[$k]['acc']['x'];
+				$accy = $qq[$k]['acc']['y'];
+				$lat =  $qq[$k]['gps']['latitude'];
+				$lng = $qq[$k]['gps']['longitude'];
+				$direction = $qq[$k]['gps']['direction'];
+				$compass = $qq[$k]['gps']['compass'];
+				$speed = $qq[$k]['gps']['speed'];
+				$distance = $qq[$k]['gps']['distance'];
+				$utimestamp = $qq[$k]['timestamp'];
+					$accx = mysql_real_escape_string($accx);
+					$accy = mysql_real_escape_string($accy);
+					$lat = mysql_real_escape_string($lat);
+					$lng = mysql_real_escape_string($lng); 
+					$direction = mysql_real_escape_string($direction);
+					$compass = mysql_real_escape_string($compass);
+					$speed = mysql_real_escape_string($speed);
+					$distance = mysql_real_escape_string($distance);
+					$utimestamp = mysql_real_escape_string($utimestamp);
+					$str = "INSERT INTO NTIEntry (UID, accx, accy, distance, lat, lng, direction, compass, speed, utimestamp, FileId) VALUES ($UID, $accx, $accy, $distance, $lat, $lng, $direction, $compass, $speed, $utimestamp, $fileid)";
+					mysql_query($str);
+				//echo $str;
+				$k++;
+			}
+			$errortype=array('info'=>"All okey",'code'=>  0);
+			$res=array('result'=>1,'error'=> $errortype);
+			echo json_encode($res);	
 	
-
-
-	
-		$errortype=array('info'=>"",'code'=>  0);
+			exit();
+		}
+		else
+		{
+			$errortype=array('info'=>"Data is not in json",'code'=>  4);
+			$res=array('result'=>1,'error'=> $errortype);
+			echo json_encode($res);	
+			exit();	
+		}
+	}
+	else
+	{						
+		$errortype=array('info'=>"File is too small or empty(".strlen($ins).")",'code'=>  3);
 		$res=array('result'=>1,'error'=> $errortype);
 		echo json_encode($res);	
 		exit();
+	}
 }
+
 
 
 ?>
