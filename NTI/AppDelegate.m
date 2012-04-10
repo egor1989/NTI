@@ -80,7 +80,10 @@
                         andKey:@"czvj5ewmgoxin8qsxzrjrgnd1y2b" 
                      andSecret:@"yjqmmg4ztbnoodvph29cldqvx3ialn1p" 
          andMainViewController:nil ];
+    
+    [Crittercism setUsername:[[NSUserDefaults standardUserDefaults] stringForKey:@"login"]];
 
+    
 
     return YES;
     
