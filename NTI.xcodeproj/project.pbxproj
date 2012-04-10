@@ -101,6 +101,7 @@
 		2779258E15347C110062D871 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2779258D15347C110062D871 /* MapKit.framework */; };
 		2779259115347CA80062D871 /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2779259015347CA80062D871 /* MapViewController.m */; };
 		27792597153486800062D871 /* route.csv in Resources */ = {isa = PBXBuildFile; fileRef = 27792596153486800062D871 /* route.csv */; };
+		277925AB15349FA90062D871 /* time.png in Resources */ = {isa = PBXBuildFile; fileRef = 277925AA15349FA90062D871 /* time.png */; };
 		278FE5C6150CE2EE0098BA74 /* DatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 278FE5C5150CE2EE0098BA74 /* DatePickerViewController.m */; };
 		27CFA5301521EBA300F9AC21 /* FeedBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27CFA52E1521EBA300F9AC21 /* FeedBackViewController.m */; };
 		27EDA63B152B117A00679B25 /* MyTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 27EDA63A152B117A00679B25 /* MyTextField.m */; };
@@ -294,6 +295,7 @@
 		2779258F15347CA80062D871 /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
 		2779259015347CA80062D871 /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 		27792596153486800062D871 /* route.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = route.csv; sourceTree = SOURCE_ROOT; };
+		277925AA15349FA90062D871 /* time.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = time.png; path = Images/time.png; sourceTree = "<group>"; };
 		278FE5C4150CE2EE0098BA74 /* DatePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatePickerViewController.h; sourceTree = "<group>"; };
 		278FE5C5150CE2EE0098BA74 /* DatePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatePickerViewController.m; sourceTree = "<group>"; };
 		27CFA52D1521EBA300F9AC21 /* FeedBackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedBackViewController.h; sourceTree = "<group>"; };
@@ -590,6 +592,7 @@
 		276C4C9214DEE6EA00C469A6 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				277925AA15349FA90062D871 /* time.png */,
 				2763714C152A4E94003FE70B /* Icons */,
 				53A5AE321527593C0093E552 /* green.png */,
 				53A5AE331527593C0093E552 /* red.png */,
@@ -1066,6 +1069,7 @@
 				2763714E152A4F0F003FE70B /* Icon.png in Resources */,
 				27637150152A4F16003FE70B /* Icon@2x.png in Resources */,
 				27792597153486800062D871 /* route.csv in Resources */,
+				277925AB15349FA90062D871 /* time.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
