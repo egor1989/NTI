@@ -15,12 +15,13 @@
     NSDictionary *accelDict;
     double x,y;
     DatabaseActions *databaseAction;
-    
+    NSMutableArray *toWrite;
     NSMutableArray *dataArray;
 }
 - (void)addRecord;
 - (void)endOfRecord;
 - (void)checkWriteRight;
 - (void)startOfRecord;
+- (void)sendFile;
 
 @end

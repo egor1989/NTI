@@ -8,7 +8,7 @@
 
 #import "StatViewController.h"
 
-#define ROWSNUMBER 9
+#define ROWSNUMBER 10
 
 @implementation StatViewController
 @synthesize writeAction;
@@ -69,8 +69,16 @@
     
     recordImage = [[UIImageView alloc] initWithFrame:CGRectMake(280.0f, 7.0f, 27.0f, 27.0f)];
     
-    if ([myAppDelegate canWriteToFile]) [recordImage setImage:[UIImage imageNamed:@"green.png"]];
-    else [recordImage setImage:[UIImage imageNamed:@"red.png"]];
+    if ([myAppDelegate canWriteToFile]) {
+        [recordImage setImage:[UIImage imageNamed:@"green.png"]];
+        //[sendButton setHidden:YES];
+        //[sendButton setUserInteractionEnabled:NO];
+        //sendButton.userInteractionEnabled = NO;
+    }
+    else {
+        [recordImage setImage:[UIImage imageNamed:@"red.png"]];
+        //[sendButton setEnabled: YES];
+    }
     
     [[NSNotificationCenter defaultCenter]	
      addObserver: self
@@ -81,8 +89,13 @@
 
 
 - (void)changeImage{
-    if ([myAppDelegate canWriteToFile]) [recordImage setImage:[UIImage imageNamed:@"green.png"]];
-    else [recordImage setImage:[UIImage imageNamed:@"red.png"]];
+    if ([myAppDelegate canWriteToFile]) {
+        [recordImage setImage:[UIImage imageNamed:@"green.png"]];
+        [sendButton setUserInteractionEnabled:NO];
+    }
+    else {
+        [recordImage setImage:[UIImage imageNamed:@"red.png"]];
+    }
     
 }
 
@@ -212,12 +225,16 @@
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             if (cell == nil) {
+                
+
+
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
                 cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
                 cell.textLabel.text=@"Запись";
                 [cell addSubview:recordImage];
                 
                 
+                                
             }
             return cell;
         }
@@ -296,11 +313,33 @@
             }
             return cell;
         }
+            
+        case 9:{
+            static NSString *CellIdentifier = @"6";
+            
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            if (cell == nil) {
+       
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+                cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
+                cell.textLabel.text=@"Файл";
+                                
+                sendButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+                [sendButton setFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];
+                sendButton.titleLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:15];
+                cell.accessoryView = sendButton;
+                [sendButton setTitle:@"Отправить" forState:UIControlStateNormal];
+                [sendButton addTarget:self action:@selector(sendButton:) forControlEvents:UIControlEventTouchDown];
+
+            }
+            return cell;
+        }
+       
 
         
 
         
-            break;
+        break;
     }
     return nil;
 }
@@ -375,6 +414,12 @@
     AuthViewController *authView = [self.storyboard instantiateViewControllerWithIdentifier: @"AuthViewController"];
     authView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
     [self presentModalViewController: authView animated:YES];
+}
+
+- (IBAction)sendButton:(id)sender{
+    RecordAction *recordAction = [[RecordAction alloc] init];
+    [recordAction sendFile];
+    
 }
 
 

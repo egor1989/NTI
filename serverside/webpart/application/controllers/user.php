@@ -26,10 +26,15 @@ class User extends CI_Controller {
 			}
 			else
 			{
+				//Здесь формируется данные предоставляемые администратору
+				//Для начала получаем список пользователей
 				$new_data['users']=$this->userModel->LoadUsers();
+				//Теперь получаем список всех экспертов
 				$new_data['experts']=$this->userModel->LoadExperts();
+				//Получаем список запросов экспертов
 				$new_data['tickets']=$this->userModel->LoadTickets();
 				$this->load->view('header',$new_data);
+				//Загружаем его собственную вивку 
 				$this->load->view('admin', $new_data);
 			}
 		}

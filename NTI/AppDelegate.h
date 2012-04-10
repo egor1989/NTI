@@ -35,13 +35,14 @@
     float currentYaw;
     CLLocationDistance allDistance;
     BOOL kmch5;
-   // NSInteger l5Km;
-   // NSInteger m5Km;
+    NSInteger l5Km;
+    NSInteger m5Km;
     BOOL canWriteToFile;
     BOOL moreThanLimit;
    // NSDictionary *dict;
     RecordAction *recordAction;
     DatabaseActions *databaseAction;
+    BOOL needCheck;
 }
 
 -(void)stopGPSDetect;
@@ -57,6 +58,7 @@
 -(void) timerFired: (NSTimer *)timer;
 -(void) fiveMinTimer;
 -(void) checkAfterFiveMin;
+
 
 @property (strong, nonatomic) UIWindow *window;
 @property (readonly, NS_NONATOMIC_IPHONEONLY) CLLocation *lastLoc;

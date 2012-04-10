@@ -99,7 +99,7 @@ static sqlite3_stmt *readStmt = nil;
             //SQLite provides a method to get the last primary key inserted by using sqlite3_last_insert_rowid
             //sqlite3_
             pk = sqlite3_last_insert_rowid(database);
-            NSLog(@"addRecord  №%i",pk);
+            NSLog(@"addRecord %i",pk);
             [userDefaults setInteger:pk forKey:@"pk"];
             
         }
@@ -176,7 +176,7 @@ static sqlite3_stmt *readStmt = nil;
                     
 
                 }
-            } else NSLog(@"не выполнилась команда");
+            } else NSLog(@"indalid command");
             if ([self convertAndWrite]) dataArray = [[NSMutableArray alloc]init];
               
         }
@@ -227,10 +227,6 @@ static sqlite3_stmt *readStmt = nil;
     sqlite3_reset(deleteStmt); 
     return YES;
 }
-
-
-
-
 
 + (void) finalizeStatements {
 	

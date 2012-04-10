@@ -18,10 +18,17 @@
 
 - (id)init{
     databaseAction = [[DatabaseActions alloc] initDataBase];
+    
     [[NSNotificationCenter defaultCenter]	
      addObserver: self
      selector: @selector(checkWriteRight)
      name: @"motionNotification"
+     object: nil];
+    
+    [[NSNotificationCenter defaultCenter]	
+     addObserver: self
+     selector: @selector(checkWriteRight)
+     name: @"canWriteToFile"
      object: nil];
     
     return self;
@@ -70,7 +77,7 @@
         
     if (countInArray > maxEntries){ 
         
-        NSMutableArray *toWrite = dataArray;
+        toWrite = dataArray;
         dataArray = [[NSMutableArray alloc] init];
         //создаем новый тред
         NSThread* myThread = [[NSThread alloc] initWithTarget:databaseAction
@@ -82,12 +89,23 @@
 }
 
 - (void)endOfRecord{
-    NSLog(@"не пишет");
+    NSLog(@"don't write");
+   // dataArray = [[NSMutableArray alloc] init];
+    //создаем новый тред
+   // NSThread* myThread = [[NSThread alloc] initWithTarget:databaseAction
+   //                                              selector:@selector(addArray:)
+   //                                                object:toWrite];
+   // [myThread start]; 
+
 }
 
 - (void)checkWriteRight{
     if ([myAppDelegate canWriteToFile]) [self addRecord];
     else [self endOfRecord];
+}
+
+- (void)sendFile{
+    [databaseAction readDatabase]; 
 }
 
 
