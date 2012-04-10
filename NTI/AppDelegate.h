@@ -65,7 +65,7 @@
 @property (nonatomic) float north;
 @property (readonly, nonatomic) CLLocationDistance allDistance;
 @property (nonatomic) BOOL canWriteToFile;
-@property (nonatomic) NSDictionary *dict;
+@property (strong, nonatomic) NSDictionary *dict;
 
 
 
