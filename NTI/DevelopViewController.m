@@ -48,7 +48,7 @@
     accY.text=[NSString stringWithFormat:@"%f", userAcceleration.y];
     accZ.text=[NSString stringWithFormat:@"%f", userAcceleration.z];
     
-    time.text = [NSString stringWithFormat:@"%.5f",[[[NSDate alloc ]init]timeIntervalSince1970]];
+    time.text = [NSString stringWithFormat:@"%.5f",[[[NSDate alloc ]init]timeIntervalSince1970]]; 
     
    // if (writeInDB) {
    //     [databaseAction addRecord:currentAcceleration Type:0];

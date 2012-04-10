@@ -17,7 +17,7 @@
 
 @synthesize window = _window, lastLoc, course, trueNorth, north, allDistance, canWriteToFile, dict;
 
-#define accelUpdateFrequency 3.0	
+#define accelUpdateFrequency 1	
 
 
 
@@ -89,7 +89,7 @@
 - (void)checkSpeedTimer{
     moreThanLimit = NO;
     [self startGPSDetect];
-    [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(timerFired:) userInfo:nil repeats:NO];
+    [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(timerFired:) userInfo:nil repeats:NO];
 }
 
 -(void) timerFired: (NSTimer *)timer{
@@ -106,6 +106,7 @@
     }
     else {
         [self startMotionDetect];
+        
         kmch5 = YES;
         canWriteToFile = YES;
         [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
@@ -121,9 +122,9 @@
     if (kmch5) {
         moreThanLimit = NO;
         kmch5 = NO;
-        [NSTimer scheduledTimerWithTimeInterval:300 target:self selector:@selector(checkAfterFiveMin) userInfo:nil repeats:NO];
+        [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(checkAfterFiveMin) userInfo:nil repeats:NO];
     }
-    else [NSTimer scheduledTimerWithTimeInterval:300 target:self selector:@selector(checkSpeedTimer) userInfo:nil repeats:NO];
+    else [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(checkSpeedTimer) userInfo:nil repeats:NO];
     
 }
 
@@ -195,6 +196,7 @@
         [self fiveMinTimer];
         needCheck = YES;
         l5Km = 0;
+        kmch5 = NO;
     }
     
     

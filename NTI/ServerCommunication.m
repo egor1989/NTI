@@ -15,7 +15,9 @@
 - (void)uploadData:(NSString *)fileContent{
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSLog(@"cookie = %@", [userDefaults valueForKey:@"cookie"]);
-    NSString *cookie = [userDefaults valueForKey:@"cookie"]; //?
+    //заменить на выборку строки
+    //и время .???
+    NSString *cookie = @"SYzK12oVj9QUnsed2CioLF0BVqXG9CYW2iNtNiTLznyhHSYK1DV7CWSYDpeBr3Yj";//[userDefaults valueForKey:@"cookie"]; //?
   //  NSString * cookie = [self refreshCookie];
     
     fileContent=[@"data={\"method\":\"addNTIFile\",\"params\":{\"ntifile\":" stringByAppendingString:fileContent];
@@ -32,7 +34,7 @@
     
      NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
      @"http://nti.goodroads.ru/api/", NSHTTPCookieDomain,
-     @"key", NSHTTPCookieName,
+                                 @"NTIKeys", NSHTTPCookieName,
      cookie, NSHTTPCookieValue,
      @"/", NSHTTPCookiePath,
      nil];

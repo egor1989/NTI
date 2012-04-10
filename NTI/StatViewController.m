@@ -418,6 +418,7 @@
 
 - (IBAction)sendButton:(id)sender{
     RecordAction *recordAction = [[RecordAction alloc] init];
+    
     [recordAction sendFile];
     
 }
