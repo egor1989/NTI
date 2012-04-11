@@ -161,6 +161,121 @@
     
 }
 
+
+- (void)getAllStatistic{
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSLog(@"cookie = %@", [userDefaults valueForKey:@"cookie"]);
+    NSString *cookie = [userDefaults valueForKey:@"cookie"]; 
+    //  NSString * cookie = [self refreshCookie];
+    //data={\"method\":\getStatistics\"}
+    NSString *data = @"data={\"method\":\"getStatistics\"}";//,\"params\":{\"login\":\"",login, @"\",\"password\":\"", password, @"\"}}"];
+    NSLog(@"Request: %@", data);
+    
+    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                  timeoutInterval:60.0];
+    
+    requestData = [NSData dataWithBytes:[data UTF8String] length:[data length]];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody: requestData];    
+    
+    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                @"http://nti.goodroads.ru/api/", NSHTTPCookieDomain,
+                                @"NTIKeys", NSHTTPCookieName,
+                                cookie, NSHTTPCookieValue,
+                                @"/", NSHTTPCookiePath,
+                                nil];
+    
+    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:[NSHTTPCookie cookieWithProperties:properties]];
+    NSHTTPCookie *fcookie = [NSHTTPCookie cookieWithProperties:properties]; //?
+    NSArray* fcookies = [NSArray arrayWithObjects: fcookie, nil];   //?
+    NSDictionary * headers = [NSHTTPCookie requestHeaderFieldsWithCookies:fcookies]; //?
+    
+    [request setAllHTTPHeaderFields:headers];
+    
+    
+   // NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: &response error: &requestError ];
+   // [NSURLConnection sendAsynchronousRequest:request
+   //                                    queue:[NSOperationQueue mainQueue]
+   //                        completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *error) {
+   //                            returnString = [[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding];
+   //                            NSLog(@"returnData: %@", returnString);
+                               //[self checkErrors:returnString];
+                               // провверка на ошибки при получении статистики 
+   //                        }];
+    NSError *requestError = nil;
+    NSURLResponse *response = nil;
+    NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: &response error: &requestError ];
+    
+    if (requestError!=nil) {
+        NSLog(@"%@", requestError);
+        NSLog(@"ERROR!ERROR!ERROR!");
+    }
+    
+    returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
+    NSLog(@"returnData: %@", returnString);
+
+    
+}
+
+
+- (void)getLastStatistic{
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSLog(@"cookie = %@", [userDefaults valueForKey:@"cookie"]);
+    NSString *cookie = [userDefaults valueForKey:@"cookie"]; 
+    //  NSString * cookie = [self refreshCookie];
+    //data={\"method\":\getStatistics\"}
+    NSString *data = @"data={\"method\":\"getStatistics\",\"params\":{\"last\":\"1\"}}";//,\"params\":{\"login\":\"",login, @"\",\"password\":\"", password, @"\"}}"];
+    NSLog(@"Request: %@", data);
+    
+    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                  timeoutInterval:60.0];
+    
+    requestData = [NSData dataWithBytes:[data UTF8String] length:[data length]];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody: requestData];    
+    
+    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                @"http://nti.goodroads.ru/api/", NSHTTPCookieDomain,
+                                @"NTIKeys", NSHTTPCookieName,
+                                cookie, NSHTTPCookieValue,
+                                @"/", NSHTTPCookiePath,
+                                nil];
+    
+    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:[NSHTTPCookie cookieWithProperties:properties]];
+    NSHTTPCookie *fcookie = [NSHTTPCookie cookieWithProperties:properties]; //?
+    NSArray* fcookies = [NSArray arrayWithObjects: fcookie, nil];   //?
+    NSDictionary * headers = [NSHTTPCookie requestHeaderFieldsWithCookies:fcookies]; //?
+    
+    [request setAllHTTPHeaderFields:headers];
+    
+    
+    // NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: &response error: &requestError ];
+    // [NSURLConnection sendAsynchronousRequest:request
+    //                                    queue:[NSOperationQueue mainQueue]
+    //                        completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *error) {
+    //                            returnString = [[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding];
+    //                            NSLog(@"returnData: %@", returnString);
+    //[self checkErrors:returnString];
+    // провверка на ошибки при получении статистики 
+    //                        }];
+    NSError *requestError = nil;
+    NSURLResponse *response = nil;
+    NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: &response error: &requestError ];
+    
+    if (requestError!=nil) {
+        NSLog(@"%@", requestError);
+        NSLog(@"ERROR!ERROR!ERROR!");
+    }
+    
+    returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
+    NSLog(@"returnData: %@", returnString);
+    
+    
+}
+
+
  
  
 

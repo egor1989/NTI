@@ -36,6 +36,8 @@
 - (BOOL)checkCookieExpires;
 - (NSString*) getStringBetweenStrings: (NSString *) main first:(NSString *)first second: (NSString*) second;
 - (void)infoAboutDevice;
+- (void)getAllStatistic;
+- (void)getLastStatistic;
 
 @property (nonatomic) BOOL errors;
 
