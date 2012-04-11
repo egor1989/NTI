@@ -1230,8 +1230,8 @@
 					"\"$(SRCROOT)/CrittercismSDK\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "945ACF9E-A880-4572-8BB2-D9BAB10DAAE6";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "945ACF9E-A880-4572-8BB2-D9BAB10DAAE6";
+				PROVISIONING_PROFILE = "237DFADE-47F7-49C9-BC7D-8CA012CD68B7";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "237DFADE-47F7-49C9-BC7D-8CA012CD68B7";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1239,8 +1239,8 @@
 		53E0A79114DEC75D004E3E1B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Vladislav Efremov";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Vladislav Efremov";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Vladislav Efremov (MBL7632743)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vladislav Efremov (MBL7632743)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NTI/NTI-Prefix.pch";
 				INFOPLIST_FILE = "NTI/NTI-Info.plist";
@@ -1249,8 +1249,8 @@
 					"\"$(SRCROOT)/CrittercismSDK\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "AE775371-96C8-4B59-9FDB-68EE33146F92";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "AE775371-96C8-4B59-9FDB-68EE33146F92";
+				PROVISIONING_PROFILE = "237DFADE-47F7-49C9-BC7D-8CA012CD68B7";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "237DFADE-47F7-49C9-BC7D-8CA012CD68B7";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

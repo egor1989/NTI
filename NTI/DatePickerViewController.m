@@ -23,8 +23,9 @@
     [super viewDidLoad];
     NSDate *today = [NSDate date];
     NSDate *twoDayBefore = [today dateByAddingTimeInterval: -172800];
+    NSDate *maxDate = [today dateByAddingTimeInterval: -900];
     datePicker.minimumDate = twoDayBefore;
-    datePicker.maximumDate = today;
+    datePicker.maximumDate = maxDate;
 }
 
 - (IBAction)doneButton:(id)sender {
