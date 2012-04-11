@@ -42,12 +42,8 @@
 
 
     lastLoc = [[CLLocation alloc] init];
-    kmch5 = NO;
-    m5Km = 0;
-    l5Km = 0;
     allDistance = 0;
     canWriteToFile = YES;//?
-    needCheck = YES;
     [recordAction startOfRecord];
     
     [self checkSpeedTimer];
@@ -91,8 +87,12 @@
 
 - (void)checkSpeedTimer{
     moreThanLimit = NO;
+    needCheck = YES;
+    m5Km = 0;
+    l5Km = 0;
+    kmch5 = NO;
     [self startGPSDetect];
-    [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(timerFired:) userInfo:nil repeats:NO];
+    [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(timerFired:) userInfo:nil repeats:NO];
 }
 
 -(void) timerFired: (NSTimer *)timer{
@@ -109,11 +109,12 @@
     }
     else {
         [self startMotionDetect];
-        
+        needCheck = NO;
         kmch5 = YES;
         canWriteToFile = YES;
         [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
-        
+        m5Km = 0;
+        l5Km = 0;
         NSLog(@"canWriteToFile = YES");
     }
     
@@ -125,9 +126,12 @@
     if (kmch5) {
         moreThanLimit = NO;
         kmch5 = NO;
-        [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(checkAfterFiveMin) userInfo:nil repeats:NO];
+        needCheck = YES;
+        m5Km = 0;
+        l5Km = 0;
+        [NSTimer scheduledTimerWithTimeInterval:300 target:self selector:@selector(checkAfterFiveMin) userInfo:nil repeats:NO];
     }
-    else [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(checkSpeedTimer) userInfo:nil repeats:NO];
+    else [NSTimer scheduledTimerWithTimeInterval:300 target:self selector:@selector(checkSpeedTimer) userInfo:nil repeats:NO];
     
 }
 
@@ -139,13 +143,10 @@
         [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
         NSLog(@"canWriteToFile = NO");
     }
- //   else {
- //       canWriteToFile = YES;
- //       [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
- //       [self startGPSDetect];
- //       [self startMotionDetect];
- //       kmch5 = YES;
- //   }
+    else {
+        needCheck = NO;
+        kmch5 = YES;
+    }
 
 }
 
@@ -177,7 +178,33 @@
     CLLocationDistance meters = [newLocation distanceFromLocation:oldLocation];
     if (meters<0) meters = 0;
     allDistance += meters;
-    if (newLocation.speed > SPEED) m5Km++;
+    
+    if (needCheck) {
+        if (newLocation.speed > SPEED) {
+            m5Km++;
+            if (m5Km > 5){
+                needCheck = NO;
+                moreThanLimit = YES;
+                canWriteToFile = YES;
+                [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
+            }
+        }
+    }
+    
+    if (kmch5) {
+        if (newLocation.speed < SPEED){
+            l5Km++;
+            
+            if (l5Km > 5) {
+                [self fiveMinTimer];                
+                
+            }
+            
+        }
+        else l5Km = 0;
+    }
+    
+/*    if (newLocation.speed > SPEED) m5Km++;
     
     if (m5Km > 5) {
         moreThanLimit = YES;
@@ -201,7 +228,7 @@
         l5Km = 0;
         kmch5 = NO;
     }
-    
+    */
     
     
     lastLoc = [[CLLocation alloc] initWithCoordinate:newLocation.coordinate altitude:newLocation.altitude horizontalAccuracy:newLocation.horizontalAccuracy verticalAccuracy:newLocation.verticalAccuracy course:newLocation.course speed:newLocation.speed timestamp:newLocation.timestamp];
