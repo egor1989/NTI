@@ -98,6 +98,11 @@
 		2775F55615068A7900FE08BC /* NTI_StatMenuIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2775F55015068A7900FE08BC /* NTI_StatMenuIcon@2x.png */; };
 		2775F5601507D01900FE08BC /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2775F55E1507D01900FE08BC /* MainStoryboard.storyboard */; };
 		2775F5641507D48C00FE08BC /* StatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2775F5631507D48C00FE08BC /* StatViewController.m */; };
+		2779258E15347C110062D871 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2779258D15347C110062D871 /* MapKit.framework */; };
+		2779259115347CA80062D871 /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2779259015347CA80062D871 /* MapViewController.m */; };
+		27792597153486800062D871 /* route.csv in Resources */ = {isa = PBXBuildFile; fileRef = 27792596153486800062D871 /* route.csv */; };
+		277925AB15349FA90062D871 /* time.png in Resources */ = {isa = PBXBuildFile; fileRef = 277925AA15349FA90062D871 /* time.png */; };
+		277925B215357F940062D871 /* MapHelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 277925B115357F940062D871 /* MapHelpViewController.m */; };
 		278FE5C6150CE2EE0098BA74 /* DatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 278FE5C5150CE2EE0098BA74 /* DatePickerViewController.m */; };
 		27CFA5301521EBA300F9AC21 /* FeedBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27CFA52E1521EBA300F9AC21 /* FeedBackViewController.m */; };
 		27EDA63B152B117A00679B25 /* MyTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 27EDA63A152B117A00679B25 /* MyTextField.m */; };
@@ -287,6 +292,13 @@
 		2775F55F1507D01900FE08BC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		2775F5621507D48C00FE08BC /* StatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatViewController.h; sourceTree = "<group>"; };
 		2775F5631507D48C00FE08BC /* StatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatViewController.m; sourceTree = "<group>"; };
+		2779258D15347C110062D871 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		2779258F15347CA80062D871 /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
+		2779259015347CA80062D871 /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
+		27792596153486800062D871 /* route.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = route.csv; sourceTree = SOURCE_ROOT; };
+		277925AA15349FA90062D871 /* time.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = time.png; path = Images/time.png; sourceTree = "<group>"; };
+		277925B015357F930062D871 /* MapHelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapHelpViewController.h; sourceTree = "<group>"; };
+		277925B115357F940062D871 /* MapHelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapHelpViewController.m; sourceTree = "<group>"; };
 		278FE5C4150CE2EE0098BA74 /* DatePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatePickerViewController.h; sourceTree = "<group>"; };
 		278FE5C5150CE2EE0098BA74 /* DatePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatePickerViewController.m; sourceTree = "<group>"; };
 		27CFA52D1521EBA300F9AC21 /* FeedBackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedBackViewController.h; sourceTree = "<group>"; };
@@ -397,6 +409,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2779258E15347C110062D871 /* MapKit.framework in Frameworks */,
 				53A560DC1535CFCB00520781 /* CoreTelephony.framework in Frameworks */,
 				2745AD01152A347300253BF2 /* QuartzCore.framework in Frameworks */,
 				536175231511098000D290F1 /* SystemConfiguration.framework in Frameworks */,
@@ -582,6 +595,7 @@
 		276C4C9214DEE6EA00C469A6 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				277925AA15349FA90062D871 /* time.png */,
 				2763714C152A4E94003FE70B /* Icons */,
 				53A5AE321527593C0093E552 /* green.png */,
 				53A5AE331527593C0093E552 /* red.png */,
@@ -623,6 +637,10 @@
 				2775F53015067E9E00FE08BC /* WebViewController.m */,
 				278FE5C4150CE2EE0098BA74 /* DatePickerViewController.h */,
 				278FE5C5150CE2EE0098BA74 /* DatePickerViewController.m */,
+				2779258F15347CA80062D871 /* MapViewController.h */,
+				2779259015347CA80062D871 /* MapViewController.m */,
+				277925B015357F930062D871 /* MapHelpViewController.h */,
+				277925B115357F940062D871 /* MapHelpViewController.m */,
 			);
 			name = Map;
 			sourceTree = "<group>";
@@ -715,6 +733,7 @@
 		53E0A75B14DEC75D004E3E1B = {
 			isa = PBXGroup;
 			children = (
+				2779258D15347C110062D871 /* MapKit.framework */,
 				2745AC4B152A344400253BF2 /* CrittercismSDK */,
 				53E0A77014DEC75D004E3E1B /* NTI */,
 				53E0A76914DEC75D004E3E1B /* Frameworks */,
@@ -751,6 +770,7 @@
 		53E0A77014DEC75D004E3E1B /* NTI */ = {
 			isa = PBXGroup;
 			children = (
+				27792596153486800062D871 /* route.csv */,
 				5361751A1510F8DB00D290F1 /* Reachability */,
 				53F8834C150A53D5000F7FE3 /* JSON framework */,
 				532A46951502621A0070340D /* CSV */,
@@ -1052,6 +1072,8 @@
 				2763714A152A4E8E003FE70B /* Icon@2x.png in Resources */,
 				2763714E152A4F0F003FE70B /* Icon.png in Resources */,
 				27637150152A4F16003FE70B /* Icon@2x.png in Resources */,
+				27792597153486800062D871 /* route.csv in Resources */,
+				277925AB15349FA90062D871 /* time.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1117,6 +1139,8 @@
 				27CFA5301521EBA300F9AC21 /* FeedBackViewController.m in Sources */,
 				27EDA63B152B117A00679B25 /* MyTextField.m in Sources */,
 				5381C8F7153046380012E99D /* RecordAction.m in Sources */,
+				2779259115347CA80062D871 /* MapViewController.m in Sources */,
+				277925B215357F940062D871 /* MapHelpViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
