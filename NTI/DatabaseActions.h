@@ -10,7 +10,6 @@
 #import <CoreLocation/CoreLocation.h>
 #import <CoreMotion/CoreMotion.h>
 #import <sqlite3.h> 
-#import "Record.h"
 #import "FileController.h"
 #import "toJSON.h"
 #import "ServerCommunication.h"

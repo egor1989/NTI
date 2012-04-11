@@ -154,7 +154,7 @@ static sqlite3_stmt *readStmt = nil;
                     
                     NSDictionary *gps = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%.1f", sqlite3_column_double(readStmt, 6)], @"direction", [NSString stringWithFormat:@"%.1f", sqlite3_column_double(readStmt, 10)], @"speed", [NSString stringWithFormat:@"%f", sqlite3_column_double(readStmt, 8)], @"latitude", [NSString stringWithFormat:@"%f", sqlite3_column_double(readStmt, 9)], @"longitude", [NSString stringWithFormat:@"%.0f", sqlite3_column_double(readStmt, 5)], @"compass", [NSString stringWithFormat:@"%.2f", sqlite3_column_double(readStmt, 7)], @"distance", nil];
                     
-                    NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.0f", sqlite3_column_double(readStmt, 2)],[NSString stringWithFormat:@"%s", sqlite3_column_text(readStmt, 1)], 
+                    NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.3f", sqlite3_column_double(readStmt, 2)],[NSString stringWithFormat:@"%s", sqlite3_column_text(readStmt, 1)], 
                                      acc, gps, nil];
                     
                     NSDictionary *record = [NSDictionary dictionaryWithObjects:objs forKeys:keys];
@@ -189,12 +189,12 @@ static sqlite3_stmt *readStmt = nil;
 - (BOOL) convertAndWrite{
     NSInteger size = [dataArray count];
     NSLog(@"%i",size);
-    NSString *CSV = [csvConverter arrayToCSVString:dataArray];
+  //  NSString *CSV = [csvConverter arrayToCSVString:dataArray];
     NSString *JSON = [jsonConvert convert:dataArray];
     
     NSDateFormatter * date_format = [[NSDateFormatter alloc] init];
     [date_format setDateFormat: @"dd.MM.YYYY"]; 
-    NSLog (@"Date: %@", [date_format stringFromDate:[NSDate date]]);
+  //  NSLog (@"Date: %@", [date_format stringFromDate:[NSDate date]]);
      
     
     if ([serverCommunication checkInternetConnection]) {
@@ -206,8 +206,8 @@ static sqlite3_stmt *readStmt = nil;
         NSLog(@"интернета нет - записано в локальный файл");
     }
     
-    if ([fileController writeToFile:CSV fileName: [date_format stringFromDate:[NSDate date]]]) return YES;
-    else return NO;
+ //   if ([fileController writeToFile:CSV fileName: [date_format stringFromDate:[NSDate date]]]) return YES;
+ //   else return NO;
 }
 
 - (BOOL) deleteRowsFrom: (NSInteger)start To: (NSInteger)end{

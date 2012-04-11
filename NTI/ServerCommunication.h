@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "SBJson.h"
 #import "Reachability.h"
+#import <CoreTelephony/CTCarrier.h>
+#import <CoreTelephony/CTTelephonyNetworkInfo.h>
 
 @interface ServerCommunication : NSObject {
     NSString *returnString; 
@@ -20,6 +22,8 @@
     NSString *deviceName;
     NSString *systemVersion;
     NSString *model;
+    NSString *carrierName;
+
     
 }
 - (void)regUser:(NSString *)login password:(NSString *)password email:(NSString *)email;
