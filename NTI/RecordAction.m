@@ -110,6 +110,10 @@
     [databaseAction readDatabase]; 
 }
 
+- (void)eventRecord: (NSString *)type{
+    [databaseAction addEntrie:type];
+}
+
 
 
 

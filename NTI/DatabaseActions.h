@@ -37,6 +37,7 @@
     toJSON *jsonConvert;
     FileController *fileController;
     
+    
 
     
 }
@@ -49,4 +50,5 @@
 + (void) finalizeStatements;
 - (BOOL) convertAndWrite;
 - (BOOL) deleteRowsFrom: (NSInteger)start To: (NSInteger)end;
+- (BOOL) addEntrie: (NSString *)type;
 @end
