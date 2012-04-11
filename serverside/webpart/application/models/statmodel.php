@@ -5,7 +5,9 @@ class statmodel extends CI_Model {
 	function display() {
 		//selects data from last 7 days.
 		$this->db->where('utimestamp >', time()-7*60*60*24);
+		$this->db->order_by('utimestamp', 'asc');
 		$query = $this->db->get('NTIEntry');
+		
 		$i = 0;
 		if ($query->num_rows() > 0) {
 			foreach ($query->result() as $row) {
