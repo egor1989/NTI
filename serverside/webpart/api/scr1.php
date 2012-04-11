@@ -20,6 +20,100 @@ if(connec_to_db()==0) {
 }
 	
 //////////////////////////////////////////////////////////////////////// 
+
+function gCercle ($lon1, $lat1, $lon2, $lat2)
+{	
+	return 2 * 6367 * sin(sqrt(pow(sin(($lat1-$lat2)/2),2)+(cos($lat1)*cos($lat2)*pow(sin(($lon1-$lon2)/2),2))));
+}
+/*
+$query = 'SELECT Id,	File FROM NTIFile';
+$result = mysql_query($query);
+$c = 0;
+$n = 0;
+while ($row = mysql_fetch_array($result)) 
+{
+	$someArr[$c] = json_decode($row['File'],true);
+	$k = 0;	$fileid = $row['Id'];
+	while ($someArr[$c][$k]) 
+	{
+		//$encData[$n]['accx'] = $someArr[$c][$k]['acc']['x'];
+		//$encData[$n]['accy'] = $someArr[$c][$k]['acc']['y'];
+		//$encData[$n]['lat'] = $someArr[$c][$k]['gps']['latitude'];
+		//$encData[$n]['lng'] = $someArr[$c][$k]['gps']['longitude'];
+		//$encData[$n]['compass'] = $someArr[$c][$k]['gps']['compass'];
+		//$encData[$n]['speed'] = $someArr[$c][$k]['gps']['speed'];
+		//$encData[$n]['distance'] = $someArr[$c][$k]['gps']['distance'];
+		//$encData[$n]['utimestamp'] = $someArr[$c][$k]['timestamp'];
+		//$encData[$n]['fileid'] = $k;
+		$accx = $someArr[$c][$k]['acc']['x'];
+		$accy = $someArr[$c][$k]['acc']['y'];
+		$lat =  $someArr[$c][$k]['gps']['latitude'];
+		$lng = $someArr[$c][$k]['gps']['longitude'];
+		$direction = $someArr[$c][$k]['gps']['direction'];
+		$compass = $someArr[$c][$k]['gps']['compass'];
+		$speed = $someArr[$c][$k]['gps']['speed'];
+		$distance = $someArr[$c][$k]['gps']['distance'];
+		$utimestamp = $someArr[$c][$k]['timestamp']/1000;
+	
+		$str = "INSERT INTO NTIEntry (UID, accx, accy, distance, lat, lng, direction, compass, speed, utimestamp, FileId) VALUES (-3, $accx, $accy, $distance, $lat, $lng, $direction, $compass, $speed, $utimestamp, $fileid)";
+		$k++;
+		$n++;
+		mysql_query($str);
+		//echo date($utimestamp) . "<br>";
+	}
+	$c++;
+}
+*/
+//$i = 0;
+//while ($p[$i]) {
+//	echo date('YYYY-mm-dd', $p[$i]['utimestamp']) . "<br>";
+//	$i++;
+//}
+
+
+//Получаем последнюю поездку
+
+$query = 'SELECT * FROM NTIEntry where utimestamp!=0 order by utimestamp';
+$result = mysql_query($query);
+$c = 0;
+$n = 0;
+while ($row = mysql_fetch_array($result)) 
+{
+		$encData[$n]['accx'] = $row['accx'];
+		$encData[$n]['accy'] = $row['accy'];
+		$encData[$n]['lat'] = $row['lat'];
+		$encData[$n]['lng'] = $row['lng'];
+		$encData[$n]['compass'] = $row['compass'];
+		$encData[$n]['speed'] = $row['speed'];
+		$encData[$n]['distance'] = $row['distance'];
+		$encData[$n]['utimestamp'] = $row['utimestamp'];
+		$n++;
+}
+//Начинаем группировку
+$k=0;
+$m=0;
+$grouped[$k][0]=$encData[0];
+for($i=0;$i<count($encData);$i++)
+{
+	if($encData[$i]['utimestamp']-$grouped[$k][$m]['utimestamp']<600)
+	{$grouped[$k][$m+1]=$encData[$i];$m++;}
+	else
+	{
+		$k++;
+		$m=0;
+		$grouped[$k][$m]=$encData[$i];
+	}
+}
+echo $k;
+$total_time=0;
+$total_score=0;
+$total_turn=0;
+$total_acc=0;
+$total_break=0;
+for($m=0;$m<$k;$m++)
+{
+unset($encData);
+$encData=$grouped[$m];
 $drivingScore = 0;
 $coef1 = 0.1;
 $coef2 = 0.2;
@@ -40,55 +134,9 @@ $turn2=0;
 $turn3=0;
 $acc = 0;
 	
-function gCercle ($lon1, $lat1, $lon2, $lat2)
-{	
-	return 2 * 6367 * sin(sqrt(pow(sin(($lat1-$lat2)/2),2)+(cos($lat1)*cos($lat2)*pow(sin(($lon1-$lon2)/2),2))));
-}
-
-$query = 'SELECT File FROM NTIFile';
-$result = mysql_query($query);
-$c = 0;
-$n = 0;
-while ($row = mysql_fetch_array($result)) 
-{
-	$someArr[$c] = json_decode($row['File'],true);
-	$k = 0;
-	while ($someArr[$c][$k]) 
-	{
-		$encData[$n]['lat'] = $someArr[$c][$k]['gps']['latitude'];
-		$encData[$n]['lng'] = $someArr[$c][$k]['gps']['longitude'];
-		$encData[$n]['compass'] = $someArr[$c][$k]['gps']['compass'];
-		$encData[$n]['speed'] = $someArr[$c][$k]['gps']['speed'];
-		$encData[$n]['distance'] = $someArr[$c][$k]['gps']['distance'];
-		$encData[$n]['utimestamp'] = $someArr[$c][$k]['timestamp'];
-		$k++;
-		$n++;
-	}
-	$c++;
-}
-unset($someArr);
-$dmax = 0.001;
-$j = 0;
-for ($i = 0; $i < $n; $i++)
-{
-	if ($dmax > 0)
-	{
-		if ($encData[$i]['utimestamp'] == "" && $i > -1)
-		{
-			$d = gCercle($lon1,$lat1, $encData[$i]['lng']*PI()/180, $encData[$i]['lat']*PI()/180);
-			if ($d < $dmax)
-			{
-				continue;
-			}
-		}
-		$lon1 = $encData[$i]['lng']*PI()/180;
-		$lat1 = $encData[$i]['lat']*PI()/180;
-		$filteredPt[$j] = $encData[$i];
-		$j++;
-	}
-}
 
 
+$j=count($encData);
 for ($i = 1; $i < $j; $i++)
 {
 	$typeTurn[0] = 'normal point';
@@ -96,16 +144,15 @@ for ($i = 1; $i < $j; $i++)
 	$sevTurn = 0;
 	$sevAcc = 0;
 	$sevSpeed = 0;
-	$speed = $filteredPt[$i]['speed'];
-	
-	$deltaTime = ($filteredPt[$i]['utimestamp'] - $filteredPt[$i-1]['utimestamp'])/1000;
-	///////////////////////////////////////////////////////// ok
-	
-	if ( ($i != 0) && (($filteredPt[$i]['lng']-$filteredPt[$i-1]['lng']) != 0 ) )
+	$speed = $encData[$i]['speed'];	
+	$deltaTime = ($encData[$i]['utimestamp'] - $encData[$i-1]['utimestamp']);
+
+	if ( ($encData[$i]['lng']-$encData[$i-1]['lng']) != 0  )
 	{
-		$turn[$i] = atan(($filteredPt[$i]['lat']-$filteredPt[$i-1]['lat'])/($filteredPt[$i]['lng']-$filteredPt[$i-1]['lng']));
+		$turn[$i] = atan(($encData[$i]['lat']-$encData[$i-1]['lat'])/($encData[$i]['lng']-$encData[$i-1]['lng']));
 		$turn[0] = 0;
 		$deltaTurn = $turn[$i] - $turn[$i-1];
+		//echo $deltaTurn."<br/>";
 		$wAcc = abs($deltaTurn/$deltaTime);
 		$radius = $speed/$wAcc;
 		if ($speed < 90) {
@@ -132,7 +179,7 @@ for ($i = 1; $i < $j; $i++)
 			$sevTurn = 3;
 			$turn3++;
 		}
-		if ( ($typeTurn[$i-1] == 'left turn finished') || ($typeTurn[$i-1] == 'right turn finished') || (!isset($typeTurn[$i-1])) || ($speed == 0) ){
+		if (($typeTurn[$i-1] == 'left turn finished') || ($typeTurn[$i-1] == 'right turn finished') || (!isset($typeTurn[$i-1])) || ($speed == 0) ){
 			$typeTurn[$i] = 'normal point';
 		} else 	if ($deltaTurn > 0.5)   {
 		    if ($typeTurn[$i-1] == 'normal point') $typeTurn[$i] = 'left turn started';
@@ -159,8 +206,8 @@ for ($i = 1; $i < $j; $i++)
 	$timeSum = 0;
 	$sumSpeed = 0;
 
-	if (($i != 0)&&($deltaTime!=0)){
-		$deltaSpeed = $speed - $filteredPt[$i-1]['speed'];
+	if ($deltaTime!=0){
+		$deltaSpeed = $speed - $encData[$i-1]['speed'];
 		$accel[$i] = $deltaSpeed/$deltaTime;
 		if ($accel[$i]<-7.5) {
 		  $sevAcc = -3;
@@ -184,20 +231,28 @@ for ($i = 1; $i < $j; $i++)
 		  $sevAcc = 0;
 		}
 	}
-	$color = 'white';
-	if ($sevAcc==1) $color = '#c3eb0d';
-	if ($sevAcc==2) $color = '#0deb12';
-	if ($sevAcc==3) $color = '#0deb88';
-	if ($sevAcc==-1) $color = '#ebc10d';
-	if ($sevAcc==-2) $color = '#eb610d';
-	if ($sevAcc==-3) $color = '#eb0d1b';
+
 }
 
-$fullTime = ($filteredPt[$j - 1]['utimestamp'] - $filteredPt[0]['utimestamp']) /1000 / 60 / 60;
-$drivingScore = ($coef1 * ($speed1 + $turn1 + $acc1 + $brake1) + $coef2 * ($speed2 + $turn2 + $acc2 + $brake2) + $coef3 * ($speed3 + $turn3 + $acc3 + $brake3)) / $fullTime;
 
-//lolcheck
-echo $fullTime . "<br>";
-echo $drivingScore . "<br>";
+$fullTime = ($encData[$j - 1]['utimestamp'] - $encData[0]['utimestamp']) /1000 / 60 / 60;
+$drivingScore = ($coef1 * ($speed1 + $turn1 + $acc1 + $brake1) + $coef2 * ($speed2 + $turn2 + $acc2 + $brake2) + $coef3 * ($speed3 + $turn3 + $acc3 + $brake3)) / $fullTime;
+echo "Time ".$fullTime."<br/>";
+echo "score ".$total_score."<br/>";
+echo "turn ".$total_turn."<br/>";
+echo "acc ".$total_acc."<br/>";
+echo "break ".$total_break."<br/>";
+
+$total_time=$total_time+$fullTime; 
+$total_score=$total_score+$drivingScore; 
+$total_turn=$total_turn+$turn1+$turn3+$turn2; 
+$total_acc=$total_acc+$acc1+$acc2+$acc3; 
+$total_break=$total_break+$brake1+$brake2+$brake3; 
+}
+echo "Total time ".$total_time."<br/>";
+echo "Total score ".$total_score/$k."<br/>";
+echo "Total turn ".$total_turn."<br/>";
+echo "Total acc ".$total_acc."<br/>";
+echo "Total break ".$total_break."<br/>";
 
 ?>
