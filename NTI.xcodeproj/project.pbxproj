@@ -98,6 +98,11 @@
 		2775F55615068A7900FE08BC /* NTI_StatMenuIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2775F55015068A7900FE08BC /* NTI_StatMenuIcon@2x.png */; };
 		2775F5601507D01900FE08BC /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2775F55E1507D01900FE08BC /* MainStoryboard.storyboard */; };
 		2775F5641507D48C00FE08BC /* StatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2775F5631507D48C00FE08BC /* StatViewController.m */; };
+		2779258E15347C110062D871 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2779258D15347C110062D871 /* MapKit.framework */; };
+		2779259115347CA80062D871 /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2779259015347CA80062D871 /* MapViewController.m */; };
+		27792597153486800062D871 /* route.csv in Resources */ = {isa = PBXBuildFile; fileRef = 27792596153486800062D871 /* route.csv */; };
+		277925AB15349FA90062D871 /* time.png in Resources */ = {isa = PBXBuildFile; fileRef = 277925AA15349FA90062D871 /* time.png */; };
+		277925B215357F940062D871 /* MapHelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 277925B115357F940062D871 /* MapHelpViewController.m */; };
 		278FE5C6150CE2EE0098BA74 /* DatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 278FE5C5150CE2EE0098BA74 /* DatePickerViewController.m */; };
 		27CFA5301521EBA300F9AC21 /* FeedBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27CFA52E1521EBA300F9AC21 /* FeedBackViewController.m */; };
 		27EDA63B152B117A00679B25 /* MyTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 27EDA63A152B117A00679B25 /* MyTextField.m */; };
@@ -109,6 +114,7 @@
 		5381C8F7153046380012E99D /* RecordAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 5381C8F6153046380012E99D /* RecordAction.m */; };
 		539B29BE14F305C3007E6977 /* gps.png in Resources */ = {isa = PBXBuildFile; fileRef = 539B29BC14F305C3007E6977 /* gps.png */; };
 		539B29BF14F305C3007E6977 /* north.png in Resources */ = {isa = PBXBuildFile; fileRef = 539B29BD14F305C3007E6977 /* north.png */; };
+		53A560DC1535CFCB00520781 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A560DB1535CFCB00520781 /* CoreTelephony.framework */; };
 		53A5AE341527593C0093E552 /* green.png in Resources */ = {isa = PBXBuildFile; fileRef = 53A5AE321527593C0093E552 /* green.png */; };
 		53A5AE351527593C0093E552 /* red.png in Resources */ = {isa = PBXBuildFile; fileRef = 53A5AE331527593C0093E552 /* red.png */; };
 		53AAF04B14FE2CF000E12486 /* ServerCommunication.m in Sources */ = {isa = PBXBuildFile; fileRef = 53AAF04A14FE2CF000E12486 /* ServerCommunication.m */; };
@@ -160,7 +166,6 @@
 		53F8836D150A53D6000F7FE3 /* SBJsonUTF8Stream.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F88361150A53D6000F7FE3 /* SBJsonUTF8Stream.m */; };
 		53F8836E150A53D6000F7FE3 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F88363150A53D6000F7FE3 /* SBJsonWriter.m */; };
 		53F88371150B9740000F7FE3 /* log.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 53F88370150B9740000F7FE3 /* log.sqlite */; };
-		53F88378150BD312000F7FE3 /* Record.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F88377150BD311000F7FE3 /* Record.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -287,6 +292,13 @@
 		2775F55F1507D01900FE08BC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		2775F5621507D48C00FE08BC /* StatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatViewController.h; sourceTree = "<group>"; };
 		2775F5631507D48C00FE08BC /* StatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatViewController.m; sourceTree = "<group>"; };
+		2779258D15347C110062D871 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		2779258F15347CA80062D871 /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
+		2779259015347CA80062D871 /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
+		27792596153486800062D871 /* route.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = route.csv; sourceTree = SOURCE_ROOT; };
+		277925AA15349FA90062D871 /* time.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = time.png; path = Images/time.png; sourceTree = "<group>"; };
+		277925B015357F930062D871 /* MapHelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapHelpViewController.h; sourceTree = "<group>"; };
+		277925B115357F940062D871 /* MapHelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapHelpViewController.m; sourceTree = "<group>"; };
 		278FE5C4150CE2EE0098BA74 /* DatePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatePickerViewController.h; sourceTree = "<group>"; };
 		278FE5C5150CE2EE0098BA74 /* DatePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatePickerViewController.m; sourceTree = "<group>"; };
 		27CFA52D1521EBA300F9AC21 /* FeedBackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedBackViewController.h; sourceTree = "<group>"; };
@@ -305,6 +317,7 @@
 		5381C8F6153046380012E99D /* RecordAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordAction.m; sourceTree = "<group>"; };
 		539B29BC14F305C3007E6977 /* gps.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gps.png; sourceTree = "<group>"; };
 		539B29BD14F305C3007E6977 /* north.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = north.png; sourceTree = "<group>"; };
+		53A560DB1535CFCB00520781 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		53A5AE321527593C0093E552 /* green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = green.png; path = Images/green.png; sourceTree = "<group>"; };
 		53A5AE331527593C0093E552 /* red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = red.png; path = Images/red.png; sourceTree = "<group>"; };
 		53AAF04914FE2CF000E12486 /* ServerCommunication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerCommunication.h; sourceTree = "<group>"; };
@@ -389,8 +402,6 @@
 		53F88362150A53D6000F7FE3 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
 		53F88363150A53D6000F7FE3 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
 		53F88370150B9740000F7FE3 /* log.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = log.sqlite; sourceTree = "<group>"; };
-		53F88376150BD310000F7FE3 /* Record.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Record.h; sourceTree = "<group>"; };
-		53F88377150BD311000F7FE3 /* Record.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Record.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -398,6 +409,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2779258E15347C110062D871 /* MapKit.framework in Frameworks */,
+				53A560DC1535CFCB00520781 /* CoreTelephony.framework in Frameworks */,
 				2745AD01152A347300253BF2 /* QuartzCore.framework in Frameworks */,
 				536175231511098000D290F1 /* SystemConfiguration.framework in Frameworks */,
 				53E0A82914E6DC49004E3E1B /* libz.1.2.5.dylib in Frameworks */,
@@ -582,6 +595,7 @@
 		276C4C9214DEE6EA00C469A6 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				277925AA15349FA90062D871 /* time.png */,
 				2763714C152A4E94003FE70B /* Icons */,
 				53A5AE321527593C0093E552 /* green.png */,
 				53A5AE331527593C0093E552 /* red.png */,
@@ -623,6 +637,10 @@
 				2775F53015067E9E00FE08BC /* WebViewController.m */,
 				278FE5C4150CE2EE0098BA74 /* DatePickerViewController.h */,
 				278FE5C5150CE2EE0098BA74 /* DatePickerViewController.m */,
+				2779258F15347CA80062D871 /* MapViewController.h */,
+				2779259015347CA80062D871 /* MapViewController.m */,
+				277925B015357F930062D871 /* MapHelpViewController.h */,
+				277925B115357F940062D871 /* MapHelpViewController.m */,
 			);
 			name = Map;
 			sourceTree = "<group>";
@@ -715,7 +733,7 @@
 		53E0A75B14DEC75D004E3E1B = {
 			isa = PBXGroup;
 			children = (
-				2745AD00152A347300253BF2 /* QuartzCore.framework */,
+				2779258D15347C110062D871 /* MapKit.framework */,
 				2745AC4B152A344400253BF2 /* CrittercismSDK */,
 				53E0A77014DEC75D004E3E1B /* NTI */,
 				53E0A76914DEC75D004E3E1B /* Frameworks */,
@@ -734,6 +752,8 @@
 		53E0A76914DEC75D004E3E1B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				53A560DB1535CFCB00520781 /* CoreTelephony.framework */,
+				2745AD00152A347300253BF2 /* QuartzCore.framework */,
 				536175221511098000D290F1 /* SystemConfiguration.framework */,
 				53E0A82814E6DC49004E3E1B /* libz.1.2.5.dylib */,
 				53E0A81E14E6AC6F004E3E1B /* MessageUI.framework */,
@@ -750,6 +770,7 @@
 		53E0A77014DEC75D004E3E1B /* NTI */ = {
 			isa = PBXGroup;
 			children = (
+				27792596153486800062D871 /* route.csv */,
 				5361751A1510F8DB00D290F1 /* Reachability */,
 				53F8834C150A53D5000F7FE3 /* JSON framework */,
 				532A46951502621A0070340D /* CSV */,
@@ -788,8 +809,6 @@
 				276C4C9A14DEF4FF00C469A6 /* DatabaseActions.m */,
 				53E0A79C14DEDE6F004E3E1B /* libsqlite3.0.dylib */,
 				53E0A79D14DEDE6F004E3E1B /* libsqlite3.dylib */,
-				53F88376150BD310000F7FE3 /* Record.h */,
-				53F88377150BD311000F7FE3 /* Record.m */,
 			);
 			name = DataBase;
 			sourceTree = "<group>";
@@ -1053,6 +1072,8 @@
 				2763714A152A4E8E003FE70B /* Icon@2x.png in Resources */,
 				2763714E152A4F0F003FE70B /* Icon.png in Resources */,
 				27637150152A4F16003FE70B /* Icon@2x.png in Resources */,
+				27792597153486800062D871 /* route.csv in Resources */,
+				277925AB15349FA90062D871 /* time.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1112,13 +1133,14 @@
 				53F8836C150A53D6000F7FE3 /* SBJsonTokeniser.m in Sources */,
 				53F8836D150A53D6000F7FE3 /* SBJsonUTF8Stream.m in Sources */,
 				53F8836E150A53D6000F7FE3 /* SBJsonWriter.m in Sources */,
-				53F88378150BD312000F7FE3 /* Record.m in Sources */,
 				5361751D1510FE6A00D290F1 /* Reachability.m in Sources */,
 				53D8F580151DFC7C00589D67 /* HelpViewController.m in Sources */,
 				53D8F584151E0EBA00589D67 /* IterviewViewController.m in Sources */,
 				27CFA5301521EBA300F9AC21 /* FeedBackViewController.m in Sources */,
 				27EDA63B152B117A00679B25 /* MyTextField.m in Sources */,
 				5381C8F7153046380012E99D /* RecordAction.m in Sources */,
+				2779259115347CA80062D871 /* MapViewController.m in Sources */,
+				277925B215357F940062D871 /* MapHelpViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1166,8 +1188,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				PROVISIONING_PROFILE = "237DFADE-47F7-49C9-BC7D-8CA012CD68B7";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "237DFADE-47F7-49C9-BC7D-8CA012CD68B7";
+				PROVISIONING_PROFILE = "945ACF9E-A880-4572-8BB2-D9BAB10DAAE6";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "945ACF9E-A880-4572-8BB2-D9BAB10DAAE6";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1178,8 +1200,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Vladislav Efremov (MBL7632743)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vladislav Efremov (MBL7632743)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Vladislav Efremov";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Vladislav Efremov";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -1188,8 +1210,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "237DFADE-47F7-49C9-BC7D-8CA012CD68B7";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "237DFADE-47F7-49C9-BC7D-8CA012CD68B7";
+				PROVISIONING_PROFILE = "AE775371-96C8-4B59-9FDB-68EE33146F92";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "AE775371-96C8-4B59-9FDB-68EE33146F92";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1208,8 +1230,8 @@
 					"\"$(SRCROOT)/CrittercismSDK\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "57E9399D-33B1-4820-BA4C-E5AEF63BDE98";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "237DFADE-47F7-49C9-BC7D-8CA012CD68B7";
+				PROVISIONING_PROFILE = "945ACF9E-A880-4572-8BB2-D9BAB10DAAE6";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "945ACF9E-A880-4572-8BB2-D9BAB10DAAE6";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1217,8 +1239,8 @@
 		53E0A79114DEC75D004E3E1B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: Vladislav Efremov (MBL7632743)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vladislav Efremov (MBL7632743)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Vladislav Efremov";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Vladislav Efremov";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NTI/NTI-Prefix.pch";
 				INFOPLIST_FILE = "NTI/NTI-Info.plist";
@@ -1227,8 +1249,8 @@
 					"\"$(SRCROOT)/CrittercismSDK\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "57E9399D-33B1-4820-BA4C-E5AEF63BDE98";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "237DFADE-47F7-49C9-BC7D-8CA012CD68B7";
+				PROVISIONING_PROFILE = "AE775371-96C8-4B59-9FDB-68EE33146F92";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "AE775371-96C8-4B59-9FDB-68EE33146F92";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

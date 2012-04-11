@@ -15,6 +15,7 @@
 static sqlite3 *database = nil;
 static sqlite3_stmt *deleteStmt = nil;
 static sqlite3_stmt *addStmt = nil;
+static sqlite3_stmt *addEntr = nil;
 static sqlite3_stmt *readStmt = nil;
 
 
@@ -116,6 +117,48 @@ static sqlite3_stmt *readStmt = nil;
     return YES;
 }
 
+- (BOOL)addEntrie: (NSString *)type{
+    
+   // double currentTime = [[NSData data] timeIntervalSince1970];
+    NSLog(@" time = %f, type = %@",[[NSDate date] timeIntervalSince1970], type);
+    
+    const char *sql = "INSERT INTO log(type, time, accX, accY, compass, direction, distance, latitude, longitude, speed) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    if(addEntr == nil) {
+        if(sqlite3_prepare_v2(database, sql, -1, &addEntr, NULL) != SQLITE_OK){
+            NSAssert1(0, @"Error while creating add statement. '%s'", sqlite3_errmsg(database));
+            return NO;
+        }
+    }
+    sqlite3_bind_text(addEntr, 1, [type UTF8String], -1, SQLITE_TRANSIENT);
+    sqlite3_bind_double(addEntr, 2, [[NSDate date] timeIntervalSince1970]);
+    
+    //
+    //
+    //
+    
+    if(SQLITE_DONE != sqlite3_step(addEntr)){
+        NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
+        return NO;
+    }
+    else {
+        //SQLite provides a method to get the last primary key inserted by using sqlite3_last_insert_rowid
+        //sqlite3_
+        pk = sqlite3_last_insert_rowid(database);
+        NSLog(@"addRecord %i",pk);
+        [userDefaults setInteger:pk forKey:@"pk"];
+        
+    }
+    
+    
+    //Reset the add statement.
+    sqlite3_reset(addEntr); 
+    sqlite3_clear_bindings(addEntr);
+
+    
+    return YES;
+
+}
+
 
 - (void) clearDatabase{
     const char *sql = "delete from log";
@@ -154,7 +197,7 @@ static sqlite3_stmt *readStmt = nil;
                     
                     NSDictionary *gps = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%.1f", sqlite3_column_double(readStmt, 6)], @"direction", [NSString stringWithFormat:@"%.1f", sqlite3_column_double(readStmt, 10)], @"speed", [NSString stringWithFormat:@"%f", sqlite3_column_double(readStmt, 8)], @"latitude", [NSString stringWithFormat:@"%f", sqlite3_column_double(readStmt, 9)], @"longitude", [NSString stringWithFormat:@"%.0f", sqlite3_column_double(readStmt, 5)], @"compass", [NSString stringWithFormat:@"%.2f", sqlite3_column_double(readStmt, 7)], @"distance", nil];
                     
-                    NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.0f", sqlite3_column_double(readStmt, 2)],[NSString stringWithFormat:@"%s", sqlite3_column_text(readStmt, 1)], 
+                    NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.3f", sqlite3_column_double(readStmt, 2)],[NSString stringWithFormat:@"%s", sqlite3_column_text(readStmt, 1)], 
                                      acc, gps, nil];
                     
                     NSDictionary *record = [NSDictionary dictionaryWithObjects:objs forKeys:keys];
@@ -189,12 +232,12 @@ static sqlite3_stmt *readStmt = nil;
 - (BOOL) convertAndWrite{
     NSInteger size = [dataArray count];
     NSLog(@"%i",size);
-    NSString *CSV = [csvConverter arrayToCSVString:dataArray];
+  //  NSString *CSV = [csvConverter arrayToCSVString:dataArray];
     NSString *JSON = [jsonConvert convert:dataArray];
     
     NSDateFormatter * date_format = [[NSDateFormatter alloc] init];
     [date_format setDateFormat: @"dd.MM.YYYY"]; 
-    NSLog (@"Date: %@", [date_format stringFromDate:[NSDate date]]);
+  //  NSLog (@"Date: %@", [date_format stringFromDate:[NSDate date]]);
      
     
     if ([serverCommunication checkInternetConnection]) {
@@ -206,8 +249,8 @@ static sqlite3_stmt *readStmt = nil;
         NSLog(@"интернета нет - записано в локальный файл");
     }
     
-    if ([fileController writeToFile:CSV fileName: [date_format stringFromDate:[NSDate date]]]) return YES;
-    else return NO;
+ //   if ([fileController writeToFile:CSV fileName: [date_format stringFromDate:[NSDate date]]]) return YES;
+ //   else return NO;
 }
 
 - (BOOL) deleteRowsFrom: (NSInteger)start To: (NSInteger)end{

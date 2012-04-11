@@ -10,7 +10,6 @@
 #import <CoreLocation/CoreLocation.h>
 #import <CoreMotion/CoreMotion.h>
 #import <sqlite3.h> 
-#import "Record.h"
 #import "FileController.h"
 #import "toJSON.h"
 #import "ServerCommunication.h"
@@ -38,6 +37,7 @@
     toJSON *jsonConvert;
     FileController *fileController;
     
+    
 
     
 }
@@ -50,4 +50,5 @@
 + (void) finalizeStatements;
 - (BOOL) convertAndWrite;
 - (BOOL) deleteRowsFrom: (NSInteger)start To: (NSInteger)end;
+- (BOOL) addEntrie: (NSString *)type;
 @end

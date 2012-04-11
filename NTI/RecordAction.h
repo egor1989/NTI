@@ -23,5 +23,6 @@
 - (void)checkWriteRight;
 - (void)startOfRecord;
 - (void)sendFile;
+- (void)eventRecord: (NSString *)type;
 
 @end

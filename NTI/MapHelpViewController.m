@@ -1,41 +1,51 @@
 //
-//  DatePickerViewController.m
+//  MapHelpViewController.m
 //  NTI
 //
-//  Created by Mike on 11.03.12.
+//  Created by Mike on 11.04.12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "DatePickerViewController.h"
+#import "MapHelpViewController.h"
 
-@implementation DatePickerViewController
+@implementation MapHelpViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        // Custom initialization
     }
     return self;
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    NSDate *today = [NSDate date];
-    NSDate *twoDayBefore = [today dateByAddingTimeInterval: -172800];
-    datePicker.minimumDate = twoDayBefore;
-    datePicker.maximumDate = today;
-}
-
-- (IBAction)doneButton:(id)sender {
-    NSDate *myDate = datePicker.date;
-    NSLog(@"%f",[myDate timeIntervalSinceNow]);
+-(IBAction) okButton:(id)sender{
     [self dismissModalViewControllerAnimated:YES];
-    [[NSNotificationCenter defaultCenter]	postNotificationName:	@"routePointsRequestSend" object:  nil];
+}
+- (void)didReceiveMemoryWarning
+{
+    // Releases the view if it doesn't have a superview.
+    [super didReceiveMemoryWarning];
+    
+    // Release any cached data, images, etc that aren't in use.
 }
 
 #pragma mark - View lifecycle
 
+/*
+// Implement loadView to create a view hierarchy programmatically, without using a nib.
+- (void)loadView
+{
+}
+*/
+
+/*
+// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+}
+*/
 
 - (void)viewDidUnload
 {

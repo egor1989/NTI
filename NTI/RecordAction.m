@@ -69,7 +69,7 @@
 
     NSArray *keys = [NSArray arrayWithObjects:@"timestamp", @"type", @"accX", @"accY", @"compass", @"direction", @"distance", @"latitude", @"longitude",@"speed", nil];
     
-    NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]*1000], type, [NSString stringWithFormat:@"%f", x], [NSString stringWithFormat:@"%f", y], [NSString stringWithFormat:@"%.0f",[myAppDelegate north]], [NSString stringWithFormat:@"%.1f",[myAppDelegate course]], [NSString stringWithFormat:@"%.2f",distance], [NSString stringWithFormat:@"%.6f",location.coordinate.latitude],[NSString stringWithFormat:@"%.6f",location.coordinate.longitude], [NSString stringWithFormat:@"%.2f",curSpeed], nil];
+    NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.3f",[[[NSDate alloc ]init]timeIntervalSince1970]], type, [NSString stringWithFormat:@"%f", x], [NSString stringWithFormat:@"%f", y], [NSString stringWithFormat:@"%.0f",[myAppDelegate north]], [NSString stringWithFormat:@"%.1f",[myAppDelegate course]], [NSString stringWithFormat:@"%.2f",distance], [NSString stringWithFormat:@"%.6f",location.coordinate.latitude],[NSString stringWithFormat:@"%.6f",location.coordinate.longitude], [NSString stringWithFormat:@"%.2f",curSpeed], nil];
     NSDictionary *entries = [NSDictionary dictionaryWithObjects: objs forKeys:keys];
     [dataArray addObject:entries];
         
@@ -101,11 +101,17 @@
 
 - (void)checkWriteRight{
     if ([myAppDelegate canWriteToFile]) [self addRecord];
-    else [self endOfRecord];
+   // else [self endOfRecord];
 }
+
+
 
 - (void)sendFile{
     [databaseAction readDatabase]; 
+}
+
+- (void)eventRecord: (NSString *)type{
+    [databaseAction addEntrie:type];
 }
 
 
