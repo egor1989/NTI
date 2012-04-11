@@ -418,7 +418,10 @@
 
 - (IBAction)sendButton:(id)sender{
     RecordAction *recordAction = [[RecordAction alloc] init];
-    
+    //
+    ServerCommunication *serverCommunication = [[ServerCommunication alloc] init];
+    [serverCommunication refreshCookie];
+    //
     [recordAction sendFile];
     
 }

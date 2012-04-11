@@ -20,6 +20,7 @@
     NSString *deviceName;
     NSString *systemVersion;
     NSString *model;
+
     
 }
 - (void)regUser:(NSString *)login password:(NSString *)password email:(NSString *)email;

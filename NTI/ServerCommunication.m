@@ -15,9 +15,7 @@
 - (void)uploadData:(NSString *)fileContent{
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSLog(@"cookie = %@", [userDefaults valueForKey:@"cookie"]);
-    //заменить на выборку строки
-    //и время .???
-    NSString *cookie = @"SYzK12oVj9QUnsed2CioLF0BVqXG9CYW2iNtNiTLznyhHSYK1DV7CWSYDpeBr3Yj";//[userDefaults valueForKey:@"cookie"]; //?
+    NSString *cookie = [userDefaults valueForKey:@"cookie"]; 
   //  NSString * cookie = [self refreshCookie];
     
     fileContent=[@"data={\"method\":\"addNTIFile\",\"params\":{\"ntifile\":" stringByAppendingString:fileContent];
@@ -51,7 +49,8 @@
                            completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *error) {
                                returnString = [[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding];
                                NSLog(@"returnData: %@", returnString);
-                               [self checkErrors:returnString];
+                               //[self checkErrors:returnString];
+                               // провверка на ошибки при отправке файла // если нет можно очистить БД
                            }];
 
 }
@@ -71,8 +70,8 @@
     NSLog(@"cookie = %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"cookie"]);
     NSString *cookieDate = [self getStringBetweenStrings:[[NSUserDefaults standardUserDefaults] objectForKey:@"cookie"] first:@"expires=" second:@"GMT"];
     NSLog(@"cookie date = %@",cookieDate);
-    NSDate * result = [date_format dateFromString: cookieDate]; 
-    NSLog (@"%@", result); 
+    NSDate * resultD = [date_format dateFromString: cookieDate]; 
+    NSLog (@"%@", resultD); 
 
     return YES;
 }
@@ -80,12 +79,12 @@
 - (NSString *) refreshCookie{
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    if ([self checkCookieExpires]){
+    //if ([self checkCookieExpires]){
 
         if ([userDefaults objectForKey:@"cookie"]!=nil) {
             [self authUser:[userDefaults objectForKey:@"login"] secret:[userDefaults objectForKey:@"password"]];
         }
-    }
+    //}
     return [userDefaults objectForKey:@"cookie"];
     
 }
@@ -97,10 +96,10 @@
 	if ((rangeofFirst.length == 0) || (rangeOfSecond.length == 0)) {
 		return nil;
 	}
-	NSString *result = [[main substringFromIndex:rangeofFirst.location+rangeofFirst.length] 
+	NSString *resultD = [[main substringFromIndex:rangeofFirst.location+rangeofFirst.length] 
 						substringToIndex:
 						[[main substringFromIndex:rangeofFirst.location+rangeofFirst.length] rangeOfString:second].location];
-	return result;
+	return resultD;
 }
 
 
@@ -111,7 +110,7 @@
     NSArray *answer = [jsonParser objectWithString:answerString error:NULL];
     NSArray *error = [answer valueForKey:@"error"];
     NSInteger code =[[error valueForKey:@"code"] intValue];
-    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     info = nil;
     forgotPassword = NO;
     errors = YES;
@@ -119,6 +118,9 @@
     switch (code) {
         case 0:
             info = @"Поздравляем!";
+            [userDefaults removeObjectForKey:@"cookie"];
+            [userDefaults synchronize];
+            [userDefaults setValue:[answer valueForKey:@"result"] forKey:@"cookie"];
             errors = NO;
             break;
         case 2:
@@ -190,14 +192,14 @@
     [self checkErrors:returnString];
     
     if (!errors) {
-        NSDictionary *fields = [(NSHTTPURLResponse *)response allHeaderFields];
-        NSString *cookie = [fields valueForKey:@"Set-Cookie"];
-        NSLog(@"Cookie: %@", cookie);
+      //  NSDictionary *fields = [(NSHTTPURLResponse *)response allHeaderFields];
+      //  NSString *cookie = [fields valueForKey:@"Set-Cookie"];
+      //  NSLog(@"Cookie: %@", cookie);
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setValue: login forKey:@"login"];
         [userDefaults setValue: password forKey:@"password"];
-        [userDefaults setValue:cookie forKey:@"cookie"];
-        [userDefaults synchronize];
+      //  [userDefaults setValue: result forKey:@"cookie"];
+      ///  [userDefaults synchronize];
         info = @"Поздравляем! Регистрация прошла успешно";
         
         //на таб
@@ -234,15 +236,14 @@
     NSLog(@"returnData: %@", returnString);
     [self checkErrors: returnString];
     if (!errors) {
-        NSDictionary *fields = [(NSHTTPURLResponse *)response allHeaderFields];
-        NSString *cookie = [fields valueForKey:@"Set-Cookie"];
-        NSLog(@"Cookie: %@", cookie);
+
+       // NSDictionary *fields = [(NSHTTPURLResponse *)response allHeaderFields];
+       // NSString *cookie = [fields valueForKey:@"Set-Cookie"];
+       // NSLog(@"Cookie: %@", cookie);
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setValue: login forKey:@"login"];
         [userDefaults setValue: message forKey:@"password"];
-        [userDefaults removeObjectForKey:@"cookie"];
-        [userDefaults synchronize];
-        [userDefaults setValue:cookie forKey:@"cookie"];
+        NSLog(@"cookie - %@", [userDefaults valueForKey:@"cookie"]);
         
         info = @"Поздравляем! Авторизация прошла успешно";
         

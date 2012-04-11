@@ -348,7 +348,7 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     NSLog(@"open");
-    if ([[NSUserDefaults standardUserDefaults] stringForKey:@"login"] == nil){
+    if ([[NSUserDefaults standardUserDefaults] stringForKey:@"cookie"] == nil){
     UIStoryboard *storyboard = self.window.rootViewController.storyboard;
     UIViewController *loginController = [storyboard instantiateViewControllerWithIdentifier:@"AuthViewController"];
     [self.window.rootViewController presentModalViewController:loginController animated:NO];
