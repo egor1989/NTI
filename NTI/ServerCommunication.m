@@ -212,8 +212,12 @@
 
 - (void) authUser:(NSString *)login secret:(NSString *)message{
     [self infoAboutDevice];
-    //device, model, version
-    NSString *data = [NSString stringWithFormat:(@"data={\"method\":\"NTIauth\",\"params\":{\"login\":\"%@%@%@%@%@%@%@%@%@%@"),login, @"\",\"secret\":\"", message,@"\",\"device\":\"", deviceName,@"\",\"model\":\"", model,@"\",\"version\":\"", systemVersion, @"\"}}"];
+    
+    
+    //device, model, version, service
+    
+    
+    NSString *data = [NSString stringWithFormat:(@"data={\"method\":\"NTIauth\",\"params\":{\"login\":\"%@%@%@%@%@%@%@%@%@%@%@%@"),login, @"\",\"secret\":\"", message,@"\",\"device\":\"", deviceName,@"\",\"model\":\"", model,@"\",\"version\":\"", systemVersion, @"\",\"carrier\":\"", carrierName, @"\"}}"];
     
     NSLog(@"Request: %@", data);
     
@@ -272,7 +276,15 @@
     systemVersion = [[UIDevice currentDevice] systemVersion];
     model = [[UIDevice currentDevice] model];
     
-    NSLog(@"%@; %@; %@", deviceName, model, systemVersion);
+    
+    // Setup the Network Info and create a CTCarrier object
+    CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init] ;
+    CTCarrier *carrier = [networkInfo subscriberCellularProvider];
+    
+    // Get carrier name
+    carrierName = [carrier carrierName];
+    
+    NSLog(@"%@; %@; %@; %@", deviceName, model, systemVersion, carrierName);
     
 }
 

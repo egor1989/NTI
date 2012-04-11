@@ -109,6 +109,7 @@
 		5381C8F7153046380012E99D /* RecordAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 5381C8F6153046380012E99D /* RecordAction.m */; };
 		539B29BE14F305C3007E6977 /* gps.png in Resources */ = {isa = PBXBuildFile; fileRef = 539B29BC14F305C3007E6977 /* gps.png */; };
 		539B29BF14F305C3007E6977 /* north.png in Resources */ = {isa = PBXBuildFile; fileRef = 539B29BD14F305C3007E6977 /* north.png */; };
+		53A560DC1535CFCB00520781 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A560DB1535CFCB00520781 /* CoreTelephony.framework */; };
 		53A5AE341527593C0093E552 /* green.png in Resources */ = {isa = PBXBuildFile; fileRef = 53A5AE321527593C0093E552 /* green.png */; };
 		53A5AE351527593C0093E552 /* red.png in Resources */ = {isa = PBXBuildFile; fileRef = 53A5AE331527593C0093E552 /* red.png */; };
 		53AAF04B14FE2CF000E12486 /* ServerCommunication.m in Sources */ = {isa = PBXBuildFile; fileRef = 53AAF04A14FE2CF000E12486 /* ServerCommunication.m */; };
@@ -304,6 +305,7 @@
 		5381C8F6153046380012E99D /* RecordAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordAction.m; sourceTree = "<group>"; };
 		539B29BC14F305C3007E6977 /* gps.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gps.png; sourceTree = "<group>"; };
 		539B29BD14F305C3007E6977 /* north.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = north.png; sourceTree = "<group>"; };
+		53A560DB1535CFCB00520781 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		53A5AE321527593C0093E552 /* green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = green.png; path = Images/green.png; sourceTree = "<group>"; };
 		53A5AE331527593C0093E552 /* red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = red.png; path = Images/red.png; sourceTree = "<group>"; };
 		53AAF04914FE2CF000E12486 /* ServerCommunication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerCommunication.h; sourceTree = "<group>"; };
@@ -395,6 +397,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				53A560DC1535CFCB00520781 /* CoreTelephony.framework in Frameworks */,
 				2745AD01152A347300253BF2 /* QuartzCore.framework in Frameworks */,
 				536175231511098000D290F1 /* SystemConfiguration.framework in Frameworks */,
 				53E0A82914E6DC49004E3E1B /* libz.1.2.5.dylib in Frameworks */,
@@ -712,7 +715,6 @@
 		53E0A75B14DEC75D004E3E1B = {
 			isa = PBXGroup;
 			children = (
-				2745AD00152A347300253BF2 /* QuartzCore.framework */,
 				2745AC4B152A344400253BF2 /* CrittercismSDK */,
 				53E0A77014DEC75D004E3E1B /* NTI */,
 				53E0A76914DEC75D004E3E1B /* Frameworks */,
@@ -731,6 +733,8 @@
 		53E0A76914DEC75D004E3E1B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				53A560DB1535CFCB00520781 /* CoreTelephony.framework */,
+				2745AD00152A347300253BF2 /* QuartzCore.framework */,
 				536175221511098000D290F1 /* SystemConfiguration.framework */,
 				53E0A82814E6DC49004E3E1B /* libz.1.2.5.dylib */,
 				53E0A81E14E6AC6F004E3E1B /* MessageUI.framework */,
