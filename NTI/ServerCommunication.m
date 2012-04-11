@@ -273,6 +273,52 @@
     
 }
 
+- (void)getRouteFromServer:(float)timeInterval{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSLog(@"cookie = %@", [userDefaults valueForKey:@"cookie"]);
+    NSString *cookie = [userDefaults valueForKey:@"cookie"];
+    
+    NSString *timeString = [NSString stringWithFormat:@"%.0f",timeInterval];
+    timeString=[@"data={\"method\":\"addNTIFile\",\"params\":{\"ntifile\":" stringByAppendingString:timeString];
+    timeString=[timeString stringByAppendingString:@"}}"];
+    
+    NSLog(@"Request: %@", timeString);
+    
+    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                  timeoutInterval:60.0];
+    
+    requestData = [NSData dataWithBytes:[timeString UTF8String] length:[timeString length]];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody: requestData];    
+    
+    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                @"http://nti.goodroads.ru/api/", NSHTTPCookieDomain,
+                                @"key", NSHTTPCookieName,
+                                cookie, NSHTTPCookieValue,
+                                @"/", NSHTTPCookiePath,
+                                nil];
+    
+    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:[NSHTTPCookie cookieWithProperties:properties]];
+    NSHTTPCookie *fcookie = [NSHTTPCookie cookieWithProperties:properties]; //?
+    NSArray* fcookies = [NSArray arrayWithObjects: fcookie, nil];   //?
+    NSDictionary * headers = [NSHTTPCookie requestHeaderFieldsWithCookies:fcookies]; //?
+    
+    [request setAllHTTPHeaderFields:headers];
+    
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *error) {
+                               returnString = [[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding];
+                               NSLog(@"returnData: %@", returnString);
+                               [[NSNotificationCenter defaultCenter]	postNotificationName:	@"routePointsReceived" object:  nil];
+
+                               [self checkErrors:returnString];
+                               //написсать свой checkError
+                           }];
+    
+}
+
+
 
 
 

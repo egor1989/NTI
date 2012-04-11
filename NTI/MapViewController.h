@@ -23,6 +23,9 @@
 	
 	// the rect that bounds the loaded points
 	MKMapRect _routeRect;
+    
+    IBOutlet UIActivityIndicatorView *waintingIndicator;
+    IBOutlet UIView *grayView;
 }
 
 @property (nonatomic, retain) IBOutlet MKMapView* mapView;
@@ -35,6 +38,8 @@
 
 // use the computed _routeRect to zoom in on the route. 
 -(void) zoomInOnRoute;
+-(void) mapWaitingState;
+-(void) mapDrawRoute;
 
 
 @end

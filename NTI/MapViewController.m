@@ -13,14 +13,24 @@
 @synthesize routeLine = _routeLine;
 @synthesize routeLineView = routeLineView;
 
-
+//routePointsReceived
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     [_mapView setDelegate:self];
-	
+    [[NSNotificationCenter defaultCenter]	
+     addObserver: self
+     selector: @selector(mapWaitingState)
+     name: @"routePointsRequestSend"
+     object: nil];
+    [[NSNotificationCenter defaultCenter]	
+     addObserver: self
+     selector: @selector(mapDrawRoute)
+     name: @"routePointsReceived"
+     object: nil];
+    
 	// create the overlay
 	[self loadRoute];
 	
@@ -34,7 +44,24 @@
 	
 }
 
-// creates the route (MKPolyline) overlay
+-(void) mapWaitingState{
+    waintingIndicator.hidden = NO;
+    [waintingIndicator startAnimating];
+    grayView.hidden = NO;
+}
+
+-(void) mapDrawRoute{
+    [waintingIndicator stopAnimating];
+    grayView.hidden = YES;
+    
+	[self loadRoute];
+	if (nil != self.routeLine) {
+		[self.mapView addOverlay:self.routeLine];
+	}
+    //возможно понадобится чистить слой 
+	[self zoomInOnRoute];
+}
+
 -(void) loadRoute
 {
 	NSString* filePath = [[NSBundle mainBundle] pathForResource:@"route" ofType:@"csv"];
@@ -132,8 +159,8 @@
 		if(nil == self.routeLineView)
 		{
 			routeLineView = [[MKPolylineView alloc] initWithPolyline:self.routeLine];
-			routeLineView.fillColor = [UIColor redColor];
-			self.routeLineView.strokeColor = [UIColor redColor];
+			routeLineView.fillColor = [UIColor blackColor];
+			self.routeLineView.strokeColor = [UIColor blackColor];
 			self.routeLineView.lineWidth = 3;
 		}
 		
