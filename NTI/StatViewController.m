@@ -346,17 +346,22 @@
 
 
 - (void) pickOne:(id)sender{
+    //проверка интернета
+    ServerCommunication *serverCommunication = [[ServerCommunication alloc] init];
     UISegmentedControl *segmentedControl = (UISegmentedControl *)sender;
     if ([segmentedControl selectedSegmentIndex]==0) {
         NSLog(@"за последнюю поездку");
-        qualityDriving.text = @"?";
-        speedMode.text = @"?";
-        acceleration.text = @"?";
-        deceleration.text = @"?";
-        rotation.text = @"?";
+        
+        [serverCommunication getLastStatistic];
+        qualityDriving.text = @"!";
+        speedMode.text = @"!";
+        acceleration.text = @"!";
+        deceleration.text = @"!";
+        rotation.text = @"!";
     }
     else {
         NSLog(@"за все время");
+        [serverCommunication getAllStatistic];
         qualityDriving.text = @"???";
         speedMode.text = @"???";
         acceleration.text = @"???";

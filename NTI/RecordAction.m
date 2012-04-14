@@ -27,9 +27,13 @@
     
     [[NSNotificationCenter defaultCenter]	
      addObserver: self
-     selector: @selector(checkWriteRight)
+     selector: @selector(checkActivity)
      name: @"canWriteToFile"
      object: nil];
+    
+    Start = NO;
+    End = NO;
+    First = YES;
     
     return self;
 }
@@ -90,12 +94,12 @@
 
 - (void)endOfRecord{
     NSLog(@"don't write");
-   // dataArray = [[NSMutableArray alloc] init];
+    dataArray = [[NSMutableArray alloc] init];
     //создаем новый тред
-   // NSThread* myThread = [[NSThread alloc] initWithTarget:databaseAction
-   //                                              selector:@selector(addArray:)
-   //                                                object:toWrite];
-   // [myThread start]; 
+    NSThread* myThread = [[NSThread alloc] initWithTarget:databaseAction
+                                                 selector:@selector(addArray:)
+                                                   object:toWrite];
+    [myThread start]; 
 
 }
 
@@ -104,10 +108,31 @@
    // else [self endOfRecord];
 }
 
+- (void)checkActivity{
+    if ([myAppDelegate canWriteToFile] && !Start && First) {
+        Start = YES;
+        End = NO;
+        First = NO;
+        [databaseAction addEntrie:@"start"];
+    }
+    if (![myAppDelegate canWriteToFile] && !End && !First){
+        Start = NO;
+        End = YES;
+        First = YES;
+        [self endOfRecord];
+        [databaseAction addEntrie:@"end"];
+    }
+    
+}
+
 
 
 - (void)sendFile{
     [databaseAction readDatabase]; 
+}
+
+- (void)eventRecord: (NSString *)type{
+    [databaseAction addEntrie:type];
 }
 
 

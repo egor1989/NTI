@@ -23,15 +23,11 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {
-    NSLog(@"open2");
-    //databaseAction = [[DatabaseActions alloc] initDataBase];
-    
-    //if (databaseAction !=nil) {
-    //    NSLog(@"БД есть или создана");
-    //}
-    //else NSLog(@"БД сломалась");
-    
+
+       
     recordAction = [[RecordAction alloc] init];
+    
+    [recordAction eventRecord:@"open"]; 
     
     locationManager=[[CLLocationManager alloc] init];
     locationManager.delegate=self;
@@ -347,7 +343,7 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    NSLog(@"open");
+    
     if ([[NSUserDefaults standardUserDefaults] stringForKey:@"cookie"] == nil){
     UIStoryboard *storyboard = self.window.rootViewController.storyboard;
     UIViewController *loginController = [storyboard instantiateViewControllerWithIdentifier:@"AuthViewController"];
@@ -359,6 +355,7 @@
 {
     
     NSLog(@"close");
+    [recordAction eventRecord:@"close"];
     /*
      Called when the application is about to terminate.
      Save data if appropriate.

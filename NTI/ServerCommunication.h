@@ -37,6 +37,8 @@
 - (NSString*) getStringBetweenStrings: (NSString *) main first:(NSString *)first second: (NSString*) second;
 - (void)infoAboutDevice;
 - (void)getRouteFromServer:(float)timeInterval;
+- (void)getAllStatistic;
+- (void)getLastStatistic;
 @property (nonatomic) BOOL errors;
 
 @end

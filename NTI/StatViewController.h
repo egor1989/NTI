@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import "AuthViewController.h"
 #import "RecordAction.h"
+#import "ServerCommunication.h"
 
 
 #define myAppDelegate (AppDelegate*) [[UIApplication sharedApplication] delegate]

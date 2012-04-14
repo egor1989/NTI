@@ -15,6 +15,7 @@
 static sqlite3 *database = nil;
 static sqlite3_stmt *deleteStmt = nil;
 static sqlite3_stmt *addStmt = nil;
+static sqlite3_stmt *addEntr = nil;
 static sqlite3_stmt *readStmt = nil;
 
 
@@ -114,6 +115,48 @@ static sqlite3_stmt *readStmt = nil;
     sqlite3_exec(database, "COMMIT", NULL, NULL, NULL);
     
     return YES;
+}
+
+- (BOOL)addEntrie: (NSString *)type{
+    
+   // double currentTime = [[NSData data] timeIntervalSince1970];
+    NSLog(@" time = %f, type = %@",[[NSDate date] timeIntervalSince1970], type);
+    
+    const char *sql = "INSERT INTO log(type, time, accX, accY, compass, direction, distance, latitude, longitude, speed) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    if(addEntr == nil) {
+        if(sqlite3_prepare_v2(database, sql, -1, &addEntr, NULL) != SQLITE_OK){
+            NSAssert1(0, @"Error while creating add statement. '%s'", sqlite3_errmsg(database));
+            return NO;
+        }
+    }
+    sqlite3_bind_text(addEntr, 1, [type UTF8String], -1, SQLITE_TRANSIENT);
+    sqlite3_bind_double(addEntr, 2, [[NSDate date] timeIntervalSince1970]);
+    
+    //
+    //
+    //
+    
+    if(SQLITE_DONE != sqlite3_step(addEntr)){
+        NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
+        return NO;
+    }
+    else {
+        //SQLite provides a method to get the last primary key inserted by using sqlite3_last_insert_rowid
+        //sqlite3_
+        pk = sqlite3_last_insert_rowid(database);
+        NSLog(@"addRecord %i",pk);
+        [userDefaults setInteger:pk forKey:@"pk"];
+        
+    }
+    
+    
+    //Reset the add statement.
+    sqlite3_reset(addEntr); 
+    sqlite3_clear_bindings(addEntr);
+
+    
+    return YES;
+
 }
 
 
