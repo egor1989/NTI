@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
+#import "ServerCommunication.h"
+#import "SBJsonParser.h"
 
 @interface MapViewController : UIViewController <MKMapViewDelegate>{
     
@@ -26,6 +28,8 @@
     
     IBOutlet UIActivityIndicatorView *waintingIndicator;
     IBOutlet UIView *grayView;
+    
+    ServerCommunication *serverCommunication;
 }
 
 @property (nonatomic, retain) IBOutlet MKMapView* mapView;
@@ -34,12 +38,14 @@
 
 // load the points of the route from the data source, in this case
 // a CSV file. 
--(void) loadRoute;
+-(void) loadRoute: (NSString*) routeString;
 
 // use the computed _routeRect to zoom in on the route. 
 -(void) zoomInOnRoute;
 -(void) mapWaitingState;
 -(void) mapDrawRoute;
+-(void) normalPointsDraw:(NSArray*) normalPointsArray;
+-(void) leftTurnStartedPointsDraw:(NSArray*) leftTurnStartedPointsArray;
 
 
 @end

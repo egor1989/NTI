@@ -36,7 +36,7 @@
 - (BOOL)checkCookieExpires;
 - (NSString*) getStringBetweenStrings: (NSString *) main first:(NSString *)first second: (NSString*) second;
 - (void)infoAboutDevice;
-
+- (void)getRouteFromServer:(float)timeInterval;
 @property (nonatomic) BOOL errors;
 
 @end

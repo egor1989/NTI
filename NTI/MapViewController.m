@@ -20,19 +20,20 @@
     [super viewDidLoad];
     
     [_mapView setDelegate:self];
+    serverCommunication = [[ServerCommunication alloc]init ];
     [[NSNotificationCenter defaultCenter]	
      addObserver: self
-     selector: @selector(mapWaitingState)
+     selector: @selector(mapWaitingState:)
      name: @"routePointsRequestSend"
      object: nil];
     [[NSNotificationCenter defaultCenter]	
      addObserver: self
-     selector: @selector(mapDrawRoute)
+     selector: @selector(mapDrawRoute:)
      name: @"routePointsReceived"
      object: nil];
     
 	// create the overlay
-	[self loadRoute];
+//	[self loadRoute];
 	
 	// add the overlay to the map
 	if (nil != self.routeLine) {
@@ -44,60 +45,71 @@
 	
 }
 
--(void) mapWaitingState{
+-(void) mapWaitingState: (NSNotification*) TheNotice{
     waintingIndicator.hidden = NO;
     [waintingIndicator startAnimating];
     grayView.hidden = NO;
+    NSLog(@"getRoute");
+    [serverCommunication getRouteFromServer:[[TheNotice object] timeIntervalSince1970]];
 }
 
--(void) mapDrawRoute{
+-(void) mapDrawRoute: (NSNotification*) TheNotice{
     [waintingIndicator stopAnimating];
     grayView.hidden = YES;
     
-	[self loadRoute];
-	if (nil != self.routeLine) {
-		[self.mapView addOverlay:self.routeLine];
-	}
+	[self loadRoute:[TheNotice object]];
     //возможно понадобится чистить слой 
 	[self zoomInOnRoute];
 }
 
--(void) loadRoute
+-(void) loadRoute: (NSString*) routeString
 {
-	NSString* filePath = [[NSBundle mainBundle] pathForResource:@"route" ofType:@"csv"];
-	NSString* fileContents = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
-	NSArray* pointStrings = [fileContents componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-	
-	
-	// while we create the route points, we will also be calculating the bounding box of our route
-	// so we can easily zoom in on it. 
-	MKMapPoint northEastPoint; 
+    SBJsonParser *jsonParser = [SBJsonParser new];
+    NSArray *routeArray = [[NSArray alloc] init ];
+    routeArray = [jsonParser objectWithString:routeString error:NULL];
+    NSArray *pointsArray = [[NSArray alloc] init ]; 
+    pointsArray = [routeArray valueForKey:@"result"]; 
+//    NSArray *error = [answer valueForKey:@"error"];
+//    NSString *info = [error valueForKey:@"info"];
+//    NSInteger code = [[error valueForKey:@"code"] intValue];
+//    NSLog(@"result=%@ info=%@ code=%d", result, info, code);
+    NSArray *point = [[NSArray alloc] init];
+    NSMutableArray *normalPointsArray = [[NSMutableArray alloc] init];
+    NSMutableArray *leftTurnStartedPointsArray = [[NSMutableArray alloc] init];
+    
+    if ([pointsArray isEqual: @"empty"]){
+        NSLog(@"noHoles");
+    }
+    else
+        for (point in pointsArray){
+            if ([[point valueForKey:@"type"] isEqual:@"normal point"]){                NSArray *latLngArray = [[NSArray alloc] initWithObjects:[point valueForKey:@"lat"],[point valueForKey:@"lng"],nil ];
+                [normalPointsArray addObject:latLngArray];
+            }
+            else if ([[point valueForKey:@"type"] isEqual:@"left turn started"]){
+                NSArray *latLngArray = [[NSArray alloc] initWithObjects:[point valueForKey:@"lat"],[point valueForKey:@"lng"],nil ];
+                [leftTurnStartedPointsArray addObject:latLngArray];
+            }
+        }
+    [self normalPointsDraw:normalPointsArray];
+    [self leftTurnStartedPointsDraw:leftTurnStartedPointsArray];
+		
+}
+
+-(void) normalPointsDraw:(NSArray*) normalPointsArray{
+    MKMapPoint northEastPoint; 
 	MKMapPoint southWestPoint; 
-	
-	// create a c array of points. 
-	MKMapPoint* pointArr = malloc(sizeof(CLLocationCoordinate2D) * pointStrings.count);
-	
-	for(int idx = 0; idx < pointStrings.count; idx++)
+    
+	MKMapPoint* pointArr = malloc(sizeof(CLLocationCoordinate2D) * normalPointsArray.count);
+    
+	for(int idx = 0; idx < normalPointsArray.count; idx++)
 	{
-		// break the string down even further to latitude and longitude fields. 
-		NSString* currentPointString = [pointStrings objectAtIndex:idx];
-		NSArray* latLonArr = [currentPointString componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@","]];
+		NSArray* currentPoint = [normalPointsArray objectAtIndex:idx];
         
-		CLLocationDegrees latitude  = [[latLonArr objectAtIndex:0] doubleValue];
-		CLLocationDegrees longitude = [[latLonArr objectAtIndex:1] doubleValue];
-        
-        
-		// create our coordinate and add it to the correct spot in the array 
+		CLLocationDegrees latitude  = [[currentPoint objectAtIndex:0] doubleValue];
+		CLLocationDegrees longitude = [[currentPoint objectAtIndex:1] doubleValue];
 		CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(latitude, longitude);
-        
 		MKMapPoint point = MKMapPointForCoordinate(coordinate);
         
-		
-		//
-		// adjust the bounding box
-		//
-		
-		// if it is the first point, just use them, since we have nothing to compare to yet. 
 		if (idx == 0) {
 			northEastPoint = point;
 			southWestPoint = point;
@@ -117,15 +129,31 @@
 		pointArr[idx] = point;
         
 	}
-	
-	// create the polyline based on the array of points. 
-	self.routeLine = [MKPolyline polylineWithPoints:pointArr count:pointStrings.count];
     
+	self.routeLine = [MKPolyline polylineWithPoints:pointArr count:normalPointsArray.count];
 	_routeRect = MKMapRectMake(southWestPoint.x, southWestPoint.y, northEastPoint.x - southWestPoint.x, northEastPoint.y - southWestPoint.y);
     
-	// clear the memory allocated earlier for the points
 	free(pointArr);
-	
+    
+	if (nil != self.routeLine) {
+		[self.mapView addOverlay:self.routeLine];
+	}
+
+}
+
+-(void) leftTurnStartedPointsDraw:(NSArray*) leftTurnStartedPointsArray{
+	for(int idx = 0; idx < leftTurnStartedPointsArray.count; idx++)
+	{
+		NSArray* currentPoint = [leftTurnStartedPointsArray objectAtIndex:idx];
+        
+		CLLocationDegrees latitude  = [[currentPoint objectAtIndex:0] doubleValue];
+		CLLocationDegrees longitude = [[currentPoint objectAtIndex:1] doubleValue];
+		CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(latitude, longitude);
+        MKCircle *circle = [MKCircle circleWithCenterCoordinate:coordinate radius:5];
+        [self.mapView addOverlay:circle];
+        
+	}
+    
 }
 
 -(void) zoomInOnRoute
@@ -166,9 +194,17 @@
 		
 		overlayView = self.routeLineView;
 		
+        return overlayView;
 	}
 	
-	return overlayView;
+    
+//    if(overlay == self.routeLine)
+//	{
+        MKCircleView *circleView = [[MKCircleView alloc] initWithCircle:overlay];
+        circleView.lineWidth = 8.0;
+        circleView.strokeColor = [UIColor redColor];
+        return circleView;
+//    }
 	
 }
 @end
