@@ -7,6 +7,7 @@
 //
 
 #import "MapViewController.h"
+#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:0.8]
 
 @implementation MapViewController
 @synthesize mapView = _mapView;
@@ -75,23 +76,55 @@
 //    NSLog(@"result=%@ info=%@ code=%d", result, info, code);
     NSArray *point = [[NSArray alloc] init];
     NSMutableArray *normalPointsArray = [[NSMutableArray alloc] init];
-    NSMutableArray *leftTurnStartedPointsArray = [[NSMutableArray alloc] init];
-    
-    if ([pointsArray isEqual: @"empty"]){
+    NSMutableArray *specialPointsArray1 = [[NSMutableArray alloc] init];
+    NSMutableArray *specialPointsArray2 = [[NSMutableArray alloc] init];
+    NSMutableArray *specialPointsArray3 = [[NSMutableArray alloc] init];
+    NSMutableArray *specialPointsArray4 = [[NSMutableArray alloc] init];
+    NSMutableArray *specialPointsArray5 = [[NSMutableArray alloc] init];
+    NSMutableArray *specialPointsArray6 = [[NSMutableArray alloc] init];
+    if ([pointsArray isEqual: @"null"]){
         NSLog(@"noHoles");
     }
     else
         for (point in pointsArray){
-            if ([[point valueForKey:@"type"] isEqual:@"normal point"]){                NSArray *latLngArray = [[NSArray alloc] initWithObjects:[point valueForKey:@"lat"],[point valueForKey:@"lng"],nil ];
-                [normalPointsArray addObject:latLngArray];
-            }
-            else if ([[point valueForKey:@"type"] isEqual:@"left turn started"]){
+            if ([[point valueForKey:@"type"] doubleValue] == 0){                
                 NSArray *latLngArray = [[NSArray alloc] initWithObjects:[point valueForKey:@"lat"],[point valueForKey:@"lng"],nil ];
-                [leftTurnStartedPointsArray addObject:latLngArray];
+                [normalPointsArray addObject:latLngArray];
+                NSLog(@"sdfsdf");
             }
+            else if ([[point valueForKey:@"type"] doubleValue] == -3){
+                NSArray *latLngArray = [[NSArray alloc] initWithObjects:[point valueForKey:@"lat"],[point valueForKey:@"lng"],nil ];
+                [specialPointsArray1 addObject:latLngArray];
+            }
+            else if ([[point valueForKey:@"type"] doubleValue] == -2){
+                NSArray *latLngArray = [[NSArray alloc] initWithObjects:[point valueForKey:@"lat"],[point valueForKey:@"lng"],nil ];
+                [specialPointsArray2 addObject:latLngArray];
+            }
+            else if ([[point valueForKey:@"type"] doubleValue] == -1){
+                NSArray *latLngArray = [[NSArray alloc] initWithObjects:[point valueForKey:@"lat"],[point valueForKey:@"lng"],nil ];
+                [specialPointsArray3 addObject:latLngArray];
+            }
+            else if ([[point valueForKey:@"type"] doubleValue] == 1){
+                NSArray *latLngArray = [[NSArray alloc] initWithObjects:[point valueForKey:@"lat"],[point valueForKey:@"lng"],nil ];
+                [specialPointsArray4 addObject:latLngArray];
+            }
+            else if ([[point valueForKey:@"type"] doubleValue] == 2){
+                NSArray *latLngArray = [[NSArray alloc] initWithObjects:[point valueForKey:@"lat"],[point valueForKey:@"lng"],nil ];
+                [specialPointsArray5 addObject:latLngArray];
+            } 
+            else if ([[point valueForKey:@"type"] doubleValue] == 3){
+                NSArray *latLngArray = [[NSArray alloc] initWithObjects:[point valueForKey:@"lat"],[point valueForKey:@"lng"],nil ];
+                [specialPointsArray6 addObject:latLngArray];
+            }
+
         }
     [self normalPointsDraw:normalPointsArray];
-    [self leftTurnStartedPointsDraw:leftTurnStartedPointsArray];
+    [self specialPointsDraw:specialPointsArray1:1];
+    [self specialPointsDraw:specialPointsArray2:2];
+    [self specialPointsDraw:specialPointsArray3:3];
+    [self specialPointsDraw:specialPointsArray4:4];
+    [self specialPointsDraw:specialPointsArray5:5];
+    [self specialPointsDraw:specialPointsArray6:6];
 		
 }
 
@@ -141,17 +174,44 @@
 
 }
 
--(void) leftTurnStartedPointsDraw:(NSArray*) leftTurnStartedPointsArray{
-	for(int idx = 0; idx < leftTurnStartedPointsArray.count; idx++)
+-(void) specialPointsDraw:(NSArray*) specialPointsArray: (int) pointType{
+	for(int idx = 0; idx < specialPointsArray.count; idx++)
 	{
-		NSArray* currentPoint = [leftTurnStartedPointsArray objectAtIndex:idx];
+		NSArray* currentPoint = [specialPointsArray objectAtIndex:idx];
         
 		CLLocationDegrees latitude  = [[currentPoint objectAtIndex:0] doubleValue];
 		CLLocationDegrees longitude = [[currentPoint objectAtIndex:1] doubleValue];
 		CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(latitude, longitude);
-        MKCircle *circle = [MKCircle circleWithCenterCoordinate:coordinate radius:5];
-        [self.mapView addOverlay:circle];
         
+        circleSpecial = [MKCircle circleWithCenterCoordinate:coordinate radius:6];
+        switch (pointType) {
+            case 1:
+                [circleSpecial setTitle:@"-3"];
+                [self.mapView addOverlay:circleSpecial];
+                break;
+            case 2:
+                [circleSpecial setTitle:@"-2"];
+                [self.mapView addOverlay:circleSpecial];
+                break;
+            case 3:
+                [circleSpecial setTitle:@"-1"];
+                [self.mapView addOverlay:circleSpecial];
+                break;
+            case 4:
+                [circleSpecial setTitle:@"1"];
+                [self.mapView addOverlay:circleSpecial];
+                break;
+            case 5:
+                [circleSpecial setTitle:@"2"];
+                [self.mapView addOverlay:circleSpecial];
+                break;
+            case 6:
+                [circleSpecial setTitle:@"3"];
+                [self.mapView addOverlay:circleSpecial];
+                break;
+            default:
+                break;
+        }
 	}
     
 }
@@ -179,10 +239,11 @@
 #pragma mark MKMapViewDelegate
 - (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id <MKOverlay>)overlay
 {
-	MKOverlayView* overlayView = nil;
 	
 	if(overlay == self.routeLine)
 	{
+        
+        MKOverlayView* overlayView = nil;
 		//if we have not yet created an overlay view for this overlay, create it now. 
 		if(nil == self.routeLineView)
 		{
@@ -196,15 +257,36 @@
 		
         return overlayView;
 	}
-	
     
-//    if(overlay == self.routeLine)
-//	{
-        MKCircleView *circleView = [[MKCircleView alloc] initWithCircle:overlay];
-        circleView.lineWidth = 8.0;
-        circleView.strokeColor = [UIColor redColor];
-        return circleView;
-//    }
-	
+    MKCircle *circle = overlay;
+    MKCircleView *circleView = [[MKCircleView alloc] initWithCircle:overlay];
+    if([circle.title isEqualToString:@"-3"]){
+        
+        circleView.strokeColor = circleView.fillColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:1.0];
+//        circleView.strokeColor = circleView.fillColor = UIColorFromRGB(0xff0000);
+    }
+    else if([circle.title isEqualToString:@"-2"]){
+        circleView.fillColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.7];
+        
+//        circleView.strokeColor = circleView.fillColor = UIColorFromRGB(0xffa500);
+    }
+    else if([circle.title isEqualToString:@"-1"]){
+        circleView.strokeColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.4];
+//        circleView.strokeColor = circleView.fillColor = UIColorFromRGB(0xffff00);
+    }
+    else if([circle.title isEqualToString:@"1"]){
+        circleView.fillColor = circleView.strokeColor = [UIColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:0.4];
+//        circleView.strokeColor = circleView.fillColor = UIColorFromRGB(0xd8ff00);
+    }
+    else if([circle.title isEqualToString:@"2"]){
+        circleView.fillColor = [UIColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:0.7];
+//        circleView.strokeColor = circleView.fillColor = UIColorFromRGB(0xafff00);
+    }
+    else if([circle.title isEqualToString:@"3"]){
+        circleView.strokeColor = [UIColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:1.0];
+//        circleView.strokeColor = circleView.fillColor = UIColorFromRGB(0x3bff00);
+    }
+    
+    return circleView;
 }
 @end

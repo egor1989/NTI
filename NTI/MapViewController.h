@@ -30,6 +30,8 @@
     IBOutlet UIView *grayView;
     
     ServerCommunication *serverCommunication;
+    
+    MKCircle *circleSpecial;
 }
 
 @property (nonatomic, retain) IBOutlet MKMapView* mapView;
@@ -45,7 +47,7 @@
 -(void) mapWaitingState;
 -(void) mapDrawRoute;
 -(void) normalPointsDraw:(NSArray*) normalPointsArray;
--(void) leftTurnStartedPointsDraw:(NSArray*) leftTurnStartedPointsArray;
+-(void) specialPointsDraw:(NSArray*) specialPointsArray: (int) pointType;
 
 
 @end

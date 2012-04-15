@@ -423,11 +423,10 @@
     
     NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
                                 @"http://nti.goodroads.ru/api/", NSHTTPCookieDomain,
-                                @"key", NSHTTPCookieName,
+                                @"NTIKeys", NSHTTPCookieName,
                                 cookie, NSHTTPCookieValue,
                                 @"/", NSHTTPCookiePath,
-                                nil];
-    
+                                nil];    
     [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:[NSHTTPCookie cookieWithProperties:properties]];
     NSHTTPCookie *fcookie = [NSHTTPCookie cookieWithProperties:properties]; //?
     NSArray* fcookies = [NSArray arrayWithObjects: fcookie, nil];   //?
