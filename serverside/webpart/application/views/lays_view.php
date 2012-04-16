@@ -3,7 +3,7 @@
 	<title>Untitled</title>
 </head>
 <body>
-	<h3 align="left">Time: from/till (like YYYY.mm.dd p.e: 2011.11.25)</h3>
+	<h3 align="left">Time: from/till (like YYYY-mm-dd p.e: 2011-11-25)</h3>
 	<?php echo form_open('lays/search');?>
 	<p>
 		<label for="time1">From</label>

@@ -2,37 +2,44 @@
 
 class lays extends CI_Controller {
 
-	function index() {
+	public function index() {
 		$this->load->view('lays_view');
 	}
 
 	public function search() {
+		$isDataOk = 0;
 		$this->load->model('lays_model');
 		$data = array(
 			't1' => $this->input->post('t1'),
 			't2' => $this->input->post('t2')
 		);
-		/*
 		if (strtotime($data['t1']) === FALSE) {
-			echo "Wrong data: check your fromTime. Should be in YYYY-mm-dd format. Click BACK in your browser and try again.";
-			return;
+			$isDataOk = 0;
+			$this->index();
+			echo "Wrong data: check your fromTime. Should be in YYYY-mm-dd format.";
+		} else if (strtotime($data['t2']) === FALSE) {
+			$isDataOk = 0;
+			$this->index();
+			echo "Wrong data: check your tillTime. Should be in YYYY-mm-dd format.";			
+		} else if (strtotime($data['t1']) > strtotime($data['t2'])) {
+			$isDataOk = 0;
+			$this->index();
+			echo "Wrong data: fromTime is bigger than tillTime.";			
+		} else if (strtotime($data['t2']) > time()) {
+			$isDataOk = 0;
+			$this->index();
+			echo "Wrong data: fromTime is bigger than current time.";			
+		} else {
+			$isDataOk = 1;
 		}
-		if (strtotime($data['t2']) === FALSE) {
-			echo "Wrong data: check your tillTime. Should be in YYYY-mm-dd format. Click BACK in your browser and try again.";
-			return;
+		
+		if ($isDataOk = 1)
+		{
+			$results = $this->lays_model->search($data);
+			//echo "data is okay";
+			//$this->load->view('lays_view', $results);
 		}
-		if (strtotime($data['t1']) > strtotime($data['t2'])) {
-			echo "Wrong data: fromTime is bigger than tillTime. Click BACK in your browser and try again.";
-			return;
-		}
-		if (strtotime($data['t2']) > time()) {
-			echo "Wrong data: fromTime is bigger than current time. Click BACK in your browser and try again.";
-			return;
-		}
-		*/
-		$results = $this->lays_model->search($data);
-		print_r($results);
-		$this->load->view('lays_view', $results);
+		
 	}
 
 }
