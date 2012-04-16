@@ -44,7 +44,7 @@
 
 // load the points of the route from the data source, in this case
 // a CSV file. 
--(void) loadRoute: (NSString*) routeString;
+-(void) loadRoute: (NSArray*) routeArray;
 
 // use the computed _routeRect to zoom in on the route. 
 -(void) zoomInOnRoute;

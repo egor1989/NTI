@@ -45,21 +45,35 @@
 }
 
 -(void) mapDrawRoute: (NSNotification*) TheNotice{
+    SBJsonParser *jsonParser = [SBJsonParser new];
+    NSArray *answerArray = [[NSArray alloc] init];
+    NSArray *routeArray = [[NSArray alloc] init];
+    int errorCode;
+    
+    answerArray = [jsonParser objectWithString:[TheNotice object] error:NULL];
+    routeArray = [answerArray valueForKey:@"result"];
+    errorCode = [[[answerArray valueForKey:@"error"] valueForKey:@"code"] intValue];
+    
     [waintingIndicator stopAnimating];
     grayView.hidden = YES;
     
-	[self loadRoute:[TheNotice object]];
-    //возможно понадобится чистить слой 
-	[self zoomInOnRoute];
+    if (errorCode == 31 || errorCode == 32) {
+        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Неверная дата" message:@"Данных по поездке за указанный период не существует. Пожалуйста выберите другую дату" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+    }
+    else if (errorCode == 33){
+        UIAlertView* alertView33 = [[UIAlertView alloc] initWithTitle:@"Ошибка авторизации" message:@"Пожалуйста перезайдите под своим логином. Это можно сделать в окне статистики." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView33 show];
+    }
+    else {
+        [self.mapView removeOverlays: self.mapView.overlays];
+        [self loadRoute:routeArray];
+        [self zoomInOnRoute];
+    }
 }
 
--(void) loadRoute: (NSString*) routeString
+-(void) loadRoute: (NSArray*) routeArray
 {
-    SBJsonParser *jsonParser = [SBJsonParser new];
-    NSArray *routeArray = [[NSArray alloc] init ];
-    routeArray = [jsonParser objectWithString:routeString error:NULL];
-    NSArray *pointsArray = [[NSArray alloc] init ]; 
-    pointsArray = [routeArray valueForKey:@"result"]; 
 //    NSArray *error = [answer valueForKey:@"error"];
 //    NSString *info = [error valueForKey:@"info"];
 //    NSInteger code = [[error valueForKey:@"code"] intValue];
@@ -73,11 +87,11 @@
     NSMutableArray *specialPointsArray4 = [[NSMutableArray alloc] init];
     NSMutableArray *specialPointsArray5 = [[NSMutableArray alloc] init];
     NSMutableArray *specialPointsArray6 = [[NSMutableArray alloc] init];
-    if ([pointsArray isEqual: @"null"]){
+    if ([routeArray isEqual: @"null"]){
         NSLog(@"noHoles");
     }
     else
-        for (point in pointsArray){
+        for (point in routeArray){
             if ([[point valueForKey:@"type"] doubleValue] == 0){  
                 if ([[point valueForKey:@"lat"] doubleValue]>0.1) {
                     NSArray *latLngArray = [[NSArray alloc] initWithObjects:[point valueForKey:@"lat"],[point valueForKey:@"lng"],nil ];
@@ -109,7 +123,6 @@
                 [specialPointsArray6 addObject:latLngArray];
             }
             else if ([[point valueForKey:@"type"] doubleValue] == 42){
-                NSLog(@"42");
                 if (normalPointsArray.count != 0){
                     [routeLineArray addObject:[self normalPointsDraw:normalPointsArray]];
                 }
@@ -118,7 +131,7 @@
 
         }
     
-//    [self normalPointsDraw:normalPointsArray];
+    [routeLineArray addObject:[self normalPointsDraw:normalPointsArray]];
     [self specialPointsDraw:specialPointsArray1:1];
     [self specialPointsDraw:specialPointsArray2:2];
     [self specialPointsDraw:specialPointsArray3:3];

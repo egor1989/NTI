@@ -441,7 +441,7 @@
                                NSLog(@"returnData: %@", returnString);
                                [[NSNotificationCenter defaultCenter]	postNotificationName:	@"routePointsReceived" object:  returnString];
 
-                               [self checkErrors:returnString];
+//                               [self checkErrors:returnString];
                                //написсать свой checkError
                            }];
     
