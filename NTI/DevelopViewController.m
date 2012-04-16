@@ -77,7 +77,7 @@
             [myThread start]; 
         }
         
-        NSLog(@"countInArray = %i", countInArray);
+//        NSLog(@"countInArray = %i", countInArray);
     }
     if ([myAppDelegate canWriteToFile]) writeLabel.text = @"+";
     else writeLabel.text = @"-";
