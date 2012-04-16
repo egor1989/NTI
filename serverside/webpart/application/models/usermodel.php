@@ -41,6 +41,21 @@
 				return false;
 			}
 		}
+		//Загружает всех пользователей системы 
+		// Нужно для администратора
+		function load_all_users(){
+			
+			$query = $this->db->query("SELECT* from NTIUsers Where Rights!=3");
+			if($query->num_rows()>0){
+			
+				return $query->result_array();
+			}
+			else{
+				return false;
+			}
+		}
+		
+		
 		function get_all_unregdata()
 		{
 			$query = $this->db->query("Select Id,Insert_Time from NTIFile where UID=-3 group by Insert_Time");
@@ -83,10 +98,9 @@
 		
 		//Функция отвечает за поиск пользователя по параметрам
 		//Также относительно пользователя собирает инфу о его отногениях
-		function search($userData)
+		function search($name)
 		{
-				extract($userData);
-				$name=$this->db->escape($name);
+				
 				//Методом n-грамма ищем похожих
 				$query = $this->db->query("Select * from NTIUsers where Rights=0");
 				//Получили все данные 

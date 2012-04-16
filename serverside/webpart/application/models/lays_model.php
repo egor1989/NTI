@@ -6,8 +6,9 @@ class lays_model extends CI_Model {
 
 		$time1 = strtotime($d['t1']);
 		$time2 = strtotime($d['t2']);	
+		$total_runs = 0;
 	
-		$q = $this->db->query("SELECT * FROM NTIEntry where utimestamp > $time1 AND utimestamp < $time2 AND (lat != 0 OR lng != 0) order by utimestamp");
+		$q = $this->db->query("SELECT * FROM NTIEntry where utimestamp > $time1 AND utimestamp < $time2 AND lat != 0 AND lng != 0 order by utimestamp");
 		$n=0;
 		//Если не было поездок за текущий период или не передано ни одной точки.
 		if ($q->num_rows() > 0) {
@@ -24,6 +25,7 @@ class lays_model extends CI_Model {
 			}
 		}
 		else {
+			echo "No data found.";
 			return -1;
 		}
 		
@@ -47,22 +49,7 @@ class lays_model extends CI_Model {
 				}
 			}
 		}
-		//Testing output (r, t, ct) unneccessary
-		/*
-		$ct = 0;
-		for ($r = 0; $r < count($grouped); $r++) {
-			for ($t = 0; $t < count($grouped[$r]); $t++) {
-				echo $grouped[$r][$t]['lat']." ".$grouped[$r][$t]['lng']." ".$grouped[$r][$t]['utimestamp'];
-				echo "<br>";
-			}
-			echo "<br>";
-			echo "<br>";
-			$ct++;
-		}
-		echo "<hr>";
-		echo $ct;
-		
-		*/
+		$total_runs = $k - 1;
 		//Конец группирования по поездкам
 		
 		$total_time=0;
@@ -80,8 +67,9 @@ class lays_model extends CI_Model {
 		$total_brake2=0;
 		$total_brake3=0;
 		
-		for($m=0;$m<$k;$m++)
+		for($m=0;$m<=$k;$m++)
 		{
+			echo "***"."<br>";
 			unset($data);
 			$data=$grouped[$m];
 			$drivingScore = 0;
@@ -105,10 +93,10 @@ class lays_model extends CI_Model {
 			$acc = 0;
 			$j=count($data);
 					
-			for ($i = 1; $i < $j; $i++)
+			for ($i = 1; $i < $j-1; $i++)
 			{
-				$typeTurn[0] = 'normal point';
-				$typeAcc[0] = 'normal point';
+				$typeTurn[0] = "normal point";
+				$typeAcc[0] = "normal point";
 				$sevTurn = 0;
 				$sevAcc = 0;
 				$sevSpeed = 0;
@@ -122,7 +110,23 @@ class lays_model extends CI_Model {
 	
 					$turn[0] = 0;
 					$deltaTurn = $turn[$i] - $turn[$i-1];
-					$wAcc = abs($deltaTurn/$deltaTime);
+					$wAcc = abs($deltaTurn/(1000*$deltaTime));
+										
+					//Высчитываем тип поворота через угловое ускорение.					
+					if (($wAcc < 4.5) && ($wAcc >= 0)) {
+						$sevTurn = 0;
+						echo $sevTurn." ";
+					} else 	if (($wAcc >= 4.5) && ($wAcc < 6))	{
+						$sevTurn = 1;
+						echo $sevTurn." ";
+					} else 	if (($wAcc >= 6) && ($wAcc < 7.5)){
+			            $sevTurn = 2;
+			            echo $sevTurn." ";
+					} else if ($wAcc >= 7.5) {
+						$sevTurn = 3;
+						echo $sevTurn." ";
+					}
+					
 					
 					if (($speed > 90) && ($speed < 110)) {
 						$speed1++;
@@ -132,87 +136,257 @@ class lays_model extends CI_Model {
 						$speed3++;
 					}
 					
-					if ( ($wAcc < 4.5) ) {
-						$sevTurn = 0;
-					} else 	if (($wAcc < 6) && ($wAcc > 4.5))	{
-						$sevTurn = 1;
-					} else 	if (($wAcc < 7.5) && ($wAcc > 6)){
-			            $sevTurn = 2;
-					} else if ($wAcc > 7.5) {
-						$sevTurn = 3;
+					/*					
+					$deltaSpeed = $speed - $data[$i-1]['speed'];
+					$accel[$i] = $deltaSpeed/$deltaTime;
+					if ($accel[$i]<-7.5) {
+//						$sevAcc = -3;
+//					  	$brake3++;
+					} else if (($accel[$i]<-6)&&($accel[$i]>=-7.5)) {
+//						$sevAcc = -2;
+//						$brake2++;
+					} else if (($accel[$i]<-4.5)&&($accel[$i]>=-6)) {
+//						$sevAcc = -1;
+//						$brake1++;
+					} else if ($accel[$i]>5){
+//						$sevAcc = 3;
+//						$acc3++;
+					} else if (($accel[$i]>4)&&($accel[$i]<=5)){
+//						$sevAcc = 2;
+//						$acc2++;
+					} else if (($accel[$i]>3.5)&&($accel[$i]<=4)) {
+//						$sevAcc = 1;
+//						$acc1++;
+					} else if (($accel[$i]>=-4.5)&&($accel[$i]<=3.5)){
+//						$sevAcc = 0;
 					}
-					if (($typeTurn[$i-1] == 'left turn finished') || ($typeTurn[$i-1] == 'right turn finished') || (!isset($typeTurn[$i-1])) || ($speed == 0) ){
-						$typeTurn[$i] = 'normal point';
-					} else 	if ($deltaTurn > 0.5)   {
-					    if ($typeTurn[$i-1] == 'normal point') $typeTurn[$i] = 'left turn started';
-						if (($typeTurn[$i-1] == 'left turn started')||($typeTurn[$i-1] == 'left turn continued')) $typeTurn[$i] = 'left turn continued';
-						if (($typeTurn[$i-1] == 'right turn started')||($typeTurn[$i-1] == 'right turn continued')) {
-							$typeTurn[$i] = 'right turn finished';
-							switch ($sevTurn) {
-								case 1:
-									$turn1++;
-									break;
-								case 2:
-									$turn2++;
-									break;
-								case 3:
-									$turn3++;
-									break;
-							}
+					*/					
+					
+					$deltaSpeed = $speed - $data[$i-1]['speed'];
+					$accel[$i] = $deltaSpeed/$deltaTime;
+					//Высчитываем тип неравномерного движения (ускорение-торможение) через ускорение.
+					if ($accel[$i]<-7.5) {
+						$sevAcc = -3;
+					} else if (($accel[$i]>=-7.5)&&($accel[$i]<-6)) {
+						$sevAcc = -2;
+					} else if (($accel[$i]>=-6)&&($accel[$i]<-4.5)) {
+						$sevAcc = -1;
+					} else if ($accel[$i]>5) {
+						$sevAcc = 3;
+					} else if (($accel[$i]>4)&&($accel[$i]<=5)){
+						$sevAcc = 2;
+					} else if (($accel[$i]>3.5)&&($accel[$i]<=4)) {
+						$sevAcc = 1;
+					} else if (($accel[$i]>=-4.5)&&($accel[$i]<=3.5)) {
+						$sevAcc = 0;
+					}
+					
+					//Большое количество проверок условий соотношения ускорений в текущей и прошлой точках.
+					if ($typeAcc[$i-1] == "normal point") {
+						if ($sevAcc == 0) {
+							$typeAcc[$i] = "normal point";
+						} else if ($sevAcc == 1) {
+							$typeAcc[$i] = "acc1 started";
+						} else if ($sevAcc == 2) {
+							$typeAcc[$i] = "acc2 started";
+						} else if ($sevAcc == 3) {
+							$typeAcc[$i] = "acc3 started";
+						} else if ($sevAcc == -1) {
+							$typeAcc[$i] = "brake1 started";
+						} else if ($sevAcc == -2) {
+							$typeAcc[$i] = "brake2 started";
+						} else if ($sevAcc == -3) {
+							$typeAcc[$i] = "brake3 started";
 						}
+					} else	if (($typeAcc[$i-1] == "acc1 started") || ($typeAcc[$i-1] == "acc1 continued")) {
+						if ($sevAcc == 0) {
+							$typeAcc[$i] = "normal point";
+							$acc1++;
+						} else if ($sevAcc == 1) {
+							$typeAcc[$i] = "acc1 continued";
+						} else if ($sevAcc == 2) {
+							$typeAcc[$i] = "acc2 continued";
+						} else if ($sevAcc == 3) {
+							$typeAcc[$i] = "acc3 continued";
+						} else if ($sevAcc == -1) {
+							$typeAcc[$i] = "brake1 started";
+							$acc1++;
+						} else if ($sevAcc == -2) {
+							$typeAcc[$i] = "brake2 started";
+							$acc2++;
+						} else if ($sevAcc == -3) {
+							$typeAcc[$i] = "brake3 started";
+							$acc3++;
+						}
+					} else	if (($typeAcc[$i-1] == "acc2 started") || ($typeAcc[$i-1] == "acc2 continued")) {
+						if ($sevAcc == 0) {
+							$typeAcc[$i] = "normal point";
+							$acc2++;
+						} else if ($sevAcc == 1) {
+							$typeAcc[$i] = "acc1 started";
+							$acc2++;
+						} else if ($sevAcc == 2) {
+							$typeAcc[$i] = "acc2 continued";
+						} else if ($sevAcc == 3) {
+							$typeAcc[$i] = "acc3 continued";
+						} else if ($sevAcc == -1) {
+							$typeAcc[$i] = "brake1 started";
+							$acc2++;
+						} else if ($sevAcc == -2) {
+							$typeAcc[$i] = "brake2 started";
+							$acc2++;
+						} else if ($sevAcc == -3) {
+							$typeAcc[$i] = "brake3 started";
+							$acc2++;
+						}
+					} else	if (($typeAcc[$i-1] == "acc3 started") || ($typeAcc[$i-1] == "acc3 continued")) {
+						if ($sevAcc == 0) {
+							$typeAcc[$i] = "normal point";
+							$acc3++;
+						} else if ($sevAcc == 1) {
+							$typeAcc[$i] = "acc1 started";
+							$acc3++;
+						} else if ($sevAcc == 2) {
+							$typeAcc[$i] = "acc2 started";
+							$acc3++;
+						} else if ($sevAcc == 3) {
+							$typeAcc[$i] = "acc3 continued";
+						} else if ($sevAcc == -1) {
+							$typeAcc[$i] = "brake1 started";
+							$acc3++;
+						} else if ($sevAcc == -2) {
+							$typeAcc[$i] = "brake2 started";
+							$acc3++;
+						} else if ($sevAcc == -3) {
+							$typeAcc[$i] = "brake3 started";
+							$acc3++;
+						}
+					} else	if (($typeAcc[$i-1] == "brake1 started") || ($typeAcc[$i-1] == "brake1 continued")) {
+						if ($sevAcc == 0) {
+							$typeAcc[$i] = "normal point";
+							$brake1++;
+						} else if ($sevAcc == 1) {
+							$typeAcc[$i] = "acc1 started";
+							$brake1++;
+						} else if ($sevAcc == 2) {
+							$typeAcc[$i] = "acc2 started";
+							$brake1++;
+						} else if ($sevAcc == 3) {
+							$typeAcc[$i] = "acc3 started";
+							$brake1++;
+						} else if ($sevAcc == -1) {
+							$typeAcc[$i] = "brake1 continued";
+						} else if ($sevAcc == -2) {
+							$typeAcc[$i] = "brake2 started";
+						} else if ($sevAcc == -3) {
+							$typeAcc[$i] = "brake3 started";
+						}
+					} else if (($typeAcc[$i-1] == "brake2 started") || ($typeAcc[$i-1] == "brake2 continued")) {
+						if ($sevAcc == 0) {
+							$typeAcc[$i] = "normal point";
+							$brake2++;
+						} else if ($sevAcc == 1) {
+							$typeAcc[$i] = "acc1 started";
+							$brake2++;
+						} else if ($sevAcc == 2) {
+							$typeAcc[$i] = "acc2 started";
+							$brake2++;
+						} else if ($sevAcc == 3) {
+							$typeAcc[$i] = "acc3 started";
+							$brake2++;
+						} else if ($sevAcc == -1) {
+							$typeAcc[$i] = "brake1 started";
+							$brake2++;
+						} else if ($sevAcc == -2) {
+							$typeAcc[$i] = "brake2 continued";
+						} else if ($sevAcc == -3) {
+							$typeAcc[$i] = "brake3 started";
+						}
+					} else	if (($typeAcc[$i-1] == "brake3 started") || ($typeAcc[$i-1] == "brake3 continued")) {
+						if ($sevAcc == 0) {
+							$typeAcc[$i] = "normal point";
+							$brake3++;
+						} else if ($sevAcc == 1) {
+							$typeAcc[$i] = "acc1 started";
+							$brake3++;
+						} else if ($sevAcc == 2) {
+							$typeAcc[$i] = "acc2 started";
+							$brake3++;
+						} else if ($sevAcc == 3) {
+							$typeAcc[$i] = "acc3 started";
+							$brake3++;
+						} else if ($sevAcc == -1) {
+							$typeAcc[$i] = "brake1 started";
+							$brake3++;
+						} else if ($sevAcc == -2) {
+							$typeAcc[$i] = "brake2 started";
+							$brake3++;
+						} else if ($sevAcc == -3) {
+							$typeAcc[$i] = "brake3 continued";
+						}
+					}
+					
+														
+					//После поворота - нормальная точка.
+					if (($typeTurn[$i-1] == "left turn finished") || ($typeTurn[$i-1] == "right turn finished") || (!isset($typeTurn[$i-1])) || ($speed == 0) ) {
+						$typeTurn[$i] = "normal point";
+					// Отклонение > 0.5 - после нормальной точки начинаем поворот налево, либо продолжаем поворот налево после уже начатого, либо завершаем, если это был поворот направо.
+					} else 	if ($deltaTurn > 0.5)   {
+					    if ($typeTurn[$i-1] == "normal point") 
+							$typeTurn[$i] = "left turn started";
+						if (($typeTurn[$i-1] == "left turn started")||($typeTurn[$i-1] == "left turn continued")) 
+							$typeTurn[$i] = "left turn continued";
+						if (($typeTurn[$i-1] == "right turn started")||($typeTurn[$i-1] == "right turn continued")) {
+							$typeTurn[$i] = "right turn finished";
+							///////
+						}
+					// Отклонение > 0.5 - после нормальной точки начинаем поворот направо, либо продолжаем поворот направо после уже начатого, либо завершаем, если это был поворот налево.
 					} else 	if ($deltaTurn < -0.5)	{
-			            if ($typeTurn[$i-1] == 'normal point') $typeTurn[$i] = 'right turn started';
-						if (($typeTurn[$i-1] == 'right turn started')||($typeTurn[$i-1] == 'right turn continued')) $typeTurn[$i] = 'right turn continued';
-						if (($typeTurn[$i-1] == 'left turn started')||($typeTurn[$i-1] == 'left turn continued')) {
-							$typeTurn[$i] = 'left turn finished';
-								switch ($sevTurn) {
-								case 1:
-									$turn1++;
-									break;
-								case 2:
-									$turn2++;
-									break;
-								case 3:
-									$turn3++;
-									break;
-							}
+			            if ($typeTurn[$i-1] == "normal point") 
+							$typeTurn[$i] = "right turn started";
+						if (($typeTurn[$i-1] == "right turn started")||($typeTurn[$i-1] == "right turn continued")) 
+							$typeTurn[$i] = "right turn continued";
+						if (($typeTurn[$i-1] == "left turn started")||($typeTurn[$i-1] == "left turn continued")) {
+							$typeTurn[$i] = "left turn finished";
+							///////
 						}
 					} else	{
-						if ($typeTurn[$i-1] == 'normal point') $typeTurn[$i] = 'normal point';
-						if (($typeTurn[$i-1] == 'left turn started')||($typeTurn[$i-1] == 'left turn continued')) {
-							$typeTurn[$i] = 'left turn finished';
-								switch ($sevTurn) {
-								case 1:
+					// Отклонение между -0.5 и 0.5 - после нормальной точки идет нормальная, а после начатых поворотов налево или направо - продолженные повороты соответственно налево и направо.
+						if ($typeTurn[$i-1] == "normal point") 
+							$typeTurn[$i] = "normal point";
+						if (($typeTurn[$i-1] == "left turn started")||($typeTurn[$i-1] == "left turn continued")) {
+							$typeTurn[$i] = "left turn finished";
+							///////
+						}
+						if (($typeTurn[$i-1] == "right turn started")||($typeTurn[$i-1] == "right turn continued")) {
+							$typeTurn[$i] = "right turn finished";
+							///////
+						}
+					}
+					if (($typeTurn[$i] == "left turn finished") || ($typeTurn[$i] == "right turn finished")) {
+						switch ($sevTurn) {
+								case 1: {
 									$turn1++;
 									break;
-								case 2:
+								}
+								case 2: {
 									$turn2++;
 									break;
-								case 3:
+								}
+								case 3: {
 									$turn3++;
 									break;
+								}
+								case 0: {
+									break;
+								}
 							}
-						}
-						if (($typeTurn[$i-1] == 'right turn started')||($typeTurn[$i-1] == 'right turn continued')) {
-							$typeTurn[$i] = 'right turn finished';
-							if ($sevTurn == 1) { $turn1++; } 
-								switch ($sevTurn) {
-								case 1:
-									$turn1++;
-									break;
-								case 2:
-									$turn2++;
-									break;
-								case 3:
-									$turn3++;
-									break;
-							}
-						}
 					}
 				}
 				else 	
 				{
-					$typeTurn[$i] = 'normal point';
+					$typeTurn[$i] = "normal point";
+					$typeAcc[$i] = "normal point";
 					$sevTurn = 0;
 					$wAcc = 0;
 					$radius = 0;
@@ -222,31 +396,8 @@ class lays_model extends CI_Model {
 				$timeSum = 0;
 				$sumSpeed = 0;
 			
-				if ($deltaTime!=0) {
-					$deltaSpeed = $speed - $data[$i-1]['speed'];
-					$accel[$i] = $deltaSpeed/$deltaTime;
-					if ($accel[$i]<-7.5) {
-					  $sevAcc = -3;
-					  $brake3++;
-					} else if ($accel[$i]<-6){
-					  $sevAcc = -2;
-					  $brake2++;
-					} else if ($accel[$i]<-4.5){
-					  $sevAcc = -1;
-					  $brake1++;
-					} else if ($accel[$i]>5){
-					  $sevAcc = 3;
-					  $acc3++;
-					} else if ($accel[$i]>4){
-					  $sevAcc = 2;
-					  $acc2++;
-					} else if ($accel[$i]>3.5){
-					  $sevAcc = 1;
-					  $acc1++;
-					} else {
-					  $sevAcc = 0;
-					}
-				}
+				
+			
 				$color = "white";
 				if ($sevAcc==1) 
 					$color = "#c3eb0d";
@@ -262,21 +413,22 @@ class lays_model extends CI_Model {
 					$color = "#eb0d1b";
 	
 			}
-
+			//echo $acc1." ".$acc2." ".$acc3." ".$brake1." ".$brake2." ".$brake3." ".$turn1." ".$turn2." ".$turn3."<br>";
 			$fullTime = ($data[$j - 1]['utimestamp'] - $data[0]['utimestamp']);
 			$drivingScore = ($coef1 * ($speed1 + $turn1 + $acc1 + $brake1) + $coef2 * ($speed2 + $turn2 + $acc2 + $brake2) + $coef3 * ($speed3 + $turn3 + $acc3 + $brake3)) / ($fullTime);
-			$total_time=$total_time+$fullTime; 
-			$total_score=$total_score+$drivingScore;
-			$total_turn1=$total_turn1+$turn1;
-			$total_turn2=$total_turn2+$turn2;
-			$total_turn3=$total_turn3+$turn3;
-			$total_acc1=$total_acc1+$acc1;
-			$total_acc2=$total_acc2+$acc2;
-			$total_acc3=$total_acc3+$acc3;
-			$total_brake1=$total_brake1+$brake1;
-			$total_brake2=$total_brake2+$brake2;
-			$total_brake3=$total_brake3+$brake3;
+			$total_time 	= 	$total_time 	+ 	$fullTime; 
+			$total_score 	= 	$total_score 	+ 	$drivingScore;
+			$total_turn1	=	$total_turn1	+	$turn1;
+			$total_turn2	=	$total_turn2	+	$turn2;
+			$total_turn3	=	$total_turn3	+	$turn3;
+			$total_acc1		=	$total_acc1		+	$acc1;
+			$total_acc2		=	$total_acc2		+	$acc2;
+			$total_acc3		=	$total_acc3		+	$acc3;
+			$total_brake1	=	$total_brake1	+	$brake1;
+			$total_brake2	=	$total_brake2	+	$brake2;
+			$total_brake3	=	$total_brake3	+	$brake3;
 		}
+		
 		echo "<h3>Подробная статистика за период с ".$d['t1']." по ".$d['t2'].".</h3>";
 		echo "<br>";
 		if ($total_turn1 != 0)
@@ -306,8 +458,10 @@ class lays_model extends CI_Model {
 		echo "Всего торможений: ".$tb."<br/>";
 		echo "<hr>";
 		$ttime = $total_time/3600;
+		echo "Совершено поездок: ".$total_runs."<br>";
 		echo "Затрачено времени: ".$ttime." часов.<br/>";
 		echo "Ваш общий счет : ".$total_score." очков.<br/>";
+		
 	}
 }
 

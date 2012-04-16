@@ -19,12 +19,12 @@
 	<?php echo form_close(); ?>
 	<hr>
 	<br>
-	
+	<!--
 	<p><?php echo "Ускорений: $total_acc"; ?></p>
 	<p><?php echo "Торможений: $total_brake"; ?></p>
 	<p><?php echo "Поворотов: $total_turn"; ?></p>
 	<p><?php echo "Затраченное время: $total_time"; ?></p>
 	<p><?php echo "Общий счет: $total_score"; ?></p>
-	
+	-->
 </body>
 </html>

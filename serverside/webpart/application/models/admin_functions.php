@@ -36,4 +36,22 @@
 			$this->db->update('NTIRequests', $data); 
 			return 1;	
 		}
+		
+		//Блокирует пользователя
+		function banuser($userid)
+		{
+			$data = array('Deleted' => 1);
+			$this->db->where('Id', $userid);
+			$this->db->update('NTIUsers', $data); 
+			return 1;	
+		}
+		//Разблокирует пользователя
+		function unbanuser($userid)
+		{
+			$data = array('Deleted' => 0);
+			$this->db->where('Id', $userid);
+			$this->db->update('NTIUsers', $data); 
+			return 1;	
+		}
+		
 	}

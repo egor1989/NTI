@@ -43,3 +43,5 @@ class lays extends CI_Controller {
 	}
 
 }
+
+?>
