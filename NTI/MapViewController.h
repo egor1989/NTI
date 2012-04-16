@@ -21,7 +21,7 @@
 	
     
 	// the view we create for the line on the map
-	MKPolylineView* routeLineView;
+//	MKPolylineView* routeLineView;
 	
 	// the rect that bounds the loaded points
 	MKMapRect _routeRect;
@@ -32,11 +32,15 @@
     ServerCommunication *serverCommunication;
     
     MKCircle *circleSpecial;
+    bool isFirstRect;
+    
+    MKMapPoint northEastPoint; 
+	MKMapPoint southWestPoint; 
 }
 
 @property (nonatomic, retain) IBOutlet MKMapView* mapView;
 @property (nonatomic, retain) MKPolyline* routeLine;
-@property (nonatomic, retain) MKPolylineView* routeLineView;
+//@property (nonatomic, retain) MKPolylineView* routeLineView;
 
 // load the points of the route from the data source, in this case
 // a CSV file. 
@@ -46,7 +50,7 @@
 -(void) zoomInOnRoute;
 -(void) mapWaitingState;
 -(void) mapDrawRoute;
--(void) normalPointsDraw:(NSArray*) normalPointsArray;
+-(MKPolyline*) normalPointsDraw:(NSArray*) normalPointsArray;
 -(void) specialPointsDraw:(NSArray*) specialPointsArray: (int) pointType;
 
 

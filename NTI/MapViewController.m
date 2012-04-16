@@ -7,12 +7,11 @@
 //
 
 #import "MapViewController.h"
-#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:0.8]
 
 @implementation MapViewController
 @synthesize mapView = _mapView;
 @synthesize routeLine = _routeLine;
-@synthesize routeLineView = routeLineView;
+//@synthesize routeLineView = routeLineView;
 
 //routePointsReceived
 
@@ -33,16 +32,7 @@
      name: @"routePointsReceived"
      object: nil];
     
-	// create the overlay
-//	[self loadRoute];
-	
-	// add the overlay to the map
-	if (nil != self.routeLine) {
-		[self.mapView addOverlay:self.routeLine];
-	}
-	
-	// zoom in on the route. 
-	[self zoomInOnRoute];
+    isFirstRect = YES;
 	
 }
 
@@ -75,6 +65,7 @@
 //    NSInteger code = [[error valueForKey:@"code"] intValue];
 //    NSLog(@"result=%@ info=%@ code=%d", result, info, code);
     NSArray *point = [[NSArray alloc] init];
+    NSMutableArray *routeLineArray = [[NSMutableArray alloc] init];
     NSMutableArray *normalPointsArray = [[NSMutableArray alloc] init];
     NSMutableArray *specialPointsArray1 = [[NSMutableArray alloc] init];
     NSMutableArray *specialPointsArray2 = [[NSMutableArray alloc] init];
@@ -87,10 +78,11 @@
     }
     else
         for (point in pointsArray){
-            if ([[point valueForKey:@"type"] doubleValue] == 0){                
-                NSArray *latLngArray = [[NSArray alloc] initWithObjects:[point valueForKey:@"lat"],[point valueForKey:@"lng"],nil ];
-                [normalPointsArray addObject:latLngArray];
-                NSLog(@"sdfsdf");
+            if ([[point valueForKey:@"type"] doubleValue] == 0){  
+                if ([[point valueForKey:@"lat"] doubleValue]>0.1) {
+                    NSArray *latLngArray = [[NSArray alloc] initWithObjects:[point valueForKey:@"lat"],[point valueForKey:@"lng"],nil ];
+                    [normalPointsArray addObject:latLngArray];
+                }
             }
             else if ([[point valueForKey:@"type"] doubleValue] == -3){
                 NSArray *latLngArray = [[NSArray alloc] initWithObjects:[point valueForKey:@"lat"],[point valueForKey:@"lng"],nil ];
@@ -116,36 +108,47 @@
                 NSArray *latLngArray = [[NSArray alloc] initWithObjects:[point valueForKey:@"lat"],[point valueForKey:@"lng"],nil ];
                 [specialPointsArray6 addObject:latLngArray];
             }
+            else if ([[point valueForKey:@"type"] doubleValue] == 42){
+                NSLog(@"42");
+                if (normalPointsArray.count != 0){
+                    [routeLineArray addObject:[self normalPointsDraw:normalPointsArray]];
+                }
+                [normalPointsArray removeAllObjects];
+            }
 
         }
-    [self normalPointsDraw:normalPointsArray];
+    
+//    [self normalPointsDraw:normalPointsArray];
     [self specialPointsDraw:specialPointsArray1:1];
     [self specialPointsDraw:specialPointsArray2:2];
     [self specialPointsDraw:specialPointsArray3:3];
     [self specialPointsDraw:specialPointsArray4:4];
     [self specialPointsDraw:specialPointsArray5:5];
     [self specialPointsDraw:specialPointsArray6:6];
-		
+	
+//    MKPolyline *polyLine;
+    for (self.routeLine in routeLineArray){
+        [self.mapView addOverlay:self.routeLine];
+    }
 }
 
--(void) normalPointsDraw:(NSArray*) normalPointsArray{
-    MKMapPoint northEastPoint; 
-	MKMapPoint southWestPoint; 
+-(MKPolyline*) normalPointsDraw:(NSArray*) normalPointsArray1{
     
-	MKMapPoint* pointArr = malloc(sizeof(CLLocationCoordinate2D) * normalPointsArray.count);
+	MKMapPoint* pointArr = malloc(sizeof(CLLocationCoordinate2D) * normalPointsArray1.count);
     
-	for(int idx = 0; idx < normalPointsArray.count; idx++)
+	for(int idx = 0; idx < normalPointsArray1.count; idx++)
 	{
-		NSArray* currentPoint = [normalPointsArray objectAtIndex:idx];
+		NSArray* currentPoint = [normalPointsArray1 objectAtIndex:idx];
         
 		CLLocationDegrees latitude  = [[currentPoint objectAtIndex:0] doubleValue];
 		CLLocationDegrees longitude = [[currentPoint objectAtIndex:1] doubleValue];
 		CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(latitude, longitude);
 		MKMapPoint point = MKMapPointForCoordinate(coordinate);
         
-		if (idx == 0) {
+		if (isFirstRect) {
 			northEastPoint = point;
 			southWestPoint = point;
+            isFirstRect = NO;
 		}
 		else 
 		{
@@ -163,14 +166,17 @@
         
 	}
     
-	self.routeLine = [MKPolyline polylineWithPoints:pointArr count:normalPointsArray.count];
+	self.routeLine = [MKPolyline polylineWithPoints:pointArr count:normalPointsArray1.count];
 	_routeRect = MKMapRectMake(southWestPoint.x, southWestPoint.y, northEastPoint.x - southWestPoint.x, northEastPoint.y - southWestPoint.y);
     
 	free(pointArr);
     
-	if (nil != self.routeLine) {
-		[self.mapView addOverlay:self.routeLine];
-	}
+    return self.routeLine;
+    
+//	if (nil != self.routeLine) {
+//		[self.mapView addOverlay:self.routeLine];
+//	}
+//    self.routeLine = nil;
 
 }
 
@@ -232,7 +238,6 @@
 {
 	self.mapView = nil;
 	self.routeLine = nil;
-	self.routeLineView = nil;
 }
 
 
@@ -244,16 +249,12 @@
 	{
         
         MKOverlayView* overlayView = nil;
-		//if we have not yet created an overlay view for this overlay, create it now. 
-		if(nil == self.routeLineView)
-		{
-			routeLineView = [[MKPolylineView alloc] initWithPolyline:self.routeLine];
-			routeLineView.fillColor = [UIColor blackColor];
-			self.routeLineView.strokeColor = [UIColor blackColor];
-			self.routeLineView.lineWidth = 3;
-		}
-		
-		overlayView = self.routeLineView;
+        MKPolylineView *routeLineView = [[MKPolylineView alloc] initWithPolyline:self.routeLine];
+        routeLineView.fillColor = [UIColor blackColor];
+        routeLineView.strokeColor = [UIColor blackColor];
+        routeLineView.lineWidth = 3;
+    
+		overlayView = routeLineView;
 		
         return overlayView;
 	}
@@ -261,30 +262,22 @@
     MKCircle *circle = overlay;
     MKCircleView *circleView = [[MKCircleView alloc] initWithCircle:overlay];
     if([circle.title isEqualToString:@"-3"]){
-        
         circleView.strokeColor = circleView.fillColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:1.0];
-//        circleView.strokeColor = circleView.fillColor = UIColorFromRGB(0xff0000);
     }
     else if([circle.title isEqualToString:@"-2"]){
-        circleView.fillColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.7];
-        
-//        circleView.strokeColor = circleView.fillColor = UIColorFromRGB(0xffa500);
+        circleView.strokeColor = circleView.fillColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.6];
     }
     else if([circle.title isEqualToString:@"-1"]){
-        circleView.strokeColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.4];
-//        circleView.strokeColor = circleView.fillColor = UIColorFromRGB(0xffff00);
+        circleView.strokeColor = circleView.fillColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.3];
     }
     else if([circle.title isEqualToString:@"1"]){
-        circleView.fillColor = circleView.strokeColor = [UIColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:0.4];
-//        circleView.strokeColor = circleView.fillColor = UIColorFromRGB(0xd8ff00);
+        circleView.strokeColor = circleView.fillColor = [UIColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:0.3];
     }
     else if([circle.title isEqualToString:@"2"]){
-        circleView.fillColor = [UIColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:0.7];
-//        circleView.strokeColor = circleView.fillColor = UIColorFromRGB(0xafff00);
+        circleView.strokeColor = circleView.fillColor = [UIColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:0.6];
     }
     else if([circle.title isEqualToString:@"3"]){
-        circleView.strokeColor = [UIColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:1.0];
-//        circleView.strokeColor = circleView.fillColor = UIColorFromRGB(0x3bff00);
+        circleView.strokeColor = circleView.fillColor = [UIColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:1.0];
     }
     
     return circleView;
