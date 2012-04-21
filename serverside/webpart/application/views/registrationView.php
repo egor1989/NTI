@@ -2,28 +2,33 @@
 	<div  id="regform" class="regform">
 		После регистрации Вам будет выслана ссылка для подтверждения аккаунта.
 		<?if(isset($specinfo))echo $specinfo."<br/><br/><br/>";?>
-		 <form action="http://nti.goodroads.ru/user/registration" method="post" accept-charset="utf-8" id="registrationForm">
-		<table>
+<?echo form_open('/user/registration');?>		<table>
 			<tr>
 				<td> Имя </td>
-				<td><td><input type="text" name="fname" value="" id="fname"  /></td>
+				<td><?echo form_input('fname', '');?></td>
 			</tr>
 			<tr>
 				<td> Фамилия </td>
-			<td><td><input type="text" name="sname" value="" id="sname"  /></td>
+			<td><?echo form_input('sname', '');?></td>
 			<tr>
 				<td> Email </td>
-				<td><td><input type="text" name="email" value="" id="email"  /></td>
+				<td><?echo form_input('email', '');?></td>
 			</tr>
 			<tr>
 				<td> Пароль </td>
-				<td><td><input type="text" name="password" value="" id="password"  /></td>
+				<td><?echo form_input('password', '');?></td>
 			</tr>
 			<tr>
-				<td><input type="submit" name="registration" value="Зарегистрироваться" id="registration"  /></td>
+				<td><?echo form_submit('registration', 'Зарегистрироваться');?></td>
 			<td></td>
 			</tr>
 		</table>
-		</form>
+		<?echo form_close();?>
 </div>
 </div>
+
+				
+				
+				
+			
+				

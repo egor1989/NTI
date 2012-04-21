@@ -1,5 +1,5 @@
 ﻿<div id="content" class="pageContent">
-	<?if(isset($some_info))echo $some_info."<br/>";?>
+	<?if(isset($some_info))echo $some_info;?>
 	<?if($isfounded==1){?>
 	<table>
 			<?foreach ($search_result as $row)	
@@ -54,42 +54,16 @@
 			<?}?>
 	</table>
 	<?}?>
-	<?if($isfounded==0)echo "По вашему запросу ничего не найти";?>
+	<?if($isfounded==0)echo "По вашему запросу ничего не найти<br/>";?>
 	
 
- Введите имя для поиска
+			Введите имя для поиска
 			<?
 				echo form_open('/search');
 				echo form_input('name', '');
 				echo form_submit('accept', 'Accept');
 				echo form_close();
 		
-		?>
+			?>
 		
-		Последние зарегистрировавшиеся пользователи
-		<table border=1>
-		<?
-			foreach ($users as $row)	
-			{ 
-				echo "<tr><td><a href=/user/viewuser/".$row['Login'].">".$row['Login']."</a></td><td>".$row['FName']."</td><td>".$row['SName']."</td> </tr>";
-			}
-		?>
-		</table>
-		<?if($rights==2){?>
-		Ваши заявки, находящиеся в обработке<br/>
-		<?if($tickets){?>
-		<table border=1>
-		<?
-			foreach ($tickets as $row)	
-			{ 
-				echo "<tr><td><a href=/user/viewuser/".$row['Login'].">".$row['Login']."</a></td><td>".$row['FName']."</td><td>".$row['SName']."</td> </tr>";
-			}
-		?>
-		</table>
-		<?}
-		else
-		{?>
-		Заявок не найдено 
-		<?}?>
-		<?}?>
 </div>

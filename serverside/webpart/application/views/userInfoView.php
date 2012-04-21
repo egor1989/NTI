@@ -1,29 +1,34 @@
 ﻿<div id="content" class="pageContent">
-	<center><? echo $name." ". $sname;?>, PeacockTeam приветствует Вас!</center><br/>
-	
+	<center><? echo $name." ". $sname;?>, PeacockTeam приветствует Вас!</center><br/><br/><br/>	
 	<?if($rights!=2){?><center><a href="/map">Карта ваших маршрутов</a></center><?}?>
 	<?
 if($rights==2)
 {?>
-
+Ваши пользователи:<br/>
 	
 	<table>
 	<?
 	foreach ($retdata as $row)	
 			{ 
-				echo "<tr><td><a href=/user/viewuser/".$row['Login'].">".$row['Login']."</a></td><td>".$row['FName']."</td><td>".$row['SName']."</td> </tr>";
+				echo "<tr><td><a href=/user/search/".$row['Id'].">".$row['Login']."</a></td><td>".$row['FName']."</td><td>".$row['SName']."</td> </tr>";
 			}
-?>
+	?>
 	</table>
 	
-	
-		<table>
-	<?
-	foreach ($unregistered_data as $row)	
+	<?if($tickets){?>
+	Ваши заявки<br/>
+		<table border=1>
+		<?
+			foreach ($tickets as $row)	
 			{ 
-				echo "<tr><td><a href=/map/viewdata/".$row['Id'].">".$row['Insert_Time']."</a></td></tr>";
+				echo "<tr><td><a href=/user/search/".$row['Id'].">".$row['Login']."</a></td><td>".$row['FName']."</td><td>".$row['SName']."</td> </tr>";
 			}
-}?>
-	</table>
+		?>
+		</table>
+		<?}?>
+	
+	
+	
+<?}?>
 	
 </div>

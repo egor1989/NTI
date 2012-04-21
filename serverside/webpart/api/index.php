@@ -72,7 +72,7 @@ else if($json['method']=="addNTIFile"){addNTIFile($json['params']);}//-
 else if($json['method']=="NTIregister"){NTIregister($json['params']);}//-
 else if($json['method']=="getStatistics"){getStatistics($json['params']);}//-
 else if($json['method']=="getPath"){getPath($json['params']);}//-
-
+else if($json['method']=="feedBack"){feedBack($json['params']);}//-
 else
 {
 	   $errortype=array('info'=>"No action set, or function is incorrect",'code'=>  1);
@@ -98,7 +98,7 @@ function NTI_Cookie_check()
 			$dt=time();
 			while($row = mysql_fetch_array($result))
 			{
-				if($dt-$row['Creation_Date']>6000)
+				if($dt-$row['Creation_Date']>60000)
 				{
 					mysql_query("UPDATE NTIKeys SET Deleted=1 where SID='$cooks'");
 					return -2;
@@ -717,6 +717,7 @@ function getStatistics($param)
 function getPath($param)
 {
 	$time=$param['time'];
+	$till=$param['till'];
 	$UID=NTI_Cookie_check();
 	if($UID>0)
 	{
@@ -724,7 +725,13 @@ function getPath($param)
 	if(isset($time))
 	{
 		$time=mysql_real_escape_string($time);
+		if(!isset($param['till'])){
 		$query = "SELECT * FROM NTIEntry where utimestamp>=$time and UID=$UID and (lat!=0 or lng!=0) and utimestamp!=0 order by utimestamp";
+	}else
+	{$time=mysql_real_escape_string($time);
+	$tillmysql_real_escape_string($till);
+			$query = "SELECT * FROM NTIEntry where utimestamp>=$time and utimestamp<=$till and UID=$UID and (lat!=0 or lng!=0) and utimestamp!=0 order by utimestamp";
+	}
 		$result = mysql_query($query);
 		$c = 0;
 		$n = 0;
@@ -842,17 +849,23 @@ function getPath($param)
 	}		
 		$vg[1]=42;
 		$k=0;
+		$R = 6371; // km
 		for ($i = 1; $i < $j; $i++)
 		{
 			if($encData[$i]['utimestamp']-$encData[$i-1]['utimestamp']!=0)
 			{
-				if(($encData[$i]['utimestamp']-$encData[$i-1]['utimestamp']>300) || ((sqrt(pow(($encData[$i]['lat']-$encData[$i-1]['lat']),2)+pow(($encData[$i]['lng']-$encData[$i-1]['lng']),2))/($encData[$i]['utimestamp']-$encData[$i-1]['utimestamp']))<200))$vg[$i]=42;			
+				
+				$d = acos(sin($encData[$i]['lat'])*sin($encData[$i-1]['lat']) + cos($encData[$i]['lat'])*cos($encData[$i-1]['lat']) *  cos($encData[$i-1]['lng']-$encData[$i]['lng'])) * $R;
+				
+				if(($encData[$i]['utimestamp']-$encData[$i-1]['utimestamp']>300) || (($d)/($encData[$i]['utimestamp']-$encData[$i-1]['utimestamp']))>40)$vg[$i]=42;			
 				$ret_arr[$k]['lat']=$encData[$i]['lat'];
 				$ret_arr[$k]['lng']=$encData[$i]['lng'];
 				$ret_arr[$k]['type']=$vg[$i];
+			
 				$k++;
 			}
 		}
+		
 		if($k!=0)
 		{
 		
@@ -879,4 +892,25 @@ function getPath($param)
 	}
 	
 }
+
+
+
+
+function feedBack($param)
+{
+	$title=$param['title'];
+	$body=$param['body'];	
+	$UID=NTI_Cookie_check();			
+	if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
+	$title=mysql_real_escape_string($title);
+	$body=mysql_real_escape_string($body);
+	mysql_query("INSERT into NTIFeedback (UID,Title,Body) values ('$UID','$title','$body')");
+	$errortype=array('info'=>"Data is not in json",'code'=>  4);
+	$res=array('result'=>1,'error'=> $errortype);
+	echo json_encode($res);	
+	exit();	
+}
+
+
+
 ?>

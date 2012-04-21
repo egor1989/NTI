@@ -34,10 +34,8 @@ class Search extends CI_Controller {
 			else
 			{
 				$new_data['search_result'] = "";		
-				$new_data['isfounded'] = 0;
+				$new_data['isfounded'] = -1;
 			}
-			$new_data['users']=$this->userModel->load_users_list(5);
-			$new_data['tickets']=$this->userModel->load_all_tickets($this->session->userdata('id'));
 			$this->load->view('header',$new_data);
 			$this->load->view('usersearch',$new_data);
 			$this->load->view('footer');
