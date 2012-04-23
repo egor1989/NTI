@@ -139,9 +139,9 @@
     [self specialPointsDraw:specialPointsArray5:5];
     [self specialPointsDraw:specialPointsArray6:6];
 	
-//    MKPolyline *polyLine;
-    for (self.routeLine in routeLineArray){
-        [self.mapView addOverlay:self.routeLine];
+   // MKPolyline *polyLine;
+   for (_routeLine in routeLineArray){
+        [_mapView addOverlay:_routeLine];
     }
 }
 

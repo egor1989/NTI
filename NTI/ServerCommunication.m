@@ -138,12 +138,24 @@
         case 4:
             info = @"E-mail уже используется";
             break;
+        case 5:
+            info = @"Повторите ввод пароля";
+            break;
+        case 6:
+            info = @"Поле должно быть меньше 32 символов";
+            break;
+        case 7:
+            info = @"Поле e-mail слишком короткое";
+            break;
         case 11:
             info = @"Пользователя с таким именем не существует";
             break;
         case 12:
             info = @"Неверный пароль";
             forgotPassword = YES;
+            break;
+        case 88:
+            info = @"Сервер временно не доступен";
             break;
             
         default:
