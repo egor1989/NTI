@@ -15,7 +15,7 @@
 
 @implementation AppDelegate
 
-@synthesize window = _window, lastLoc, course, trueNorth, north, allDistance, canWriteToFile, dict;
+@synthesize window = _window, lastLoc, course, trueNorth, north, allDistance, canWriteToFile, dict, recordAction;
 
 #define accelUpdateFrequency 1	
 
@@ -39,7 +39,7 @@
 
     lastLoc = [[CLLocation alloc] init];
     allDistance = 0;
-    canWriteToFile = YES;//?
+    canWriteToFile = NO;//?
     [recordAction startOfRecord];
     
     [self checkSpeedTimer];
@@ -92,6 +92,7 @@
 }
 
 -(void) timerFired: (NSTimer *)timer{
+   // recordAction = [[RecordAction alloc] init];
     NSLog(@"moreThanLimit = %@", moreThanLimit?@"YES":@"NO");
     NSLog(@"30sec");
     if (!moreThanLimit) {
@@ -125,9 +126,9 @@
         needCheck = YES;
         m5Km = 0;
         l5Km = 0;
-        [NSTimer scheduledTimerWithTimeInterval:300 target:self selector:@selector(checkAfterFiveMin) userInfo:nil repeats:NO];
+        [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(checkAfterFiveMin) userInfo:nil repeats:NO];
     }
-    else [NSTimer scheduledTimerWithTimeInterval:300 target:self selector:@selector(checkSpeedTimer) userInfo:nil repeats:NO];
+    else [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(checkSpeedTimer) userInfo:nil repeats:NO];
     
 }
 
@@ -190,41 +191,15 @@
     if (kmch5) {
         if (newLocation.speed < SPEED){
             l5Km++;
-            
             if (l5Km > 5) {
                 [self fiveMinTimer];                
                 
             }
-            
         }
         else l5Km = 0;
     }
     
-/*    if (newLocation.speed > SPEED) m5Km++;
-    
-    if (m5Km > 5) {
-        moreThanLimit = YES;
-        m5Km = 0;
-        
-        if (needCheck) {
-            canWriteToFile = YES;
-            [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
-            //[self startGPSDetect];
-            //[self startMotionDetect];
-            needCheck = NO;
-        }
-    }
 
-    if (kmch5) 
-        if (newLocation.speed < SPEED) l5Km++;
-            
-    if (l5Km > 5) {
-        [self fiveMinTimer];
-        needCheck = YES;
-        l5Km = 0;
-        kmch5 = NO;
-    }
-    */
     
     
     lastLoc = [[CLLocation alloc] initWithCoordinate:newLocation.coordinate altitude:newLocation.altitude horizontalAccuracy:newLocation.horizontalAccuracy verticalAccuracy:newLocation.verticalAccuracy course:newLocation.course speed:newLocation.speed timestamp:newLocation.timestamp];
@@ -362,6 +337,8 @@
      See also applicationDidEnterBackground:.
      */
 }
+
+
 
 
 

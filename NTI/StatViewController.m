@@ -89,6 +89,7 @@
 
 
 - (void)changeImage{
+    
     if ([myAppDelegate canWriteToFile]) {
         [recordImage setImage:[UIImage imageNamed:@"green.png"]];
         [sendButton setUserInteractionEnabled:NO];
@@ -422,12 +423,11 @@
 }
 
 - (IBAction)sendButton:(id)sender{
-    RecordAction *recordAction = [[RecordAction alloc] init];
-    //
     ServerCommunication *serverCommunication = [[ServerCommunication alloc] init];
     [serverCommunication refreshCookie];
     //
-    [recordAction sendFile];
+    [[myAppDelegate recordAction] sendFile];
+
     
 }
 

@@ -170,6 +170,7 @@ static sqlite3_stmt *readStmt = nil;
     
     sqlite3_reset(deleteStmt); 
     
+    
     //если придется вернуть очистку рк
     //thanks to http://stackoverflow.com/questions/1601697/sqlite-reset-primary-key-field
 }
@@ -226,7 +227,8 @@ static sqlite3_stmt *readStmt = nil;
      }
     
     sqlite3_finalize(readStmt);
-    [self clearDatabase];
+    //[self clearDatabase];
+    sqlite3_close(database);
 }
 
 - (BOOL) convertAndWrite{

@@ -68,6 +68,7 @@
 @property (readonly, nonatomic) CLLocationDistance allDistance;
 @property (nonatomic) BOOL canWriteToFile;
 @property (strong, nonatomic) NSDictionary *dict;
+@property (nonatomic) RecordAction *recordAction;
 
 
 
