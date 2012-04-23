@@ -22,16 +22,16 @@
 {
     [super viewDidLoad];
     NSDate *today = [NSDate date];
-    NSDate *twoDayBefore = [today dateByAddingTimeInterval: -172800];
+    NSDate *twoDayBefore = [today dateByAddingTimeInterval: -432000];
+    NSDate *maxDate = [today dateByAddingTimeInterval: -900];
     datePicker.minimumDate = twoDayBefore;
-    datePicker.maximumDate = today;
+    datePicker.maximumDate = maxDate;
 }
 
 - (IBAction)doneButton:(id)sender {
     NSDate *myDate = datePicker.date;
-    NSLog(@"%f",[myDate timeIntervalSinceNow]);
     [self dismissModalViewControllerAnimated:YES];
-    [[NSNotificationCenter defaultCenter]	postNotificationName:	@"routePointsRequestSend" object:  nil];
+    [[NSNotificationCenter defaultCenter]	postNotificationName:	@"routePointsRequestSend" object:  myDate];
 }
 
 #pragma mark - View lifecycle

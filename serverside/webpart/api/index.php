@@ -25,10 +25,7 @@ if (!mysql_select_db($dbname,$dbcnx) )    {      return 0;    }
 mysql_query('SET NAMES cp1251'); 
 return 1;
 }
-
-
 $data=$_POST['data'];
-
 if(!isset($_POST))
 {
 	$data = file_get_contents("php://input");
@@ -74,6 +71,8 @@ if($json['method']=="NTIauth"){NTIauth($json['params']);}//-
 else if($json['method']=="addNTIFile"){addNTIFile($json['params']);}//-
 else if($json['method']=="NTIregister"){NTIregister($json['params']);}//-
 else if($json['method']=="getStatistics"){getStatistics($json['params']);}//-
+else if($json['method']=="getPath"){getPath($json['params']);}//-
+else if($json['method']=="feedBack"){feedBack($json['params']);}//-
 else
 {
 	   $errortype=array('info'=>"No action set, or function is incorrect",'code'=>  1);
@@ -99,7 +98,7 @@ function NTI_Cookie_check()
 			$dt=time();
 			while($row = mysql_fetch_array($result))
 			{
-				if($dt-$row['Creation_Date']>6000)
+				if($dt-$row['Creation_Date']>60000)
 				{
 					mysql_query("UPDATE NTIKeys SET Deleted=1 where SID='$cooks'");
 					return -2;
@@ -108,7 +107,7 @@ function NTI_Cookie_check()
 				return $row['UID'];
 			} 
 		}
-	
+	return -1;
 
 }
 
@@ -703,7 +702,7 @@ function getStatistics($param)
 	}
 							
 		$ret=array('total_score'=>$total_score,'total_time'=>$total_time,'total_turn'=>$total_turn,'total_acc'=>$total_acc,'total_break'=>$total_break);				
-		$errortype=array('info'=>"",'code'=>  3);
+		$errortype=array('info'=>"",'code'=>  0);
 		$res=array('result'=>$ret,'error'=> $errortype);
 		echo json_encode($res);	
 		exit();
@@ -718,16 +717,21 @@ function getStatistics($param)
 function getPath($param)
 {
 	$time=$param['time'];
+	$till=$param['till'];
+	$UID=NTI_Cookie_check();
+	if($UID>0)
+	{
 	if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
-	$total_time=0;
-	$total_score=0;
-	$total_turn=0;
-	$total_acc=0;
-	$total_break=0;
 	if(isset($time))
 	{
 		$time=mysql_real_escape_string($time);
-		$query = "SELECT * FROM NTIEntry where utimestamp>=$time and utimestamp!=0 order by utimestamp";
+		if(!isset($param['till'])){
+		$query = "SELECT * FROM NTIEntry where utimestamp>=$time and UID=$UID and (lat!=0 or lng!=0) and utimestamp!=0 order by utimestamp";
+	}else
+	{$time=mysql_real_escape_string($time);
+	$tillmysql_real_escape_string($till);
+			$query = "SELECT * FROM NTIEntry where utimestamp>=$time and utimestamp<=$till and UID=$UID and (lat!=0 or lng!=0) and utimestamp!=0 order by utimestamp";
+	}
 		$result = mysql_query($query);
 		$c = 0;
 		$n = 0;
@@ -752,18 +756,6 @@ function getPath($param)
 			$coef3 = 0.6;
 			$speedType = 0;
 			$deltaSpeed=0;
-			$speed1=0;
-			$speed2=0;
-			$speed3=0;
-			$acc1=0;
-			$acc2=0;
-			$acc3=0;
-			$brake1=0;
-			$brake2=0;
-			$brake3=0;
-			$turn1=0;
-			$turn2=0;
-			$turn3=0;
 			$acc = 0;
 			$j=count($encData);
 			for ($i = 1; $i < $j; $i++)
@@ -782,60 +774,22 @@ function getPath($param)
 					$deltaTurn = $turn[$i] - $turn[$i-1];
 					$wAcc = abs($deltaTurn/$deltaTime);
 					$radius = $speed/$wAcc;
-					if ($speed < 90) 
+					if (($typeTurn[$i-1] == 'left turn finished') || ($typeTurn[$i-1] == 'right turn finished') || (!isset($typeTurn[$i-1])) || ($speed == 0) )
 					{
-						$speedType = 0; 
-					} 
-					else if ($speed < 110) 
-					{
-						$speed1++;
-						$speedType = 1;
-					} 
-					else if ($speed<130)	
-					{
-						$speed2++;
-						$speedType = 2;
-					} 
-					else	
-					{
-						$speed3++;
-						$speedType = 3;
+						$typeTurn[$i] = 'normal point';
+					} else 	if ($deltaTurn > 0.5)   {
+					if ($typeTurn[$i-1] == 'normal point') $typeTurn[$i] = 'left turn started';
+					if (($typeTurn[$i-1] == 'left turn started')||($typeTurn[$i-1] == 'left turn continued')) $typeTurn[$i] = 'left turn continued';
+					if (($typeTurn[$i-1] == 'right turn started')||($typeTurn[$i-1] == 'right turn continued')) $typeTurn[$i] = 'right turn finished';
+					} else 	if ($deltaTurn < -0.5)	{
+					if ($typeTurn[$i-1] == 'normal point') $typeTurn[$i] = 'right turn started';
+					if (($typeTurn[$i-1] == 'right turn started')||($typeTurn[$i-1] == 'right turn continued')) $typeTurn[$i] = 'right turn continued';
+					if (($typeTurn[$i-1] == 'left turn started')||($typeTurn[$i-1] == 'left turn continued')) $typeTurn[$i] = 'left turn finished';
+					} else	{
+					if ($typeTurn[$i-1] == 'normal point') $typeTurn[$i] = 'normal point';
+					if (($typeTurn[$i-1] == 'left turn started')||($typeTurn[$i-1] == 'left turn continued')) $typeTurn[$i] = 'left turn finished';
+					if (($typeTurn[$i-1] == 'right turn started')||($typeTurn[$i-1] == 'right turn continued')) $typeTurn[$i] = 'right turn finished';
 					}
-					if ( ($wAcc < 4.5) || (!is_Numeric($wAcc)) ) 
-					{
-						$sevTurn = 0;
-					}
-					else 	if ($wAcc < 6)	
-					{
-						$sevTurn = 1;
-						$turn1++;
-					}
-					else 	if ($wAcc < 7.5) 
-					{
-						$sevTurn = 2;
-						$turn2++;
-					} 
-					else 
-					{
-						$sevTurn = 3;
-						$turn3++;
-					}
-						if (($typeTurn[$i-1] == 'left turn finished') || ($typeTurn[$i-1] == 'right turn finished') || (!isset($typeTurn[$i-1])) || ($speed == 0) )
-						{
-							$typeTurn[$i] = 'normal point';
-						} else 	if ($deltaTurn > 0.5)   {
-						if ($typeTurn[$i-1] == 'normal point') $typeTurn[$i] = 'left turn started';
-						if (($typeTurn[$i-1] == 'left turn started')||($typeTurn[$i-1] == 'left turn continued')) $typeTurn[$i] = 'left turn continued';
-						if (($typeTurn[$i-1] == 'right turn started')||($typeTurn[$i-1] == 'right turn continued')) $typeTurn[$i] = 'right turn finished';
-						} else 	if ($deltaTurn < -0.5)	{
-						if ($typeTurn[$i-1] == 'normal point') $typeTurn[$i] = 'right turn started';
-						if (($typeTurn[$i-1] == 'right turn started')||($typeTurn[$i-1] == 'right turn continued')) $typeTurn[$i] = 'right turn continued';
-						if (($typeTurn[$i-1] == 'left turn started')||($typeTurn[$i-1] == 'left turn continued')) $typeTurn[$i] = 'left turn finished';
-						} else	{
-						if ($typeTurn[$i-1] == 'normal point') $typeTurn[$i] = 'normal point';
-						if (($typeTurn[$i-1] == 'left turn started')||($typeTurn[$i-1] == 'left turn continued')) $typeTurn[$i] = 'left turn finished';
-						if (($typeTurn[$i-1] == 'right turn started')||($typeTurn[$i-1] == 'right turn continued')) $typeTurn[$i] = 'right turn finished';
-						}
 					
 				}
 				else 	
@@ -847,45 +801,40 @@ function getPath($param)
 				}
 				$timeSum = 0;
 				$sumSpeed = 0;
-				if ($deltaTime!=0)
-				{
-					$deltaSpeed = $speed - $encData[$i-1]['speed'];
-					$accel[$i] = $deltaSpeed/$deltaTime;
-					if ($accel[$i]<-7.5) 
-					{
-						$sevAcc = -3;
-						$brake3++;
-					} 
-					else if ($accel[$i]<-6)
-					{
-						$sevAcc = -2;
-						$brake2++;
-					}
-					else if ($accel[$i]<-4.5)
-					{
-						$sevAcc = -1;
-						$brake1++;
-					} 
-					else if ($accel[$i]>5)
-					{
-						$sevAcc = 3;
-						$acc3++;
-					} 
-					else if ($accel[$i]>4)
-					{
-						$sevAcc = 2;
-						$acc2++;
-					} 
-					else if ($accel[$i]>3.5)
-					{
-						$sevAcc = 1;
-						$acc1++;
-					} 
-					else 
-					{
-						$sevAcc = 0;
-					}
-				}
+
+	if ($deltaTime!=0){
+		$deltaSpeed = $speed - $encData[$i-1]['speed'];
+		$accel[$i] = $deltaSpeed/$deltaTime;
+		if ($accel[$i]<-7.5) {
+		  $sevAcc = -3;
+		  $brake3++;
+		} else if ($accel[$i]<-6){
+		  $sevAcc = -2;
+		  $brake2++;
+		} else if ($accel[$i]<-4.5){
+		  $sevAcc = -1;
+		  $brake1++;
+		} else if ($accel[$i]>5){
+		  $sevAcc = 3;
+		  $acc3++;
+		} else if ($accel[$i]>4){
+		  $sevAcc = 2;
+		  $acc2++;
+		} else if ($accel[$i]>3.5){
+		  $sevAcc = 1;
+		  $acc1++;
+		} else {
+		  $sevAcc = 0;
+		}
+	}
+	$vg[$i]=0;
+		if ($sevAcc==1) $vg[$i]=1;
+		if ($sevAcc==2) $vg[$i]=2;
+		if ($sevAcc==3) $vg[$i]=3;
+	    if ($sevAcc==-1) $vg[$i]=-1;
+		if ($sevAcc==-2) $vg[$i]=-2;
+		if ($sevAcc==-3) $vg[$i]=-3;
+		
 
 			}
 
@@ -893,24 +842,75 @@ function getPath($param)
 	}
 	else
 	{
-		$errortype=array('info'=>"No time set",'code'=>  3);
+		$errortype=array('info'=>"No time set",'code'=>  31);
 		$res=array('result'=>-1,'error'=> $errortype);
 		echo json_encode($res);	
 		exit();
 	}		
-	
-							
+		$vg[1]=42;
+		$k=0;
+		$R = 6371; // km
 		for ($i = 1; $i < $j; $i++)
 		{
-			$ret_arr[$i-1]['lat']=$encData[$i]['lat'];
-			$ret_arr[$i-1]['lng']=$encData[$i]['lng'];
-			$ret_arr[$i-1]['type']=$typeTurn[$i];
+			if($encData[$i]['utimestamp']-$encData[$i-1]['utimestamp']!=0)
+			{
+				
+				$d = acos(sin($encData[$i]['lat'])*sin($encData[$i-1]['lat']) + cos($encData[$i]['lat'])*cos($encData[$i-1]['lat']) *  cos($encData[$i-1]['lng']-$encData[$i]['lng'])) * $R;
+				
+				if(($encData[$i]['utimestamp']-$encData[$i-1]['utimestamp']>300) || (($d)/($encData[$i]['utimestamp']-$encData[$i-1]['utimestamp']))>40)$vg[$i]=42;			
+				$ret_arr[$k]['lat']=$encData[$i]['lat'];
+				$ret_arr[$k]['lng']=$encData[$i]['lng'];
+				$ret_arr[$k]['type']=$vg[$i];
 			
+				$k++;
+			}
 		}
-		$errortype=array('info'=>"File is too small or empty(".strlen($ins).")",'code'=>  3);
-		$res=array('result'=>$ret_arr,'error'=> $errortype);
+		
+		if($k!=0)
+		{
+		
+			$errortype=array('info'=>"",'code'=>  0);
+			$res=array('result'=>$ret_arr,'error'=> $errortype);
+			echo json_encode($res);	
+			exit();
+		}	
+		else
+		{
+			$errortype=array('info'=>"There is no data with such time",'code'=>  32);
+			$res=array('result'=>-1,'error'=> $errortype);
+			echo json_encode($res);	
+			exit();
+
+		}
+	}
+	else
+	{
+		$errortype=array('info'=>"Connection broken or you are not authorized",'code'=>  33);
+		$res=array('result'=>-1,'error'=> $errortype);
 		echo json_encode($res);	
 		exit();
+	}
 	
 }
+
+
+
+
+function feedBack($param)
+{
+	$title=$param['title'];
+	$body=$param['body'];	
+	$UID=NTI_Cookie_check();			
+	if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
+	$title=mysql_real_escape_string($title);
+	$body=mysql_real_escape_string($body);
+	mysql_query("INSERT into NTIFeedback (UID,Title,Body) values ('$UID','$title','$body')");
+	$errortype=array('info'=>"Data is not in json",'code'=>  4);
+	$res=array('result'=>1,'error'=> $errortype);
+	echo json_encode($res);	
+	exit();	
+}
+
+
+
 ?>

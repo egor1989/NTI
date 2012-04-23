@@ -89,7 +89,6 @@
 		27637150152A4F16003FE70B /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2763714F152A4F16003FE70B /* Icon@2x.png */; };
 		276C4C9814DEE94D00C469A6 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 276C4C9714DEE94D00C469A6 /* CoreMotion.framework */; };
 		276C4C9B14DEF4FF00C469A6 /* DatabaseActions.m in Sources */ = {isa = PBXBuildFile; fileRef = 276C4C9A14DEF4FF00C469A6 /* DatabaseActions.m */; };
-		2775F53115067E9E00FE08BC /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2775F53015067E9E00FE08BC /* WebViewController.m */; };
 		2775F55115068A7900FE08BC /* NTI_GraphMenuIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2775F54B15068A7900FE08BC /* NTI_GraphMenuIcon.png */; };
 		2775F55215068A7900FE08BC /* NTI_GraphMenuIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2775F54C15068A7900FE08BC /* NTI_GraphMenuIcon@2x.png */; };
 		2775F55315068A7900FE08BC /* NTI_MapMenuIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2775F54D15068A7900FE08BC /* NTI_MapMenuIcon.png */; };
@@ -281,8 +280,6 @@
 		276C4C9714DEE94D00C469A6 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		276C4C9914DEF4FF00C469A6 /* DatabaseActions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatabaseActions.h; sourceTree = "<group>"; };
 		276C4C9A14DEF4FF00C469A6 /* DatabaseActions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseActions.m; sourceTree = "<group>"; };
-		2775F52F15067E9E00FE08BC /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
-		2775F53015067E9E00FE08BC /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 		2775F54B15068A7900FE08BC /* NTI_GraphMenuIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = NTI_GraphMenuIcon.png; sourceTree = "<group>"; };
 		2775F54C15068A7900FE08BC /* NTI_GraphMenuIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "NTI_GraphMenuIcon@2x.png"; sourceTree = "<group>"; };
 		2775F54D15068A7900FE08BC /* NTI_MapMenuIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = NTI_MapMenuIcon.png; sourceTree = "<group>"; };
@@ -633,8 +630,6 @@
 		27CE0BC9150CDEE00016F4BA /* Map */ = {
 			isa = PBXGroup;
 			children = (
-				2775F52F15067E9E00FE08BC /* WebViewController.h */,
-				2775F53015067E9E00FE08BC /* WebViewController.m */,
 				278FE5C4150CE2EE0098BA74 /* DatePickerViewController.h */,
 				278FE5C5150CE2EE0098BA74 /* DatePickerViewController.m */,
 				2779258F15347CA80062D871 /* MapViewController.h */,
@@ -1115,7 +1110,6 @@
 				27F218B114E8238000E22C44 /* Plot.m in Sources */,
 				53AAF04B14FE2CF000E12486 /* ServerCommunication.m in Sources */,
 				532A46991502623A0070340D /* CSVConverter.m in Sources */,
-				2775F53115067E9E00FE08BC /* WebViewController.m in Sources */,
 				53F0061515077DCB0074156E /* AuthViewController.m in Sources */,
 				53F0061A15077F390074156E /* RegistrationViewController.m in Sources */,
 				53F8832D1507E70F000F7FE3 /* EncryptionData.m in Sources */,
@@ -1230,8 +1224,8 @@
 					"\"$(SRCROOT)/CrittercismSDK\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "945ACF9E-A880-4572-8BB2-D9BAB10DAAE6";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "945ACF9E-A880-4572-8BB2-D9BAB10DAAE6";
+				PROVISIONING_PROFILE = "237DFADE-47F7-49C9-BC7D-8CA012CD68B7";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "237DFADE-47F7-49C9-BC7D-8CA012CD68B7";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1239,8 +1233,8 @@
 		53E0A79114DEC75D004E3E1B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Vladislav Efremov";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Vladislav Efremov";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Vladislav Efremov (MBL7632743)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vladislav Efremov (MBL7632743)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NTI/NTI-Prefix.pch";
 				INFOPLIST_FILE = "NTI/NTI-Info.plist";
@@ -1249,8 +1243,8 @@
 					"\"$(SRCROOT)/CrittercismSDK\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "AE775371-96C8-4B59-9FDB-68EE33146F92";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "AE775371-96C8-4B59-9FDB-68EE33146F92";
+				PROVISIONING_PROFILE = "237DFADE-47F7-49C9-BC7D-8CA012CD68B7";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "237DFADE-47F7-49C9-BC7D-8CA012CD68B7";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

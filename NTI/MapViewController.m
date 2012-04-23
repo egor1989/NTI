@@ -11,7 +11,7 @@
 @implementation MapViewController
 @synthesize mapView = _mapView;
 @synthesize routeLine = _routeLine;
-@synthesize routeLineView = routeLineView;
+//@synthesize routeLineView = routeLineView;
 
 //routePointsReceived
 
@@ -20,87 +20,148 @@
     [super viewDidLoad];
     
     [_mapView setDelegate:self];
+    serverCommunication = [[ServerCommunication alloc]init ];
     [[NSNotificationCenter defaultCenter]	
      addObserver: self
-     selector: @selector(mapWaitingState)
+     selector: @selector(mapWaitingState:)
      name: @"routePointsRequestSend"
      object: nil];
     [[NSNotificationCenter defaultCenter]	
      addObserver: self
-     selector: @selector(mapDrawRoute)
+     selector: @selector(mapDrawRoute:)
      name: @"routePointsReceived"
      object: nil];
     
-	// create the overlay
-	[self loadRoute];
-	
-	// add the overlay to the map
-	if (nil != self.routeLine) {
-		[self.mapView addOverlay:self.routeLine];
-	}
-	
-	// zoom in on the route. 
-	[self zoomInOnRoute];
+    isFirstRect = YES;
 	
 }
 
--(void) mapWaitingState{
+-(void) mapWaitingState: (NSNotification*) TheNotice{
     waintingIndicator.hidden = NO;
     [waintingIndicator startAnimating];
     grayView.hidden = NO;
+    NSLog(@"getRoute");
+    [serverCommunication getRouteFromServer:[[TheNotice object] timeIntervalSince1970]];
 }
 
--(void) mapDrawRoute{
+-(void) mapDrawRoute: (NSNotification*) TheNotice{
+    SBJsonParser *jsonParser = [SBJsonParser new];
+    NSArray *answerArray = [[NSArray alloc] init];
+    NSArray *routeArray = [[NSArray alloc] init];
+    int errorCode;
+    
+    answerArray = [jsonParser objectWithString:[TheNotice object] error:NULL];
+    routeArray = [answerArray valueForKey:@"result"];
+    errorCode = [[[answerArray valueForKey:@"error"] valueForKey:@"code"] intValue];
+    
     [waintingIndicator stopAnimating];
     grayView.hidden = YES;
     
-	[self loadRoute];
-	if (nil != self.routeLine) {
-		[self.mapView addOverlay:self.routeLine];
-	}
-    //возможно понадобится чистить слой 
-	[self zoomInOnRoute];
+    if (errorCode == 31 || errorCode == 32) {
+        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Неверная дата" message:@"Данных по поездке за указанный период не существует. Пожалуйста выберите другую дату" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+    }
+    else if (errorCode == 33){
+        UIAlertView* alertView33 = [[UIAlertView alloc] initWithTitle:@"Ошибка авторизации" message:@"Пожалуйста перезайдите под своим логином. Это можно сделать в окне статистики." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView33 show];
+    }
+    else {
+        [self.mapView removeOverlays: self.mapView.overlays];
+        [self loadRoute:routeArray];
+        [self zoomInOnRoute];
+    }
 }
 
--(void) loadRoute
+-(void) loadRoute: (NSArray*) routeArray
 {
-	NSString* filePath = [[NSBundle mainBundle] pathForResource:@"route" ofType:@"csv"];
-	NSString* fileContents = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
-	NSArray* pointStrings = [fileContents componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+//    NSArray *error = [answer valueForKey:@"error"];
+//    NSString *info = [error valueForKey:@"info"];
+//    NSInteger code = [[error valueForKey:@"code"] intValue];
+//    NSLog(@"result=%@ info=%@ code=%d", result, info, code);
+    NSArray *point = [[NSArray alloc] init];
+    NSMutableArray *routeLineArray = [[NSMutableArray alloc] init];
+    NSMutableArray *normalPointsArray = [[NSMutableArray alloc] init];
+    NSMutableArray *specialPointsArray1 = [[NSMutableArray alloc] init];
+    NSMutableArray *specialPointsArray2 = [[NSMutableArray alloc] init];
+    NSMutableArray *specialPointsArray3 = [[NSMutableArray alloc] init];
+    NSMutableArray *specialPointsArray4 = [[NSMutableArray alloc] init];
+    NSMutableArray *specialPointsArray5 = [[NSMutableArray alloc] init];
+    NSMutableArray *specialPointsArray6 = [[NSMutableArray alloc] init];
+    if ([routeArray isEqual: @"null"]){
+        NSLog(@"noHoles");
+    }
+    else
+        for (point in routeArray){
+            if ([[point valueForKey:@"type"] doubleValue] == 0){  
+                if ([[point valueForKey:@"lat"] doubleValue]>0.1) {
+                    NSArray *latLngArray = [[NSArray alloc] initWithObjects:[point valueForKey:@"lat"],[point valueForKey:@"lng"],nil ];
+                    [normalPointsArray addObject:latLngArray];
+                }
+            }
+            else if ([[point valueForKey:@"type"] doubleValue] == -3){
+                NSArray *latLngArray = [[NSArray alloc] initWithObjects:[point valueForKey:@"lat"],[point valueForKey:@"lng"],nil ];
+                [specialPointsArray1 addObject:latLngArray];
+            }
+            else if ([[point valueForKey:@"type"] doubleValue] == -2){
+                NSArray *latLngArray = [[NSArray alloc] initWithObjects:[point valueForKey:@"lat"],[point valueForKey:@"lng"],nil ];
+                [specialPointsArray2 addObject:latLngArray];
+            }
+            else if ([[point valueForKey:@"type"] doubleValue] == -1){
+                NSArray *latLngArray = [[NSArray alloc] initWithObjects:[point valueForKey:@"lat"],[point valueForKey:@"lng"],nil ];
+                [specialPointsArray3 addObject:latLngArray];
+            }
+            else if ([[point valueForKey:@"type"] doubleValue] == 1){
+                NSArray *latLngArray = [[NSArray alloc] initWithObjects:[point valueForKey:@"lat"],[point valueForKey:@"lng"],nil ];
+                [specialPointsArray4 addObject:latLngArray];
+            }
+            else if ([[point valueForKey:@"type"] doubleValue] == 2){
+                NSArray *latLngArray = [[NSArray alloc] initWithObjects:[point valueForKey:@"lat"],[point valueForKey:@"lng"],nil ];
+                [specialPointsArray5 addObject:latLngArray];
+            } 
+            else if ([[point valueForKey:@"type"] doubleValue] == 3){
+                NSArray *latLngArray = [[NSArray alloc] initWithObjects:[point valueForKey:@"lat"],[point valueForKey:@"lng"],nil ];
+                [specialPointsArray6 addObject:latLngArray];
+            }
+            else if ([[point valueForKey:@"type"] doubleValue] == 42){
+                if (normalPointsArray.count != 0){
+                    [routeLineArray addObject:[self normalPointsDraw:normalPointsArray]];
+                }
+                [normalPointsArray removeAllObjects];
+            }
+
+        }
+    
+    [routeLineArray addObject:[self normalPointsDraw:normalPointsArray]];
+    [self specialPointsDraw:specialPointsArray1:1];
+    [self specialPointsDraw:specialPointsArray2:2];
+    [self specialPointsDraw:specialPointsArray3:3];
+    [self specialPointsDraw:specialPointsArray4:4];
+    [self specialPointsDraw:specialPointsArray5:5];
+    [self specialPointsDraw:specialPointsArray6:6];
 	
-	
-	// while we create the route points, we will also be calculating the bounding box of our route
-	// so we can easily zoom in on it. 
-	MKMapPoint northEastPoint; 
-	MKMapPoint southWestPoint; 
-	
-	// create a c array of points. 
-	MKMapPoint* pointArr = malloc(sizeof(CLLocationCoordinate2D) * pointStrings.count);
-	
-	for(int idx = 0; idx < pointStrings.count; idx++)
+//    MKPolyline *polyLine;
+    for (self.routeLine in routeLineArray){
+        [self.mapView addOverlay:self.routeLine];
+    }
+}
+
+-(MKPolyline*) normalPointsDraw:(NSArray*) normalPointsArray1{
+    
+	MKMapPoint* pointArr = malloc(sizeof(CLLocationCoordinate2D) * normalPointsArray1.count);
+    
+	for(int idx = 0; idx < normalPointsArray1.count; idx++)
 	{
-		// break the string down even further to latitude and longitude fields. 
-		NSString* currentPointString = [pointStrings objectAtIndex:idx];
-		NSArray* latLonArr = [currentPointString componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@","]];
+		NSArray* currentPoint = [normalPointsArray1 objectAtIndex:idx];
         
-		CLLocationDegrees latitude  = [[latLonArr objectAtIndex:0] doubleValue];
-		CLLocationDegrees longitude = [[latLonArr objectAtIndex:1] doubleValue];
-        
-        
-		// create our coordinate and add it to the correct spot in the array 
+		CLLocationDegrees latitude  = [[currentPoint objectAtIndex:0] doubleValue];
+		CLLocationDegrees longitude = [[currentPoint objectAtIndex:1] doubleValue];
 		CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(latitude, longitude);
-        
 		MKMapPoint point = MKMapPointForCoordinate(coordinate);
         
-		
-		//
-		// adjust the bounding box
-		//
-		
-		// if it is the first point, just use them, since we have nothing to compare to yet. 
-		if (idx == 0) {
+		if (isFirstRect) {
 			northEastPoint = point;
 			southWestPoint = point;
+            isFirstRect = NO;
 		}
 		else 
 		{
@@ -117,15 +178,61 @@
 		pointArr[idx] = point;
         
 	}
-	
-	// create the polyline based on the array of points. 
-	self.routeLine = [MKPolyline polylineWithPoints:pointArr count:pointStrings.count];
     
+	self.routeLine = [MKPolyline polylineWithPoints:pointArr count:normalPointsArray1.count];
 	_routeRect = MKMapRectMake(southWestPoint.x, southWestPoint.y, northEastPoint.x - southWestPoint.x, northEastPoint.y - southWestPoint.y);
     
-	// clear the memory allocated earlier for the points
 	free(pointArr);
-	
+    
+    return self.routeLine;
+    
+//	if (nil != self.routeLine) {
+//		[self.mapView addOverlay:self.routeLine];
+//	}
+//    self.routeLine = nil;
+
+}
+
+-(void) specialPointsDraw:(NSArray*) specialPointsArray: (int) pointType{
+	for(int idx = 0; idx < specialPointsArray.count; idx++)
+	{
+		NSArray* currentPoint = [specialPointsArray objectAtIndex:idx];
+        
+		CLLocationDegrees latitude  = [[currentPoint objectAtIndex:0] doubleValue];
+		CLLocationDegrees longitude = [[currentPoint objectAtIndex:1] doubleValue];
+		CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(latitude, longitude);
+        
+        circleSpecial = [MKCircle circleWithCenterCoordinate:coordinate radius:6];
+        switch (pointType) {
+            case 1:
+                [circleSpecial setTitle:@"-3"];
+                [self.mapView addOverlay:circleSpecial];
+                break;
+            case 2:
+                [circleSpecial setTitle:@"-2"];
+                [self.mapView addOverlay:circleSpecial];
+                break;
+            case 3:
+                [circleSpecial setTitle:@"-1"];
+                [self.mapView addOverlay:circleSpecial];
+                break;
+            case 4:
+                [circleSpecial setTitle:@"1"];
+                [self.mapView addOverlay:circleSpecial];
+                break;
+            case 5:
+                [circleSpecial setTitle:@"2"];
+                [self.mapView addOverlay:circleSpecial];
+                break;
+            case 6:
+                [circleSpecial setTitle:@"3"];
+                [self.mapView addOverlay:circleSpecial];
+                break;
+            default:
+                break;
+        }
+	}
+    
 }
 
 -(void) zoomInOnRoute
@@ -144,31 +251,48 @@
 {
 	self.mapView = nil;
 	self.routeLine = nil;
-	self.routeLineView = nil;
 }
 
 
 #pragma mark MKMapViewDelegate
 - (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id <MKOverlay>)overlay
 {
-	MKOverlayView* overlayView = nil;
 	
 	if(overlay == self.routeLine)
 	{
-		//if we have not yet created an overlay view for this overlay, create it now. 
-		if(nil == self.routeLineView)
-		{
-			routeLineView = [[MKPolylineView alloc] initWithPolyline:self.routeLine];
-			routeLineView.fillColor = [UIColor blackColor];
-			self.routeLineView.strokeColor = [UIColor blackColor];
-			self.routeLineView.lineWidth = 3;
-		}
+        
+        MKOverlayView* overlayView = nil;
+        MKPolylineView *routeLineView = [[MKPolylineView alloc] initWithPolyline:self.routeLine];
+        routeLineView.fillColor = [UIColor blackColor];
+        routeLineView.strokeColor = [UIColor blackColor];
+        routeLineView.lineWidth = 3;
+    
+		overlayView = routeLineView;
 		
-		overlayView = self.routeLineView;
-		
+        return overlayView;
 	}
-	
-	return overlayView;
-	
+    
+    MKCircle *circle = overlay;
+    MKCircleView *circleView = [[MKCircleView alloc] initWithCircle:overlay];
+    if([circle.title isEqualToString:@"-3"]){
+        circleView.strokeColor = circleView.fillColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:1.0];
+    }
+    else if([circle.title isEqualToString:@"-2"]){
+        circleView.strokeColor = circleView.fillColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.6];
+    }
+    else if([circle.title isEqualToString:@"-1"]){
+        circleView.strokeColor = circleView.fillColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.3];
+    }
+    else if([circle.title isEqualToString:@"1"]){
+        circleView.strokeColor = circleView.fillColor = [UIColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:0.3];
+    }
+    else if([circle.title isEqualToString:@"2"]){
+        circleView.strokeColor = circleView.fillColor = [UIColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:0.6];
+    }
+    else if([circle.title isEqualToString:@"3"]){
+        circleView.strokeColor = circleView.fillColor = [UIColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:1.0];
+    }
+    
+    return circleView;
 }
 @end

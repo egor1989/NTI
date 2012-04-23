@@ -416,7 +416,7 @@
     NSString *cookie = [userDefaults valueForKey:@"cookie"];
     
     NSString *timeString = [NSString stringWithFormat:@"%.0f",timeInterval];
-    timeString=[@"data={\"method\":\"addNTIFile\",\"params\":{\"ntifile\":" stringByAppendingString:timeString];
+    timeString=[@"data={\"method\":\"getPath\",\"params\":{\"time\":" stringByAppendingString:timeString];
     timeString=[timeString stringByAppendingString:@"}}"];
     
     NSLog(@"Request: %@", timeString);
@@ -430,15 +430,14 @@
     
     NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
                                 @"http://nti.goodroads.ru/api/", NSHTTPCookieDomain,
-                                @"key", NSHTTPCookieName,
+                                @"NTIKeys", NSHTTPCookieName,
                                 cookie, NSHTTPCookieValue,
                                 @"/", NSHTTPCookiePath,
-                                nil];
-    
+                                nil];    
     [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:[NSHTTPCookie cookieWithProperties:properties]];
     NSHTTPCookie *fcookie = [NSHTTPCookie cookieWithProperties:properties]; //?
     NSArray* fcookies = [NSArray arrayWithObjects: fcookie, nil];   //?
-    NSDictionary * headers = [NSHTTPCookie requestHeaderFieldsWithCookies:fcookies]; //?
+    NSDictionary *headers = [NSHTTPCookie requestHeaderFieldsWithCookies:fcookies]; //?
     
     [request setAllHTTPHeaderFields:headers];
     
@@ -447,9 +446,8 @@
                            completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *error) {
                                returnString = [[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding];
                                NSLog(@"returnData: %@", returnString);
-                               [[NSNotificationCenter defaultCenter]	postNotificationName:	@"routePointsReceived" object:  nil];
+                               [[NSNotificationCenter defaultCenter]	postNotificationName:	@"routePointsReceived" object:  returnString];
 
-                              // [self checkErrors:returnString];
                                //написсать свой checkError
                            }];
     

@@ -7,18 +7,8 @@
 <meta name="Description" content="<?if(!isset($descr))echo "Проект по автоматизированному контролю состояния дорожного покрытия GoodRoads";else echo $descr;?>">
 <meta name="Keywords" content="<?if(!isset($keywords))echo "goodroads,дорожное покрытие,гудроадс,ямы на дорогах, качество покрытия, качество асфальта, качество дороги";else echo $keywords;?>">
 <link rel="stylesheet" type="text/css" href="/css/main.css" /> 
-<?if($map_type!=2){?>
-<script type="text/javascript" src="/js/jquery-1.6.1.js"></script>
-<script src="http://maps.google.com/maps/api/js?v=3.5&amp;sensor=false"></script>
-<script src="http://openlayers.org/dev/OpenLayers.js"></script>
-<link rel="stylesheet" href="http://openlayers.org/dev/theme/default/style.css" type="text/css">
-<link rel="stylesheet" href="http://openlayers.org/dev/theme/default/google.css" type="text/css">
-
-<?}?>
-<script type="text/javascript" src="/js/base3.js"></script>
-
 </head>
-<body <?if($map_type!=2){?>onload="init('map');"<?}?>>
+<body>
   <div itemscope itemtype="http://schema.org/Organization"> 
     <meta itemprop="url" content="peacockteam.org" /> 
  
@@ -96,7 +86,7 @@
  {?>         
 <div id="menu" class="menu"> 
 	<div id="menuitems" class="menuitems"> 
-		<div id="menuitem1" class="menuitem selectedItem"><a href="/user/search" class="hrefmenu" >Поиск</a></div> 
+		<div id="menuitem1" class="menuitem"><a href="/search" class="hrefmenu" >Поиск</a></div> 
 		<div id="menuitem2" class="menuitem "><a href="/user/navigate" class="hrefmenu" >Просмотр пользователей</a></div> 
 		<div id="menuitem3" class="menuitem "><a href="/" class="hrefmenu" >Изменить информацию</a></div> 
 		<div id="menuitem4" class="menuitem "><a href="/user/logout" class="hrefmenu" >Выход</a></div> 
@@ -106,17 +96,17 @@
 else if(isset($rights) && $rights==3){?>
 <div id="menu" class="menu"> 
 	<div id="menuitems" class="menuitems"> 
-		<div id="menuitem1" class="menuitem selectedItem"><a href="/user/search" class="hrefmenu" >Поиск</a></div> 
-		<div id="menuitem2" class="menuitem "><a href="/" class="hrefmenu" >Просмотр пользователей</a></div> 
-		<div id="menuitem3" class="menuitem "><a href="/" class="hrefmenu" >Изменить информацию</a></div> 
-		<div id="menuitem4" class="menuitem "><a href="/user/logout" class="hrefmenu" >Выход</a></div> 
+		<div id="menuitem1" class="menuitem"><a href="/search" class="hrefmenu" >Поиск</a></div> 
+		<div id="menuitem2" class="menuitem"><a href="/all" class="hrefmenu" >Управление пользователями</a></div> 
+		<div id="menuitem2" class="menuitem"><a href="/tickets" class="hrefmenu" >Все заявки</a></div> 
+		<div id="menuitem4" class="menuitem"><a href="/user/logout" class="hrefmenu" >Выход</a></div> 
 	</div>
 </div> 
 <?}else
 {?>
 <div id="menu" class="menu"> 
 	<div id="menuitems" class="menuitems"> 
-		<div id="menuitem1" class="menuitem selectedItem"><a href="/map/" class="hrefmenu" >Карта движения</a></div> 
+		<div id="menuitem1" class="menuitem"><a href="/user/search" class="hrefmenu" >Подробная информация по движению</a></div> 
 		<div id="menuitem2" class="menuitem "><a href="/" class="hrefmenu" >Изменить информацию</a></div> 
 		<div id="menuitem3" class="menuitem "><a href="/user/logout" class="hrefmenu" >Выход</a></div> 
 	</div>

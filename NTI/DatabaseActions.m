@@ -100,7 +100,7 @@ static sqlite3_stmt *readStmt = nil;
             //SQLite provides a method to get the last primary key inserted by using sqlite3_last_insert_rowid
             //sqlite3_
             pk = sqlite3_last_insert_rowid(database);
-            NSLog(@"addRecord %i",pk);
+//            NSLog(@"addRecord %i",pk);
             [userDefaults setInteger:pk forKey:@"pk"];
             
         }
@@ -144,7 +144,7 @@ static sqlite3_stmt *readStmt = nil;
         //SQLite provides a method to get the last primary key inserted by using sqlite3_last_insert_rowid
         //sqlite3_
         pk = sqlite3_last_insert_rowid(database);
-        NSLog(@"addRecord %i",pk);
+//        NSLog(@"addRecord %i",pk);
         [userDefaults setInteger:pk forKey:@"pk"];
         
     }
@@ -198,7 +198,7 @@ static sqlite3_stmt *readStmt = nil;
                     
                     NSDictionary *gps = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%.1f", sqlite3_column_double(readStmt, 6)], @"direction", [NSString stringWithFormat:@"%.1f", sqlite3_column_double(readStmt, 10)], @"speed", [NSString stringWithFormat:@"%f", sqlite3_column_double(readStmt, 8)], @"latitude", [NSString stringWithFormat:@"%f", sqlite3_column_double(readStmt, 9)], @"longitude", [NSString stringWithFormat:@"%.0f", sqlite3_column_double(readStmt, 5)], @"compass", [NSString stringWithFormat:@"%.2f", sqlite3_column_double(readStmt, 7)], @"distance", nil];
                     
-                    NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.3f", sqlite3_column_double(readStmt, 2)],[NSString stringWithFormat:@"%s", sqlite3_column_text(readStmt, 1)], 
+                    NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.0f", sqlite3_column_double(readStmt, 2)],[NSString stringWithFormat:@"%s", sqlite3_column_text(readStmt, 1)], 
                                      acc, gps, nil];
                     
                     NSDictionary *record = [NSDictionary dictionaryWithObjects:objs forKeys:keys];

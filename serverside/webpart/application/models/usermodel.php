@@ -41,6 +41,22 @@
 				return false;
 			}
 		}
+		//Загружает всех пользователей системы 
+		// Нужно для администратора
+		function load_all_users(){
+			
+			$query = $this->db->query("SELECT* from NTIUsers Where Rights!=3");
+			if($query->num_rows()>0){
+			
+				return $query->result_array();
+			}
+			else{
+				return false;
+			}
+		}
+		
+		
+		
 		function get_all_unregdata()
 		{
 			$query = $this->db->query("Select Id,Insert_Time from NTIFile where UID=-3 group by Insert_Time");
@@ -57,7 +73,7 @@
 		
 		function checkrealation($id,$username)
 		{
-		$query = $this->db->query("Select UserID from NTIRelations,(Select * from NTIUsers where Login=".$this->db->escape($username).") as UserRel where UserRel.ID=NTIRelations.UserID and NTIRelations.ExpertID=$id");
+		$query = $this->db->query("Select UserID from NTIRelations,(Select * from NTIUsers where Id=".$this->db->escape($username).") as UserRel where UserRel.ID=NTIRelations.UserID and NTIRelations.ExpertID=$id");
 			if($query->num_rows()>0){
 			
 			return 1;
@@ -83,12 +99,11 @@
 		
 		//Функция отвечает за поиск пользователя по параметрам
 		//Также относительно пользователя собирает инфу о его отногениях
-		function search($userData)
+		function search($name)
 		{
-				extract($userData);
-				$name=$this->db->escape($name);
+				
 				//Методом n-грамма ищем похожих
-				$query = $this->db->query("Select * from NTIUsers where Rights=0");
+				$query = $this->db->query("Select * from NTIUsers where Rights<2");
 				//Получили все данные 
 				if($query->num_rows()>0)
 				{
@@ -188,10 +203,10 @@
 		
 		//Функиця отвечает за проверку и добавление заявки пользователя
 		
-		function AddRelationQuery($id,$username)
+		function AddRelationQuery($id,$userId)
 		{
 			//Сначала получаем id пользователя относительно его имени
-			$query = $this->db->query("Select * from NTIUsers where Login=".$this->db->escape($username));
+			$query = $this->db->query("Select * from NTIUsers where Rights<2 and Id=".$this->db->escape($userId));
 			if($query->num_rows()>0){
 			
 				foreach($query->result() as $row){
@@ -226,10 +241,10 @@
 		}
 		
 			
-		function RemoveRelationQuery($id,$username)
+		function RemoveRelationQuery($id,$userId)
 		{
 			//Сначала получаем id пользователя относительно его имени
-			$query = $this->db->query("Select * from NTIUsers where Login=".$this->db->escape($username));
+			$query = $this->db->query("Select * from NTIUsers where Login=".$this->db->escape($userId));
 			if($query->num_rows()>0){
 			
 				foreach($query->result() as $row){
@@ -254,8 +269,8 @@
 			$data = array(
 				'Status' => 4
 						);
-$this->db->where('UserId', $userid);
-$this->db->where('ExpertId', $id);
+				$this->db->where('UserId', $userid);
+				$this->db->where('ExpertId', $id);
 
 				$this->db->update('NTIRequests', $data); 
 				
@@ -396,20 +411,30 @@ $this->db->where('ExpertId', $id);
 				$this->db->update('NTIUsers', $data); 
 				return 1;
 		}
+		
+
+		
 		//registration
-		function registration($userData){
-				extract($userData);
+		function registration($fname,$sname,$email,$password){
 				$email=mysql_real_escape_string($email);
 				$name=mysql_real_escape_string($fname);
 				$surname=mysql_real_escape_string($sname);
 				$emailcheck = array('Email' => $email);
-				
+				//Слишком короткий пароль
+				if(strlen($password)<3)
+				{
+					return array('login' => -1, 'password' => -1,'result'=>-4);	
+				}
+								
+				if(strlen($email)<3)
+				{
+					return array('login' => -1, 'password' => -1,'result'=>-5);	
+				}
 				$query = $this->db->get_where('NTIUsers',$emailcheck);
 
 				if ($query->num_rows() > 0)
 				{
-					return array('login' => -1, 'password' => -1,'result'=>-1);
-					
+					return array('login' => -1, 'password' => -1,'result'=>-1);	
 				}
 				
 				$userData = array('Login' => $email ,'Password' => hash('sha256', $password),'FName' => $name ,'SName' => $surname,'Email'=>$email);
