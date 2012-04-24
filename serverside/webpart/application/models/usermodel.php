@@ -7,9 +7,10 @@
 			}
 		
 		
-		function authorization($user){
-			$login = $user['login'];
-			$password=hash('sha256', $user['password']);
+		function authorization($login,$password){
+		
+			$password=hash('sha256', $password);
+
 			$query = $this->db->get_where('NTIUsers', array('Login' => $login, 'Password' => $password));
 			if($query->num_rows()>0){
 			

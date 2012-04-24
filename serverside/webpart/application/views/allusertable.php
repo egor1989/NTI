@@ -28,7 +28,7 @@
 				if($row['Rights']==1)$type="Данные подтверждены";
 				if($row['Rights']==0)$type="Не подтвердено";
 				?>
-				<tr><td><a href="/user/viewuser/<?echo $row['Login'];?>"><?echo $row['Login'];?></a></td><td><?echo $row['FName'];?></td><td><?echo $row['SName'];?></td> <td><?echo $type;?></td>
+				<tr><td><a href="/user/viewuser/<?echo $row['Id'];?>"><?echo $row['Login'];?></a></td><td><?echo $row['FName'];?></td><td><?echo $row['SName'];?></td> <td><?echo $type;?></td>
 				
 				<td>
 				<?
@@ -47,10 +47,29 @@
 					echo form_close();
 				}
 				?>
-				
-				
 				</td>
-				
+				<td>
+				<?
+				if($row['Deleted']==0) {
+					echo form_open('/admin/chrights/');
+					echo form_hidden('userid', $row['Id']);
+					echo form_input('nrights', '');
+					echo form_submit('newrights', 'Изменить права');
+					echo form_close();
+				}
+				?>	
+				</td>
+				<td>
+				<?
+				if($row['Deleted']==0) {
+					echo form_open('/admin/chpassword/');
+					echo form_hidden('userid', $row['Id']);
+					echo form_input('newpassword', '');
+					echo form_submit('newpwd', 'Изменить пароль');
+					echo form_close();
+				}
+				?>	
+				</td>				
 				
 				
 				
@@ -72,7 +91,7 @@
 				if($row['Rights']==1)$type="Данные подтверждены";
 				if($row['Rights']==0)$type="Не подтвердено";
 				?>
-				<tr><td><a href="/user/viewuser/<?echo $row['Login'];?>"><?echo $row['Login'];?></a></td><td><?echo $row['FName'];?></td><td><?echo $row['SName'];?></td> <td><?echo $type;?></td>
+				<tr><td><a href="/user/viewck/<?echo $row['Login'];?>"><?echo $row['Login'];?></a></td><td><?echo $row['FName'];?></td><td><?echo $row['SName'];?></td> <td><?echo $type;?></td>
 				
 				<td>
 				<?
@@ -94,7 +113,28 @@
 				
 				
 				</td>
-				
+								<td>
+				<?
+				if($row['Deleted']==0) {
+					echo form_open('/admin/chrights/');
+					echo form_hidden('userid', $row['Id']);
+					echo form_input('nrights', '');
+					echo form_submit('newrights', 'Изменить права');
+					echo form_close();
+				}
+				?>	
+				</td>
+				<td>
+				<?
+				if($row['Deleted']==0) {
+					echo form_open('/admin/chpassword/');
+					echo form_hidden('userid', $row['Id']);
+					echo form_input('newpassword', '');
+					echo form_submit('newpwd', 'Изменить пароль');
+					echo form_close();
+				}
+				?>	
+				</td>
 				
 				
 				

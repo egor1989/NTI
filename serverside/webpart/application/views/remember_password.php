@@ -1,17 +1,21 @@
 <div id="content" class="pageContent">
 		<div  id="regform" class="regform">
 		<?if(isset($specinfo))echo $specinfo."<br/><br/><br/>";?>
-		 <form action="http://nti.goodroads.ru/remember/recover" method="post" accept-charset="utf-8" id="recoveryForm">
+	
+			<?
+			 $formAttr = array('id' => 'recoveryForm');
+				echo form_open('remember/recover', $formAttr);
+		?>
 		<table>
 			<tr>
 				<td> Введите адрес Вашей почты </td>
-				<td><td><input type="text" name="email" value="" id="email"  /></td>
+				<td><td><?echo  form_input(array('name'=>'email', 'id'=>'email'));?></td>
 			</tr>
 			<tr>
-				<td><input type="submit" name="recovery" value="Восстановить" id="recovery"  /></td>
+				<td><?echo form_submit('recovery', 'Восстановить');?></td>
 			<td></td>
 			</tr>
 		</table>
-		</form>
+<?echo form_close();?>
 </div>
 </div>

@@ -26,6 +26,7 @@
 
 			echo "</tr>";
 		echo "</table>";	
+			echo form_close();
 	?>
 	
 	</div>
