@@ -45,10 +45,10 @@
 - (id) initDataBase;
 - (void) checkAndCreateDatabase;
 - (void) clearDatabase;
-- (BOOL)addArray: (NSMutableArray *)data;
-- (void) readDatabase;
+- (BOOL) addArray: (NSMutableArray *)data;
+- (void) sendDatabase;
 + (void) finalizeStatements;
-- (BOOL) convertAndWrite;
+- (BOOL) convertAndSend;
 - (BOOL) deleteRowsFrom: (NSInteger)start To: (NSInteger)end;
 - (BOOL) addEntrie: (NSString *)type;
 @end

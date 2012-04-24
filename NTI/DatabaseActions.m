@@ -175,7 +175,7 @@ static sqlite3_stmt *readStmt = nil;
     //thanks to http://stackoverflow.com/questions/1601697/sqlite-reset-primary-key-field
 }
 
-- (void) readDatabase{  
+- (void) sendDatabase{  
     NSArray *keys = [NSArray arrayWithObjects:@"timestamp", @"type", @"acc", @"gps", nil];
     dataArray = [[NSMutableArray alloc]init];
     
@@ -221,7 +221,7 @@ static sqlite3_stmt *readStmt = nil;
 
                 }
             } else NSLog(@"indalid command");
-            if ([self convertAndWrite]) dataArray = [[NSMutableArray alloc]init];
+            if ([self convertAndSend]) dataArray = [[NSMutableArray alloc]init];
               
         }
      }
@@ -231,25 +231,29 @@ static sqlite3_stmt *readStmt = nil;
     sqlite3_close(database);
 }
 
-- (BOOL) convertAndWrite{
+- (BOOL) convertAndSend{
     NSInteger size = [dataArray count];
     NSLog(@"%i",size);
   //  NSString *CSV = [csvConverter arrayToCSVString:dataArray];
     NSString *JSON = [jsonConvert convert:dataArray];
+    [serverCommunication uploadData: JSON]; 
     
-    NSDateFormatter * date_format = [[NSDateFormatter alloc] init];
-    [date_format setDateFormat: @"dd.MM.YYYY"]; 
+  //  NSDateFormatter * date_format = [[NSDateFormatter alloc] init];
+  //  [date_format setDateFormat: @"dd.MM.YYYY"]; 
   //  NSLog (@"Date: %@", [date_format stringFromDate:[NSDate date]]);
-     
+
     
-    if ([serverCommunication checkInternetConnection]) {
-        NSLog(@"стефу");
-        [serverCommunication uploadData: JSON]; 
-    }
-    else {
-    [fileController writeToFile:JSON fileName:[[date_format stringFromDate:[NSDate date]] stringByAppendingString:@".json"]];
-        NSLog(@"интернета нет - записано в локальный файл");
-    }
+ //   if ([serverCommunication checkInternetConnection]) {
+ //       NSLog(@"стефу");
+        
+ //   }
+ //   else {
+    //[fileController writeToFile:JSON fileName:[[date_format stringFromDate:[NSDate date]] stringByAppendingString:@".json"]];
+    //    NSLog(@"интернета нет - записано в локальный файл");
+        
+ //   }
+    if ([serverCommunication errors]) return NO;
+    else return YES;
     
  //   if ([fileController writeToFile:CSV fileName: [date_format stringFromDate:[NSDate date]]]) return YES;
  //   else return NO;

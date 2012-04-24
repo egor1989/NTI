@@ -23,13 +23,14 @@
     NSString *systemVersion;
     NSString *model;
     NSString *carrierName;
+    
 
     
 }
 - (void)regUser:(NSString *)login password:(NSString *)password email:(NSString *)email;
 - (void)uploadData:(NSString *)fileContent;
 - (void)authUser:(NSString *)login secret:(NSString *)message;
-- (BOOL)checkErrors:(NSString *)answerString;
+- (BOOL)checkErrors:(NSString *)answerString method:(NSString *)methodName;
 - (void)showResult;
 - (BOOL) checkInternetConnection;
 - (NSString *) refreshCookie;

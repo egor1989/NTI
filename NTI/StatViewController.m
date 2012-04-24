@@ -423,11 +423,19 @@
 }
 
 - (IBAction)sendButton:(id)sender{
+    
+    
     ServerCommunication *serverCommunication = [[ServerCommunication alloc] init];
-    [serverCommunication refreshCookie];
-    //
-    [[myAppDelegate recordAction] sendFile];
-
+    
+    if ([serverCommunication checkInternetConnection]){
+        [serverCommunication refreshCookie];
+        [[myAppDelegate recordAction] sendFile];
+    }
+    else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Отсутствует Интернет-соединение. Включите Интернет и повторите попытку" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
+        [alert show];
+    }
+    
     
 }
 

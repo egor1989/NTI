@@ -49,7 +49,7 @@
                            completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *error) {
                                returnString = [[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding];
                                NSLog(@"returnData: %@", returnString);
-                               //[self checkErrors:returnString];
+                               [self checkErrors:returnString method:@"sendData"];
                                // проверка на ошибки при отправке файла // если нет можно очистить БД
                            }];
 
@@ -108,7 +108,7 @@
 
 
 
-- (BOOL)checkErrors:(NSString *)answerString{
+- (BOOL)checkErrors:(NSString *)answerString method:(NSString *)methodName{
     
     SBJsonParser *jsonParser = [SBJsonParser new];
     NSArray *answer = [jsonParser objectWithString:answerString error:NULL];
@@ -121,11 +121,18 @@
     
     switch (code) {
         case 0:
-            info = @"Поздравляем!";
-            [userDefaults removeObjectForKey:@"cookie"];
-           
-            [userDefaults setValue:[answer valueForKey:@"result"] forKey:@"cookie"];
-            [userDefaults synchronize];
+            
+            if ([methodName isEqualToString: @"reg&auth"]){
+                info = @"Поздравляем!";
+                [userDefaults removeObjectForKey:@"cookie"];
+                [userDefaults setValue:[answer valueForKey:@"result"] forKey:@"cookie"];
+                [userDefaults synchronize];
+            }
+            else if ([methodName isEqualToString: @"sendData"]){
+                info = @"Данные успешно отправлены";
+                
+            }
+            
             errors = NO;
             break;
         case 2:
@@ -133,10 +140,16 @@
             info = @"Не все обязательные поля заполнены";
             break;
         case 3:
-            info = @"Пользователь с таким именем уже существует";
+             if ([methodName isEqualToString: @"reg&auth"]){
+                 info = @"Пользователь с таким именем уже существует";
+             }
+             else if ([methodName isEqualToString: @"sendData"]){
+                  info = @"Файл пуст";
+             }
             break;
         case 4:
             info = @"E-mail уже используется";
+            // info = @"Неверный формат данных";//сообщите разработчикам
             break;
         case 5:
             info = @"Повторите ввод пароля";
@@ -145,7 +158,7 @@
             info = @"Поле должно быть меньше 32 символов";
             break;
         case 7:
-            info = @"Поле e-mail слишком короткое";
+            info = @"Поле email слишком короткое";
             break;
         case 11:
             info = @"Пользователя с таким именем не существует";
@@ -153,6 +166,9 @@
         case 12:
             info = @"Неверный пароль";
             forgotPassword = YES;
+            break;
+        case 43:
+            info = @"Нет данных для пользователя";
             break;
         case 88:
             info = @"Сервер временно не доступен";
@@ -321,7 +337,7 @@
     
     returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
     NSLog(@"returnData: %@", returnString);
-    [self checkErrors:returnString];
+    [self checkErrors:returnString method:@"reg&auth"];
     
     if (!errors) {
         NSDictionary *fields = [(NSHTTPURLResponse *)response allHeaderFields];
@@ -370,7 +386,7 @@
     }
     returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
     NSLog(@"returnData: %@", returnString);
-    [self checkErrors: returnString];
+    [self checkErrors: returnString method:@"reg&auth"];
     if (!errors) {
 
         NSDictionary *fields = [(NSHTTPURLResponse *)response allHeaderFields];

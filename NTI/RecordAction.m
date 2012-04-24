@@ -128,7 +128,7 @@
 
 
 - (void)sendFile{
-    [databaseAction readDatabase]; 
+    [databaseAction sendDatabase]; 
 }
 
 - (void)eventRecord: (NSString *)type{

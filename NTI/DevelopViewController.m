@@ -360,7 +360,7 @@
 
 
 - (IBAction)sendFile:(id)sender {
-    [databaseAction readDatabase]; 
+    [databaseAction sendDatabase]; 
 }
 
 
@@ -433,7 +433,7 @@
 }
 
 -(void) sendToServer{
-    [databaseAction readDatabase];
+    [databaseAction sendDatabase];
 
 }
 
