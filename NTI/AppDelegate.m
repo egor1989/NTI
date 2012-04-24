@@ -39,7 +39,7 @@
 
     lastLoc = [[CLLocation alloc] init];
     allDistance = 0;
-    canWriteToFile = YES;//?
+    canWriteToFile = NO;//?
     [recordAction startOfRecord];
     
     [self checkSpeedTimer];

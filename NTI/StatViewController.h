@@ -25,7 +25,7 @@
     UILabel *rotation;
     UILabel *recordLabel;
     IBOutlet UIButton *sendButton;
-
+    ServerCommunication *serverCommunication;
     UIImageView *recordImage;
     
 }

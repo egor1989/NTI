@@ -56,7 +56,7 @@
 
 - (IBAction)authButton:(id)sender {
     ServerCommunication *serverCommunication = [[ServerCommunication alloc] init];
-    if (![serverCommunication checkInternetConnection]) {
+    if (![ServerCommunication checkInternetConnection]) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Отсутствует Интернет-соединение. Включите Интернет и повторите попытку" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
         [alert show];
     }

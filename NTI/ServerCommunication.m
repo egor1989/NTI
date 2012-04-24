@@ -411,7 +411,7 @@
     
 }
 
-- (BOOL) checkInternetConnection{
++ (BOOL) checkInternetConnection{
     Reachability* reach = [Reachability reachabilityWithHostname:@"www.goodroads.ru"];
 
     NetworkStatus hostStatus = [reach currentReachabilityStatus];

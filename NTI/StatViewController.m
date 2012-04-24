@@ -85,6 +85,27 @@
      selector: @selector(changeImage)
      name: @"canWriteToFile"
      object: nil];
+     serverCommunication = [[ServerCommunication alloc] init];
+    if ([ServerCommunication checkInternetConnection]){
+        
+        NSString *result=[serverCommunication getLastStatistic];
+        if (![result isEqualToString:@"error"]) {
+            [[NSUserDefaults standardUserDefaults] setValue:result forKey:@"lastStat"];
+            [self parse: result];
+        }
+        else {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Повторите попытку позже" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
+            [alert show];
+        }
+
+    }
+    else {
+        [self parse:[[NSUserDefaults standardUserDefaults] valueForKey:@"lastStat"]];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Интернет-соединение отсутствует" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
+        [alert show];
+    }
+    
+    
 }
 
 
@@ -348,7 +369,7 @@
 
 - (void) pickOne:(id)sender{
     //проверка интернета
-    ServerCommunication *serverCommunication = [[ServerCommunication alloc] init];
+   
     
         UISegmentedControl *segmentedControl = (UISegmentedControl *)sender;
         if ([segmentedControl selectedSegmentIndex]==0) {
@@ -384,14 +405,29 @@
 
 - (void)parse:(NSString *)result{
     NSLog(@"result = %@", result);
-    SBJsonParser *jsonParser = [SBJsonParser new];
-    NSArray *answer = [jsonParser objectWithString:result error:NULL];
-    NSArray *statArray = [answer valueForKey:@"result"];
-    qualityDriving.text = [NSString stringWithFormat:@"%@", [statArray valueForKey:@"total_score"]];
-    speedMode.text = [NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_speed"]];
-    acceleration.text = [NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_acc"]];
-    deceleration.text = [NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_brake"]];
-    rotation.text = [NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_turn"]];
+    
+    if (result != nil) {
+        SBJsonParser *jsonParser = [SBJsonParser new];
+        NSArray *answer = [jsonParser objectWithString:result error:NULL];
+        NSArray *statArray = [answer valueForKey:@"result"];
+        qualityDriving.text = [NSString stringWithFormat:@"%@", [statArray valueForKey:@"total_score"]];
+        speedMode.text = [NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_speed"]];
+        acceleration.text = [NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_acc"]];
+        deceleration.text = [NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_brake"]];
+        rotation.text = [NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_turn"]];
+    }
+    else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Нет данных" message:@"Для вашей учетной записи еще нет данных" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
+        [alert show];
+        qualityDriving.text = @"?";
+        speedMode.text = @"?";
+        acceleration.text = @"?";
+        deceleration.text = @"?";
+        rotation.text = @"?";
+
+        
+    }
+
 }
 
 /*
@@ -447,9 +483,9 @@
 - (IBAction)sendButton:(id)sender{
     
     
-    ServerCommunication *serverCommunication = [[ServerCommunication alloc] init];
     
-    if ([serverCommunication checkInternetConnection]){
+    
+    if ([ServerCommunication checkInternetConnection]){
         [serverCommunication refreshCookie];
         [[myAppDelegate recordAction] sendFile];
     }
