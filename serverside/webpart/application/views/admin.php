@@ -18,7 +18,7 @@
 				echo"</td><td>";
 				echo form_open('/admin/dismiss/');
 				echo form_hidden('relation', $row['RequestId']);
-				echo form_submit('accept', 'Denie');
+				echo form_submit('accept', 'Deny');
 				echo form_close();
 				echo "</td></tr>\n";
 			}
