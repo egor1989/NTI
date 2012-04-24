@@ -39,7 +39,7 @@
 
     lastLoc = [[CLLocation alloc] init];
     allDistance = 0;
-    canWriteToFile = NO;//?
+    canWriteToFile = YES;//?
     [recordAction startOfRecord];
     
     [self checkSpeedTimer];
@@ -126,9 +126,9 @@
         needCheck = YES;
         m5Km = 0;
         l5Km = 0;
-        [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(checkAfterFiveMin) userInfo:nil repeats:NO];
+        [NSTimer scheduledTimerWithTimeInterval:180 target:self selector:@selector(checkAfterFiveMin) userInfo:nil repeats:NO];
     }
-    else [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(checkSpeedTimer) userInfo:nil repeats:NO];
+    else [NSTimer scheduledTimerWithTimeInterval:180 target:self selector:@selector(checkSpeedTimer) userInfo:nil repeats:NO];
     
 }
 

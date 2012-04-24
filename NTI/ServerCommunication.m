@@ -118,6 +118,7 @@
     info = nil;
     forgotPassword = NO;
     errors = YES;
+    NSLog(@"code = %i", code);
     
     switch (code) {
         case 0:
@@ -128,10 +129,11 @@
                 [userDefaults setValue:[answer valueForKey:@"result"] forKey:@"cookie"];
                 [userDefaults synchronize];
             }
-            else if ([methodName isEqualToString: @"sendData"]){
+            if ([methodName isEqualToString: @"sendData"]){
                 info = @"Данные успешно отправлены";
                 
             }
+            //для получения данных
             
             errors = NO;
             break;
@@ -195,7 +197,7 @@
 }
 
 
-- (void)getAllStatistic{
+- (NSString *)getAllStatistic{
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSLog(@"cookie = %@", [userDefaults valueForKey:@"cookie"]);
@@ -247,12 +249,13 @@
     
     returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
     NSLog(@"returnData: %@", returnString);
-
-    
+    [self checkErrors:returnString method:@"stat"];
+    if (!errors) return returnString; 
+    else return @"error";
 }
 
 
-- (void)getLastStatistic{
+- (NSString *)getLastStatistic{
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSLog(@"cookie = %@", [userDefaults valueForKey:@"cookie"]);
@@ -304,8 +307,9 @@
     
     returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
     NSLog(@"returnData: %@", returnString);
-    
-    
+    [self checkErrors:returnString method:@"stat"];
+    if (!errors) return returnString; 
+    else return @"error";
 }
 
 

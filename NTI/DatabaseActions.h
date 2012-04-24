@@ -36,7 +36,7 @@
     ServerCommunication *serverCommunication;
     toJSON *jsonConvert;
     FileController *fileController;
-    
+
     
 
     
@@ -48,7 +48,7 @@
 - (BOOL) addArray: (NSMutableArray *)data;
 - (void) sendDatabase;
 + (void) finalizeStatements;
-- (BOOL) convertAndSend;
+- (void) convertAndSend;
 - (BOOL) deleteRowsFrom: (NSInteger)start To: (NSInteger)end;
 - (BOOL) addEntrie: (NSString *)type;
 @end

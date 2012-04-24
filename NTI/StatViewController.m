@@ -45,27 +45,27 @@
     qualityDriving = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];;
     qualityDriving.font = fontForLabel;
     qualityDriving.textAlignment = UITextAlignmentRight;
-    qualityDriving.text = @"?";
+    
     
     speedMode = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];;
     speedMode.font = fontForLabel;
     speedMode.textAlignment = UITextAlignmentRight;
-    speedMode.text = @"?";
+    
 
     acceleration = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];;
     acceleration.font = fontForLabel;
     acceleration.textAlignment = UITextAlignmentRight;
-    acceleration.text = @"?";
+    
     
     deceleration = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];;
     deceleration.font = fontForLabel;
     deceleration.textAlignment = UITextAlignmentRight;
-    deceleration.text = @"?";
+    
     
     rotation = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];;
     rotation.font = fontForLabel;
     rotation.textAlignment = UITextAlignmentRight;
-    rotation.text = @"?";
+    
     
     recordImage = [[UIImageView alloc] initWithFrame:CGRectMake(280.0f, 7.0f, 27.0f, 27.0f)];
     
@@ -349,27 +349,49 @@
 - (void) pickOne:(id)sender{
     //проверка интернета
     ServerCommunication *serverCommunication = [[ServerCommunication alloc] init];
-    UISegmentedControl *segmentedControl = (UISegmentedControl *)sender;
-    if ([segmentedControl selectedSegmentIndex]==0) {
-        NSLog(@"за последнюю поездку");
+    
+        UISegmentedControl *segmentedControl = (UISegmentedControl *)sender;
+        if ([segmentedControl selectedSegmentIndex]==0) {
+            NSLog(@"за последнюю поездку");
         
-        [serverCommunication getLastStatistic];
-        qualityDriving.text = @"!";
-        speedMode.text = @"!";
-        acceleration.text = @"!";
-        deceleration.text = @"!";
-        rotation.text = @"!";
-    }
+            NSString *result=[serverCommunication getLastStatistic];
+            if (![result isEqualToString:@"error"]) {
+                [[NSUserDefaults standardUserDefaults] setValue:result forKey:@"lastStat"];
+                [self parse: result];
+            }
+            else {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Повторите попытку позже" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
+                [alert show];
+            }
+            
+        }
     else {
         NSLog(@"за все время");
-        [serverCommunication getAllStatistic];
-        qualityDriving.text = @"???";
-        speedMode.text = @"???";
-        acceleration.text = @"???";
-        deceleration.text = @"???";
-        rotation.text = @"???";
+        NSString *result=[serverCommunication getAllStatistic];
+        if (![result isEqualToString:@"error"]) {
+            [[NSUserDefaults standardUserDefaults] setValue:result forKey:@"allStat"];
+            [self parse: result];
+        }
+        else {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Повторите попытку позже" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
+            [alert show];
+        }
+
+        
     }
     //[segmentedControl titleForSegmentAtIndex: [segmentedControl selectedSegmentIndex]];
+}
+
+- (void)parse:(NSString *)result{
+    NSLog(@"result = %@", result);
+    SBJsonParser *jsonParser = [SBJsonParser new];
+    NSArray *answer = [jsonParser objectWithString:result error:NULL];
+    NSArray *statArray = [answer valueForKey:@"result"];
+    qualityDriving.text = [NSString stringWithFormat:@"%@", [statArray valueForKey:@"total_score"]];
+    speedMode.text = [NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_speed"]];
+    acceleration.text = [NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_acc"]];
+    deceleration.text = [NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_brake"]];
+    rotation.text = [NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_turn"]];
 }
 
 /*

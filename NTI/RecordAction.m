@@ -89,7 +89,7 @@
                                                            object:toWrite];
         [myThread start]; 
     }
-    NSLog(@"countInArray = %i", countInArray);
+  //  NSLog(@"countInArray = %i", countInArray);
 }
 
 - (void)endOfRecord{

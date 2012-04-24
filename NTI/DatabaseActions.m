@@ -144,7 +144,7 @@ static sqlite3_stmt *readStmt = nil;
         //SQLite provides a method to get the last primary key inserted by using sqlite3_last_insert_rowid
         //sqlite3_
         pk = sqlite3_last_insert_rowid(database);
-//        NSLog(@"addRecord %i",pk);
+        NSLog(@"addRecord %i",pk);
         [userDefaults setInteger:pk forKey:@"pk"];
         
     }
@@ -221,22 +221,26 @@ static sqlite3_stmt *readStmt = nil;
 
                 }
             } else NSLog(@"indalid command");
-            if ([self convertAndSend]) dataArray = [[NSMutableArray alloc]init];
-              
+            [self convertAndSend];
+            dataArray = [[NSMutableArray alloc]init];
+            
         }
      }
     
     sqlite3_finalize(readStmt);
-    //[self clearDatabase];
+    //if (![serverCommunication errors]) [self clearDatabase];//попадает сюда быстрее обработчика ошибок
     sqlite3_close(database);
 }
 
-- (BOOL) convertAndSend{
+- (void) convertAndSend{
     NSInteger size = [dataArray count];
     NSLog(@"%i",size);
   //  NSString *CSV = [csvConverter arrayToCSVString:dataArray];
     NSString *JSON = [jsonConvert convert:dataArray];
     [serverCommunication uploadData: JSON]; 
+
+    
+
     
   //  NSDateFormatter * date_format = [[NSDateFormatter alloc] init];
   //  [date_format setDateFormat: @"dd.MM.YYYY"]; 
@@ -252,8 +256,7 @@ static sqlite3_stmt *readStmt = nil;
     //    NSLog(@"интернета нет - записано в локальный файл");
         
  //   }
-    if ([serverCommunication errors]) return NO;
-    else return YES;
+
     
  //   if ([fileController writeToFile:CSV fileName: [date_format stringFromDate:[NSDate date]]]) return YES;
  //   else return NO;

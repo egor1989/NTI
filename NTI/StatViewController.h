@@ -37,5 +37,6 @@
 - (IBAction)sendButton:(id)sender;
 - (void) pickOne:(id)sender;
 - (void)changeImage;
+- (void)parse:(NSString *)result;
 
 @end
