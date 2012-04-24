@@ -19,7 +19,7 @@
 			echo $errortype;
 		}
 	?>
-	<hr>
+	
 	<br>
 	<?
 	
@@ -44,11 +44,11 @@
 		if ($total_excesses != 0){?><span style="color:red">Всего превышений: <?echo $total_excesses;?></span><br><?}
 		?><br><?
 		if ($total_trips != 0){?><span style="color:red">Всего поездок: <?echo $total_trips;?></span><br><?}
-		if ($total_time != 0){?><span style="color:red">Затрачено времени: <?echo $total_time;?></span><br><?}
-		if ($total_score != 0){?><span style="color:red">Общий счет: <?echo $total_score;?></span><br><?}
+		if ($total_time != 0){?><span style="color:red">Затрачено времени: <?echo round($total_time/3600,2);?> ч.</span><br><?}
+		if ($total_score != 0){?><span style="color:red">Общий счет: <?echo floor($total_score);?></span><br><?}
 	}
 	else {
-		if ((isset($is_set)) && ($is_set == 0)) {?><span style="color:red">Данных за указанный период не найдено.</span><br><?}
+		if ((isset($is_set)) && ($is_set != 1)) {?><span style="color:red">Данных за указанный период не найдено.</span><br><?}
 	}
 	?>
 </div>

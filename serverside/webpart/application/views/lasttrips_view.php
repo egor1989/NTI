@@ -73,7 +73,7 @@
 				<span style="color:red">Общий счет последних <?echo $trr['total_trips']; ?> поездок: <?echo floor($trr['tscore']);?> points</span><?
 			}
 		} 
-		else if ((isset($trr['total_trips']))&&($trr['total_trips'] == 0)) {
+		else if ((isset($trr['total_trips']))&&($trr['total_trips'] == -1)) {
 		?>
 		<h3>Нет данных по поездкам или данные еще не поступили.</h3>
 	<?}

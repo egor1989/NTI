@@ -87,10 +87,46 @@ class Admin extends CI_Controller
 		}
 	}	
 	
+	
+	public function chrights() {
+		if(!$this->input->post('userid'))
+		{
+			header("Location:http://nti.goodroads.ru/");
+		} else {
+			if($this->session->userdata('id')!=null && $this->session->userdata('id')>0 && $this->session->userdata('rights')==3)
+			{
+					
+					$this->load->model('admin_functions');
+					$dt = array (
+						'i' => $this->input->post('userid'),
+						'r' => $this->input->post('nrights')
+					);
+					if (($dt['r'] == 0) || ($dt['r'] == 1) || ($dt['r'] == 2)) 
+						$response = $this->admin_functions->chrights($dt);
+					header("Location:http://nti.goodroads.ru/all");	
+			}
+		}
+	}
+	
+	public function chpassword() {
+		if(!$this->input->post('userid'))
+		{
+			header("Location:http://nti.goodroads.ru/");
+		} else {
+			if($this->session->userdata('id')!=null && $this->session->userdata('id')>0 && $this->session->userdata('rights')==3)
+			{
+					$this->load->model('admin_functions');
+					$dt = array (
+						'i' => $this->input->post('userid'),
+						'p' => $this->input->post('npwd')
+					);
+					if (strlen($dt['p'])>=3)
+						$response = $this->admin_functions->chpassword($dt);
+					header("Location:http://nti.goodroads.ru/all");					
+			}
+		}
+	}
+	
 }
-	
-	
-	
-	
-	
 
+?>
