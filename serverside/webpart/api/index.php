@@ -42,6 +42,9 @@ if (!mysql_select_db($dbname,$dbcnx) )    {      return 0;    }
 mysql_query('SET NAMES cp1251'); 
 return 1;
 }
+//print_r( $_POST);
+//exit();
+
 $data=$_POST['data'];
 if(!isset($_POST))
 {
@@ -74,7 +77,7 @@ switch(json_last_error())
         break;
         case JSON_ERROR_SYNTAX:
 			$errortype=array('info'=>" - Syntax error, malformed JSON",'code'=>  666);
-			$res=array('result'=>1,'error'=> $errortype);
+			$res=array('result'=>$data,'error'=> $errortype);
 			echo json_encode($res);
 			exit();
         break; 
@@ -82,7 +85,7 @@ switch(json_last_error())
     
    
 if(!isset($json['method'])){ $errortype=array('info'=>"No difintion state set, or function is incorrect",'code'=>  1);
-$res=array('result'=>2,'error'=>  $errortype);echo json_encode($res);exit();}
+$res=array('result'=>$data,'error'=>  $errortype);echo json_encode($res);exit();}
 
 if($json['method']=="NTIauth"){NTIauth($json['params']);}//-
 else if($json['method']=="addNTIFile"){addNTIFile($json['params']);}//-
@@ -964,19 +967,18 @@ function getPath($param)
 	{
 		$time=mysql_real_escape_string($time);
 		if(!isset($param['till'])){
-		$query = "SELECT * FROM NTIEntry where utimestamp>=$time and UID=$UID and (lat!=0 or lng!=0) and utimestamp!=0 order by utimestamp";
+		$query = "SELECT * FROM NTIEntry where utimestamp>=$time and UID=$UID and (lat!=0 or lng!=0) and utimestamp!=0 grouped by utimestamp order by utimestamp";
 	}else
-	{$time=mysql_real_escape_string($time);
-	$tillmysql_real_escape_string($till);
-			$query = "SELECT * FROM NTIEntry where utimestamp>=$time and utimestamp<=$till and UID=$UID and (lat!=0 or lng!=0) and utimestamp!=0 order by utimestamp";
+	{
+		$time=mysql_real_escape_string($time);
+	$till=mysql_real_escape_string($till);
+			$query = "SELECT * FROM NTIEntry where utimestamp>=$time and utimestamp<=$till and UID=$UID and (lat!=0 or lng!=0) and utimestamp!=0 grouped by utimestamp order by utimestamp";
 	}
 		$result = mysql_query($query);
 		$c = 0;
 		$n = 0;
 		while ($row = mysql_fetch_array($result)) 
 		{
-			$encData[$n]['accx'] = $row['accx'];
-			$encData[$n]['accy'] = $row['accy'];
 			$encData[$n]['lat'] = $row['lat'];
 			$encData[$n]['lng'] = $row['lng'];
 			$encData[$n]['compass'] = $row['compass'];
@@ -1012,27 +1014,10 @@ function getPath($param)
 					$deltaTurn = $turn[$i] - $turn[$i-1];
 					$wAcc = abs($deltaTurn/$deltaTime);
 					$radius = $speed/$wAcc;
-					if (($typeTurn[$i-1] == 'left turn finished') || ($typeTurn[$i-1] == 'right turn finished') || (!isset($typeTurn[$i-1])) || ($speed == 0) )
-					{
-						$typeTurn[$i] = 'normal point';
-					} else 	if ($deltaTurn > 0.5)   {
-					if ($typeTurn[$i-1] == 'normal point') $typeTurn[$i] = 'left turn started';
-					if (($typeTurn[$i-1] == 'left turn started')||($typeTurn[$i-1] == 'left turn continued')) $typeTurn[$i] = 'left turn continued';
-					if (($typeTurn[$i-1] == 'right turn started')||($typeTurn[$i-1] == 'right turn continued')) $typeTurn[$i] = 'right turn finished';
-					} else 	if ($deltaTurn < -0.5)	{
-					if ($typeTurn[$i-1] == 'normal point') $typeTurn[$i] = 'right turn started';
-					if (($typeTurn[$i-1] == 'right turn started')||($typeTurn[$i-1] == 'right turn continued')) $typeTurn[$i] = 'right turn continued';
-					if (($typeTurn[$i-1] == 'left turn started')||($typeTurn[$i-1] == 'left turn continued')) $typeTurn[$i] = 'left turn finished';
-					} else	{
-					if ($typeTurn[$i-1] == 'normal point') $typeTurn[$i] = 'normal point';
-					if (($typeTurn[$i-1] == 'left turn started')||($typeTurn[$i-1] == 'left turn continued')) $typeTurn[$i] = 'left turn finished';
-					if (($typeTurn[$i-1] == 'right turn started')||($typeTurn[$i-1] == 'right turn continued')) $typeTurn[$i] = 'right turn finished';
-					}
 					
 				}
 				else 	
 				{
-					$typeTurn[$i] = 'normal point';
 					$sevTurn[$i] = 0;
 					$wAcc = 0;
 					$radius = 0;
@@ -1065,7 +1050,7 @@ function getPath($param)
 		  $sevAcc = 0;
 		}
 	}
-	$vg[$i]=0;
+		$vg[$i]=0;
 		if ($sevAcc==1) $vg[$i]=1;
 		if ($sevAcc==2) $vg[$i]=2;
 		if ($sevAcc==3) $vg[$i]=3;
@@ -1090,18 +1075,16 @@ function getPath($param)
 		$R = 6371; // km
 		for ($i = 1; $i < $j; $i++)
 		{
-			if($encData[$i]['utimestamp']-$encData[$i-1]['utimestamp']!=0)
-			{
 				
 				$d = acos(sin($encData[$i]['lat'])*sin($encData[$i-1]['lat']) + cos($encData[$i]['lat'])*cos($encData[$i-1]['lat']) *  cos($encData[$i-1]['lng']-$encData[$i]['lng'])) * $R;
-				
 				if(($encData[$i]['utimestamp']-$encData[$i-1]['utimestamp']>300) || (($d)/($encData[$i]['utimestamp']-$encData[$i-1]['utimestamp']))>40)$vg[$i]=42;			
 				$ret_arr[$k]['lat']=$encData[$i]['lat'];
 				$ret_arr[$k]['lng']=$encData[$i]['lng'];
 				$ret_arr[$k]['type']=$vg[$i];
-			
+				$ret_arr[$k]['waht']=$accel[$i];
+				
+				
 				$k++;
-			}
 		}
 		
 		if($k!=0)

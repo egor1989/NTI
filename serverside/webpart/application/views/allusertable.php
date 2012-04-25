@@ -93,7 +93,7 @@
 				if($row['Rights']==1)$type="Данные подтверждены";
 				if($row['Rights']==0)$type="Не подтвердено";
 				?>
-				<tr><td><a href="/user/viewck/<?echo $row['Login'];?>"><?echo $row['Login'];?></a></td><td><?echo $row['FName'];?></td><td><?echo $row['SName'];?></td> <td><?echo $type;?></td>
+				<tr><td><a href="/admin/viewck/<?echo $row['Id'];?>"><?echo $row['Login'];?></a></td><td><?echo $row['FName'];?></td><td><?echo $row['SName'];?></td> <td><?echo $type;?></td>
 				
 				<td>
 				<?

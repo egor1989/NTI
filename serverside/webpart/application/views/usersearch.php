@@ -88,17 +88,12 @@
 			</td>
 			<td>
 				<?
-				if ($r['Button'] == 1) {
+				
 					echo form_open('/user/addaccept/');
 					echo form_hidden('userid', $r['Id']);
 					echo form_submit('adduser', 'Добавить');
 					echo form_close();
-				} else {
-					echo form_open('/user/deleteaccept/');
-					echo form_hidden('userid', $r['Id']);
-					echo form_submit('deluser', 'Удалить');
-					echo form_close();
-				}
+
 				?>
 			</td>
 		</tr>

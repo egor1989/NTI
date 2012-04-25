@@ -98,6 +98,29 @@ class lays_model extends CI_Model {
 			return -1;
 		}
 	}
+	
+	public function vck($i) {
+		$q = $this->db->query("SELECT NTIUsers.Id, NTIUsers.Login, NTIUsers.FName, NTIUsers.SName, NTIRelations.ExpertId FROM NTIUsers INNER JOIN NTIRelations ON NTIUsers.Id=NTIRelations.UserId WHERE NTIRelations.ExpertId=$i AND NTIUsers.Deleted=0 AND NTIUsers.Rights<2 ORDER BY Login");
+		$n = 0;
+		if ($q->num_rows() > 0) {
+			foreach($q->result() as $row) {
+				$da[$n]['Id'] = $row->Id;
+				$da[$n]['Login'] = $row->Login;
+				$da[$n]['FName'] = $row->FName;
+				$da[$n]['SName'] = $row->SName;
+				$n++;
+			}
+			return $da;
+		} 
+		else {
+			return -1;
+		}
+	}
+	
+	function unbind($i, $c) {
+		$q = $this->db->query("DELETE FROM NTIRelations WHERE ExpertId=$c AND UserId=$i");
+		return 1;
+	}
 }
 
 ?>
