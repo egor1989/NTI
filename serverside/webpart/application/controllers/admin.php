@@ -118,7 +118,7 @@ class Admin extends CI_Controller
 					$this->load->model('admin_functions');
 					$dt = array (
 						'i' => $this->input->post('userid'),
-						'p' => $this->input->post('npwd')
+						'p' => $this->input->post('npassword')
 					);
 					if (strlen($dt['p'])>=3)
 						$response = $this->admin_functions->chpassword($dt);

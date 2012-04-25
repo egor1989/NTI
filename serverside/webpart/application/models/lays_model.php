@@ -78,6 +78,26 @@ class lays_model extends CI_Model {
 			return -1;
 		}
 	}
+	
+	public function cksearch($ckid) {
+		$q = $this->db->query("SELECT * FROM (select tablet_user.* ,coalesce(`Status`,0) as Stat from (select allusers.* ,coalesce(`ExpertID`,0) as Bnd from (SELECT Id,Login,FName,SName FROM `NTIUsers` WHERE `Rights`<2 and Deleted=0) as allusers Left OUTER JOIN  (select * from NTIRelations where ExpertID=$ckid) as expert on allusers.Id=expert.UserID) as tablet_user Left OUTER JOIN (Select `Status`,`UserId` from NTIRequests where `ExpertId`=$ckid and Status<=2) as request on tablet_user.Id=request.`UserId`) as prst ORDER BY Login");
+		$n = 0;
+		if ($q->num_rows() > 0) {
+			foreach($q->result() as $row) {
+				$da[$n]['Id'] = $row->Id;
+				$da[$n]['Login'] = $row->Login;
+				$da[$n]['FName'] = $row->FName;
+				$da[$n]['SName'] = $row->SName;
+				$da[$n]['Bnd'] = $row->Bnd;
+				$da[$n]['Stat'] = $row->Stat;
+				$n++;
+			}
+			return $da;
+		} 
+		else {
+			return -1;
+		}
+	}
 }
 
 ?>

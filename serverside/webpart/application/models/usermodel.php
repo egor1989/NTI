@@ -283,7 +283,7 @@
 		function DeleteRelation($id,$username)
 		{
 			//Сначала получаем id пользователя относительно его имени
-			$query = $this->db->query("Select * from NTIUsers where Login=".$this->db->escape($username));
+			$query = $this->db->query("Select * from NTIUsers where Id=".$this->db->escape($username));
 			if($query->num_rows()>0){
 			
 				foreach($query->result() as $row){
