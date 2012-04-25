@@ -1610,13 +1610,11 @@ class User extends CI_Controller {
 				}
 			}
 			
-			
+			if(!isset($grouped)){	$results['is_set'] = -1;return $results;}
 
 			$grouped=array_reverse($grouped);
 			
 			$z=count($grouped);
-		//	for($i=5;$i<$z;$i++)
-			//	unset($grouped[$i]);
 			
 			unset($results);
 			
@@ -2084,6 +2082,36 @@ class User extends CI_Controller {
 		}
 		return $results;
 	} //end of getAll method.	
+	
+	function deleterel() {
+		if($this->session->userdata('rights')==2)
+		{
+			$usri=$this->input->post('userid');
+			$cki=$this->session->userdata('id');
+			$this->load->model('lays_model');
+			$suckmyfuck = $this->lays_model->unbind($usri,$cki);
+			header("Location: http://nti.goodroads.ru/search");
+		}
+		else
+		{
+			header("Location: http://nti.goodroads.ru/");
+		}
+		return 1;
+	}
+	
+	function viewck() {
+		$rg = $this->session->userdata('Rights');
+		if ($rg==3) {
+			$this->load->model('lays_model');
+			$i = $this->uri->segment(3);
+			$data = $this->lays_model->vck($i);
+			return $data;
+		
+		} else {
+			header("Location: http://nti.goodroads.ru/");
+			return -1;
+		}
+	}
 		
 	
 	
