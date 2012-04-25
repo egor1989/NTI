@@ -38,17 +38,19 @@
     FileController *fileController;
 
     
-
-    
 }
 
 - (id) initDataBase;
 - (void) checkAndCreateDatabase;
-- (void) clearDatabase;
++ (void) clearDatabase;
 - (BOOL) addArray: (NSMutableArray *)data;
 - (void) sendDatabase;
 + (void) finalizeStatements;
 - (void) convertAndSend;
 - (BOOL) deleteRowsFrom: (NSInteger)start To: (NSInteger)end;
 - (BOOL) addEntrie: (NSString *)type;
+- (void) sendDatabaseTr;
+
+
+
 @end

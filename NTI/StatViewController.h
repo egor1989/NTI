@@ -38,5 +38,5 @@
 - (void) pickOne:(id)sender;
 - (void)changeImage;
 - (void)parse:(NSString *)result;
-
+- (IBAction) internetUploadSwitch:(id)sender;
 @end

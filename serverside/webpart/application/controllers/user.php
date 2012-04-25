@@ -274,28 +274,11 @@ class User extends CI_Controller {
 		
 		if($this->session->userdata('rights')>=2)
 		{
-			$new_data['rights']=$this->session->userdata('rights');
-			$new_data['map_type'] = 2;	
 			$urls=$this->input->post('userid');
 			$this->load->model('userModel');
 			//1) Check if he can see		
 			$checker=$this->userModel->AddRelationQuery($this->session->userdata('id'),$urls);
-			
-			if($checker==1)
-			{
-				$new_data['some_info']="Заявка создана";	
-			}
-			else
-			{
-				$new_data['some_info']="Заявка не может быть создана.";
-			}
-			$new_data['isfounded']=-3;
-			$new_data['users']=$this->userModel->load_users_list(5);
-			$new_data['tickets']=$this->userModel->load_all_tickets($this->session->userdata('id'));
-			$this->load->view('header',$new_data);
-			$this->load->view('usersearch',$new_data);
-			$this->load->view('footer');
-			return;
+			header("Location: http://nti.goodroads.ru/search");
 		}
 		else
 		{
@@ -308,26 +291,12 @@ class User extends CI_Controller {
 	public function removeaccept()	{
 		if($this->session->userdata('rights')>=2)
 		{
-			$new_data['rights']=$this->session->userdata('rights');
-			$new_data['map_type'] = 2;	
+
 			$urls=$this->input->post('userid');
 			$this->load->model('userModel');
 			//1) Check if he can see		
 			$checker=$this->userModel->RemoveRelationQuery($this->session->userdata('id'),$urls);
-			if($checker==1)
-			{
-				$new_data['some_info']="Заявка удалена";	
-			}
-			else
-			{
-				$new_data['some_info']="Заявка не может быть удалена.";
-			}
-			$new_data['isfounded']=-3;
-			$new_data['users']=$this->userModel->load_users_list(5);
-			$new_data['tickets']=$this->userModel->load_all_tickets($this->session->userdata('id'));
-			$this->load->view('header',$new_data);
-			$this->load->view('usersearch',$new_data);
-			$this->load->view('footer');
+		header("Location: http://nti.goodroads.ru/search");
 		}
 		else
 		{
@@ -335,30 +304,14 @@ class User extends CI_Controller {
 		}
 	}
 	
-	public function delete() {
+	public function deleteaccept() {
 		if($this->session->userdata('rights')>=2)
 		{
-			$new_data['rights']=$this->session->userdata('rights');
-			$new_data['map_type'] = 2;	
-			$this->load->helper('url');
-			$urls=$this->uri->segment(3);
+			$urls=$this->input->post('userid');	
 			$this->load->model('userModel');
 			//1) Check if he can see		
 			$checker=$this->userModel->DeleteRelation($this->session->userdata('id'),$urls);
-			if($checker==1)
-			{
-				$new_data['some_info']="Заявка на удаление подана";	
-			}
-			else
-			{
-				$new_data['some_info']="Заявка не может быть удалена.";
-			}
-			$new_data['isfounded']=-3;
-			$new_data['users']=$this->userModel->load_users_list(5);
-			$new_data['tickets']=$this->userModel->load_all_tickets($this->session->userdata('id'));
-			$this->load->view('header',$new_data);
-			$this->load->view('usersearch',$new_data);
-			$this->load->view('footer');
+			header("Location: http://nti.goodroads.ru/search");
 		}
 		else
 		{
@@ -1116,10 +1069,13 @@ class User extends CI_Controller {
 				}
 			}
 			
-			
-
+			//
+		if (!isset($grouped)) {
+			$results['total_trips'] = -1;
+			return $results;
+		}
 			$grouped=array_reverse($grouped);
-			
+					
 			$z=count($grouped);
 		//	for($i=5;$i<$z;$i++)
 			//	unset($grouped[$i]);
@@ -1572,7 +1528,7 @@ class User extends CI_Controller {
 								
 							}
 						}	
-						
+		
 					
 					$results['total_trips'] = $m+1;
 			} //end of "$dt != -1" operators block.
@@ -1654,13 +1610,11 @@ class User extends CI_Controller {
 				}
 			}
 			
-			
+			if(!isset($grouped)){	$results['is_set'] = -1;return $results;}
 
 			$grouped=array_reverse($grouped);
 			
 			$z=count($grouped);
-		//	for($i=5;$i<$z;$i++)
-			//	unset($grouped[$i]);
 			
 			unset($results);
 			
@@ -2128,6 +2082,38 @@ class User extends CI_Controller {
 		}
 		return $results;
 	} //end of getAll method.	
+	
+	function deleterel() {
+		if($this->session->userdata('rights')==2)
+		{
+			$usri=$this->input->post('userid');
+			$cki=$this->session->userdata('id');
+			$this->load->model('lays_model');
+			$suckmyfuck = $this->lays_model->unbind($usri,$cki);
+			header("Location: http://nti.goodroads.ru/search");
+		}
+		else
+		{
+			header("Location: http://nti.goodroads.ru/");
+		}
+		return 1;
+	}
+	
+	function viewck() {
+		$rg = $this->session->userdata('Rights');
+		if ($rg==3) {
+			$this->load->model('lays_model');
+			$i = $this->uri->segment(3);
+			$data = $this->lays_model->vck($i);
+			return $data;
 		
+		} else {
+			header("Location: http://nti.goodroads.ru/");
+			return -1;
+		}
+	}
+		
+	
+	
 } //end of controller
 ?>

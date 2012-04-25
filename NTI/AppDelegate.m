@@ -288,6 +288,17 @@
     [motionManager stopDeviceMotionUpdates];
 }
 
+- (void)stopRecord{
+    canWriteToFile = NO;
+    [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
+    [self stopGPSDetect];
+    [self stopMotionDetect];
+}
+- (void)startRecord{
+    [self startMotionDetect];
+    [self checkSpeedTimer];
+}
+
 
 
 

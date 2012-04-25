@@ -23,6 +23,7 @@ class Admin extends CI_Controller
 			} 
 		}
 	}
+	/* Not need in this further. Updated to non-ticket (permanent) unbinding.
 	public function dismiss()
 	{
 		if(!$this->input->post('relation'))
@@ -42,7 +43,8 @@ class Admin extends CI_Controller
 					header("Location:http://nti.goodroads.ru/");					
 			} 		
 		}
-	}	
+	}
+	*/	
 	
 	
 		public function banuser()
@@ -118,7 +120,7 @@ class Admin extends CI_Controller
 					$this->load->model('admin_functions');
 					$dt = array (
 						'i' => $this->input->post('userid'),
-						'p' => $this->input->post('npwd')
+						'p' => $this->input->post('npassword')
 					);
 					if (strlen($dt['p'])>=3)
 						$response = $this->admin_functions->chpassword($dt);
@@ -126,6 +128,81 @@ class Admin extends CI_Controller
 			}
 		}
 	}
+		public function viewck()
+	{
+		if($this->session->userdata('rights')==3)
+		{	
+			$this->load->helper('url');
+			$ckid=$this->uri->segment(3);
+			$new_data['rights']=$this->session->userdata('rights');
+			$new_data['map_type'] = 2;	
+			$new_data['ckid'] = $ckid;	
+			$this->load->model('userModel');
+			$new_data['ept'] = $this->cksearch($ckid);
+			$this->load->view('header',$new_data);
+			$this->load->view('ckmanagment',$new_data);
+			$this->load->view('footer');
+		}
+		else
+		{
+			header("Location: http://nti.goodroads.ru/");
+		}
+	}
+	
+	function cksearch($id) {
+	
+		$this->load->model('lays_model');
+		$data = $this->lays_model->cksearch($id);
+		
+		if ($data != -1) {
+			for ($i=0;$i<count($data);$i++) {
+				if ($data[$i]['Bnd']==0) {
+					$data[$i]['Button'] = 1; //add user
+				} else {
+					$data[$i]['Button'] = 2; //drop user
+				}
+			}
+		} else {
+			$data['Users'] = -1;
+		}
+		
+		return $data;
+	}
+	
+	
+	
+			public function add()
+	{
+		if($this->session->userdata('rights')==3)
+		{	
+			$ckid=$this->input->post('ckid');
+			$userid=$this->input->post('userid');
+				$this->load->model('userModel');
+				$this->userModel->AddRelation($ckid,$userid);
+			header("Location: http://nti.goodroads.ru/admin/viewck/$ckid");
+		}
+		else
+		{
+			header("Location: http://nti.goodroads.ru/");
+		}
+	}
+	
+			public function delete()
+	{
+		if($this->session->userdata('rights')==3)
+		{	
+			$ckid=$this->input->post('ckid');
+			$userid=$this->input->post('userid');
+				$this->load->model('userModel');
+				$this->userModel->DelRelation($ckid,$userid);
+			header("Location: http://nti.goodroads.ru/admin/viewck/$ckid");
+		}
+		else
+		{
+			header("Location: http://nti.goodroads.ru/");
+		}
+	}
+	
 	
 }
 

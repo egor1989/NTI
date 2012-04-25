@@ -109,16 +109,14 @@
 }
 
 - (void)checkActivity{
-    if ([myAppDelegate canWriteToFile] && !Start && First) {
+    if ([myAppDelegate canWriteToFile] && !Start) {
         Start = YES;
         End = NO;
-        First = NO;
         [databaseAction addEntrie:@"start"];
     }
-    if (![myAppDelegate canWriteToFile] && !End && !First){
+    if (![myAppDelegate canWriteToFile] && Start){
         Start = NO;
         End = YES;
-        First = YES;
         [self endOfRecord];
         [databaseAction addEntrie:@"end"];
     }
@@ -129,6 +127,7 @@
 
 - (void)sendFile{
     [databaseAction sendDatabase]; 
+
 }
 
 - (void)eventRecord: (NSString *)type{

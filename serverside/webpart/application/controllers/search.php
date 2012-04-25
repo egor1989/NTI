@@ -10,6 +10,7 @@ class Search extends CI_Controller {
 			$new_data['rights']=$this->session->userdata('rights');
 			$new_data['map_type'] = 2;	
 			$this->load->model('userModel');
+			$new_data['ept'] = $this->cksearch();
 			if($this->input->post('name'))
 			{
 				$user = $this->input->post('name');
@@ -46,8 +47,25 @@ class Search extends CI_Controller {
 		}
 	}
 	
-	
-	
-	
-	
+	function cksearch() {
+		$userid = $this->session->userdata('id');
+		$this->load->model('lays_model');
+		$data = $this->lays_model->cksearch($userid);
+		
+		if ($data != -1) {
+			for ($i=0;$i<count($data);$i++) {
+				if ($data[$i]['Bnd']==0) {
+					$data[$i]['Button'] = 1; //add user
+				} else {
+					$data[$i]['Button'] = 2; //drop user
+				}
+			}
+		} else {
+			$data['Users'] = -1;
+		}
+		
+		return $data;
+	}
 }
+
+?>

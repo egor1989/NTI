@@ -199,7 +199,30 @@
 		}
 		
 		
+		//Добавляет отношение для CK
+				function AddRelation($id,$userId)
+		{
+		$userId=mysql_real_escape_string($userId);
+				$id=mysql_real_escape_string($id);
+			$query = $this->db->query("Select * from NTIRelations where UserID=$userId and ExpertID=$id");
+			if($query->num_rows()>0)return -2;
+			$data = array('UserId' => $userId ,	'ExpertId' => $id);
+			$this->db->insert('NTIRelations', $data); 
+			return 1;
+			
+		}
 		
+		
+				//Добавляет отношение для CK
+		function DelRelation($id,$userId)
+		{
+				$userId=mysql_real_escape_string($userId);
+				$id=mysql_real_escape_string($id);
+
+			$query = $this->db->query("Delete from NTIRelations where UserID=$userId and ExpertID=$id");
+			return 1;
+			
+		}
 		
 		
 		//Функиця отвечает за проверку и добавление заявки пользователя
@@ -283,7 +306,7 @@
 		function DeleteRelation($id,$username)
 		{
 			//Сначала получаем id пользователя относительно его имени
-			$query = $this->db->query("Select * from NTIUsers where Login=".$this->db->escape($username));
+			$query = $this->db->query("Select * from NTIUsers where Id=".$this->db->escape($username));
 			if($query->num_rows()>0){
 			
 				foreach($query->result() as $row){

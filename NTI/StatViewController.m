@@ -8,7 +8,7 @@
 
 #import "StatViewController.h"
 
-#define ROWSNUMBER 10
+#define ROWSNUMBER 11
 
 @implementation StatViewController
 @synthesize writeAction;
@@ -101,8 +101,8 @@
     }
     else {
         [self parse:[[NSUserDefaults standardUserDefaults] valueForKey:@"lastStat"]];
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Интернет-соединение отсутствует" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
-        [alert show];
+      //  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Интернет-соединение отсутствует" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
+      //  [alert show];
     }
     
     
@@ -204,7 +204,7 @@
             segmentedControl.frame = CGRectMake(35, 5, 250, 35);//x,y,widht, height 
             segmentedControl.segmentedControlStyle = UISegmentedControlStylePlain;
             
-            segmentedControl.selectedSegmentIndex = 0;
+            segmentedControl.selectedSegmentIndex = [[NSUserDefaults standardUserDefaults] integerForKey:@"segment"];
              
             [segmentedControl addTarget:self action:@selector(pickOne:) forControlEvents:UIControlEventValueChanged];
         
@@ -356,6 +356,23 @@
             }
             return cell;
         }
+        case 10:{
+            UITableViewCell *aCell = [tableView dequeueReusableCellWithIdentifier:@"internetCell"];
+            if( aCell == nil ) {
+                aCell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault
+                                              reuseIdentifier:@"internetCell"] ;
+                aCell.textLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
+                aCell.textLabel.text = @"Только Wi-Fi";
+                aCell.selectionStyle = UITableViewCellSelectionStyleNone;
+                UISwitch *internetUploadSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
+                aCell.accessoryView = internetUploadSwitch;
+                [internetUploadSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"internetUserPreference"] animated:NO];
+                [internetUploadSwitch addTarget:self action:@selector(internetUploadSwitch:) forControlEvents:UIControlEventValueChanged];
+                
+            }
+            return aCell;
+
+        }
        
 
         
@@ -369,15 +386,19 @@
 
 - (void) pickOne:(id)sender{
     //проверка интернета
-   
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    if ([ServerCommunication checkInternetConnection]) {
+  
+    
     
         UISegmentedControl *segmentedControl = (UISegmentedControl *)sender;
         if ([segmentedControl selectedSegmentIndex]==0) {
             NSLog(@"за последнюю поездку");
-        
+            [userDefaults setInteger:0 forKey:@"segment"];
             NSString *result=[serverCommunication getLastStatistic];
             if (![result isEqualToString:@"error"]) {
-                [[NSUserDefaults standardUserDefaults] setValue:result forKey:@"lastStat"];
+                [userDefaults setValue:result forKey:@"lastStat"];
                 [self parse: result];
             }
             else {
@@ -389,18 +410,18 @@
     else {
         NSLog(@"за все время");
         NSString *result=[serverCommunication getAllStatistic];
+        [userDefaults setInteger:1 forKey:@"segment"];
         if (![result isEqualToString:@"error"]) {
-            [[NSUserDefaults standardUserDefaults] setValue:result forKey:@"allStat"];
+            [userDefaults setValue:result forKey:@"allStat"];
             [self parse: result];
         }
         else {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Повторите попытку позже" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
             [alert show];
         }
-
-        
+        }
     }
-    //[segmentedControl titleForSegmentAtIndex: [segmentedControl selectedSegmentIndex]];
+    
 }
 
 - (void)parse:(NSString *)result{
@@ -428,6 +449,18 @@
         
     }
 
+}
+
+- (IBAction) internetUploadSwitch:(id)sender{
+    if ([sender isOn])
+    {
+        //only wi-fi
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"internetUserPreference"];
+    }
+    else
+    {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"internetUserPreference"]; 
+    }
 }
 
 /*
@@ -485,14 +518,18 @@
     
     
     
-    if ([ServerCommunication checkInternetConnection]){
+    if ([ServerCommunication checkInternetConnectionForSend]){
         [serverCommunication refreshCookie];
+        
+        [[myAppDelegate recordAction] endOfRecord];
+        [myAppDelegate stopRecord];
         [[myAppDelegate recordAction] sendFile];
+        
     }
-    else {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Отсутствует Интернет-соединение. Включите Интернет и повторите попытку" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
-        [alert show];
-    }
+//    else {
+//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Отсутствует Интернет-соединение. Включите Интернет и повторите попытку" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
+//        [alert show];
+//    }
     
     
 }

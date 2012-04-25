@@ -349,7 +349,7 @@
         //[fileController sendFile];
     }
     else if (buttonIndex ==1) {
-        [databaseAction clearDatabase];
+      //  [databaseAction clearDatabase];
        //[fileController deleteFile]; 
     }
     

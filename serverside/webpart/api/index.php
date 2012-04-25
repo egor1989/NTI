@@ -42,6 +42,9 @@ if (!mysql_select_db($dbname,$dbcnx) )    {      return 0;    }
 mysql_query('SET NAMES cp1251'); 
 return 1;
 }
+//print_r( $_POST);
+//exit();
+
 $data=$_POST['data'];
 if(!isset($_POST))
 {
@@ -74,7 +77,7 @@ switch(json_last_error())
         break;
         case JSON_ERROR_SYNTAX:
 			$errortype=array('info'=>" - Syntax error, malformed JSON",'code'=>  666);
-			$res=array('result'=>1,'error'=> $errortype);
+			$res=array('result'=>$data,'error'=> $errortype);
 			echo json_encode($res);
 			exit();
         break; 
@@ -82,7 +85,7 @@ switch(json_last_error())
     
    
 if(!isset($json['method'])){ $errortype=array('info'=>"No difintion state set, or function is incorrect",'code'=>  1);
-$res=array('result'=>2,'error'=>  $errortype);echo json_encode($res);exit();}
+$res=array('result'=>$data,'error'=>  $errortype);echo json_encode($res);exit();}
 
 if($json['method']=="NTIauth"){NTIauth($json['params']);}//-
 else if($json['method']=="addNTIFile"){addNTIFile($json['params']);}//-
@@ -376,7 +379,7 @@ function getStatistics($param)
 		$n=0;
 		//Если не было поездок за текущий период или не передано ни одной точки.
 			while($row = mysql_fetch_array($result)) {
-
+		
 				$data[$n]['lat'] = $row['lat'];
 				$data[$n]['lng'] = $row['lng'];
 				$data[$n]['compass'] = $row['compass'];
@@ -451,26 +454,31 @@ function getStatistics($param)
 			$grouped=array_reverse($grouped);
 			
 			$z=count($grouped);
-			if isset($param['last']) {
-				if ($z > 2)
-					for ($i=$z-2;$i>-1;$i--)
-						unset($grouped[$i]);
+			if (isset($param['last']) && $param['last']>0) {
+				
+				if ($z >= 2)for ($i=1;$i<$z;$i++)unset($grouped[$i]);
+			//$grouped=array_reverse($grouped);			
 			}
 						
 			unset($results);
-			$results['score'] = 0;			 
-			$results['time'] =0; 
-			$results['turn1']=0;
-			$results['turn2']=0;
+			$results['score']=0;
+			$results['score_speed']=0;
+			$results['score_turn']=0;
+			$results['score_acc']=0;
+			$results['score_brake']=0;
+			//$results['score'] =0;				 
+			$results['time'] =	0;
+			$results['turn1']=	0;
+			$results['turn2']=	0;
 			$results['turn3']=0;
 			$results['acc1']=0;
-			$results['acc2']=0;
-			$results['acc3']=0;
-			$results['brake1']=0;
-			$results['brake2']=0;
+			$results['acc2']=	0;
+			$results['acc3']=	0;
+			$results['brake1']=	0;
+			$results['brake2']	=	0;
 			$results['brake3']=0;
 			$results['prev1']=0;
-			$results['prev2']=0;
+			$results['prev2']=	0;
 			$results['prev3']=0;
 			$results['tscore'] = 0;
 			$total_time=0;
@@ -876,20 +884,6 @@ function getStatistics($param)
 							$sumSpeed = 0;
 						
 							
-						
-							$color = "white";
-							if ($sevAcc==1) 
-								$color = "#c3eb0d";
-							if ($sevAcc==2) 
-								$color = "#0deb12";
-							if ($sevAcc==3) 
-								$color = "#0deb88";
-							if ($sevAcc==-1) 
-								$color = "#ebc10d";
-							if ($sevAcc==-2) 
-								$color = "#eb610d";
-							if ($sevAcc==-3) 
-								$color = "#eb0d1b";
 				
 						}
 						if(isset($data[$j-2]['utimestamp']))	{
@@ -899,11 +893,20 @@ function getStatistics($param)
 							
 							//$number=$m;
 						
-								$results['score'] 		+= 		($coef1 * ($speed1 + $turn1 + $acc1 + $brake1) + $coef2 * ($speed2 + $turn2 + $acc2 + $brake2) + $coef3 * ($speed3 + $turn3 + $acc3 + $brake3)) / ($fullTime/3600);			 
-								$results['time'] 		+=	 	$fullTime; 
-								$results['turn1']		+=		$turn1;
-								$results['turn2']		+=		$turn2;
-								$results['turn3']		+=		$turn3;
+								$results['score'] 		+= 		($coef1 * ($speed1 + $turn1 + $acc1 + $brake1) + $coef2 * ($speed2 + $turn2 + $acc2 + $brake2) + $coef3 * ($speed3 + $turn3 + $acc3 + $brake3)) / ($fullTime/3600);
+								$results['score_speed'] 	+=($coef1 * ($speed1) + $coef2 * ($speed2) + $coef3 * ($speed3)) / ($fullTime/3600);
+								$results['score_turn'] 	+=($coef1 * ($turn1) + $coef2 * ($turn2) + $coef3 * ($turn3)) / ($fullTime/3600);
+								$results['score_acc'] 	+=($coef1 * ($acc1) + $coef2 * ($acc2) + $coef3 * ($acc3)) / ($fullTime/3600);
+								$results['score_brake'] 	+=($coef1 * ($brake1) + $coef2 * ($brake2) + $coef3 * ($brake3)) / ($fullTime/3600);
+								 
+								 
+								 
+								 
+								/* 
+									$results['time'] 		+=	 	$fullTime; 
+									$results['turn1']		+=		$turn1;
+									$results['turn2']		+=		$turn2;
+									$results['turn3']		+=		$turn3;
 								$results['acc1']		+=		$acc1;
 								$results['acc2']		+=		$acc2;
 								$results['acc3']		+=		$acc3;
@@ -913,14 +916,16 @@ function getStatistics($param)
 								$results['prev1']		+=		$speed1;
 								$results['prev2']		+=		$speed2;
 								$results['prev3']		+=		$speed3;
-							
+								*/
 								
 							}
 						}	
 			} 
 			
 			$errortype=array('info'=>"",'code'=>  0);
-			$ret=array('total_score'=>floor($results['score']),'time'=>floor($results['time']),'turn1'=>$results['turn1'],'turn2'=>$results['turn2'],'turn3'=>$results['turn3'],'acc1'=>$results['acc1'],'acc2'=>$results['acc2'],'acc3'=>$results['acc3'],'brake1'=>$results['brake1'],'brake2'=>$results['brake2'],'brake3'=>$results['brake3'],'prev1'=>$results['prev1'],'prev2'=>$results['prev2'],'prev3'=>$results['prev3']);
+		//	$ret=array('total_score'=>floor($results['score']),'time'=>floor($results['time']),'turn1'=>$results['turn1'],'turn2'=>$results['turn2'],'turn3'=>$results['turn3'],'acc1'=>$results['acc1'],'acc2'=>$results['acc2'],'acc3'=>$results['acc3'],'brake1'=>$results['brake1'],'brake2'=>$results['brake2'],'brake3'=>$results['brake3'],'prev1'=>$results['prev1'],'prev2'=>$results['prev2'],'prev3'=>$results['prev3']);
+			$ret=array('total_score'=>floor($results['score']),'score_speed'=>floor($results['score_speed']),'score_turn'=>floor($results['score_turn']),'score_acc'=>floor($results['score_acc']),'score_brake'=>floor($results['score_brake']));
+			
 			$res=array('result'=>$ret,'error'=> $errortype);
 			echo json_encode($res);	
 			exit();	
@@ -962,19 +967,18 @@ function getPath($param)
 	{
 		$time=mysql_real_escape_string($time);
 		if(!isset($param['till'])){
-		$query = "SELECT * FROM NTIEntry where utimestamp>=$time and UID=$UID and (lat!=0 or lng!=0) and utimestamp!=0 group by utimestamp order by utimestamp";
+		$query = "SELECT * FROM NTIEntry where utimestamp>=$time and UID=$UID and (lat!=0 or lng!=0) and utimestamp!=0 grouped by utimestamp order by utimestamp";
 	}else
-	{$time=mysql_real_escape_string($time);
+	{
+		$time=mysql_real_escape_string($time);
 	$till=mysql_real_escape_string($till);
-			$query = "SELECT * FROM NTIEntry where utimestamp>=$time and utimestamp<=$till and UID=$UID and (lat!=0 or lng!=0) and utimestamp!=0 group by utimestamp  order by utimestamp";
+			$query = "SELECT * FROM NTIEntry where utimestamp>=$time and utimestamp<=$till and UID=$UID and (lat!=0 or lng!=0) and utimestamp!=0 grouped by utimestamp order by utimestamp";
 	}
 		$result = mysql_query($query);
 		$c = 0;
 		$n = 0;
 		while ($row = mysql_fetch_array($result)) 
 		{
-			$encData[$n]['accx'] = $row['accx'];
-			$encData[$n]['accy'] = $row['accy'];
 			$encData[$n]['lat'] = $row['lat'];
 			$encData[$n]['lng'] = $row['lng'];
 			$encData[$n]['compass'] = $row['compass'];
@@ -1010,27 +1014,10 @@ function getPath($param)
 					$deltaTurn = $turn[$i] - $turn[$i-1];
 					$wAcc = abs($deltaTurn/$deltaTime);
 					$radius = $speed/$wAcc;
-					if (($typeTurn[$i-1] == 'left turn finished') || ($typeTurn[$i-1] == 'right turn finished') || (!isset($typeTurn[$i-1])) || ($speed == 0) )
-					{
-						$typeTurn[$i] = 'normal point';
-					} else 	if ($deltaTurn > 0.5)   {
-					if ($typeTurn[$i-1] == 'normal point') $typeTurn[$i] = 'left turn started';
-					if (($typeTurn[$i-1] == 'left turn started')||($typeTurn[$i-1] == 'left turn continued')) $typeTurn[$i] = 'left turn continued';
-					if (($typeTurn[$i-1] == 'right turn started')||($typeTurn[$i-1] == 'right turn continued')) $typeTurn[$i] = 'right turn finished';
-					} else 	if ($deltaTurn < -0.5)	{
-					if ($typeTurn[$i-1] == 'normal point') $typeTurn[$i] = 'right turn started';
-					if (($typeTurn[$i-1] == 'right turn started')||($typeTurn[$i-1] == 'right turn continued')) $typeTurn[$i] = 'right turn continued';
-					if (($typeTurn[$i-1] == 'left turn started')||($typeTurn[$i-1] == 'left turn continued')) $typeTurn[$i] = 'left turn finished';
-					} else	{
-					if ($typeTurn[$i-1] == 'normal point') $typeTurn[$i] = 'normal point';
-					if (($typeTurn[$i-1] == 'left turn started')||($typeTurn[$i-1] == 'left turn continued')) $typeTurn[$i] = 'left turn finished';
-					if (($typeTurn[$i-1] == 'right turn started')||($typeTurn[$i-1] == 'right turn continued')) $typeTurn[$i] = 'right turn finished';
-					}
 					
 				}
 				else 	
 				{
-					$typeTurn[$i] = 'normal point';
 					$sevTurn[$i] = 0;
 					$wAcc = 0;
 					$radius = 0;
@@ -1063,7 +1050,7 @@ function getPath($param)
 		  $sevAcc = 0;
 		}
 	}
-	$vg[$i]=0;
+		$vg[$i]=0;
 		if ($sevAcc==1) $vg[$i]=1;
 		if ($sevAcc==2) $vg[$i]=2;
 		if ($sevAcc==3) $vg[$i]=3;
@@ -1088,18 +1075,16 @@ function getPath($param)
 		$R = 6371; // km
 		for ($i = 1; $i < $j; $i++)
 		{
-			if($encData[$i]['utimestamp']-$encData[$i-1]['utimestamp']!=0)
-			{
 				
 				$d = acos(sin($encData[$i]['lat'])*sin($encData[$i-1]['lat']) + cos($encData[$i]['lat'])*cos($encData[$i-1]['lat']) *  cos($encData[$i-1]['lng']-$encData[$i]['lng'])) * $R;
-				
 				if(($encData[$i]['utimestamp']-$encData[$i-1]['utimestamp']>300) || (($d)/($encData[$i]['utimestamp']-$encData[$i-1]['utimestamp']))>40)$vg[$i]=42;			
 				$ret_arr[$k]['lat']=$encData[$i]['lat'];
 				$ret_arr[$k]['lng']=$encData[$i]['lng'];
 				$ret_arr[$k]['type']=$vg[$i];
-			
+				$ret_arr[$k]['waht']=$accel[$i];
+				
+				
 				$k++;
-			}
 		}
 		
 		if($k!=0)

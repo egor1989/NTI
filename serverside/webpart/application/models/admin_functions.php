@@ -55,20 +55,21 @@
 		}
 		//Применяет к пользователю новые права (0,1,2)
 		function chrights($data) {
-			$i = mysql_real_escape_string($data['i']);
-			$r = mysql_real_escape_string($data['r']);
-			$this->db->query("UPDATE NTIUsers SET Rights=$r WHERE Id=$i");
+			$d = array(
+				'Rights' => mysql_real_escape_string($data['r'])
+            );
+			$this->db->where('Id', $data['i']);
+			$this->db->update('NTIUsers', $d);
 			return 1;		
 		}
 		//Изменяет пароль другого пользователя
 		function chpassword($data) {
-			$i = mysql_real_escape_string($data['i']);
-			$p = hash('sha256', $data['p']);
-			$this->db->query("UPDATE NTIUsers SET Password=$p WHERE Id=$i");
+			$d = array(
+				'Password' => hash('sha256', $data['p'])
+            );
+			$this->db->where('Id', $data['i']);
+			$this->db->update('NTIUsers', $d);
 			return 1;		
-		}
-		
-		
-		
+		}		
 	}
 ?>

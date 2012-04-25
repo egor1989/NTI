@@ -56,8 +56,10 @@
 -(void) checkSpeedTimer;
 -(double) getTime;
 -(void) timerFired: (NSTimer *)timer;
--(void) fiveMinTimer;
--(void) checkAfterFiveMin;
+- (void)fiveMinTimer;
+- (void)checkAfterFiveMin;
+- (void)stopRecord;
+- (void)startRecord;
 
 
 @property (strong, nonatomic) UIWindow *window;
