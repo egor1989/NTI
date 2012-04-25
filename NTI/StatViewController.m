@@ -8,7 +8,7 @@
 
 #import "StatViewController.h"
 
-#define ROWSNUMBER 10
+#define ROWSNUMBER 11
 
 @implementation StatViewController
 @synthesize writeAction;
@@ -356,6 +356,23 @@
             }
             return cell;
         }
+        case 10:{
+            UITableViewCell *aCell = [tableView dequeueReusableCellWithIdentifier:@"internetCell"];
+            if( aCell == nil ) {
+                aCell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault
+                                              reuseIdentifier:@"internetCell"] ;
+                aCell.textLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
+                aCell.textLabel.text = @"Только Wi-Fi";
+                aCell.selectionStyle = UITableViewCellSelectionStyleNone;
+                UISwitch *internetUploadSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
+                aCell.accessoryView = internetUploadSwitch;
+                [internetUploadSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"internetUserPreference"] animated:NO];
+                [internetUploadSwitch addTarget:self action:@selector(internetUploadSwitch:) forControlEvents:UIControlEventValueChanged];
+                
+            }
+            return aCell;
+
+        }
        
 
         
@@ -428,6 +445,21 @@
         
     }
 
+}
+
+- (IBAction) internetUploadSwitch:(id)sender{
+    if ([sender isOn])
+    {
+        //send via 3G
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"internetUserPreference"];
+        //  [TestFlight passCheckpoint:@"3G send switched on"];
+        
+    }
+    else
+    {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"internetUserPreference"]; 
+        //  [TestFlight passCheckpoint:@"3G send switched off"];
+    }
 }
 
 /*
