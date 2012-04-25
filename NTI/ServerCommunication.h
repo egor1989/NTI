@@ -33,6 +33,7 @@
 - (BOOL)checkErrors:(NSString *)answerString method:(NSString *)methodName;
 - (void)showResult;
 + (BOOL) checkInternetConnection;
++ (BOOL) checkInternetConnectionForSend;
 - (NSString *) refreshCookie;
 - (BOOL)checkCookieExpires;
 - (NSString*) getStringBetweenStrings: (NSString *) main first:(NSString *)first second: (NSString*) second;

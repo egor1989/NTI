@@ -418,15 +418,45 @@
 
 + (BOOL) checkInternetConnection{
     Reachability* reach = [Reachability reachabilityWithHostname:@"www.goodroads.ru"];
-
+    
     NetworkStatus hostStatus = [reach currentReachabilityStatus];
     
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"internetUserPreference"]) {
+        if (hostStatus == NotReachable){
+            NSLog(@"internet: -");
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Включите Интернет-соединение и повторите попытку" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
+            [alert show];
+            return NO;
+        } 
+        else return YES;
+    }
+    else if (hostStatus == ReachableViaWiFi){
+        NSLog(@"internet: wi-fi");
+        return YES;
+        } 
+        else{ 
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Включите Интернет-соединение и повторите попытку" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
+            [alert show];
+            return NO;
+
+        }
+}
+
++ (BOOL) checkInternetConnectionForSend{
+    Reachability* reach = [Reachability reachabilityWithHostname:@"www.goodroads.ru"];
+    
+    NetworkStatus hostStatus = [reach currentReachabilityStatus];
     if (hostStatus == NotReachable){
         NSLog(@"internet: -");
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Включите Интернет-соединение и повторите попытку" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
+        [alert show];
         return NO;
     } 
     else return YES;
+ 
 }
+
+
 
 - (void) infoAboutDevice{
 
