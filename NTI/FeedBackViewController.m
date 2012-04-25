@@ -17,7 +17,7 @@
 	[super viewDidLoad]; 
     [textField becomeFirstResponder];
     
-    
+    serverCommunication = [[ServerCommunication alloc]init];
     UIPickerView *picker = [[UIPickerView alloc] 
                             initWithFrame:CGRectZero];
     picker.delegate = self;
@@ -68,7 +68,7 @@
 }
 
 - (IBAction)rightItem:(id)sender{
-    //вставить сюда код отправки текста стефу
+    [serverCommunication sendFeedBackToServerWithTitle:textField.text andBody:textView.text];
     textView.text = @"";
     textField.text = @"";
     [self doneAction];
@@ -108,17 +108,7 @@
     [textView resignFirstResponder];
     [textField resignFirstResponder];
     navItem.leftBarButtonItem = nil;	// this will remove the "save" button
+    
 }
-
--(IBAction) crittercismPressed:(id) sender {
-    [Crittercism showCrittercism:self];
-    NSLog(@"llldldl");
-}
--(IBAction) crashPressed:(id) sender {
-    [NSException raise:NSInvalidArgumentException
-                format:@"Foo must not be nil"];
-}
-
-
 
 @end

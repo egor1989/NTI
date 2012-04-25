@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="1.0" toolsVersion="1938" systemVersion="10K549" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="4">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="1.0" toolsVersion="1938" systemVersion="10K549" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="mAs-ok-QSJ">
     <dependencies>
         <development defaultVersion="4200" identifier="xcode"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="933"/>
@@ -321,36 +321,6 @@
                                 <color key="textColor" red="0.0" green="0.0053391404790000003" blue="0.091240875420000006" alpha="0.66000000000000003" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="vF4-Mr-Qv0">
-                                <rect key="frame" x="3" y="244" width="175" height="37"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="Crittercism feedback">
-                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <state key="highlighted">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="crittercismPressed:" destination="4Kj-j2-HHN" eventType="touchUpInside" id="CZe-7R-Lll"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="22M-p5-TAx">
-                                <rect key="frame" x="173" y="244" width="149" height="37"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="Crittercism crash">
-                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <state key="highlighted">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="crashPressed:" destination="4Kj-j2-HHN" eventType="touchUpInside" id="7sJ-PH-mlu"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                     </view>
@@ -391,7 +361,7 @@
                                 <rect key="frame" x="0.0" y="244" width="320" height="216"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <date key="date" timeIntervalSinceReferenceDate="353164292.84771502">
-                                    <!--2012-03-11 16:11:32 +0300-->
+                                    <!--2012-03-11 15:11:32 +0200-->
                                 </date>
                                 <locale key="locale" localeIdentifier="en_US"/>
                                 <timeZone key="timeZone" name="America/Los_Angeles">
@@ -561,18 +531,18 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="cjx-Gx-z36">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="390"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="413"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="198-cX-UsO" customClass="MyTextField">
-                                        <rect key="frame" x="163" y="243" width="137" height="31"/>
+                                        <rect key="frame" x="163" y="275" width="137" height="31"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="0.26659891060000002" green="0.61288265310000001" blue="0.0" alpha="0.34999999999999998" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Возраст" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="Gbq-vJ-Ls2">
-                                        <rect key="frame" x="11" y="158" width="144" height="21"/>
+                                        <rect key="frame" x="11" y="147" width="144" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" name="TrebuchetMS" family="Trebuchet MS" pointSize="15"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -586,77 +556,91 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="WdN-HU-drK" customClass="MyTextField">
-                                        <rect key="frame" x="163" y="153" width="137" height="31"/>
+                                        <rect key="frame" x="163" y="142" width="137" height="31"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="0.26659891060000002" green="0.61288265310000001" blue="0.0" alpha="0.34999999999999998" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                     </textField>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Пол" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="QcW-VS-PVt">
-                                        <rect key="frame" x="11" y="115" width="144" height="21"/>
+                                        <rect key="frame" x="11" y="104" width="144" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" name="TrebuchetMS" family="Trebuchet MS" pointSize="15"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="phW-pG-Cye" customClass="MyTextField">
-                                        <rect key="frame" x="163" y="71" width="137" height="31"/>
+                                        <rect key="frame" x="163" y="60" width="137" height="31"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="0.26659891060000002" green="0.61288265310000001" blue="0.0" alpha="0.34999999999999998" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="S0V-tt-TZD" customClass="MyTextField">
-                                        <rect key="frame" x="163" y="197" width="137" height="31"/>
+                                        <rect key="frame" x="163" y="186" width="137" height="31"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="0.26659891060000002" green="0.61288265310000001" blue="0.0" alpha="0.34999999999999998" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                     </textField>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Категория авто" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="yhx-2c-eHA">
-                                        <rect key="frame" x="11" y="247" width="144" height="21"/>
+                                        <rect key="frame" x="11" y="279" width="144" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" name="TrebuchetMS" family="Trebuchet MS" pointSize="15"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="eBr-DW-JYg" customClass="MyTextField">
-                                        <rect key="frame" x="163" y="110" width="137" height="31"/>
+                                        <rect key="frame" x="163" y="99" width="137" height="31"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="0.26659891060000002" green="0.61288265310000001" blue="0.0" alpha="0.34999999999999998" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Мощность авто" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="Egz-Cm-bZv">
-                                        <rect key="frame" x="11" y="290" width="144" height="21"/>
+                                        <rect key="frame" x="11" y="322" width="144" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" name="TrebuchetMS" family="Trebuchet MS" pointSize="15"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="mfT-aq-U62" customClass="MyTextField">
-                                        <rect key="frame" x="163" y="287" width="137" height="31"/>
+                                        <rect key="frame" x="163" y="319" width="137" height="31"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="0.26659891060000002" green="0.61288265310000001" blue="0.0" alpha="0.34999999999999998" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="ДТП за год" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="jji-pQ-5Bh">
-                                        <rect key="frame" x="11" y="200" width="144" height="21"/>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Стаж вождения" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="jji-pQ-5Bh">
+                                        <rect key="frame" x="11" y="189" width="144" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="TrebuchetMS" family="Trebuchet MS" pointSize="15"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="LEE-0J-Ryu" customClass="MyTextField">
+                                        <rect key="frame" x="163" y="229" width="137" height="31"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.26659891060000002" green="0.61288265310000001" blue="0.0" alpha="0.34999999999999998" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                                    </textField>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="ДТП за год" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="SoA-0k-pwU">
+                                        <rect key="frame" x="11" y="232" width="144" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" name="TrebuchetMS" family="Trebuchet MS" pointSize="15"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Страховая Компания" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="1BG-jY-X5K">
-                                        <rect key="frame" x="6" y="74" width="149" height="21"/>
+                                        <rect key="frame" x="6" y="63" width="149" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" name="TrebuchetMS" family="Trebuchet MS" pointSize="15"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Rlq-lJ-f3g">
-                                        <rect key="frame" x="122" y="337" width="77" height="37"/>
+                                        <rect key="frame" x="122" y="369" width="77" height="37"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <state key="normal" title="Готово">
@@ -667,6 +651,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
+                                            <action selector="doneAction" destination="mAs-ok-QSJ" eventType="touchUpInside" id="b5b-Th-Dyx"/>
                                             <segue destination="B5v-hK-Ej2" kind="modal" id="z6u-ja-GLn"/>
                                         </connections>
                                     </button>
@@ -680,9 +665,10 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                         <outlet property="autoCategoryField" destination="198-cX-UsO" id="69X-AA-8km"/>
                         <outlet property="autoPowerField" destination="mfT-aq-U62" id="UV4-Vy-c8Q"/>
                         <outlet property="insuranceCompanyField" destination="phW-pG-Cye" id="rZo-AU-LV0"/>
-                        <outlet property="numberOfDtpField" destination="S0V-tt-TZD" id="RLV-NN-atG"/>
+                        <outlet property="numberOfDtpField" destination="LEE-0J-Ryu" id="9WW-26-dbo"/>
                         <outlet property="scrollView" destination="cjx-Gx-z36" id="RvD-n7-Ua2"/>
                         <outlet property="sexField" destination="eBr-DW-JYg" id="g2L-mI-ykC"/>
+                        <outlet property="skillField" destination="S0V-tt-TZD" id="S3Z-xU-9d0"/>
                     </connections>
                 </viewController>
             </objects>
@@ -1024,8 +1010,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <class className="FeedBackViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/FeedBackViewController.h"/>
             <relationships>
-                <relationship kind="action" name="crashPressed:"/>
-                <relationship kind="action" name="crittercismPressed:"/>
+                <relationship kind="action" name="done:"/>
                 <relationship kind="action" name="rightItem:"/>
                 <relationship kind="outlet" name="navItem" candidateClass="UINavigationItem"/>
                 <relationship kind="outlet" name="rightItem" candidateClass="UIBarButtonItem"/>
@@ -1039,6 +1024,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <class className="IterviewViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/IterviewViewController.h"/>
             <relationships>
+                <relationship kind="action" name="doneAction"/>
                 <relationship kind="outlet" name="ageField" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="autoCategoryField" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="autoPowerField" candidateClass="UITextField"/>
@@ -1046,6 +1032,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                 <relationship kind="outlet" name="numberOfDtpField" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
                 <relationship kind="outlet" name="sexField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="skillField" candidateClass="UITextField"/>
             </relationships>
         </class>
         <class className="MapHelpViewController" superclassName="UIViewController">

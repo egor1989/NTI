@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ServerCommunication.h"
 
 @interface IterviewViewController : UIViewController <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource> 
 {
@@ -22,6 +23,7 @@
     IBOutlet UITextField *insuranceCompanyField;
     IBOutlet UITextField *sexField;
     IBOutlet UITextField *ageField;
+    IBOutlet UITextField *skillField;
     IBOutlet UITextField *numberOfDtpField;
     IBOutlet UITextField *autoCategoryField;
     IBOutlet UITextField *autoPowerField;
@@ -31,6 +33,10 @@
     NSArray *sexPickerOptions;
     NSArray *autoCategoryPickerOptions;
     NSArray *autoPowerPickerOptions;
+    
+    ServerCommunication *serverCommunication;
 }
+
+- (IBAction)doneAction;
 
 @end

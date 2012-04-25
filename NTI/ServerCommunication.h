@@ -40,6 +40,9 @@
 - (void)getRouteFromServer:(float)timeInterval;
 - (NSString *)getAllStatistic;
 - (NSString *)getLastStatistic;
+- (void)sendFeedBackToServerWithTitle:(NSString*)title andBody: (NSString*)body;
+- (void)sendInterviewToServerWithData:(NSDictionary*)data;
+
 @property (nonatomic) BOOL errors;
 
 @end

@@ -20,7 +20,9 @@ const int autoPowerPickerTag = 4;
 {
     [super viewDidLoad];
     
-    scrollView.contentSize = CGSizeMake(320, 545);
+    serverCommunication = [[ServerCommunication alloc]init];
+    
+    scrollView.contentSize = CGSizeMake(320, 600);
     
     //insuranceCompanyPicker
     insuranceCompanyPicker = [[UIPickerView alloc] initWithFrame:CGRectZero];
@@ -167,6 +169,19 @@ const int autoPowerPickerTag = 4;
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (IBAction) doneAction{
+    NSDictionary *interviewDataDictionary = [[NSDictionary alloc] initWithObjectsAndKeys: 
+                                                                    insuranceCompanyField.text, @"company", 
+                                                                    ageField.text, @"age",
+                                                                    sexField.text, @"sex", 
+                                                                    skillField.text, @"skill",
+                                                                    numberOfDtpField.text, @"dtp", 
+                                                                    autoCategoryField.text, @"autotype",
+                                                                    autoPowerField.text, @"autopower",         
+                                                                    nil]; 
+    [serverCommunication sendInterviewToServerWithData:interviewDataDictionary];
 }
 
 @end
