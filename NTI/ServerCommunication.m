@@ -43,15 +43,33 @@
      NSDictionary * headers = [NSHTTPCookie requestHeaderFieldsWithCookies:fcookies]; //?
      
      [request setAllHTTPHeaderFields:headers];
+    
+    NSError *requestError = nil;
+    NSURLResponse *response = nil;
+    NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: &response error: &requestError ];
+    
+    if (requestError!=nil) {
+        NSLog(@"%@", requestError);
+        NSLog(@"ERROR!ERROR!ERROR!");
+    }
+    
+    returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
+    NSLog(@"returnData: %@", returnString);
+    [self checkErrors:returnString method:@"sendData"];
+ 
      
-    [NSURLConnection sendAsynchronousRequest:request
-                                       queue:[NSOperationQueue mainQueue]
-                           completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *error) {
-                               returnString = [[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding];
-                               NSLog(@"returnData: %@", returnString);
-                               [self checkErrors:returnString method:@"sendData"];
+ //   NSThread* myThread = [[NSThread alloc] initWithTarget:self
+   //                                              selector:@selector(sendData:)
+   //                                                object:request];
+  //  [myThread start]; 
+  //  [NSURLConnection sendAsynchronousRequest:request
+  //                                     queue:[NSOperationQueue mainQueue]
+  //                         completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *error) {
+  //                             returnString = [[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding];
+  //                             NSLog(@"returnData: %@", returnString);
+  //                             [self checkErrors:returnString method:@"sendData"];
                                // проверка на ошибки при отправке файла // если нет можно очистить БД
-                           }];
+  //                         }];
 
 }
 
@@ -199,11 +217,9 @@
 
 - (NSString *)getAllStatistic{
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSLog(@"cookie = %@", [userDefaults valueForKey:@"cookie"]);
-    NSString *cookie = [userDefaults valueForKey:@"cookie"]; 
-    //  NSString * cookie = [self refreshCookie];
-    //data={\"method\":\getStatistics\"}
+    NSString *cookie = [self refreshCookie]; 
+    NSLog(@"cookie = %@", cookie);
+
     NSString *data = @"data={\"method\":\"getStatistics\"}";//,\"params\":{\"login\":\"",login, @"\",\"password\":\"", password, @"\"}}"];
     NSLog(@"Request: %@", data);
     
@@ -228,16 +244,7 @@
     
     [request setAllHTTPHeaderFields:headers];
     
-    
-   // NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: &response error: &requestError ];
-   // [NSURLConnection sendAsynchronousRequest:request
-   //                                    queue:[NSOperationQueue mainQueue]
-   //                        completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *error) {
-   //                            returnString = [[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding];
-   //                            NSLog(@"returnData: %@", returnString);
-                               //[self checkErrors:returnString];
-                               // провверка на ошибки при получении статистики 
-   //                        }];
+
     NSError *requestError = nil;
     NSURLResponse *response = nil;
     NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: &response error: &requestError ];
@@ -257,11 +264,9 @@
 
 - (NSString *)getLastStatistic{
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSLog(@"cookie = %@", [userDefaults valueForKey:@"cookie"]);
-    NSString *cookie = [userDefaults valueForKey:@"cookie"]; 
-    //  NSString * cookie = [self refreshCookie];
-    //data={\"method\":\getStatistics\"}
+    NSString *cookie = [self refreshCookie]; 
+    NSLog(@"cookie = %@", cookie);
+
     NSString *data = @"data={\"method\":\"getStatistics\",\"params\":{\"last\":\"1\"}}";//,\"params\":{\"login\":\"",login, @"\",\"password\":\"", password, @"\"}}"];
     NSLog(@"Request: %@", data);
     
@@ -480,10 +485,12 @@
                                NSLog(@"returnData: %@", returnString);
                                [[NSNotificationCenter defaultCenter]	postNotificationName:	@"routePointsReceived" object:  returnString];
 
-                               //написсать свой checkError
+                               //написать свой checkError
                            }];
     
 }
+
+
 
 
 

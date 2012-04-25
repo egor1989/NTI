@@ -39,7 +39,7 @@
 
     lastLoc = [[CLLocation alloc] init];
     allDistance = 0;
-    canWriteToFile = NO;//?
+    canWriteToFile = YES;//?
     [recordAction startOfRecord];
     
     [self checkSpeedTimer];
@@ -286,6 +286,17 @@
 - (void)stopMotionDetect {
     NSLog(@"stopMotionDetect");
     [motionManager stopDeviceMotionUpdates];
+}
+
+- (void)stopRecord{
+    canWriteToFile = NO;
+    [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
+    [self stopGPSDetect];
+    [self stopMotionDetect];
+}
+- (void)startRecord{
+    [self startMotionDetect];
+    [self checkSpeedTimer];
 }
 
 

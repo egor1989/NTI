@@ -40,6 +40,7 @@
 - (void)getRouteFromServer:(float)timeInterval;
 - (NSString *)getAllStatistic;
 - (NSString *)getLastStatistic;
+
 @property (nonatomic) BOOL errors;
 
 @end

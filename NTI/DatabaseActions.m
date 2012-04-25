@@ -68,9 +68,7 @@ static sqlite3_stmt *readStmt = nil;
 
 - (BOOL)addArray: (NSMutableArray *)data{
     
-    //NSLog(@"data=%@", data);
-    
-        const char *sql = "INSERT INTO log(type, time, accX, accY, compass, direction, distance, latitude, longitude, speed) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    const char *sql = "INSERT INTO log(type, time, accX, accY, compass, direction, distance, latitude, longitude, speed) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     if(addStmt == nil) {
         if(sqlite3_prepare_v2(database, sql, -1, &addStmt, NULL) != SQLITE_OK){
             NSAssert1(0, @"Error while creating add statement. '%s'", sqlite3_errmsg(database));
@@ -160,7 +158,7 @@ static sqlite3_stmt *readStmt = nil;
 }
 
 
-- (void) clearDatabase{
++ (void) clearDatabase{
     const char *sql = "delete from log";
     if(sqlite3_prepare_v2(database, sql, -1, &deleteStmt, NULL) != SQLITE_OK)
         NSAssert1(0, @"Error while creating delete statement. '%s'", sqlite3_errmsg(database));
@@ -176,19 +174,32 @@ static sqlite3_stmt *readStmt = nil;
 }
 
 - (void) sendDatabase{  
+    NSThread* myThread = [[NSThread alloc] initWithTarget:self
+                                        selector:@selector(sendDatabaseTr)
+                                        object:nil];
+    
+    [myThread start]; 
+                          
+
+}
+
+
+
+- (void) sendDatabaseTr{
+    
     NSArray *keys = [NSArray arrayWithObjects:@"timestamp", @"type", @"acc", @"gps", nil];
     dataArray = [[NSMutableArray alloc]init];
     
     
     if(sqlite3_open([databasePath UTF8String], &database) == SQLITE_OK) {
-
-       // NSLog(@"%i", [userDefaults integerForKey:@"pk"]);
+        
+        // NSLog(@"%i", [userDefaults integerForKey:@"pk"]);
         
         for (NSInteger i=1;i<=([userDefaults integerForKey:@"pk"]/maxEntries)+1;i++) {
-
+            
             const char * sql = [[NSString stringWithFormat:@"SELECT * FROM log WHERE rowid BETWEEN %i AND %i", (i-1)*maxEntries, i*maxEntries] UTF8String];
-           
-            NSLog(@"%s", sql);
+            
+            // NSLog(@"%s", sql);
             
             if(sqlite3_prepare_v2(database, sql, -1, &readStmt, NULL) == SQLITE_OK){
                 
@@ -202,41 +213,40 @@ static sqlite3_stmt *readStmt = nil;
                                      acc, gps, nil];
                     
                     NSDictionary *record = [NSDictionary dictionaryWithObjects:objs forKeys:keys];
-                    
-                    
-                    //  record = [[NSMutableDictionary alloc] init];
-                    //  [record setObject: [NSString stringWithFormat:@"%s", sqlite3_column_text(readStmt, 0)] forKey:@"type"];
-                    //  [record setObject: [NSString stringWithFormat:@"%.0f", sqlite3_column_double(readStmt, 1)] forKey:@"time"];
-                    //  [record setObject: [NSString stringWithFormat:@"%f", sqlite3_column_double(readStmt, 2)] forKey:@"accX"];
-                    //  [record setObject: [NSString stringWithFormat:@"%f", sqlite3_column_double(readStmt, 3)] forKey:@"accY"];
-                    //  [record setObject: [NSString stringWithFormat:@"%.0f", sqlite3_column_double(readStmt, 4)] forKey:@"compass"];
-                    //  [record setObject: [NSString stringWithFormat:@"%.1f", sqlite3_column_double(readStmt, 5)] forKey:@"direction"];
-                    //  [record setObject: [NSString stringWithFormat:@"%.2f", sqlite3_column_double(readStmt, 6)] forKey:@"distance"];
-                    // [record setObject: [NSString stringWithFormat:@"%f", sqlite3_column_double(readStmt, 7)] forKey:@"latitude"];
-                    //   [record setObject: [NSString stringWithFormat:@"%f", sqlite3_column_double(readStmt, 8)] forKey:@"longitude"];
-                    // [record setObject: [NSString stringWithFormat:@"%.1f", sqlite3_column_double(readStmt, 9)] forKey:@"speed"];
-                    
+
                     [dataArray addObject:record];
                     
-
+                    
                 }
             } else NSLog(@"indalid command");
+            
             [self convertAndSend];
             dataArray = [[NSMutableArray alloc]init];
-            
         }
-     }
+    }
     
     sqlite3_finalize(readStmt);
-    //if (![serverCommunication errors]) [self clearDatabase];//попадает сюда быстрее обработчика ошибок
-    sqlite3_close(database);
+    if (![serverCommunication errors]){ 
+       
+        [DatabaseActions clearDatabase];
+    }
+     [serverCommunication showResult];
+     sqlite3_close(database);
+    [myAppDelegate startRecord];
 }
 
 - (void) convertAndSend{
     NSInteger size = [dataArray count];
     NSLog(@"%i",size);
+
   //  NSString *CSV = [csvConverter arrayToCSVString:dataArray];
     NSString *JSON = [jsonConvert convert:dataArray];
+    
+//    NSThread* myThread = [[NSThread alloc] initWithTarget:self
+//                                                 selector:@selector(sendArray:)
+//                                                   object:JSON];
+//    [myThread start]; 
+    
     [serverCommunication uploadData: JSON]; 
 
     
@@ -262,6 +272,8 @@ static sqlite3_stmt *readStmt = nil;
  //   else return NO;
 }
 
+
+
 - (BOOL) deleteRowsFrom: (NSInteger)start To: (NSInteger)end{
     
     NSLog(@"from %i to %i", start, end);
@@ -279,6 +291,7 @@ static sqlite3_stmt *readStmt = nil;
     sqlite3_reset(deleteStmt); 
     return YES;
 }
+
 
 + (void) finalizeStatements {
 	
