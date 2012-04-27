@@ -366,11 +366,7 @@
                                 <rect key="frame" x="0.0" y="244" width="320" height="216"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <date key="date" timeIntervalSinceReferenceDate="353164292.84771502">
-<<<<<<< HEAD
                                     <!--2012-03-11 13:11:32 +0000-->
-=======
-                                    <!--2012-03-11 15:11:32 +0200-->
->>>>>>> 98b0d29b97ed3037101340a4cd76fed37c0c9fa9
                                 </date>
                                 <locale key="locale" localeIdentifier="en_US"/>
                                 <timeZone key="timeZone" name="America/Los_Angeles">
