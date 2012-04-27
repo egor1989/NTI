@@ -8,6 +8,7 @@
 
 #import "Crittercism.h"
 #import <UIKit/UIKit.h>
+#import "ServerCommunication.h"
 
 @interface FeedBackViewController : UIViewController <UITextViewDelegate, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource> 
 {
@@ -17,12 +18,13 @@
     IBOutlet UIBarButtonItem *rightItem;
     
     NSArray *ThemesOptions;
+    
+    ServerCommunication *serverCommunication;
 }
 @property (nonatomic, retain) UITextView *textView;
 
 - (IBAction)rightItem:(id)sender;
--(IBAction) crittercismPressed:(id) sender;
--(IBAction) crashPressed:(id) sender;
+-(IBAction) done:(id) sender;
 
 - (void)doneAction;
 @end

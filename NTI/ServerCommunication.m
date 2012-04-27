@@ -514,12 +514,97 @@
                                returnString = [[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding];
                                NSLog(@"returnData: %@", returnString);
                                [[NSNotificationCenter defaultCenter]	postNotificationName:	@"routePointsReceived" object:  returnString];
-
-                               //написать свой checkError
+                               
+                               //написсать свой checkError
                            }];
     
 }
 
+- (void)sendFeedBackToServerWithTitle:(NSString*)title andBody: (NSString*)body{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSLog(@"cookie = %@", [userDefaults valueForKey:@"cookie"]);
+    NSString *cookie = [userDefaults valueForKey:@"cookie"];
+    
+    NSString* dataString = [NSString stringWithFormat:@"data={\"method\":\"feedBack\",\"params\":{\"title\":\"%@\",\"body\":\"%@\"", title, body];
+    dataString=[dataString stringByAppendingString:@"}}"];
+    
+    NSLog(@"Request: %@", dataString);
+    
+    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                  timeoutInterval:60.0];
+    
+    requestData = [NSData dataWithBytes:[dataString UTF8String] length:[dataString length]];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody: requestData];    
+    
+    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                @"http://nti.goodroads.ru/api/", NSHTTPCookieDomain,
+                                @"NTIKeys", NSHTTPCookieName,
+                                cookie, NSHTTPCookieValue,
+                                @"/", NSHTTPCookiePath,
+                                nil];    
+    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:[NSHTTPCookie cookieWithProperties:properties]];
+    NSHTTPCookie *fcookie = [NSHTTPCookie cookieWithProperties:properties]; //?
+    NSArray* fcookies = [NSArray arrayWithObjects: fcookie, nil];   //?
+    NSDictionary *headers = [NSHTTPCookie requestHeaderFieldsWithCookies:fcookies]; //?
+    
+    [request setAllHTTPHeaderFields:headers];
+    
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *error) {
+                               returnString = [[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding];
+                               NSLog(@"returnData: %@", returnString);
+                               [[NSNotificationCenter defaultCenter]	postNotificationName:	@"routePointsReceived" object:  returnString];
+                               
+                           }];
+    
+}
+
+- (void)sendInterviewToServerWithData:(NSDictionary*)data{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSLog(@"cookie = %@", [userDefaults valueForKey:@"cookie"]);
+    NSString *cookie = [userDefaults valueForKey:@"cookie"];
+    
+    NSDictionary *allDataDict = [[NSDictionary alloc]initWithObjectsAndKeys:
+                                @"addQuest", @"method",
+                                data, @"params", 
+                                nil];
+    NSString *dataSting = [allDataDict JSONRepresentation];
+//    NSString *finalDataString = @"data={\"method\":\"addQuest\",\"params\":{\"age\":\"541\",\"autotype\":\"A\",\"skill\":\" \",\"dtp\":\"552\",\"company\":\"РосГосСтрах\",\"sex\":\"Мужской\",\"autopower\":\"80-100 л.с.\"}}";
+    NSString *finalDataString = [@"data=" stringByAppendingString: dataSting];
+    NSLog(@"Request: %@", finalDataString);
+    
+    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                  timeoutInterval:60.0];
+    requestData = [NSData dataWithBytes:[finalDataString cStringUsingEncoding:NSUTF8StringEncoding] length:[finalDataString lengthOfBytesUsingEncoding:NSUTF8StringEncoding]];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody: requestData];    
+    
+    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                @"http://nti.goodroads.ru/api/", NSHTTPCookieDomain,
+                                @"NTIKeys", NSHTTPCookieName,
+                                cookie, NSHTTPCookieValue,
+                                @"/", NSHTTPCookiePath,
+                                nil];    
+    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:[NSHTTPCookie cookieWithProperties:properties]];
+    NSHTTPCookie *fcookie = [NSHTTPCookie cookieWithProperties:properties]; //?
+    NSArray* fcookies = [NSArray arrayWithObjects: fcookie, nil];   //?
+    NSDictionary *headers = [NSHTTPCookie requestHeaderFieldsWithCookies:fcookies]; //?
+    
+    [request setAllHTTPHeaderFields:headers];
+    
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *error) {
+                               returnString = [[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding];
+                               NSLog(@"returnData: %@", returnString);
+                               [[NSNotificationCenter defaultCenter]	postNotificationName:	@"routePointsReceived" object:  returnString];
+                               
+                               //написсать свой checkError
+                           }];
+    
+}
 
 
 
