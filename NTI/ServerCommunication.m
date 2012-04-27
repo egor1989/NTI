@@ -490,7 +490,7 @@
     
     request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
                                   timeoutInterval:60.0];
-    
+   // NSLog(@"request = %@", request);
     requestData = [NSData dataWithBytes:[timeString UTF8String] length:[timeString length]];
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody: requestData];    
