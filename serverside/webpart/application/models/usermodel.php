@@ -45,8 +45,9 @@
 		//Загружает всех пользователей системы 
 		// Нужно для администратора
 		function load_all_users(){
+
+				$query = $this->db->query("SELECT* from NTIUsers Where Rights!=3");
 			
-			$query = $this->db->query("SELECT* from NTIUsers Where Rights!=3");
 			if($query->num_rows()>0){
 			
 				return $query->result_array();
@@ -56,7 +57,42 @@
 			}
 		}
 		
+		function load_all_simple_users($from,$offset){
+			
+			$from=mysql_real_escape_string($from);
+			$offset= mysql_real_escape_string($offset);
+			
+			$query = $this->db->query("SELECT* from NTIUsers Where (Rights=1 or Rights=0) order by id limit $from offset $offset ");
+			
+			if($query->num_rows()>0)
+				return $query->result_array();
+			else
+				return false;	
+		}
+		function load_all_ck_users($from,$offset){
+			$from=mysql_real_escape_string($from);
+			$offset= mysql_real_escape_string($offset);
+			
+			$query = $this->db->query("SELECT* from NTIUsers Where Rights=2 order by id limit $from offset $offset ");
+			if($query->num_rows()>0)
+				return $query->result_array();
+			else
+				return false;	
+		}
+				function get_ck_count(){
+			$this->db->where("Rights",2);
+			$this->db->from('NTIUsers');
+			return $this->db->count_all_results();
+		}
+
 		
+			function get_users_count(){
+				$where = "Rights=0 OR Rights=1";
+				$this->db->where($where,NULL,FALSE);
+				$this->db->from('NTIUsers');
+				return $this->db->count_all_results();
+		}
+
 		
 		function get_all_unregdata()
 		{
