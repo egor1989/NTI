@@ -555,7 +555,7 @@
                            completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *error) {
                                returnString = [[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding];
                                NSLog(@"returnData: %@", returnString);
-                               [[NSNotificationCenter defaultCenter]	postNotificationName:	@"routePointsReceived" object:  returnString];
+                               [[NSNotificationCenter defaultCenter]	postNotificationName:	@"feedBackSend" object:  returnString];
                                
                            }];
     
@@ -599,9 +599,6 @@
                            completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *error) {
                                returnString = [[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding];
                                NSLog(@"returnData: %@", returnString);
-                               [[NSNotificationCenter defaultCenter]	postNotificationName:	@"routePointsReceived" object:  returnString];
-                               
-                               //написсать свой checkError
                            }];
     
 }

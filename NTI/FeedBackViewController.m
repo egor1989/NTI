@@ -30,10 +30,46 @@
                                   @"Finland", @"France", @"Greece", @"Ireland", @"Italy", @"Norway", @"Portugal",
                                   @"Poland", @"Slovenia", @"Sweden", nil];
     ThemesOptions = [ThemesOptionsUnsorted sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    
+    [[NSNotificationCenter defaultCenter]	
+     addObserver: self
+     selector: @selector(feedBackSendAction:)
+     name: @"feedBackSend"
+     object:nil]; 
 }
-// called after the view controller's view is released and set to nil.
-// For example, a memory warning which causes the view to be purged. Not invoked as a result of -dealloc.
-// So release any properties that are loaded in viewDidLoad or can be recreated lazily.
+
+-(void) feedBackWaitingState{
+    waintingIndicator.hidden = NO;
+    [waintingIndicator startAnimating];
+    grayView.hidden = NO;
+}
+
+-(void) feedBackSendAction: (NSNotification*) TheNotice{
+    SBJsonParser *jsonParser = [SBJsonParser new];
+    NSArray *answerArray = [[NSArray alloc] init];
+    int errorCode;
+    
+    answerArray = [jsonParser objectWithString:[TheNotice object] error:NULL];
+    errorCode = [[[answerArray valueForKey:@"error"] valueForKey:@"code"] intValue];
+    
+    [waintingIndicator stopAnimating];
+    grayView.hidden = YES;
+    
+    if (errorCode == 0) {
+        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Сообщение отправлено" message:@"Ваш отзыв отправлен. Спасибо!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        textView.text = @"";
+        textField.text = @"";
+        [alertView show];
+    }
+    else if (errorCode == 33){
+        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Ошибка авторизации" message:@"Пожалуйста перезайдите под своим логином. Это можно сделать в окне статистики." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+    }
+    else if (errorCode == 51){
+        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Слишком короткое сообщение" message:@"Пожалуйста, оставьте более развёрнутый отзыв!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+    }
+}
 
 -(void)viewDidUnload
 {
@@ -68,9 +104,10 @@
 }
 
 - (IBAction)rightItem:(id)sender{
-    [serverCommunication sendFeedBackToServerWithTitle:textField.text andBody:textView.text];
-    textView.text = @"";
-    textField.text = @"";
+    if ([ServerCommunication checkInternetConnection]){
+        [serverCommunication sendFeedBackToServerWithTitle:textField.text andBody:textView.text];
+        [self feedBackWaitingState];
+    }
     [self doneAction];
     
     //сделать alert сообщение отправлено

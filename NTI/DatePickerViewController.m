@@ -22,9 +22,9 @@
 {
     [super viewDidLoad];
     NSDate *today = [NSDate date];
-    NSDate *twoDayBefore = [today dateByAddingTimeInterval: -432000];
+    NSDate *minDate = [today dateByAddingTimeInterval: -432000];
     NSDate *maxDate = [today dateByAddingTimeInterval: -900];
-    datePicker.minimumDate = twoDayBefore;
+    datePicker.minimumDate = minDate;
     datePicker.maximumDate = maxDate;
 }
 

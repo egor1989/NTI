@@ -63,10 +63,10 @@ const int autoPowerPickerTag = 4;
     
     //содержание пикеров
     //    ThemesOptions = [ThemesOptionsUnsorted sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-    insuranceCompanyPickerOptions   = [NSArray arrayWithObjects:@"РосГосСтрах", @"Intouch", nil];
+    insuranceCompanyPickerOptions   = [NSArray arrayWithObjects:@"Росгосстрах", @"СОГАЗ", @"Ингосстрах", @"РЕСО-Гарантия", @"Альфастрахование", @"ВСК", @"Уралсиб", @"Согласие", @"РОСНО", @"МСК", @"Ренессанс", @"КИТ-Финанс", @"Оранта", @"Цюрих", @"МАКС", @"Югория", @"ВТБ", nil];
     sexPickerOptions                = [NSArray arrayWithObjects:@"Мужской", @"Женский", nil];
     autoCategoryPickerOptions       = [NSArray arrayWithObjects:@"A", @"B", @"C", @"D", @"E", nil];
-    autoPowerPickerOptions          = [NSArray arrayWithObjects:@"80-100 л.с.", @"100-120 л.с.", @"120-140 л.с.", nil];
+    autoPowerPickerOptions          = [NSArray arrayWithObjects:@"До 50 лошадиных сил включительно", @"Больше 50 и до 70 включительно", @"Выше 100 и до 120 включительно", @"Свыше 120 и до 150 включительно", @"Мощность выше 150 лошадиных сил", nil];
     
     
     [[NSNotificationCenter defaultCenter]	
