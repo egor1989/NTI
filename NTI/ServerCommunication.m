@@ -481,10 +481,15 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSLog(@"cookie = %@", [userDefaults valueForKey:@"cookie"]);
     NSString *cookie = [userDefaults valueForKey:@"cookie"];
-    
-    NSString *timeString = [NSString stringWithFormat:@"%.0f",timeInterval];
-    timeString=[@"data={\"method\":\"getPath\",\"params\":{\"time\":" stringByAppendingString:timeString];
-    timeString=[timeString stringByAppendingString:@"}}"];
+    NSString *timeString;
+    if (timeInterval == 0) {
+         timeString = @"data={\"method\":\"getPath\"}";
+    }
+    else{
+        timeString = [NSString stringWithFormat:@"%.0f",timeInterval];
+        timeString=[@"data={\"method\":\"getPath\",\"params\":{\"time\":" stringByAppendingString:timeString];
+        timeString=[timeString stringByAppendingString:@"}}"];
+    }
     
     NSLog(@"Request: %@", timeString);
     
@@ -514,8 +519,6 @@
                                returnString = [[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding];
                                NSLog(@"returnData: %@", returnString);
                                [[NSNotificationCenter defaultCenter]	postNotificationName:	@"routePointsReceived" object:  returnString];
-                               
-                               //написсать свой checkError
                            }];
     
 }

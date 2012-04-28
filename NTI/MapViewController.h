@@ -36,6 +36,7 @@
     
     MKMapPoint northEastPoint; 
 	MKMapPoint southWestPoint; 
+//    bool isUserLoadRoute
 }
 
 @property (nonatomic, retain) IBOutlet MKMapView* mapView;

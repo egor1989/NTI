@@ -18,6 +18,7 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
+//    isUserLoadRoute = NO;
     
     [_mapView setDelegate:self];
     serverCommunication = [[ServerCommunication alloc]init ];
@@ -33,15 +34,20 @@
      object: nil];
     
     isFirstRect = YES;
+    
+    
+    [serverCommunication getRouteFromServer:0];
 	
 }
 
 -(void) mapWaitingState: (NSNotification*) TheNotice{
-    waintingIndicator.hidden = NO;
-    [waintingIndicator startAnimating];
-    grayView.hidden = NO;
-    NSLog(@"getRoute");
-    [serverCommunication getRouteFromServer:[[TheNotice object] timeIntervalSince1970]];
+    if ([ServerCommunication checkInternetConnection]){
+        waintingIndicator.hidden = NO;
+        [waintingIndicator startAnimating];
+        grayView.hidden = NO;
+        NSLog(@"getRoute");
+        [serverCommunication getRouteFromServer:[[TheNotice object] timeIntervalSince1970]];
+    }
 }
 
 -(void) mapDrawRoute: (NSNotification*) TheNotice{
@@ -146,7 +152,7 @@
 }
 
 -(MKPolyline*) normalPointsDraw:(NSArray*) normalPointsArray1{
-    
+//    isUserLoadRoute = YES;
 	MKMapPoint* pointArr = malloc(sizeof(CLLocationCoordinate2D) * normalPointsArray1.count);
     
 	for(int idx = 0; idx < normalPointsArray1.count; idx++)
