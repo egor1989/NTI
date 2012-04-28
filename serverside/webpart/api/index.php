@@ -84,8 +84,8 @@ switch(json_last_error())
     }
     
    
-if(!isset($json['method'])){ $errortype=array('info'=>"No difintion state set, or function is incorrect",'code'=>  1);
-$res=array('result'=>$data,'error'=>  $errortype);echo json_encode($res);exit();}
+if(!isset($json['method'])){ $errortype=array('info'=>"No difintion state set, or function is incorrect",'code'=>  NO_METHOD_SET_CODE);
+$res=array('result'=>-1,'error'=>  $errortype);echo json_encode($res);exit();}
 
 if($json['method']=="NTIauth"){NTIauth($json['params']);}//-
 else if($json['method']=="addNTIFile"){addNTIFile($json['params']);}//-
@@ -957,23 +957,40 @@ else
 
 function getPath($param)
 {
+	
 	$time=$param['time'];
 	$till=$param['till'];
+	$day=$param['day'];
+	
 	$UID=NTI_Cookie_check();
 	if($UID>0)
 	{
-	if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
-	if(isset($time))
-	{
-		$time=mysql_real_escape_string($time);
-		if(!isset($param['till'])){
-		$query = "SELECT * FROM NTIEntry where utimestamp>=$time and UID=$UID and (lat!=0 or lng!=0) and utimestamp!=0 grouped by utimestamp order by utimestamp";
-	}else
-	{
-		$time=mysql_real_escape_string($time);
-	$till=mysql_real_escape_string($till);
-			$query = "SELECT * FROM NTIEntry where utimestamp>=$time and utimestamp<=$till and UID=$UID and (lat!=0 or lng!=0) and utimestamp!=0 grouped by utimestamp order by utimestamp";
-	}
+		$last=0;//Отвечает за то , чтобы выбрать последнюю поезку
+		if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
+		if(isset($param['time']) && !isset($param['till']) and $param['time']>0)
+		{
+		
+		$start=strtotime(date("D M j 00:00:00 T Y",$time));
+		$end= strtotime(date("D M j 23:59:59 T Y",$time));
+			$query = "select * from (SELECT * FROM NTIEntry where utimestamp<=$end and utimestamp>=$start and UID=$UID and (lat!=0 or lng!=0) and utimestamp!=0 group by utimestamp) as st group by `lat`,`lng` order by utimestamp";
+		}
+		else if(isset($param['time']) && isset($param['till'])  and $param['time']>0  and $param['till']>0)
+		{
+				$time=mysql_real_escape_string($time);
+				$till=mysql_real_escape_string($till);
+				$query = "SELECT * FROM NTIEntry where utimestamp>=$time and utimestamp<=$till and UID=$UID and (lat!=0 or lng!=0) and utimestamp!=0 group by utimestamp order by utimestamp";
+		}
+		else if(isset($param['day']) && $param['day']>0)
+		{
+				$day=time()-86400;//Все даты за день до этого 
+				$query = "SELECT * FROM NTIEntry where utimestamp>=$day and UID=$UID and (lat!=0 or lng!=0) and utimestamp!=0 group by utimestamp order by utimestamp";
+		}
+		else
+		{
+				//иначе будем возвращать последнюю поездку
+				$query = "Select * from (SELECT * FROM NTIEntry where UID=$UID and (lat!=0 or lng!=0) and utimestamp!=0 group by utimestamp) as st group by `lat`,`lng` order by utimestamp";
+				$last=1;
+		}
 		$result = mysql_query($query);
 		$c = 0;
 		$n = 0;
@@ -988,6 +1005,8 @@ function getPath($param)
 			$n++;
 		}
 		//Начинаем группировку
+		if($last==0)
+		{
 		$k=0;
 		$m=0;
 			$drivingScore = 0;
@@ -1062,14 +1081,6 @@ function getPath($param)
 			}
 
 		
-	}
-	else
-	{
-		$errortype=array('info'=>"No time set",'code'=>  31);
-		$res=array('result'=>-1,'error'=> $errortype);
-		echo json_encode($res);	
-		exit();
-	}		
 		$vg[1]=42;
 		$k=0;
 		$R = 6371; // km
@@ -1081,9 +1092,7 @@ function getPath($param)
 				$ret_arr[$k]['lat']=$encData[$i]['lat'];
 				$ret_arr[$k]['lng']=$encData[$i]['lng'];
 				$ret_arr[$k]['type']=$vg[$i];
-				$ret_arr[$k]['waht']=$accel[$i];
-				
-				
+				$ret_arr[$k]['waht']=$accel[$i];			
 				$k++;
 		}
 		
@@ -1097,12 +1106,195 @@ function getPath($param)
 		}	
 		else
 		{
+			$errortype=array('info'=>"There is no data with such time($end $start)",'code'=>  32);
+			$res=array('result'=>-1,'error'=> $errortype);
+			echo json_encode($res);	
+			exit();
+
+		}
+	}
+	else
+	{
+		if($n<=1)
+		{
+			$errortype=array('info'=>"There is no data with such time",'code'=>  32);
+			$res=array('result'=>-1,'error'=> $errortype);
+			echo json_encode($res);	
+			exit();
+		}
+
+		//Если нудно взять только последнюю поездку
+		//Для начала берем группировку
+		$R = 6371; // km
+		//Если дданные есть:
+		if (mysql_num_rows($result)>0) {
+			$k = 0;
+			$m = 0;
+			$grouped[$k][$m]=$encData[0];
+			$n = count($encData)-1;
+			for ($i=1;$i<$n-1;$i++) {
+				if (($encData[$i]['utimestamp'] - $grouped[$k][$m]['utimestamp'] < 300) && 
+						((acos(sin($encData[$i]['lat'])*sin($grouped[$k][$m]['lat']) + cos($encData[$i]['lat'])*cos($grouped[$k][$m]['lat']) *  cos($grouped[$k][$m]['lng']-$encData[$i]['lng'])) * $R)/($encData[$i]['utimestamp'] - $grouped[$k][$m]['utimestamp']) < 180))
+					{
+						$m++;
+						$grouped[$k][$m] = $encData[$i];
+					}
+					else
+					{
+      						$k++;
+							$m = 0; 
+							$grouped[$k][$m] = $encData[$i];
+					}
+				
+			}
+			
+			
+			
+				//Теперь фильтруем данные 
+				$w = 0;
+				$n=0;
+				for($i=0;$i<count($grouped);$i++) {
+					$w=0;
+					for ($v=1; $v<count($grouped[$i]); $v++) {
+						if ($grouped[$i][$v]['lng'] != $grouped[$i][$v-1]['lng'] ) {
+							$unfilteredData[$n][$w] = $grouped[$i][$v-1];
+							$w++;
+						}
+					}
+					$n++;
+				}
+				unset($grouped);
+				$v=0;
+				for($i=0;$i<$n;$i++)
+				{
+					if(isset($unfilteredData[$i]))
+					if(count($unfilteredData[$i])>10)
+					{
+						if(($unfilteredData[$i][count($unfilteredData[$i])-1]['distance']-$unfilteredData[$i][0]['distance'])>0.1)
+						{
+							$notneed=0;
+							for($g=0;$g<count($unfilteredData[$i]);$g++)//if($unfilteredData[$i][$g]['speed']==0)$notneed++;
+							if($notneed*2<count($unfilteredData[$i]))
+							{
+								$grouped[$v]=$unfilteredData[$i];
+								$v++;
+							}
+						}
+					}
+				}
+			
+			
+			//Теперь берем только последнюю поездку
+			$grouped=array_reverse($grouped);
+			$z=count($grouped);
+			if ($z >= 2)for ($i=1;$i<$z;$i++)unset($grouped[$i]);
+			unset($encData);
+			$encData=$grouped[0];
+			$k=0;
+			$m=0;
+			$drivingScore = 0;
+			$coef1 = 0.1;
+			$coef2 = 0.2;
+			$coef3 = 0.6;
+			$speedType = 0;
+			$deltaSpeed=0;
+			$acc = 0;
+			$j=count($encData);
+			for ($i = 1; $i < $j; $i++)
+			{
+				$typeTurn[0] = 'normal point';
+				$typeAcc[0] = 'normal point';
+				$sevTurn = 0;
+				$sevAcc = 0;
+				$sevSpeed = 0;
+				$speed = $encData[$i]['speed'];	
+				$deltaTime = ($encData[$i]['utimestamp'] - $encData[$i-1]['utimestamp']);
+				if ( ($encData[$i]['lng']-$encData[$i-1]['lng']) != 0  )
+				{
+					$turn[$i] = atan(($encData[$i]['lat']-$encData[$i-1]['lat'])/($encData[$i]['lng']-$encData[$i-1]['lng']));
+					$turn[0] = 0;
+					$deltaTurn = $turn[$i] - $turn[$i-1];
+					$wAcc = abs($deltaTurn/$deltaTime);
+					$radius = $speed/$wAcc;
+					
+				}
+				else 	
+				{
+					$sevTurn[$i] = 0;
+					$wAcc = 0;
+					$radius = 0;
+				}
+				$timeSum = 0;
+				$sumSpeed = 0;
+
+	if ($deltaTime!=0){
+		$deltaSpeed = $speed - $encData[$i-1]['speed'];
+		$accel[$i] = $deltaSpeed/$deltaTime;
+		if ($accel[$i]<-7.5) {
+		  $sevAcc = -3;
+		  $brake3++;
+		} else if ($accel[$i]<-6){
+		  $sevAcc = -2;
+		  $brake2++;
+		} else if ($accel[$i]<-4.5){
+		  $sevAcc = -1;
+		  $brake1++;
+		} else if ($accel[$i]>5){
+		  $sevAcc = 3;
+		  $acc3++;
+		} else if ($accel[$i]>4){
+		  $sevAcc = 2;
+		  $acc2++;
+		} else if ($accel[$i]>3.5){
+		  $sevAcc = 1;
+		  $acc1++;
+		} else {
+		  $sevAcc = 0;
+		}
+	}
+		$vg[$i]=0;
+		$vg[$i]=$sevAcc;
+			}
+
+		
+		$vg[1]=42;
+		$k=0;
+		$R = 6371; // km
+		for ($i = 1; $i < $j; $i++)
+		{
+				
+				$d = acos(sin($encData[$i]['lat'])*sin($encData[$i-1]['lat']) + cos($encData[$i]['lat'])*cos($encData[$i-1]['lat']) *  cos($encData[$i-1]['lng']-$encData[$i]['lng'])) * $R;
+				if(($encData[$i]['utimestamp']-$encData[$i-1]['utimestamp']>300) || (($d)/($encData[$i]['utimestamp']-$encData[$i-1]['utimestamp']))>40)$vg[$i]=42;			
+				$ret_arr[$k]['lat']=$encData[$i]['lat'];
+				$ret_arr[$k]['lng']=$encData[$i]['lng'];
+				$ret_arr[$k]['type']=$vg[$i];
+				$ret_arr[$k]['waht']=$accel[$i];			
+				$k++;
+		}
+		
+		if($k!=0)
+		{
+		
+			$errortype=array('info'=>$k,'code'=>  0);
+			$res=array('result'=>$ret_arr,'error'=> $errortype);
+			echo json_encode($res);	
+			exit();
+		}	
+		else
+		{
 			$errortype=array('info'=>"There is no data with such time",'code'=>  32);
 			$res=array('result'=>-1,'error'=> $errortype);
 			echo json_encode($res);	
 			exit();
 
 		}
+		
+		
+		
+		
+			}
+	}
+
 	}
 	else
 	{
@@ -1122,7 +1314,7 @@ function feedBack($param)
 	if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
 	$title=mysql_real_escape_string($title);
 	$body=mysql_real_escape_string($body);
-	if(strlen($title)<4 || strlen($body)<4)
+	if(strlen($title)>4 && strlen($body)>4)
 	{
 		mysql_query("INSERT into NTIFeedback (UID,Title,Body) values ('$UID','$title','$body')");
 		$errortype=array('info'=>"Allok",'code'=>  0);

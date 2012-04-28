@@ -95,7 +95,8 @@ else if(isset($rights) && $rights==3){?>
 <div id="menu" class="menu"> 
 	<div id="menuitems" class="menuitems"> 
 		<div id="menuitem1" class="menuitem"><a href="/search" class="hrefmenu" >Поиск</a></div> 
-		<div id="menuitem2" class="menuitem"><a href="/all" class="hrefmenu" >Управление пользователями</a></div> 
+		<div id="menuitem2" class="menuitem"><a href="/all/users" class="hrefmenu" >Управление пользователями</a></div> 
+		<div id="menuitem2" class="menuitem"><a href="/all/ck" class="hrefmenu" >Управление экспертами</a></div> 
 		<div id="menuitem2" class="menuitem"><a href="/tickets" class="hrefmenu" >Все заявки</a></div> 
 		<div id="menuitem4" class="menuitem"><a href="/user/logout" class="hrefmenu" >Выход</a></div> 
 	</div>
