@@ -138,6 +138,13 @@
     errors = YES;
     NSLog(@"code = %i", code);
     
+    
+//    if (errorCode == 31 || errorCode == 32) {
+       
+//    }
+//    else if (errorCode == 33){
+//    }
+
     switch (code) {
         case 0:
             
@@ -187,6 +194,18 @@
             info = @"Неверный пароль";
             forgotPassword = YES;
             break;
+        case 32:{
+            info = @"Неверная дата";
+            UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:info message:@"Данных по поездке за указанный период не существует. Пожалуйста выберите другую дату" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alertView show];
+            break;
+        }
+        case 33:{
+            info = @"Ошибка авторизации";
+            UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Ошибка авторизации" message:@"Пожалуйста перезайдите под своим логином. Это можно сделать в окне статистики." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alertView show];
+            break;
+        }
         case 43:
             info = @"Нет данных для пользователя";
             break;
@@ -518,9 +537,13 @@
                            completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *error) {
                                returnString = [[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding];
                                NSLog(@"returnData: %@", returnString);
-                               [[NSNotificationCenter defaultCenter]	postNotificationName:	@"routePointsReceived" object:  returnString];
-                           }];
-    
+                               if (![self checkErrors:returnString method:@"getRouteFromServer"]) {
+                                   [[NSNotificationCenter defaultCenter]	postNotificationName:	@"routePointsReceived" object:  returnString];
+                               }
+                               else{
+                                   [[NSNotificationCenter defaultCenter]	postNotificationName:	@"routePointsReceivedWithError" object:  nil];
+                               }
+                               }];
 }
 
 - (void)sendFeedBackToServerWithTitle:(NSString*)title andBody: (NSString*)body{

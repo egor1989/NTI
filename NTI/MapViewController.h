@@ -51,6 +51,7 @@
 -(void) zoomInOnRoute;
 -(void) mapWaitingState;
 -(void) mapDrawRoute;
+-(void) mapStopWaitingState;
 -(MKPolyline*) normalPointsDraw:(NSArray*) normalPointsArray;
 -(void) specialPointsDraw:(NSArray*) specialPointsArray: (int) pointType;
 

@@ -32,11 +32,17 @@
      selector: @selector(mapDrawRoute:)
      name: @"routePointsReceived"
      object: nil];
+    [[NSNotificationCenter defaultCenter]	
+     addObserver: self
+     selector: @selector(mapStopWaitingState)
+     name: @"routePointsReceivedWithError"
+     object: nil];
     
     isFirstRect = YES;
     
-    
-    [serverCommunication getRouteFromServer:0];
+    if ([ServerCommunication checkInternetConnection]) {
+        [serverCommunication getRouteFromServer:0];
+    }
 	
 }
 
@@ -50,32 +56,24 @@
     }
 }
 
+-(void) mapStopWaitingState{
+    [waintingIndicator stopAnimating];
+    grayView.hidden = YES;
+}
+
 -(void) mapDrawRoute: (NSNotification*) TheNotice{
     SBJsonParser *jsonParser = [SBJsonParser new];
     NSArray *answerArray = [[NSArray alloc] init];
     NSArray *routeArray = [[NSArray alloc] init];
-    int errorCode;
-    
     answerArray = [jsonParser objectWithString:[TheNotice object] error:NULL];
     routeArray = [answerArray valueForKey:@"result"];
-    errorCode = [[[answerArray valueForKey:@"error"] valueForKey:@"code"] intValue];
     
     [waintingIndicator stopAnimating];
     grayView.hidden = YES;
     
-    if (errorCode == 31 || errorCode == 32) {
-        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Неверная дата" message:@"Данных по поездке за указанный период не существует. Пожалуйста выберите другую дату" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alertView show];
-    }
-    else if (errorCode == 33){
-        UIAlertView* alertView33 = [[UIAlertView alloc] initWithTitle:@"Ошибка авторизации" message:@"Пожалуйста перезайдите под своим логином. Это можно сделать в окне статистики." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alertView33 show];
-    }
-    else {
-        [self.mapView removeOverlays: self.mapView.overlays];
-        [self loadRoute:routeArray];
-        [self zoomInOnRoute];
-    }
+    [self.mapView removeOverlays: self.mapView.overlays];
+    [self loadRoute:routeArray];
+    [self zoomInOnRoute];
 }
 
 -(void) loadRoute: (NSArray*) routeArray
