@@ -106,6 +106,7 @@
 		27CFA5301521EBA300F9AC21 /* FeedBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27CFA52E1521EBA300F9AC21 /* FeedBackViewController.m */; };
 		27EDA63B152B117A00679B25 /* MyTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 27EDA63A152B117A00679B25 /* MyTextField.m */; };
 		27F218B114E8238000E22C44 /* Plot.m in Sources */ = {isa = PBXBuildFile; fileRef = 27F218B014E8238000E22C44 /* Plot.m */; };
+		531D3228154D641C00FC4C2B /* StatHelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531D3227154D641C00FC4C2B /* StatHelpViewController.m */; };
 		532A46991502623A0070340D /* CSVConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 532A46981502623A0070340D /* CSVConverter.m */; };
 		5361751D1510FE6A00D290F1 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 5361751B1510FE6A00D290F1 /* Reachability.m */; };
 		536175231511098000D290F1 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 536175221511098000D290F1 /* SystemConfiguration.framework */; };
@@ -304,6 +305,8 @@
 		27EDA63A152B117A00679B25 /* MyTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTextField.m; sourceTree = "<group>"; };
 		27F218AF14E8238000E22C44 /* Plot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Plot.h; sourceTree = "<group>"; };
 		27F218B014E8238000E22C44 /* Plot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Plot.m; sourceTree = "<group>"; };
+		531D3226154D641C00FC4C2B /* StatHelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StatHelpViewController.h; path = ../StatHelpViewController.h; sourceTree = "<group>"; };
+		531D3227154D641C00FC4C2B /* StatHelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StatHelpViewController.m; path = ../StatHelpViewController.m; sourceTree = "<group>"; };
 		532A46971502623A0070340D /* CSVConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSVConverter.h; sourceTree = "<group>"; };
 		532A46981502623A0070340D /* CSVConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSVConverter.m; sourceTree = "<group>"; };
 		5361751B1510FE6A00D290F1 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
@@ -654,6 +657,8 @@
 		27CE0BCB150CDEFF0016F4BA /* Statistic */ = {
 			isa = PBXGroup;
 			children = (
+				531D3226154D641C00FC4C2B /* StatHelpViewController.h */,
+				531D3227154D641C00FC4C2B /* StatHelpViewController.m */,
 				2775F5621507D48C00FE08BC /* StatViewController.h */,
 				2775F5631507D48C00FE08BC /* StatViewController.m */,
 			);
@@ -1135,6 +1140,7 @@
 				5381C8F7153046380012E99D /* RecordAction.m in Sources */,
 				2779259115347CA80062D871 /* MapViewController.m in Sources */,
 				277925B215357F940062D871 /* MapHelpViewController.m in Sources */,
+				531D3228154D641C00FC4C2B /* StatHelpViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
