@@ -29,6 +29,8 @@
     
     [recordAction eventRecord:@"open"]; 
     
+    
+    
     locationManager=[[CLLocationManager alloc] init];
     locationManager.delegate=self;
     //locationManager.desiredAccuracy=kCLLocationAccuracyBest;
@@ -75,7 +77,7 @@
     
     [Crittercism setUsername:[[NSUserDefaults standardUserDefaults] stringForKey:@"login"]];
 
-    
+    [self checkSendRight];
 
     return YES;
     
@@ -145,6 +147,16 @@
         kmch5 = YES;
     }
 
+}
+
+-(void)checkSendRight{
+    if  (([[NSUserDefaults standardUserDefaults] integerForKey:@"pk"]>1) && [ServerCommunication checkInternetConnection]){
+        [recordAction sendFile];
+        NSLog(@"send");
+    }
+    else NSLog(@"can't send");
+        
+    
 }
 
 

@@ -48,6 +48,8 @@
 -(void)stopGPSDetect;
 -(void)startGPSDetect;
 
+-(void)checkSendRight;
+
 //- (void)stopAccelerometerDetect;
 //- (void)startAccelerometerDetect;
 
