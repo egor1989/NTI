@@ -10,6 +10,9 @@
 
 @interface StatHelpViewController : UIViewController{
     IBOutlet UIScrollView *scrollView;
+    IBOutlet UIButton *closeHelp;
 }
+
+- (IBAction)closeHelp:(id)sender;
 
 @end

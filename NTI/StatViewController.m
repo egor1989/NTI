@@ -540,7 +540,7 @@
 
 - (IBAction)helpButton:(id)sender{
     StatHelpViewController *statHelpView = [self.storyboard instantiateViewControllerWithIdentifier: @"StatHelpViewController"];
-    statHelpView.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    statHelpView.modalTransitionStyle = UIModalTransitionStylePartialCurl;
     [self presentModalViewController: statHelpView animated:YES];
     
 }

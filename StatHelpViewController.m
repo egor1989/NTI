@@ -25,9 +25,13 @@
 
 - (void)viewDidLoad
 {
-    scrollView.contentSize = CGSizeMake(320, 900);
+    scrollView.contentSize = CGSizeMake(320, 1250);
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+}
+
+- (IBAction)closeHelp:(id)sender{
+    [self dismissModalViewControllerAnimated:YES];
 }
 
 - (void)viewDidUnload
