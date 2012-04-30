@@ -158,6 +158,8 @@ static sqlite3_stmt *readStmt = nil;
 }
 
 
+
+
 + (void) clearDatabase{
     const char *sql = "delete from log";
     if(sqlite3_prepare_v2(database, sql, -1, &deleteStmt, NULL) != SQLITE_OK)

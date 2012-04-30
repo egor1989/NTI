@@ -71,9 +71,7 @@
     
     if ([myAppDelegate canWriteToFile]) {
         [recordImage setImage:[UIImage imageNamed:@"green.png"]];
-        //[sendButton setHidden:YES];
-        //[sendButton setUserInteractionEnabled:NO];
-        //sendButton.userInteractionEnabled = NO;
+
     }
     else {
         [recordImage setImage:[UIImage imageNamed:@"red.png"]];
@@ -196,9 +194,15 @@
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             
             if (cell == nil) {
-                //cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:CellIdentifier];
-                //cell.textLabel.text=@" ";
-                cell = [[UITableViewCell alloc] initWithFrame:CGRectMake(50, 50, 250, 35)];
+
+                cell = [[UITableViewCell alloc] initWithFrame:CGRectMake(0, 0, 250, 35)];
+                
+                helpButton = [UIButton buttonWithType:UIButtonTypeInfoDark];
+                [helpButton setFrame:CGRectMake(0.0f, 0.0f, 19.0f, 17.0f)];
+                
+                cell.accessoryView = helpButton;
+                
+                [helpButton addTarget:self action:@selector(helpButton:) forControlEvents:UIControlEventTouchDown];
             
             UISegmentedControl *segmentedControl = [[UISegmentedControl alloc]  initWithItems: [NSArray arrayWithObjects: @"Last", @"All", nil]];
             segmentedControl.frame = CGRectMake(35, 5, 250, 35);//x,y,widht, height 
@@ -207,10 +211,10 @@
             segmentedControl.selectedSegmentIndex = [[NSUserDefaults standardUserDefaults] integerForKey:@"segment"];
              
             [segmentedControl addTarget:self action:@selector(pickOne:) forControlEvents:UIControlEventValueChanged];
+                
+
         
             [cell addSubview:segmentedControl];
-           // cell.accessoryView = segmentedControl;
-                //cell.textLabel.textAlignment = UITextAlignmentCenter;
             
             }
             return cell; 
@@ -531,6 +535,13 @@
 //        [alert show];
 //    }
     
+    
+}
+
+- (IBAction)helpButton:(id)sender{
+    StatHelpViewController *statHelpView = [self.storyboard instantiateViewControllerWithIdentifier: @"StatHelpViewController"];
+    statHelpView.modalTransitionStyle = UIModalTransitionStylePartialCurl;
+    [self presentModalViewController: statHelpView animated:YES];
     
 }
 

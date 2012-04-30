@@ -29,6 +29,8 @@
     
     [recordAction eventRecord:@"open"]; 
     
+    
+    
     locationManager=[[CLLocationManager alloc] init];
     locationManager.delegate=self;
     //locationManager.desiredAccuracy=kCLLocationAccuracyBest;
@@ -57,7 +59,7 @@
     }
     
     
-    [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(updater:) userInfo:nil repeats:YES];
+    [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(updater:) userInfo:nil repeats:YES];
     
     oldHeading          = 0;
     offsetG             = 0;
@@ -75,6 +77,8 @@
     
     [Crittercism setUsername:[[NSUserDefaults standardUserDefaults] stringForKey:@"login"]];
 
+    [self checkSendRight]; 
+       
     
 
     return YES;
@@ -139,12 +143,28 @@
         canWriteToFile = NO;
         [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
         NSLog(@"canWriteToFile = NO");
+        [self checkSendRight];
     }
     else {
         needCheck = NO;
         kmch5 = YES;
     }
 
+}
+
+-(void)checkSendRight{
+    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"pk"]>1) {
+        if ([ServerCommunication checkInternetConnection])  {
+           [recordAction sendFile];
+        }
+        
+    }
+    else  [NSTimer scheduledTimerWithTimeInterval:600 target:self selector:@selector(sendTimer:) userInfo:nil repeats:NO];
+    
+}
+
+-(void)sendTimer{
+    [self checkSendRight];
 }
 
 
