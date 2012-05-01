@@ -44,10 +44,12 @@ public class runner implements Runnable {
             long server_time = 0;
             Integer Road_info = 0;
             Entry temp_entry;
+            Ride temp_ride;
             ArrayList<Entry> UnfilteredEntry = new ArrayList<Entry>();
             ArrayList<FilteredEntry> UpdatedEntry = new ArrayList<FilteredEntry>();
             ArrayList<Integer> UserList = new ArrayList<Integer>();
-            Ride UserRide;//Одна поездка пользователя
+            ArrayList<Ride> UserRide=new ArrayList<Ride>();;//Одна поездка пользователя
+            
             Integer UnfilteredCount=0;
             int i=0;
             conn = MysqlDB.getConnection();
@@ -103,20 +105,62 @@ public class runner implements Runnable {
                          * 1)Скорость между 2-мя точками не должна быть более 200 км/ч
                          * 2)Время  между ними не должно превышать 5 мин
                          */
-                        if((ArrayEntry[i].getTimestamp()-ArrayEntry[i-1].getTimestamp())<300)
+                        if((ArrayEntry[i].getTimestamp()-ArrayEntry[i-1].getTimestamp())<300 && DistanceBetweenPoints(ArrayEntry[i].getLat(),ArrayEntry[i-1].getLat(),ArrayEntry[i].getLng(),ArrayEntry[i-1].getLng())/((ArrayEntry[i].getTimestamp()-ArrayEntry[i-1].getTimestamp()))<200)
                         {
-                            if(DistanceBetweenPoints(ArrayEntry[i].getLat(),ArrayEntry[i-1].getLat(),ArrayEntry[i].getLng(),ArrayEntry[i-1].getLng())/((ArrayEntry[i].getTimestamp()-ArrayEntry[i-1].getTimestamp()))<200)
-                            {
+                                    //Добавляем в массив
+                                   temp_entry= new Entry();
+                                   temp_entry=ArrayEntry[i-1];
+                                   UnfilteredEntry.add(temp_entry);
+                        }
+                        else
+                        {
+                            temp_ride=new Ride();
+                            temp_ride.setEntryRide(UnfilteredEntry);
                             
+                            UserRide.add(temp_ride);
+                            
+                        }
+                    }
+                    //Теперь удаляем определенно херовые поезки
+                    //Если в поездке 0 скоростей больше половины - эт какая-то хуита ребята
+                   Ride[] UserRideTmp=new Ride[UserRide.size()];
+                   UserRide.toArray(UserRideTmp);
+                   UnfilteredCount=UserRide.size();
+                   for(int j=0;j<UnfilteredCount;j++)
+                    {
+                        i=0;
+                       
+                        for(Entry temptmp : UserRideTmp[j].getEntryRide())
+                        {
+                           if(temptmp.getSpeed()==0)i++;     
+                        }
+                        if(i*2<UserRideTmp[j].getEntryRide().size())
+                        {
+                            UserRideTmp[j]=null;
+                        }
+                    }
+                   //отлично, выкинули все элементы , которые были не нужны
+                    //Теперь по каждой поездке, если она не нулевая начинаем высчитывать все данные
+                      for(int j=0;j<UnfilteredCount;j++)
+                    {
+                        if(UserRideTmp[j]!=null)
+                        {
+                            for(i=1;i<UserRideTmp[j].getEntryRide().size();i++)
+                            {
+                                
                             }
                         }
                     }
+                   
+                   
+                   
             }
         
             
          
 
         }
+        
         catch (ClassNotFoundException ex) {
             Logger.getLogger(runner.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
