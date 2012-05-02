@@ -19,3 +19,6 @@ Snapshots
 # svn & cvs
 .svn
 CVS
+/serverside/JUNTI/nbproject/private/
+/serverside/JUNTI/build/
+/serverside/JUNTI/dist/
