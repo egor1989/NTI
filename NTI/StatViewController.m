@@ -83,25 +83,7 @@
      selector: @selector(changeImage)
      name: @"canWriteToFile"
      object: nil];
-     serverCommunication = [[ServerCommunication alloc] init];
-    if ([ServerCommunication checkInternetConnection]){
-        
-        NSString *result=[serverCommunication getLastStatistic];
-        if (![result isEqualToString:@"error"]) {
-            [[NSUserDefaults standardUserDefaults] setValue:result forKey:@"lastStat"];
-            [self parse: result];
-        }
-        else {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Повторите попытку позже" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
-            [alert show];
-        }
 
-    }
-    else {
-        [self parse:[[NSUserDefaults standardUserDefaults] valueForKey:@"lastStat"]];
-      //  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Интернет-соединение отсутствует" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
-      //  [alert show];
-    }
     
     
 }
@@ -392,41 +374,19 @@
     //проверка интернета
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    if ([ServerCommunication checkInternetConnection]) {
-  
-    
-    
-        UISegmentedControl *segmentedControl = (UISegmentedControl *)sender;
-        if ([segmentedControl selectedSegmentIndex]==0) {
+    UISegmentedControl *segmentedControl = (UISegmentedControl *)sender;
+    if ([segmentedControl selectedSegmentIndex]==0) {
             NSLog(@"за последнюю поездку");
             [userDefaults setInteger:0 forKey:@"segment"];
-            NSString *result=[serverCommunication getLastStatistic];
-            if (![result isEqualToString:@"error"]) {
-                [userDefaults setValue:result forKey:@"lastStat"];
-                [self parse: result];
-            }
-            else {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Повторите попытку позже" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
-                [alert show];
-            }
-            
+            [self parse: [userDefaults valueForKey:@"lastStat"]];
         }
     else {
         NSLog(@"за все время");
-        NSString *result=[serverCommunication getAllStatistic];
         [userDefaults setInteger:1 forKey:@"segment"];
-        if (![result isEqualToString:@"error"]) {
-            [userDefaults setValue:result forKey:@"allStat"];
-            [self parse: result];
-        }
-        else {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Повторите попытку позже" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
-            [alert show];
-        }
-        }
+        [self parse: [userDefaults valueForKey:@"allStat"]];
     }
-    
 }
+    
 
 - (void)parse:(NSString *)result{
     NSLog(@"result = %@", result);
@@ -524,6 +484,7 @@
     
     if ([ServerCommunication checkInternetConnectionForSend]){
         [serverCommunication refreshCookie];
+        
         
         [[myAppDelegate recordAction] endOfRecord];
         [myAppDelegate stopRecord];
