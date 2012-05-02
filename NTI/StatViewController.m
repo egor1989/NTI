@@ -83,7 +83,10 @@
      selector: @selector(changeImage)
      name: @"canWriteToFile"
      object: nil];
-
+    
+  //  NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+  //  if ([userDefaults integerForKey:@"segment"]) [self parse:[userDefaults valueForKey:@"lastStat"]];
+  //  else [self parse:[userDefaults valueForKey:@"allStat"]];
     
     
 }
@@ -111,6 +114,9 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if ([userDefaults integerForKey:@"segment"]==0) [self parse:[userDefaults valueForKey:@"lastStat"]];
+    else [self parse:[userDefaults valueForKey:@"allStat"]];
     
     //Прослушка notifications
     [[NSNotificationCenter defaultCenter]	

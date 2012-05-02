@@ -107,6 +107,7 @@
 		27EDA63B152B117A00679B25 /* MyTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 27EDA63A152B117A00679B25 /* MyTextField.m */; };
 		27F218B114E8238000E22C44 /* Plot.m in Sources */ = {isa = PBXBuildFile; fileRef = 27F218B014E8238000E22C44 /* Plot.m */; };
 		531D3228154D641C00FC4C2B /* StatHelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531D3227154D641C00FC4C2B /* StatHelpViewController.m */; };
+		531D324F1551A16C00FC4C2B /* GzipCompress.m in Sources */ = {isa = PBXBuildFile; fileRef = 531D324E1551A16B00FC4C2B /* GzipCompress.m */; };
 		532A46991502623A0070340D /* CSVConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 532A46981502623A0070340D /* CSVConverter.m */; };
 		5361751D1510FE6A00D290F1 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 5361751B1510FE6A00D290F1 /* Reachability.m */; };
 		536175231511098000D290F1 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 536175221511098000D290F1 /* SystemConfiguration.framework */; };
@@ -307,6 +308,8 @@
 		27F218B014E8238000E22C44 /* Plot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Plot.m; sourceTree = "<group>"; };
 		531D3226154D641C00FC4C2B /* StatHelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StatHelpViewController.h; path = ../StatHelpViewController.h; sourceTree = "<group>"; };
 		531D3227154D641C00FC4C2B /* StatHelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StatHelpViewController.m; path = ../StatHelpViewController.m; sourceTree = "<group>"; };
+		531D324D1551A16B00FC4C2B /* GzipCompress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GzipCompress.h; path = ../GzipCompress.h; sourceTree = "<group>"; };
+		531D324E1551A16B00FC4C2B /* GzipCompress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GzipCompress.m; path = ../GzipCompress.m; sourceTree = "<group>"; };
 		532A46971502623A0070340D /* CSVConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSVConverter.h; sourceTree = "<group>"; };
 		532A46981502623A0070340D /* CSVConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSVConverter.m; sourceTree = "<group>"; };
 		5361751B1510FE6A00D290F1 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
@@ -683,6 +686,15 @@
 			name = FeedBack;
 			sourceTree = "<group>";
 		};
+		531D32501551A17800FC4C2B /* GZIP */ = {
+			isa = PBXGroup;
+			children = (
+				531D324D1551A16B00FC4C2B /* GzipCompress.h */,
+				531D324E1551A16B00FC4C2B /* GzipCompress.m */,
+			);
+			name = GZIP;
+			sourceTree = "<group>";
+		};
 		532A46951502621A0070340D /* CSV */ = {
 			isa = PBXGroup;
 			children = (
@@ -770,6 +782,7 @@
 		53E0A77014DEC75D004E3E1B /* NTI */ = {
 			isa = PBXGroup;
 			children = (
+				531D32501551A17800FC4C2B /* GZIP */,
 				27792596153486800062D871 /* route.csv */,
 				5361751A1510F8DB00D290F1 /* Reachability */,
 				53F8834C150A53D5000F7FE3 /* JSON framework */,
@@ -1141,6 +1154,7 @@
 				2779259115347CA80062D871 /* MapViewController.m in Sources */,
 				277925B215357F940062D871 /* MapHelpViewController.m in Sources */,
 				531D3228154D641C00FC4C2B /* StatHelpViewController.m in Sources */,
+				531D324F1551A16C00FC4C2B /* GzipCompress.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
