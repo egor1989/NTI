@@ -11,7 +11,9 @@ import java.util.ArrayList;
  * @author steph
  */
 public class Ride {
-     private ArrayList<FilteredEntry> Entry;
+     private ArrayList<Entry> EntryRide;
+     private ArrayList<FilteredEntry> FilteredEntryRide;
+     
      private Integer Score;
      private Integer TimeStart;
      private Integer TimeEnd;
@@ -29,20 +31,7 @@ public class Ride {
     /**
      * @return the Entry
      */
-    public ArrayList<FilteredEntry> getEntry() {
-        return Entry;
-    }
 
-    /**
-     * @param Entry the Entry to set
-     */
-    public void setEntry(ArrayList<FilteredEntry> Entry) {
-        this.Entry = Entry;
-    }
-    //Добавляет новую точку в список
-    public void addEntry(FilteredEntry Temp) {
-        this.Entry.add(Temp);
-    }
     /**
      * @return the Score
      */
@@ -224,5 +213,33 @@ public class Ride {
     public void setTotalDistance(Double TotalDistance) {
         this.TotalDistance = TotalDistance;
     }
-     
+
+    /**
+     * @return the EntryRide
+     */
+    public ArrayList<Entry> getEntryRide() {
+        return EntryRide;
+    }
+
+    /**
+     * @param EntryRide the EntryRide to set
+     */
+    public void setEntryRide(ArrayList<Entry> EntryR) {
+        this.setEntryRide(EntryR);
+    }
+
+    /**
+     * @return the FilteredEntryRide
+     */
+    public ArrayList<FilteredEntry> getFilteredEntryRide() {
+        return FilteredEntryRide;
+    }
+
+    /**
+     * @param FilteredEntryRide the FilteredEntryRide to set
+     */
+    public void setFilteredEntryRide(ArrayList<FilteredEntry> FilteredEntryRide) {
+        this.FilteredEntryRide = FilteredEntryRide;
+    }
+
 }
