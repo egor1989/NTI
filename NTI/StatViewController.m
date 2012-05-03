@@ -476,6 +476,8 @@
     [userDefaults removeObjectForKey:@"login"];
     [userDefaults removeObjectForKey:@"password"];
     [userDefaults removeObjectForKey:@"cookie"];
+    [userDefaults removeObjectForKey:@"allStat"];
+    [userDefaults removeObjectForKey:@"lastStat"];
     [userDefaults synchronize];
     
     AuthViewController *authView = [self.storyboard instantiateViewControllerWithIdentifier: @"AuthViewController"];

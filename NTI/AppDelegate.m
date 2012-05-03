@@ -77,7 +77,7 @@
     
     [Crittercism setUsername:[[NSUserDefaults standardUserDefaults] stringForKey:@"login"]];
 
-    [self checkSendRight]; 
+    
        
     
 
@@ -351,9 +351,12 @@
 {
     
     if ([[NSUserDefaults standardUserDefaults] stringForKey:@"cookie"] == nil){
-    UIStoryboard *storyboard = self.window.rootViewController.storyboard;
-    UIViewController *loginController = [storyboard instantiateViewControllerWithIdentifier:@"AuthViewController"];
-    [self.window.rootViewController presentModalViewController:loginController animated:NO];
+        [self checkSendRight]; 
+    
+        UIStoryboard *storyboard = self.window.rootViewController.storyboard;
+        UIViewController *loginController = [storyboard instantiateViewControllerWithIdentifier:@"AuthViewController"];
+        
+        [self.window.rootViewController presentModalViewController:loginController animated:NO];
     }
 }
 
