@@ -478,6 +478,7 @@
     [userDefaults removeObjectForKey:@"cookie"];
     [userDefaults removeObjectForKey:@"allStat"];
     [userDefaults removeObjectForKey:@"lastStat"];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"internetUserPreference"]; 
     [userDefaults synchronize];
     
     AuthViewController *authView = [self.storyboard instantiateViewControllerWithIdentifier: @"AuthViewController"];
