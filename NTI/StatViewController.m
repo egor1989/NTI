@@ -192,7 +192,10 @@
                 
                 [helpButton addTarget:self action:@selector(helpButton:) forControlEvents:UIControlEventTouchDown];
             
-            UISegmentedControl *segmentedControl = [[UISegmentedControl alloc]  initWithItems: [NSArray arrayWithObjects: @"Last", @"All", nil]];
+            UISegmentedControl *segmentedControl = [[UISegmentedControl alloc]  initWithItems: [NSArray arrayWithObjects: @"Посл. поездка", @"Все поездки", nil]];
+            
+            [segmentedControl setTitleTextAttributes:[NSDictionary dictionaryWithObject:[UIFont fontWithName:@"Trebuchet MS" size:14]
+                                                                                     forKey:UITextAttributeFont] forState:UIControlStateNormal];
             segmentedControl.frame = CGRectMake(35, 5, 250, 35);//x,y,widht, height 
             segmentedControl.segmentedControlStyle = UISegmentedControlStylePlain;
             
