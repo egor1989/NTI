@@ -439,7 +439,7 @@
     Reachability* reach = [Reachability reachabilityWithHostname:@"www.goodroads.ru"];
     
     NetworkStatus hostStatus = [reach currentReachabilityStatus];
-    
+    NSLog(@"internetUserPreference = %@", [[NSUserDefaults standardUserDefaults] boolForKey:@"internetUserPreference"]?@"YES":@"NO");
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"internetUserPreference"]) {
         if (hostStatus == NotReachable){
             NSLog(@"internet: -");
