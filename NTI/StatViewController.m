@@ -8,7 +8,7 @@
 
 #import "StatViewController.h"
 
-#define ROWSNUMBER 11
+#define ROWSNUMBER 13
 
 @implementation StatViewController
 @synthesize writeAction;
@@ -66,6 +66,14 @@
     rotation.font = fontForLabel;
     rotation.textAlignment = UITextAlignmentRight;
     
+    countKm = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];;
+    countKm.font = fontForLabel;
+    countKm.textAlignment = UITextAlignmentRight;
+    
+    
+    lastTrip = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];;
+    lastTrip.font = fontForLabel;
+    lastTrip.textAlignment = UITextAlignmentRight;
     
     recordImage = [[UIImageView alloc] initWithFrame:CGRectMake(280.0f, 7.0f, 27.0f, 27.0f)];
     
@@ -280,9 +288,24 @@
             }
             return cell;
         }
+            
         
         case 5:{
             static NSString *CellIdentifier = @"2";
+            
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            if (cell == nil) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+                cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
+                cell.textLabel.text=@"Километраж";
+                cell.accessoryView = countKm;
+            }
+            return cell;
+        }
+
+        
+        case 6:{
+            static NSString *CellIdentifier = @"3";
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             if (cell == nil) {
@@ -294,8 +317,9 @@
             return cell;
         }
             
-        case 6:{
-            static NSString *CellIdentifier = @"3";
+            
+        case 7:{
+            static NSString *CellIdentifier = @"4";
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             if (cell == nil) {
@@ -306,8 +330,8 @@
             }
             return cell;
         }
-        case 7:{
-            static NSString *CellIdentifier = @"4";
+        case 8:{
+            static NSString *CellIdentifier = @"5";
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             if (cell == nil) {
@@ -318,8 +342,8 @@
             }
             return cell;
         }
-        case 8:{
-            static NSString *CellIdentifier = @"5";
+        case 9:{
+            static NSString *CellIdentifier = @"6";
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             if (cell == nil) {
@@ -331,8 +355,8 @@
             return cell;
         }
             
-        case 9:{
-            static NSString *CellIdentifier = @"6";
+        case 10:{
+            static NSString *CellIdentifier = @"7";
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             if (cell == nil) {
@@ -351,7 +375,7 @@
             }
             return cell;
         }
-        case 10:{
+        case 11:{
             UITableViewCell *aCell = [tableView dequeueReusableCellWithIdentifier:@"internetCell"];
             if( aCell == nil ) {
                 aCell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault
@@ -368,6 +392,20 @@
             return aCell;
 
         }
+            
+        case 12:{
+            static NSString *CellIdentifier = @"8";
+            
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            if (cell == nil) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+                cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
+                cell.textLabel.text=@"Дата посл. поездки";
+                cell.accessoryView = lastTrip;
+            }
+            return cell;
+        }
+
        
 
         

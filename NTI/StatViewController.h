@@ -25,6 +25,8 @@
     UILabel *deceleration;
     UILabel *rotation;
     UILabel *recordLabel;
+    UILabel *countKm;
+    UILabel *lastTrip;
     IBOutlet UIButton *sendButton;
     ServerCommunication *serverCommunication;
     UIImageView *recordImage;
