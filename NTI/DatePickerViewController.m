@@ -30,7 +30,17 @@
 
 - (IBAction)doneButton:(id)sender {
     NSDate *myDate = datePicker.date;
+//    [self transitionFromViewController:_parentModalViewController
+//                      toViewController:_parentViewController
+//                              duration:0.4
+//                               options:UIViewAnimationOptionTransitionFlipFromLeft
+//                            animations:nil
+//                            completion:^(BOOL done){
+//                                [_parentViewController didMoveToParentViewController:self];
+//                                [_parentModalViewController removeFromParentViewController];
+//                            }];
     [self dismissModalViewControllerAnimated:YES];
+    NSLog(@"!!!!!doneButton");
     [[NSNotificationCenter defaultCenter]	postNotificationName:	@"routePointsRequestSend" object:  myDate];
 }
 

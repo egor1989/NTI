@@ -209,18 +209,17 @@
 #pragma mark MKMapViewDelegate
 - (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id <MKOverlay>)overlay
 {
-	
-    NSLog(@"overlayEntered");
 	if(overlay == self.routeLine)
 	{
         MKOverlayView* overlayView = nil;
         MKPolylineView *routeLineView = [[MKPolylineView alloc] initWithPolyline:self.routeLine];
-        routeLineView.fillColor = [UIColor blackColor];
-        routeLineView.strokeColor = [UIColor blackColor];
-        routeLineView.lineWidth = 3;
-    
+        routeLineView.fillColor = [UIColor purpleColor];
+        routeLineView.strokeColor = [UIColor blueColor];
+        routeLineView.lineWidth = 8;
+        routeLineView.alpha = 0.6;
+//        routeLineView.lineDashPhase = 15;
+        
 		overlayView = routeLineView;
-		NSLog(@"routelineOverlay");
         return overlayView;
 	}
     
@@ -235,8 +234,6 @@
     else if([circle.title isEqualToString:@"3"]){
         circleView.strokeColor = circleView.fillColor = [UIColor redColor];
     }
-    
-    NSLog(@"circleOverlay");
     return circleView;
 }
 @end
