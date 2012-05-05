@@ -158,6 +158,8 @@ static sqlite3_stmt *readStmt = nil;
 }
 
 
+
+
 + (void) clearDatabase{
     const char *sql = "delete from log";
     if(sqlite3_prepare_v2(database, sql, -1, &deleteStmt, NULL) != SQLITE_OK)
@@ -226,12 +228,14 @@ static sqlite3_stmt *readStmt = nil;
     }
     
     sqlite3_finalize(readStmt);
+    [serverCommunication showResult];
     if (![serverCommunication errors]){ 
-       
         [DatabaseActions clearDatabase];
+        [userDefaults setValue: [serverCommunication getLastStatistic] forKey:@"lastStat"];
+        [userDefaults setValue: [serverCommunication getAllStatistic] forKey:@"allStat"];
+        //notif refresh
     }
-     [serverCommunication showResult];
-     sqlite3_close(database);
+    sqlite3_close(database);
     [myAppDelegate startRecord];
 }
 

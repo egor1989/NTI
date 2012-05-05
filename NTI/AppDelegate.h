@@ -43,10 +43,14 @@
     RecordAction *recordAction;
     DatabaseActions *databaseAction;
     BOOL needCheck;
+    
+
 }
 
 -(void)stopGPSDetect;
 -(void)startGPSDetect;
+
+-(void)checkSendRight;
 
 //- (void)stopAccelerometerDetect;
 //- (void)startAccelerometerDetect;
@@ -60,6 +64,7 @@
 - (void)checkAfterFiveMin;
 - (void)stopRecord;
 - (void)startRecord;
+- (void)sendTimer;
 
 
 @property (strong, nonatomic) UIWindow *window;

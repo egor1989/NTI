@@ -72,7 +72,9 @@
         [serverCommunication authUser:loginField.text secret:encryptedPass];
         [serverCommunication showResult];
         if (![serverCommunication errors]) {
-        
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setValue:[serverCommunication getAllStatistic] forKey:@"allStat"];
+            [userDefaults setValue:[serverCommunication getLastStatistic] forKey:@"lastStat"];
             HelpViewController *helpView = [self.storyboard instantiateViewControllerWithIdentifier: @"HelpViewController"];
             helpView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
             [self presentModalViewController: helpView animated:YES];

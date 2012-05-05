@@ -80,6 +80,10 @@
         
         if (![serverCommunication errors]) {
             
+            
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setValue:[serverCommunication getAllStatistic] forKey:@"allStat"];
+            [userDefaults setValue:[serverCommunication getLastStatistic] forKey:@"lastStat"];
             IterviewViewController *interviewView = [self.storyboard instantiateViewControllerWithIdentifier: @"InterviewViewController"];
             interviewView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
             [self presentModalViewController: interviewView animated:YES];

@@ -11,6 +11,7 @@
 #import "AuthViewController.h"
 #import "RecordAction.h"
 #import "ServerCommunication.h"
+#import "StatHelpViewController.h"
 
 
 #define myAppDelegate (AppDelegate*) [[UIApplication sharedApplication] delegate]
@@ -24,9 +25,12 @@
     UILabel *deceleration;
     UILabel *rotation;
     UILabel *recordLabel;
+    UILabel *countKm;
+    UILabel *lastTrip;
     IBOutlet UIButton *sendButton;
     ServerCommunication *serverCommunication;
     UIImageView *recordImage;
+    IBOutlet UIButton *helpButton;
     
 }
 
@@ -35,6 +39,7 @@
 - (void) speedUpdate;
 - (IBAction)loginButton:(id)sender;
 - (IBAction)sendButton:(id)sender;
+- (IBAction)helpButton:(id)sender;
 - (void) pickOne:(id)sender;
 - (void)changeImage;
 - (void)parse:(NSString *)result;

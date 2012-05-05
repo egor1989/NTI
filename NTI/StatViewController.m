@@ -8,7 +8,7 @@
 
 #import "StatViewController.h"
 
-#define ROWSNUMBER 11
+#define ROWSNUMBER 13
 
 @implementation StatViewController
 @synthesize writeAction;
@@ -66,14 +66,20 @@
     rotation.font = fontForLabel;
     rotation.textAlignment = UITextAlignmentRight;
     
+    countKm = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];;
+    countKm.font = fontForLabel;
+    countKm.textAlignment = UITextAlignmentRight;
+    
+    
+    lastTrip = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];;
+    lastTrip.font = fontForLabel;
+    lastTrip.textAlignment = UITextAlignmentRight;
     
     recordImage = [[UIImageView alloc] initWithFrame:CGRectMake(280.0f, 7.0f, 27.0f, 27.0f)];
     
     if ([myAppDelegate canWriteToFile]) {
         [recordImage setImage:[UIImage imageNamed:@"green.png"]];
-        //[sendButton setHidden:YES];
-        //[sendButton setUserInteractionEnabled:NO];
-        //sendButton.userInteractionEnabled = NO;
+
     }
     else {
         [recordImage setImage:[UIImage imageNamed:@"red.png"]];
@@ -85,25 +91,10 @@
      selector: @selector(changeImage)
      name: @"canWriteToFile"
      object: nil];
-     serverCommunication = [[ServerCommunication alloc] init];
-    if ([ServerCommunication checkInternetConnection]){
-        
-        NSString *result=[serverCommunication getLastStatistic];
-        if (![result isEqualToString:@"error"]) {
-            [[NSUserDefaults standardUserDefaults] setValue:result forKey:@"lastStat"];
-            [self parse: result];
-        }
-        else {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Повторите попытку позже" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
-            [alert show];
-        }
-
-    }
-    else {
-        [self parse:[[NSUserDefaults standardUserDefaults] valueForKey:@"lastStat"]];
-      //  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Интернет-соединение отсутствует" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
-      //  [alert show];
-    }
+    
+  //  NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+  //  if ([userDefaults integerForKey:@"segment"]) [self parse:[userDefaults valueForKey:@"lastStat"]];
+  //  else [self parse:[userDefaults valueForKey:@"allStat"]];
     
     
 }
@@ -131,6 +122,9 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if ([userDefaults integerForKey:@"segment"]==0) [self parse:[userDefaults valueForKey:@"lastStat"]];
+    else [self parse:[userDefaults valueForKey:@"allStat"]];
     
     //Прослушка notifications
     [[NSNotificationCenter defaultCenter]	
@@ -196,21 +190,30 @@
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             
             if (cell == nil) {
-                //cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:CellIdentifier];
-                //cell.textLabel.text=@" ";
-                cell = [[UITableViewCell alloc] initWithFrame:CGRectMake(50, 50, 250, 35)];
+
+                cell = [[UITableViewCell alloc] initWithFrame:CGRectMake(0, 0, 250, 35)];
+                
+                helpButton = [UIButton buttonWithType:UIButtonTypeInfoDark];
+                [helpButton setFrame:CGRectMake(0.0f, 0.0f, 19.0f, 17.0f)];
+                
+                cell.accessoryView = helpButton;
+                
+                [helpButton addTarget:self action:@selector(helpButton:) forControlEvents:UIControlEventTouchDown];
             
-            UISegmentedControl *segmentedControl = [[UISegmentedControl alloc]  initWithItems: [NSArray arrayWithObjects: @"Last", @"All", nil]];
+            UISegmentedControl *segmentedControl = [[UISegmentedControl alloc]  initWithItems: [NSArray arrayWithObjects: @"Посл. поездка", @"Все поездки", nil]];
+            
+            [segmentedControl setTitleTextAttributes:[NSDictionary dictionaryWithObject:[UIFont fontWithName:@"Trebuchet MS" size:14]
+                                                                                     forKey:UITextAttributeFont] forState:UIControlStateNormal];
             segmentedControl.frame = CGRectMake(35, 5, 250, 35);//x,y,widht, height 
             segmentedControl.segmentedControlStyle = UISegmentedControlStylePlain;
             
             segmentedControl.selectedSegmentIndex = [[NSUserDefaults standardUserDefaults] integerForKey:@"segment"];
              
             [segmentedControl addTarget:self action:@selector(pickOne:) forControlEvents:UIControlEventValueChanged];
+                
+
         
             [cell addSubview:segmentedControl];
-           // cell.accessoryView = segmentedControl;
-                //cell.textLabel.textAlignment = UITextAlignmentCenter;
             
             }
             return cell; 
@@ -285,9 +288,24 @@
             }
             return cell;
         }
+            
         
         case 5:{
             static NSString *CellIdentifier = @"2";
+            
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            if (cell == nil) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+                cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
+                cell.textLabel.text=@"Километраж";
+                cell.accessoryView = countKm;
+            }
+            return cell;
+        }
+
+        
+        case 6:{
+            static NSString *CellIdentifier = @"3";
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             if (cell == nil) {
@@ -299,8 +317,9 @@
             return cell;
         }
             
-        case 6:{
-            static NSString *CellIdentifier = @"3";
+            
+        case 7:{
+            static NSString *CellIdentifier = @"4";
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             if (cell == nil) {
@@ -311,8 +330,8 @@
             }
             return cell;
         }
-        case 7:{
-            static NSString *CellIdentifier = @"4";
+        case 8:{
+            static NSString *CellIdentifier = @"5";
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             if (cell == nil) {
@@ -323,8 +342,8 @@
             }
             return cell;
         }
-        case 8:{
-            static NSString *CellIdentifier = @"5";
+        case 9:{
+            static NSString *CellIdentifier = @"6";
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             if (cell == nil) {
@@ -336,8 +355,8 @@
             return cell;
         }
             
-        case 9:{
-            static NSString *CellIdentifier = @"6";
+        case 10:{
+            static NSString *CellIdentifier = @"7";
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             if (cell == nil) {
@@ -356,7 +375,7 @@
             }
             return cell;
         }
-        case 10:{
+        case 11:{
             UITableViewCell *aCell = [tableView dequeueReusableCellWithIdentifier:@"internetCell"];
             if( aCell == nil ) {
                 aCell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault
@@ -373,6 +392,20 @@
             return aCell;
 
         }
+            
+        case 12:{
+            static NSString *CellIdentifier = @"8";
+            
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            if (cell == nil) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+                cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
+                cell.textLabel.text=@"Дата посл. поездки";
+                cell.accessoryView = lastTrip;
+            }
+            return cell;
+        }
+
        
 
         
@@ -388,41 +421,19 @@
     //проверка интернета
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    if ([ServerCommunication checkInternetConnection]) {
-  
-    
-    
-        UISegmentedControl *segmentedControl = (UISegmentedControl *)sender;
-        if ([segmentedControl selectedSegmentIndex]==0) {
+    UISegmentedControl *segmentedControl = (UISegmentedControl *)sender;
+    if ([segmentedControl selectedSegmentIndex]==0) {
             NSLog(@"за последнюю поездку");
             [userDefaults setInteger:0 forKey:@"segment"];
-            NSString *result=[serverCommunication getLastStatistic];
-            if (![result isEqualToString:@"error"]) {
-                [userDefaults setValue:result forKey:@"lastStat"];
-                [self parse: result];
-            }
-            else {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Повторите попытку позже" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
-                [alert show];
-            }
-            
+            [self parse: [userDefaults valueForKey:@"lastStat"]];
         }
     else {
         NSLog(@"за все время");
-        NSString *result=[serverCommunication getAllStatistic];
         [userDefaults setInteger:1 forKey:@"segment"];
-        if (![result isEqualToString:@"error"]) {
-            [userDefaults setValue:result forKey:@"allStat"];
-            [self parse: result];
-        }
-        else {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Повторите попытку позже" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
-            [alert show];
-        }
-        }
+        [self parse: [userDefaults valueForKey:@"allStat"]];
     }
-    
 }
+    
 
 - (void)parse:(NSString *)result{
     NSLog(@"result = %@", result);
@@ -506,6 +517,9 @@
     [userDefaults removeObjectForKey:@"login"];
     [userDefaults removeObjectForKey:@"password"];
     [userDefaults removeObjectForKey:@"cookie"];
+    [userDefaults removeObjectForKey:@"allStat"];
+    [userDefaults removeObjectForKey:@"lastStat"];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"internetUserPreference"]; 
     [userDefaults synchronize];
     
     AuthViewController *authView = [self.storyboard instantiateViewControllerWithIdentifier: @"AuthViewController"];
@@ -521,6 +535,7 @@
     if ([ServerCommunication checkInternetConnectionForSend]){
         [serverCommunication refreshCookie];
         
+        
         [[myAppDelegate recordAction] endOfRecord];
         [myAppDelegate stopRecord];
         [[myAppDelegate recordAction] sendFile];
@@ -531,6 +546,13 @@
 //        [alert show];
 //    }
     
+    
+}
+
+- (IBAction)helpButton:(id)sender{
+    StatHelpViewController *statHelpView = [self.storyboard instantiateViewControllerWithIdentifier: @"StatHelpViewController"];
+    statHelpView.modalTransitionStyle = UIModalTransitionStylePartialCurl;
+    [self presentModalViewController: statHelpView animated:YES];
     
 }
 
