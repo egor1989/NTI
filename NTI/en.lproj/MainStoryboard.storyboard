@@ -1,12 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="1.1" toolsVersion="2182" systemVersion="11D50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="4">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="1.0" toolsVersion="1938" systemVersion="10K549" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="4">
     <dependencies>
-        <deployment defaultVersion="1296" identifier="iOS"/>
+        <deployment defaultVersion="1280" identifier="iOS"/>
         <development defaultVersion="4200" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1179"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="933"/>
     </dependencies>
     <scenes>
-        <!--Develop View Controller - First-->
         <scene sceneID="11">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="10" sceneMemberID="firstResponder"/>
@@ -274,7 +273,6 @@
             </objects>
             <point key="canvasLocation" x="1809" y="-304"/>
         </scene>
-        <!--Feed Back View Controller - Отзыв-->
         <scene sceneID="CbX-tD-odD">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kcQ-sX-0s3" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -352,7 +350,6 @@
             </objects>
             <point key="canvasLocation" x="1809" y="1692"/>
         </scene>
-        <!--Plot View Controller - Second-->
         <scene sceneID="13">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="12" sceneMemberID="firstResponder"/>
@@ -367,7 +364,6 @@
             </objects>
             <point key="canvasLocation" x="1809" y="284"/>
         </scene>
-        <!--Date Picker View Controller - Map-->
         <scene sceneID="Tcr-zr-v4U">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S3r-Rd-BnD" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -380,7 +376,7 @@
                                 <rect key="frame" x="0.0" y="244" width="320" height="216"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <date key="date" timeIntervalSinceReferenceDate="353164292.84771502">
-                                    <!--2012-03-11 13:11:32 +0000-->
+                                    <!--2012-03-11 16:11:32 +0300-->
                                 </date>
                                 <locale key="locale" localeIdentifier="en_US"/>
                                 <timeZone key="timeZone" name="America/Los_Angeles">
@@ -438,7 +434,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
             </objects>
             <point key="canvasLocation" x="2219" y="752"/>
         </scene>
-        <!--Map Help View Controller-->
         <scene sceneID="88e-Ie-WRo">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lRb-vs-SAS" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -484,7 +479,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
             </objects>
             <point key="canvasLocation" x="2219" y="1326"/>
         </scene>
-        <!--Map View Controller - Title-->
         <scene sceneID="1Qp-Kz-5Ox">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZKL-mj-7Oa" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -540,7 +534,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Map" image="NTI_MapMenuIcon.png" id="CdO-L2-tdX"/>
+                    <tabBarItem key="tabBarItem" title="Карта" image="NTI_MapMenuIcon.png" id="CdO-L2-tdX"/>
                     <navigationItem key="navigationItem" title="Title" id="xjR-dK-fxA"/>
                     <connections>
                         <outlet property="grayView" destination="hlh-4E-NA7" id="ics-we-z9P"/>
@@ -551,7 +545,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
             </objects>
             <point key="canvasLocation" x="1545" y="956"/>
         </scene>
-        <!--Iterview View Controller-->
         <scene sceneID="YEX-YE-F7z">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="saj-gN-sfG" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -704,7 +697,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
             </objects>
             <point key="canvasLocation" x="967" y="-939"/>
         </scene>
-        <!--Stat View Controller - Statistic-->
         <scene sceneID="aDC-Fh-98B">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VNG-QV-faK" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -731,12 +723,149 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                             <outlet property="delegate" destination="Kdu-qc-vFm" id="zBL-9z-o2j"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Statistic" image="NTI_StatMenuIcon.png" id="RSz-X8-fdU"/>
+                    <tabBarItem key="tabBarItem" title="Статистика" image="NTI_StatMenuIcon.png" id="RSz-X8-fdU"/>
                 </tableViewController>
             </objects>
             <point key="canvasLocation" x="1861" y="-898"/>
         </scene>
-        <!--Help View Controller-->
+        <scene sceneID="jOn-7G-0OQ">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cIj-7I-tzH" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController storyboardIdentifier="StatHelpViewController" id="y1o-XO-KYV" customClass="StatHelpViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="AW5-O5-VGJ">
+                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="p1e-fa-tJn">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="832"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="gIS-ra-uWr">
+                                        <rect key="frame" x="123" y="820" width="72" height="35"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" title="OK">
+                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="closeHelp:" destination="y1o-XO-KYV" eventType="touchUpInside" id="Ka0-pu-pYO"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Данные показатели отражает Ваше качество вождения относительно других автомобилистов в данном регионе." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" id="iPZ-GW-fY6">
+                                        <rect key="frame" x="3" y="36" width="313" height="72"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="TrebuchetMS-Bold" family="Trebuchet MS" pointSize="15"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Скоростной режим" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="rED-jm-lac">
+                                        <rect key="frame" x="95" y="96" width="134" height="33"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="TrebuchetMS-Bold" family="Trebuchet MS" pointSize="15"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Разгон" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="ovq-Y5-XGn">
+                                        <rect key="frame" x="95" y="244" width="134" height="33"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="TrebuchetMS-Bold" family="Trebuchet MS" pointSize="15"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Торможение" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="ozn-l4-S7P">
+                                        <rect key="frame" x="95" y="398" width="134" height="33"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="TrebuchetMS-Bold" family="Trebuchet MS" pointSize="15"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Повороты" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="fKl-4N-Wge">
+                                        <rect key="frame" x="95" y="648" width="134" height="33"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="TrebuchetMS-Bold" family="Trebuchet MS" pointSize="15"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Данный параметр учитывает частоту вождения на опасных скоростях свыше 110 км/час." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" id="faa-xi-tjG">
+                                        <rect key="frame" x="2" y="127" width="295" height="31"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="TrebuchetMS" family="Trebuchet MS" pointSize="13"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" id="g1Q-D6-imB">
+                                        <rect key="frame" x="3" y="164" width="313" height="84"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <string key="text">Превышение скорости уменьшает возможность вашего адекватного реагирования на быстрое изменение дорожной обстановки и повышает риск участия в серьезном дорожно-транспортном происшествии.</string>
+                                        <fontDescription key="fontDescription" name="TrebuchetMS" family="Trebuchet MS" pointSize="13"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" id="TYz-hr-G2u">
+                                        <rect key="frame" x="6" y="303" width="313" height="97"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <string key="text">Агрессивный разгон значительно увеличивает расход топлива и повышает вероятность наступления дорожно-транспортного происшествия.
+Старайтесь предугадывать дорожную обстановку и разгоняться постепенно.</string>
+                                        <fontDescription key="fontDescription" name="TrebuchetMS" family="Trebuchet MS" pointSize="13"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" id="wG6-NH-UOJ">
+                                        <rect key="frame" x="6" y="457" width="313" height="191"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <string key="text">Резкое торможение неблагоприятно для вас и вашего автомобиля. Оно должно быть использовано только в экстренных ситуациях. Резкое торможение повышает износ автомобиля и увеличивает расход топлива. Так же оно значительно увеличивает риск возникновения ДТП, в том числе потому что может быть неожиданно для водителей позади Вас. Пожалуйста, соблюдайте безопасную дистанцию до автомобилей впереди Вас. Старайтесь предвосхищать дорожную остановку и планировать торможение заранее.</string>
+                                        <fontDescription key="fontDescription" name="TrebuchetMS" family="Trebuchet MS" pointSize="13"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Данный параметр отражает среднюю частоту быстрых разгонов." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" id="uJB-LG-Ojn">
+                                        <rect key="frame" x="15" y="274" width="295" height="31"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="TrebuchetMS" family="Trebuchet MS" pointSize="13"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Данный параметр учитывает среднюю частоту экстренного торможения." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" id="PIl-sh-PBa">
+                                        <rect key="frame" x="15" y="424" width="295" height="31"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="TrebuchetMS" family="Trebuchet MS" pointSize="13"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Параметр отражает среднюю частоту резких и острых поворотов." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" id="ojk-uP-m3t">
+                                        <rect key="frame" x="18" y="678" width="295" height="31"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="TrebuchetMS" family="Trebuchet MS" pointSize="13"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" id="eGh-WQ-i1D">
+                                        <rect key="frame" x="15" y="697" width="295" height="128"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <string key="text">Резкие и острые повороты могут быть опасны, так как могут повлечь потерю управляемости автомобиля. Они так же увеличивают износ автомобиля.
+Старайтесь предвидеть дорожную обстановку и регулировать вашу скорость перед поворотом.</string>
+                                        <fontDescription key="fontDescription" name="TrebuchetMS" family="Trebuchet MS" pointSize="13"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.0" green="0.65585140306122447" blue="0.32103927836067714" alpha="0.80000000000000004" colorSpace="calibratedRGB"/>
+                            </scrollView>
+                        </subviews>
+                    </view>
+                    <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
+                    <connections>
+                        <outlet property="closeHelp" destination="gIS-ra-uWr" id="7rn-o5-DWs"/>
+                        <outlet property="scrollView" destination="p1e-fa-tJn" id="fId-08-SgJ"/>
+                    </connections>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="2251" y="-901"/>
+        </scene>
         <scene sceneID="zqs-27-2pC">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DiC-Vp-zsw" sceneMemberID="firstResponder"/>
@@ -781,11 +910,9 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" id="ODd-84-dLN">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Удачной дороги! Команда проекта NTI" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" id="ODd-84-dLN">
                                 <rect key="frame" x="63" y="293" width="186" height="71"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <string key="text">Удачной дороги!
-Команда проекта NTI</string>
                                 <fontDescription key="fontDescription" name="TrebuchetMS-Bold" family="Trebuchet MS" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -798,7 +925,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
             </objects>
             <point key="canvasLocation" x="681" y="-22"/>
         </scene>
-        <!--Registration View Controller-->
         <scene sceneID="xc9-ib-aDx">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DRI-69-MY8" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -891,7 +1017,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
             </objects>
             <point key="canvasLocation" x="575" y="-939"/>
         </scene>
-        <!--Auth View Controller-->
         <scene sceneID="Xpe-hI-8Qz">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jaw-vu-xTK" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -970,7 +1095,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
             </objects>
             <point key="canvasLocation" x="109" y="-939"/>
         </scene>
-        <!--Tab Bar Controller-->
         <scene sceneID="15">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="14" sceneMemberID="firstResponder"/>
@@ -1084,12 +1208,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                 <relationship kind="outlet" name="skillField" candidateClass="UITextField"/>
             </relationships>
         </class>
-        <class className="MapHelpViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MapHelpViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="okButton:"/>
-            </relationships>
-        </class>
         <class className="MapViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MapViewController.h"/>
             <relationships>
@@ -1118,12 +1236,22 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                 <relationship kind="outlet" name="passwordField" candidateClass="UITextField"/>
             </relationships>
         </class>
+        <class className="StatHelpViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/StatHelpViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="closeHelp:"/>
+                <relationship kind="outlet" name="closeHelp" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
+            </relationships>
+        </class>
         <class className="StatViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/StatViewController.h"/>
             <relationships>
+                <relationship kind="action" name="helpButton:"/>
                 <relationship kind="action" name="internetUploadSwitch:"/>
                 <relationship kind="action" name="loginButton:"/>
                 <relationship kind="action" name="sendButton:"/>
+                <relationship kind="outlet" name="helpButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="loginButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="sendButton" candidateClass="UIButton"/>
             </relationships>
