@@ -115,15 +115,15 @@
         }
         [routeLineArray addObject:[self createRouteLine:allRoutesPointsArray[0][0]]];
         
+        //отрисовка маршрута (чёрная линия)
+        for (_routeLine in routeLineArray){
+            [_mapView addOverlay:_routeLine];
+        }
         //отрисовка специальных точек
         for (int i=1; i<=3; i++) {
             for (int j=1; j<=3; j++) {
                 [self specialPointsDraw:allRoutesPointsArray[i][j] :j];
             }
-        }
-        //отрисовка маршрута (чёрная линия)
-        for (_routeLine in routeLineArray){
-            [_mapView addOverlay:_routeLine];
         }
     }
 }
@@ -213,9 +213,9 @@
 	{
         MKOverlayView* overlayView = nil;
         MKPolylineView *routeLineView = [[MKPolylineView alloc] initWithPolyline:self.routeLine];
-        routeLineView.fillColor = [UIColor purpleColor];
+        routeLineView.fillColor = [UIColor blueColor];
         routeLineView.strokeColor = [UIColor blueColor];
-        routeLineView.lineWidth = 8;
+        routeLineView.lineWidth = 15;
         routeLineView.alpha = 0.6;
 //        routeLineView.lineDashPhase = 15;
         

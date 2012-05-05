@@ -101,6 +101,7 @@
 		2779259115347CA80062D871 /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2779259015347CA80062D871 /* MapViewController.m */; };
 		27792597153486800062D871 /* route.csv in Resources */ = {isa = PBXBuildFile; fileRef = 27792596153486800062D871 /* route.csv */; };
 		277925AB15349FA90062D871 /* time.png in Resources */ = {isa = PBXBuildFile; fileRef = 277925AA15349FA90062D871 /* time.png */; };
+		2789767B155574FF00534E70 /* MapHelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2789767A155574FF00534E70 /* MapHelpViewController.m */; };
 		278FE5C6150CE2EE0098BA74 /* DatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 278FE5C5150CE2EE0098BA74 /* DatePickerViewController.m */; };
 		27CFA5301521EBA300F9AC21 /* FeedBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27CFA52E1521EBA300F9AC21 /* FeedBackViewController.m */; };
 		27EDA63B152B117A00679B25 /* MyTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 27EDA63A152B117A00679B25 /* MyTextField.m */; };
@@ -295,6 +296,8 @@
 		2779259015347CA80062D871 /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 		27792596153486800062D871 /* route.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = route.csv; sourceTree = SOURCE_ROOT; };
 		277925AA15349FA90062D871 /* time.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = time.png; path = Images/time.png; sourceTree = "<group>"; };
+		27897679155574FF00534E70 /* MapHelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapHelpViewController.h; sourceTree = "<group>"; };
+		2789767A155574FF00534E70 /* MapHelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapHelpViewController.m; sourceTree = "<group>"; };
 		278FE5C4150CE2EE0098BA74 /* DatePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatePickerViewController.h; sourceTree = "<group>"; };
 		278FE5C5150CE2EE0098BA74 /* DatePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatePickerViewController.m; sourceTree = "<group>"; };
 		27CFA52D1521EBA300F9AC21 /* FeedBackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedBackViewController.h; sourceTree = "<group>"; };
@@ -635,6 +638,8 @@
 			children = (
 				278FE5C4150CE2EE0098BA74 /* DatePickerViewController.h */,
 				278FE5C5150CE2EE0098BA74 /* DatePickerViewController.m */,
+				27897679155574FF00534E70 /* MapHelpViewController.h */,
+				2789767A155574FF00534E70 /* MapHelpViewController.m */,
 				2779258F15347CA80062D871 /* MapViewController.h */,
 				2779259015347CA80062D871 /* MapViewController.m */,
 			);
@@ -1147,9 +1152,9 @@
 				27EDA63B152B117A00679B25 /* MyTextField.m in Sources */,
 				5381C8F7153046380012E99D /* RecordAction.m in Sources */,
 				2779259115347CA80062D871 /* MapViewController.m in Sources */,
-				277925B215357F940062D871 /* MapHelpViewController.m in Sources */,
 				531D3228154D641C00FC4C2B /* StatHelpViewController.m in Sources */,
 				531D324F1551A16C00FC4C2B /* GzipCompress.m in Sources */,
+				2789767B155574FF00534E70 /* MapHelpViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
