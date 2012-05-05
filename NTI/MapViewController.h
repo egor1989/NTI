@@ -36,23 +36,18 @@
     
     MKMapPoint northEastPoint; 
 	MKMapPoint southWestPoint; 
-//    bool isUserLoadRoute
 }
 
 @property (nonatomic, retain) IBOutlet MKMapView* mapView;
 @property (nonatomic, retain) MKPolyline* routeLine;
 //@property (nonatomic, retain) MKPolylineView* routeLineView;
 
-// load the points of the route from the data source, in this case
-// a CSV file. 
--(void) loadRoute: (NSArray*) routeArray;
-
-// use the computed _routeRect to zoom in on the route. 
+-(void) parseRoute: (NSArray*) routeArray;
 -(void) zoomInOnRoute;
 -(void) mapWaitingState;
 -(void) mapDrawRoute;
 -(void) mapStopWaitingState;
--(MKPolyline*) normalPointsDraw:(NSArray*) normalPointsArray;
+-(MKPolyline*) createRouteLine:(NSArray*) normalPointsArray;
 -(void) specialPointsDraw:(NSArray*) specialPointsArray: (int) pointType;
 
 
