@@ -75,9 +75,10 @@
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             [userDefaults setValue:[serverCommunication getAllStatistic] forKey:@"allStat"];
             [userDefaults setValue:[serverCommunication getLastStatistic] forKey:@"lastStat"];
-            HelpViewController *helpView = [self.storyboard instantiateViewControllerWithIdentifier: @"HelpViewController"];
-            helpView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-            [self presentModalViewController: helpView animated:YES];
+//            HelpViewController *helpView = [self.storyboard instantiateViewControllerWithIdentifier: @"HelpViewController"];
+//            helpView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+//            [self presentModalViewController: helpView animated:YES];
+            [self dismissModalViewControllerAnimated:YES];
         }
         
     }

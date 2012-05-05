@@ -13,12 +13,8 @@
 @synthesize routeLine = _routeLine;
 //@synthesize routeLineView = routeLineView;
 
-//routePointsReceived
-
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    isUserLoadRoute = NO;
     
     [_mapView setDelegate:self];
     serverCommunication = [[ServerCommunication alloc]init ];
@@ -29,7 +25,7 @@
      object: nil];
     [[NSNotificationCenter defaultCenter]	
      addObserver: self
-     selector: @selector(mapDrawRoute:)
+     selector: @selector(parseAnswer:)
      name: @"routePointsReceived"
      object: nil];
     [[NSNotificationCenter defaultCenter]	
@@ -40,12 +36,13 @@
     
     isFirstRect = YES;
     
+    //загрузка последнего маршрута
     if ([ServerCommunication checkInternetConnection]) {
         [serverCommunication getRouteFromServer:0];
     }
-	
 }
 
+//переход карты в состояние ождиание и запрос к серверу на получение маршрута. Метод вызывается из вьюшки выбора даты
 -(void) mapWaitingState: (NSNotification*) TheNotice{
     if ([ServerCommunication checkInternetConnection]){
         waintingIndicator.hidden = NO;
@@ -56,12 +53,14 @@
     }
 }
 
+//выход из состояния ожидания
 -(void) mapStopWaitingState{
     [waintingIndicator stopAnimating];
     grayView.hidden = YES;
 }
 
--(void) mapDrawRoute: (NSNotification*) TheNotice{
+// метод верхнего уровня для отрисовки маршрута на карте. Вызывается из ServerCommunication, после получения ответа от сервера
+-(void) parseAnswer: (NSNotification*) TheNotice{
     SBJsonParser *jsonParser = [SBJsonParser new];
     NSArray *answerArray = [[NSArray alloc] init];
     NSArray *routeArray = [[NSArray alloc] init];
@@ -72,85 +71,66 @@
     grayView.hidden = YES;
     
     [self.mapView removeOverlays: self.mapView.overlays];
-    [self loadRoute:routeArray];
+    [self parseRoute:routeArray];
     [self zoomInOnRoute];
 }
 
--(void) loadRoute: (NSArray*) routeArray
+// Парсит маршрут и вызывает методы отрисовки
+-(void) parseRoute: (NSArray*) routeArray
 {
-//    NSArray *error = [answer valueForKey:@"error"];
-//    NSString *info = [error valueForKey:@"info"];
-//    NSInteger code = [[error valueForKey:@"code"] intValue];
-//    NSLog(@"result=%@ info=%@ code=%d", result, info, code);
     NSArray *point = [[NSArray alloc] init];
     NSMutableArray *routeLineArray = [[NSMutableArray alloc] init];
-    NSMutableArray *normalPointsArray = [[NSMutableArray alloc] init];
-    NSMutableArray *specialPointsArray1 = [[NSMutableArray alloc] init];
-    NSMutableArray *specialPointsArray2 = [[NSMutableArray alloc] init];
-    NSMutableArray *specialPointsArray3 = [[NSMutableArray alloc] init];
-    NSMutableArray *specialPointsArray4 = [[NSMutableArray alloc] init];
-    NSMutableArray *specialPointsArray5 = [[NSMutableArray alloc] init];
-    NSMutableArray *specialPointsArray6 = [[NSMutableArray alloc] init];
+    NSMutableArray *allRoutesPointsArray[4][4];
+    for (int i=0; i<=3; i++) {
+        for (int j=0; j<=3; j++) {
+            allRoutesPointsArray[i][j] = [[NSMutableArray alloc] init];
+        }
+    }
     if ([routeArray isEqual: @"null"]){
         NSLog(@"noHoles");
     }
-    else
+    else{
+        //если есть данные, начинаем заполнение массивов различными точками
         for (point in routeArray){
-            if ([[point valueForKey:@"type"] doubleValue] == 0){  
-                if ([[point valueForKey:@"lat"] doubleValue]>0.1) {
-                    NSArray *latLngArray = [[NSArray alloc] initWithObjects:[point valueForKey:@"lat"],[point valueForKey:@"lng"],nil ];
-                    [normalPointsArray addObject:latLngArray];
-                }
+            NSArray *latLngArray = [[NSArray alloc] initWithObjects:[point valueForKey:@"lat"],[point valueForKey:@"lng"],nil];
+            int type = [[point valueForKey:@"type"]intValue];
+            int weight = [[point valueForKey:@"weight"]intValue];
+//            switch (type) {
+//                case 42:
+//                    [routeLineArray addObject:[self createRouteLine:allRoutesPointsArray[0][0]]];
+//                    break;
+//                case 0:
+//                    allRoutesPointsArray[0][0]
+//                    
+//                default:
+//                    break;
+//            }
+            if (type == 42) {
+                [routeLineArray addObject:[self createRouteLine:allRoutesPointsArray[0][0]]];
+                [allRoutesPointsArray[0][0] removeAllObjects];
             }
-            else if ([[point valueForKey:@"type"] doubleValue] == -3){
-                NSArray *latLngArray = [[NSArray alloc] initWithObjects:[point valueForKey:@"lat"],[point valueForKey:@"lng"],nil ];
-                [specialPointsArray1 addObject:latLngArray];
+            else{
+                [allRoutesPointsArray[type][weight] addObject:latLngArray];
             }
-            else if ([[point valueForKey:@"type"] doubleValue] == -2){
-                NSArray *latLngArray = [[NSArray alloc] initWithObjects:[point valueForKey:@"lat"],[point valueForKey:@"lng"],nil ];
-                [specialPointsArray2 addObject:latLngArray];
-            }
-            else if ([[point valueForKey:@"type"] doubleValue] == -1){
-                NSArray *latLngArray = [[NSArray alloc] initWithObjects:[point valueForKey:@"lat"],[point valueForKey:@"lng"],nil ];
-                [specialPointsArray3 addObject:latLngArray];
-            }
-            else if ([[point valueForKey:@"type"] doubleValue] == 1){
-                NSArray *latLngArray = [[NSArray alloc] initWithObjects:[point valueForKey:@"lat"],[point valueForKey:@"lng"],nil ];
-                [specialPointsArray4 addObject:latLngArray];
-            }
-            else if ([[point valueForKey:@"type"] doubleValue] == 2){
-                NSArray *latLngArray = [[NSArray alloc] initWithObjects:[point valueForKey:@"lat"],[point valueForKey:@"lng"],nil ];
-                [specialPointsArray5 addObject:latLngArray];
-            } 
-            else if ([[point valueForKey:@"type"] doubleValue] == 3){
-                NSArray *latLngArray = [[NSArray alloc] initWithObjects:[point valueForKey:@"lat"],[point valueForKey:@"lng"],nil ];
-                [specialPointsArray6 addObject:latLngArray];
-            }
-            else if ([[point valueForKey:@"type"] doubleValue] == 42){
-                if (normalPointsArray.count != 0){
-                    [routeLineArray addObject:[self normalPointsDraw:normalPointsArray]];
-                }
-                [normalPointsArray removeAllObjects];
-            }
-
         }
-    
-    [routeLineArray addObject:[self normalPointsDraw:normalPointsArray]];
-    [self specialPointsDraw:specialPointsArray1:1];
-    [self specialPointsDraw:specialPointsArray2:2];
-    [self specialPointsDraw:specialPointsArray3:3];
-    [self specialPointsDraw:specialPointsArray4:4];
-    [self specialPointsDraw:specialPointsArray5:5];
-    [self specialPointsDraw:specialPointsArray6:6];
-	
-   // MKPolyline *polyLine;
-   for (_routeLine in routeLineArray){
-        [_mapView addOverlay:_routeLine];
+        [routeLineArray addObject:[self createRouteLine:allRoutesPointsArray[0][0]]];
+        
+        //отрисовка маршрута (чёрная линия)
+        for (_routeLine in routeLineArray){
+            [_mapView addOverlay:_routeLine];
+        }
+        //отрисовка специальных точек
+        for (int i=1; i<=3; i++) {
+            for (int j=1; j<=3; j++) {
+                [self specialPointsDraw:allRoutesPointsArray[i][j] :j];
+            }
+        }
     }
 }
 
--(MKPolyline*) normalPointsDraw:(NSArray*) normalPointsArray1{
-//    isUserLoadRoute = YES;
+
+//Создаёт и возвращает линию маршрута. (Просто маршрут - без специальных точек)
+-(MKPolyline*) createRouteLine:(NSArray*) normalPointsArray1{
 	MKMapPoint* pointArr = malloc(sizeof(CLLocationCoordinate2D) * normalPointsArray1.count);
     
 	for(int idx = 0; idx < normalPointsArray1.count; idx++)
@@ -197,59 +177,27 @@
 
 }
 
+// Добавляет на карту слой - точку. В зависимости от типа точки присваивает ей определёный заголовок.
 -(void) specialPointsDraw:(NSArray*) specialPointsArray: (int) pointType{
-	for(int idx = 0; idx < specialPointsArray.count; idx++)
+    NSArray *point = [[NSArray alloc] init ];
+	for(point in specialPointsArray)
 	{
-		NSArray* currentPoint = [specialPointsArray objectAtIndex:idx];
-        
-		CLLocationDegrees latitude  = [[currentPoint objectAtIndex:0] doubleValue];
-		CLLocationDegrees longitude = [[currentPoint objectAtIndex:1] doubleValue];
+		CLLocationDegrees latitude  = [[point objectAtIndex:0] doubleValue];
+		CLLocationDegrees longitude = [[point objectAtIndex:1] doubleValue];
 		CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(latitude, longitude);
         
         circleSpecial = [MKCircle circleWithCenterCoordinate:coordinate radius:6];
-        switch (pointType) {
-            case 1:
-                [circleSpecial setTitle:@"-3"];
-                [self.mapView addOverlay:circleSpecial];
-                break;
-            case 2:
-                [circleSpecial setTitle:@"-2"];
-                [self.mapView addOverlay:circleSpecial];
-                break;
-            case 3:
-                [circleSpecial setTitle:@"-1"];
-                [self.mapView addOverlay:circleSpecial];
-                break;
-            case 4:
-                [circleSpecial setTitle:@"1"];
-                [self.mapView addOverlay:circleSpecial];
-                break;
-            case 5:
-                [circleSpecial setTitle:@"2"];
-                [self.mapView addOverlay:circleSpecial];
-                break;
-            case 6:
-                [circleSpecial setTitle:@"3"];
-                [self.mapView addOverlay:circleSpecial];
-                break;
-            default:
-                break;
-        }
+        [circleSpecial setTitle:[NSString stringWithFormat:@"%d",pointType]];
+        [self.mapView addOverlay:circleSpecial];
 	}
     
 }
 
+//масштабирование на маршруте
 -(void) zoomInOnRoute
 {
 	[self.mapView setVisibleMapRect:_routeRect];
 }
-
-- (void)didReceiveMemoryWarning {
-	// Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-	
-}
-
 
 - (void)dealloc 
 {
@@ -261,42 +209,31 @@
 #pragma mark MKMapViewDelegate
 - (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id <MKOverlay>)overlay
 {
-	
 	if(overlay == self.routeLine)
 	{
-        
         MKOverlayView* overlayView = nil;
         MKPolylineView *routeLineView = [[MKPolylineView alloc] initWithPolyline:self.routeLine];
-        routeLineView.fillColor = [UIColor blackColor];
-        routeLineView.strokeColor = [UIColor blackColor];
-        routeLineView.lineWidth = 3;
-    
+        routeLineView.fillColor = [UIColor blueColor];
+        routeLineView.strokeColor = [UIColor blueColor];
+        routeLineView.lineWidth = 15;
+        routeLineView.alpha = 0.6;
+//        routeLineView.lineDashPhase = 15;
+        
 		overlayView = routeLineView;
-		
         return overlayView;
 	}
     
     MKCircle *circle = overlay;
     MKCircleView *circleView = [[MKCircleView alloc] initWithCircle:overlay];
-    if([circle.title isEqualToString:@"-3"]){
-        circleView.strokeColor = circleView.fillColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:1.0];
-    }
-    else if([circle.title isEqualToString:@"-2"]){
-        circleView.strokeColor = circleView.fillColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.6];
-    }
-    else if([circle.title isEqualToString:@"-1"]){
-        circleView.strokeColor = circleView.fillColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.3];
-    }
-    else if([circle.title isEqualToString:@"1"]){
-        circleView.strokeColor = circleView.fillColor = [UIColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:0.3];
+    if([circle.title isEqualToString:@"1"]){
+        circleView.strokeColor = circleView.fillColor = [UIColor greenColor];
     }
     else if([circle.title isEqualToString:@"2"]){
-        circleView.strokeColor = circleView.fillColor = [UIColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:0.6];
+        circleView.strokeColor = circleView.fillColor = [UIColor yellowColor];
     }
     else if([circle.title isEqualToString:@"3"]){
-        circleView.strokeColor = circleView.fillColor = [UIColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:1.0];
+        circleView.strokeColor = circleView.fillColor = [UIColor redColor];
     }
-    
     return circleView;
 }
 @end
