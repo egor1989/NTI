@@ -244,13 +244,10 @@ static sqlite3_stmt *readStmt = nil;
     NSLog(@"%i",size);
 
   //  NSString *CSV = [csvConverter arrayToCSVString:dataArray];
-    NSString *JSON = [jsonConvert convert:dataArray];
-    
-//    NSThread* myThread = [[NSThread alloc] initWithTarget:self
-//                                                 selector:@selector(sendArray:)
-//                                                   object:JSON];
-//    [myThread start]; 
-    
+    NSData *JSON = [jsonConvert convert:dataArray];
+   
+    //NSString *cJSON = [[NSString alloc] initWithData:compressJSON encoding:NSASCIIStringEncoding]; 
+    //NSLog(@"cJSON=%@",cJSON);
     [serverCommunication uploadData: JSON]; 
 
     

@@ -71,7 +71,7 @@
     countKm.textAlignment = UITextAlignmentRight;
     
     
-    lastTrip = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];;
+    lastTrip = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 89.0f, 27.0f)];;
     lastTrip.font = fontForLabel;
     lastTrip.textAlignment = UITextAlignmentRight;
     
@@ -123,8 +123,8 @@
 {
     [super viewDidAppear:animated];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    if ([userDefaults integerForKey:@"segment"]==0) [self parse:[userDefaults valueForKey:@"lastStat"]];
-    else [self parse:[userDefaults valueForKey:@"allStat"]];
+    if ([userDefaults integerForKey:@"segment"]==0) [self parse:[userDefaults valueForKey:@"lastStat"] method:@"lastStat"];
+    else [self parse:[userDefaults valueForKey:@"allStat"] method:@"allStat"];
     
     //Прослушка notifications
     [[NSNotificationCenter defaultCenter]	
@@ -425,17 +425,17 @@
     if ([segmentedControl selectedSegmentIndex]==0) {
             NSLog(@"за последнюю поездку");
             [userDefaults setInteger:0 forKey:@"segment"];
-            [self parse: [userDefaults valueForKey:@"lastStat"]];
+            [self parse: [userDefaults valueForKey:@"lastStat"] method:@"lastStat"];
         }
     else {
         NSLog(@"за все время");
         [userDefaults setInteger:1 forKey:@"segment"];
-        [self parse: [userDefaults valueForKey:@"allStat"]];
+        [self parse: [userDefaults valueForKey:@"allStat"] method:@"allStat"];
     }
 }
     
 
-- (void)parse:(NSString *)result{
+- (void)parse:(NSString *)result method:(NSString *)method{
     NSLog(@"result = %@", result);
     
     if (result != nil) {
@@ -447,6 +447,17 @@
         acceleration.text = [NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_acc"]];
         deceleration.text = [NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_brake"]];
         rotation.text = [NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_turn"]];
+        countKm.text = [NSString stringWithFormat:@"%@", [statArray valueForKey:@"distance"]];
+        if ([method isEqualToString:@"lastStat"]) {
+            NSDateFormatter * date_format = [[NSDateFormatter alloc] init];
+            [date_format setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"ru_RU"]];
+            //[date_format setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"GMT"]];
+            [date_format setDateFormat: @"dd.mm HH:mm"];
+           NSLog(@"date=%@", [NSDate dateWithTimeIntervalSince1970:[[statArray valueForKey:@"time"]doubleValue]]);
+            NSString *string = [date_format stringFromDate:[NSDate dateWithTimeIntervalSince1970:[[statArray valueForKey:@"time"]doubleValue]]];
+            lastTrip.text = string;
+        }
+        
     }
     else {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Нет данных" message:@"Для вашей учетной записи еще нет данных" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
@@ -456,8 +467,8 @@
         acceleration.text = @"?";
         deceleration.text = @"?";
         rotation.text = @"?";
-
-        
+        countKm.text = @"?";
+        lastTrip.text = @"?";
     }
 
 }

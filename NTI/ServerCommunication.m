@@ -12,23 +12,46 @@
 @synthesize errors;
 
 
-- (void)uploadData:(NSString *)fileContent{
+- (void)uploadData:(NSData *)fileContent{
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSLog(@"cookie = %@", [userDefaults valueForKey:@"cookie"]);
     NSString *cookie = [userDefaults valueForKey:@"cookie"]; 
-  //  NSString * cookie = [self refreshCookie];
+    NSLog(@"&");
     
-    fileContent=[@"data={\"method\":\"addNTIFile\",\"params\":{\"ntifile\":" stringByAppendingString:fileContent];
-    fileContent=[fileContent stringByAppendingString:@"}}"];
+    NSString *sJSON = [[NSString alloc] initWithData:fileContent encoding:NSASCIIStringEncoding]; 
+    //gzip
+    //NSData *compressJSON = [GzipCompress compressData:JSON error:nil];
+   // NSMutableData *firstPart = [NSData dataWithContentsOfFile:@"data={\"method\":\"addNTIFile\",\"params\":{\"ntifile\":"];
+   // NSData *secondPart = [NSData dataWithContentsOfFile:@"&zip=1}}"];
+   // [firstPart appendData:fileContent];
+    //NSMutableData *requestD = [firstPart appendData: fileContent];
+    NSString *requestContent = [NSString stringWithFormat:@"{\"method\":\"addNTIFile\",\"params\":{\"ntifile\":%@}",sJSON];
+    //fileContent = [NSString stringWithFormat:@"data={\"method\":\"addNTIFile\",\"params\":{\"ntifile\":data=%@ &zip=1}}",fileContent];
+    //fileContent=[@"data={\"method\":\"addNTIFile\",\"params\":{\"ntifile\":data=" stringByAppendingString:fileContent];
+    //fileContent=[fileContent stringByAppendingString:@"&zip=1}}"];
     
-    NSLog(@"Request: %@", fileContent);
+    NSLog(@"Request: %@", requestContent);
         
    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
                                   timeoutInterval:60.0];
 
-    requestData = [NSData dataWithBytes:[fileContent UTF8String] length:[fileContent length]];
+    requestData = [NSData dataWithBytes:[requestContent UTF8String] length:[fileContent length]];
+    NSData *compressData = [GzipCompress compressData:requestData error:nil];
+    
+    
+    NSLog(@"cData = %@", compressData);
+    
+    NSString* content = [compressData description];
+    
+   // NSString* s = [[NSString alloc] initWithBytes:[compressData description] length:sizeof([compressData description]) encoding:NSASCIIStringEncoding];
+   // NSString *content = [[NSString alloc] initWithData:compressData encoding: NSUTF8Encoding];
+    //NSLog(@"content=%@",content);
+    
+    NSString* requestDataFull = [NSString stringWithFormat:@"data=%@%@",content,@"&zip=1"];
+    NSLog(@"%@", requestDataFull);
+    
     [request setHTTPMethod:@"POST"];
-    [request setHTTPBody: requestData];    
+    [request setHTTPBody: [NSData dataWithBytes:[requestDataFull UTF8String] length:[requestDataFull length]]];    
     
      NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
      @"http://nti.goodroads.ru/api/", NSHTTPCookieDomain,
@@ -56,20 +79,7 @@
     returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
     NSLog(@"returnData: %@", returnString);
     [self checkErrors:returnString method:@"sendData"];
- 
-     
- //   NSThread* myThread = [[NSThread alloc] initWithTarget:self
-   //                                              selector:@selector(sendData:)
-   //                                                object:request];
-  //  [myThread start]; 
-  //  [NSURLConnection sendAsynchronousRequest:request
-  //                                     queue:[NSOperationQueue mainQueue]
-  //                         completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *error) {
-  //                             returnString = [[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding];
-  //                             NSLog(@"returnData: %@", returnString);
-  //                             [self checkErrors:returnString method:@"sendData"];
-                               // проверка на ошибки при отправке файла // если нет можно очистить БД
-  //                         }];
+
 
 }
 
@@ -138,12 +148,6 @@
     errors = YES;
     NSLog(@"code = %i", code);
     
-    
-//    if (errorCode == 31 || errorCode == 32) {
-       
-//    }
-//    else if (errorCode == 33){
-//    }
 
     switch (code) {
         case 0:

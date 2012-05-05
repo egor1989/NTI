@@ -11,6 +11,7 @@
 #import "Reachability.h"
 #import <CoreTelephony/CTCarrier.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
+#import "GzipCompress.h"
 
 @interface ServerCommunication : NSObject {
     NSString *returnString; 
@@ -28,7 +29,7 @@
     
 }
 - (void)regUser:(NSString *)login password:(NSString *)password email:(NSString *)email;
-- (void)uploadData:(NSString *)fileContent;
+- (void)uploadData:(NSData *)fileContent;
 - (void)authUser:(NSString *)login secret:(NSString *)message;
 - (BOOL)checkErrors:(NSString *)answerString method:(NSString *)methodName;
 - (void)showResult;

@@ -5,7 +5,7 @@
 //  Created by Елена on 02.05.12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
-#define DATA_CHUNK_SIZE 262144 // Deal with gzipped data in 256KB chunks
+#define DATA_CHUNK_SIZE 10240 // Deal with gzipped data in 256KB chunks 262144
 #define COMPRESSION_AMOUNT Z_DEFAULT_COMPRESSION
 
 

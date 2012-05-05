@@ -42,6 +42,6 @@
 - (IBAction)helpButton:(id)sender;
 - (void) pickOne:(id)sender;
 - (void)changeImage;
-- (void)parse:(NSString *)result;
+- (void)parse:(NSString *)result method:(NSString *)method;
 - (IBAction) internetUploadSwitch:(id)sender;
 @end

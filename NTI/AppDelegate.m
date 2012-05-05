@@ -153,7 +153,7 @@
 }
 
 -(void)checkSendRight{
-    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"pk"]>1) {
+    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"pk"]>10) {
         if ([ServerCommunication checkInternetConnection])  {
            [recordAction sendFile];
         }

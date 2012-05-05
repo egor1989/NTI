@@ -13,6 +13,6 @@
     
     
 }
-- (NSString *)convert : (NSArray *)arrayForConvert;
+- (NSData *)convert : (NSArray *)arrayForConvert;
 
 @end
