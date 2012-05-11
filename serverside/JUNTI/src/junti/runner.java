@@ -49,7 +49,8 @@ public class runner implements Runnable {
             ArrayList<FilteredEntry> UpdatedEntry = new ArrayList<FilteredEntry>();
             ArrayList<Integer> UserList = new ArrayList<Integer>();
             ArrayList<Ride> UserRide=new ArrayList<Ride>();;//Одна поездка пользователя
-            
+            FilteredEntry tttt=new FilteredEntry();
+            tttt.setLng(1.0);
             Integer UnfilteredCount=0;
             int i=0;
             conn = MysqlDB.getConnection();
