@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import junti.DBConnection.MysqlDB;
@@ -146,82 +147,347 @@ public class runner implements Runnable {
                     {
                         if(UserRideTmp[j]!=null)
                         {
-                            for(i=1;i<UserRideTmp[j].getEntryRide().size()-1;i++)
+                            //Подсчет крутости торможения/ускорения, поворота и скорости точки.
+                            for(i=1;i<UserRideTmp[j].getEntryRide().size()-1;i++) 
                             {
-                                
-                                FilteredEntry[] FilteredArray = new FilteredEntry[UserRideTmp[j].getEntryRide().size()-1];
-                                FilteredArray[0].setTypeTurn("normal point");
-                                FilteredArray[0].setTypeAcc("normal point");
-                                FilteredArray[0].setTypeSpeed("normal point");
-				FilteredArray[i].setSevAcc(0);
-                                FilteredArray[i].setSevTurn(0);
-                                FilteredArray[i].setSevSpeed(0);
-                                double speed = FilteredArray[i].getSpeed();
-                                double deltaTime = FilteredArray[i].getTimestamp() - FilteredArray[i-1].getTimestamp();
+                                FilteredEntry[] FilteredArrayTmp = new FilteredEntry[UserRideTmp[j].getEntryRide().size()-1];
+				FilteredArrayTmp[i].setSevAcc(0);
+                                FilteredArrayTmp[i].setSevTurn(0);
+                                FilteredArrayTmp[i].setSevSpeed(0);
+                                double speed = FilteredArrayTmp[i].getSpeed();
+                                double deltaTime = FilteredArrayTmp[i].getTimestamp() - FilteredArrayTmp[i-1].getTimestamp();
                                 //$d += acos(sin($data[$i]['lat'])*sin($data[$i-1]['lat']) + cos($data[$i]['lat'])*cos($data[$i-1]['lat']) *  cos($data[$i-1]['lng']-$data[$i]['lng'])) * 111.2;
-                                if (FilteredArray[i].getLng() - FilteredArray[i-1].getLng() != 0) {
-                                    FilteredArray[i].setTurn(Math.atan((FilteredArray[i].getLat()-FilteredArray[i-1].getLat())/(FilteredArray[i].getLng()-FilteredArray[i-1].getLng())));
-                                    FilteredArray[0].setTurn(0);
-                                    double deltaTurn = FilteredArray[i].getTurn() - FilteredArray[i-1].getTurn();
+                                if (FilteredArrayTmp[i].getLng() - FilteredArrayTmp[i-1].getLng() != 0) {
+                                    FilteredArrayTmp[i].setTurn(Math.atan((FilteredArrayTmp[i].getLat()-FilteredArrayTmp[i-1].getLat())/(FilteredArrayTmp[i].getLng()-FilteredArrayTmp[i-1].getLng())));
+                                    FilteredArrayTmp[0].setTurn(0);
+                                    double deltaTurn = FilteredArrayTmp[i].getTurn() - FilteredArrayTmp[i-1].getTurn();
                                     double wAcc = Math.abs(deltaTurn/deltaTime);
                                     if ((wAcc < 0.45) && (wAcc >= 0)) {
-                                        FilteredArray[i].setSevTurn(0);
+                                        FilteredArrayTmp[i].setSevTurn(0);
                                     } else if ((wAcc >= 0.45) && (wAcc < 0.6)) {
-                                        FilteredArray[i].setSevTurn(1);
+                                        FilteredArrayTmp[i].setSevTurn(1);
                                     } else if ((wAcc >= 0.6) && (wAcc < 0.75)) {
-                                        FilteredArray[i].setSevTurn(2);
+                                        FilteredArrayTmp[i].setSevTurn(2);
                                     } else if (wAcc >= 0.75) {
-                                        FilteredArray[i].setSevTurn(3);
+                                        FilteredArrayTmp[i].setSevTurn(3);
                                     }
                                     
-                                    double deltaSpeed = speed - FilteredArray[i-1].getSpeed();
+                                    double deltaSpeed = speed - FilteredArrayTmp[i-1].getSpeed();
                                     double accel = deltaSpeed/deltaTime;
                                     //Высчитываем тип неравномерного движения (ускорение-торможение) через ускорение.
                                     if (accel<-7.5) 
-					FilteredArray[i].setSevAcc(-3);
+					FilteredArrayTmp[i].setSevAcc(-3);
                                     else if ((accel>=-7.5)&&(accel<-6)) 
-                                        FilteredArray[i].setSevAcc(-2);
+                                        FilteredArrayTmp[i].setSevAcc(-2);
                                     else if ((accel>=-6)&&(accel<-4.5))
-					FilteredArray[i].setSevAcc(-1);
+					FilteredArrayTmp[i].setSevAcc(-1);
                                     else if (accel>5) 
-                                        FilteredArray[i].setSevAcc(3);
+                                        FilteredArrayTmp[i].setSevAcc(3);
                                     else if ((accel>4)&&(accel<=5))
-                                        FilteredArray[i].setSevAcc(2);
+                                        FilteredArrayTmp[i].setSevAcc(2);
                                     else if ((accel>3.5)&&(accel<=4))
-                                        FilteredArray[i].setSevAcc(1);
+                                        FilteredArrayTmp[i].setSevAcc(1);
                                     else if ((accel>=-4.5)&&(accel<=3.5))
-                                        FilteredArray[i].setSevAcc(0);
+                                        FilteredArrayTmp[i].setSevAcc(0);
 								
 								
                                     if ((speed >= 0) && (speed <= 80)) 
-                                    	FilteredArray[i].setSevSpeed(0);
+                                    	FilteredArrayTmp[i].setSevSpeed(0);
                                     else if ((speed > 80) && (speed <= 110))
-					FilteredArray[i].setSevSpeed(1);
+					FilteredArrayTmp[i].setSevSpeed(1);
                                     else if ((speed > 110) && (speed <= 130))
-					FilteredArray[i].setSevSpeed(2);
+					FilteredArrayTmp[i].setSevSpeed(2);
                                     else if (speed > 130)
-                                        FilteredArray[i].setSevSpeed(3);
+                                        FilteredArrayTmp[i].setSevSpeed(3);
                                 
                                 } else {
-                                    FilteredArray[i].setTypeTurn("normal point");
-                                    FilteredArray[i].setTypeAcc("normal point");
-                                    FilteredArray[i].setSevTurn(0);
+                                    FilteredArrayTmp[i].setSevTurn(0);
                                     double wAcc = 0;
-                                    FilteredArray[i].setTurn(FilteredArray[i-1].getTurn());
+                                    FilteredArrayTmp[i].setTurn(FilteredArrayTmp[i-1].getTurn());
                                 }
+                                UserRideTmp[i].setFilteredEntryRide(new ArrayList<FilteredEntry>(Arrays.asList(FilteredArrayTmp)));
                             }
-                        }
-                    }
-                   
-                   
-                   
-            }
-        
-            
-         
-
-        }
-        
+                            
+                            //Подсчет статистики.
+                            
+                            //Превышения скоростей:
+                            double dss;
+                            for(i=1;i<UserRideTmp[j].getFilteredEntryRide().size()-1; i++) {
+                                double deltaTime = UserRideTmp[j].getFilteredEntryRide().get(i-1).getTimestamp() - UserRideTmp[j].getFilteredEntryRide().get(i).getTimestamp();
+                                
+                                if (UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeSpeed() == "normal point") {
+                                    if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevSpeed() == 0) {
+                                            UserRideTmp[j].getFilteredEntryRide().get(i).setTypeSpeed("normal point");
+                                    } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevSpeed() == 1) {
+                                            UserRideTmp[j].getFilteredEntryRide().get(i).setTypeSpeed("s1");
+                                            dss = deltaTime;
+                                    } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevSpeed() == 2) {
+                                            UserRideTmp[j].getFilteredEntryRide().get(i).setTypeSpeed("s2");
+                                            dss = deltaTime;
+                                    } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevSpeed() == 3) {
+                                            UserRideTmp[j].getFilteredEntryRide().get(i).setTypeSpeed("s3");
+                                            dss = deltaTime;
+                                    }
+                                } else if (UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeSpeed() == "s1") {
+                                    if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevSpeed() == 0) {
+                                            UserRideTmp[j].getFilteredEntryRide().get(i).setTypeSpeed("normal point");
+                                            UserRideTmp[j].setTypeSpeed1Count(UserRideTmp[j].getTypeSpeed1Count() + Math.round(dss/3));
+                                            dss = 0;
+                                    } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevSpeed() == 1) {
+                                            UserRideTmp[j].getFilteredEntryRide().get(i).setTypeSpeed("s1");
+                                            dss += deltaTime;
+                                    } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevSpeed() == 2) {
+                                            UserRideTmp[j].getFilteredEntryRide().get(i).setTypeSpeed("s2");
+                                            UserRideTmp[j].setTypeSpeed1Count(UserRideTmp[j].getTypeSpeed1Count() + Math.round(dss/3));
+                                            dss = 0;
+                                    } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevSpeed() == 3) {
+                                            UserRideTmp[j].getFilteredEntryRide().get(i).setTypeSpeed("s3");
+                                            UserRideTmp[j].setTypeSpeed1Count(UserRideTmp[j].getTypeSpeed1Count() + Math.round(dss/3));
+                                            dss = 0;
+                                    }
+                               } else if (UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeSpeed() == "s2") {
+                                    if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevSpeed() == 0) {
+                                            UserRideTmp[j].getFilteredEntryRide().get(i).setTypeSpeed("normal point");
+                                            UserRideTmp[j].setTypeSpeed2Count(UserRideTmp[j].getTypeSpeed2Count() + Math.round(dss/3));
+                                            dss = 0;
+                                    } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevSpeed() == 1) {
+                                            UserRideTmp[j].getFilteredEntryRide().get(i).setTypeSpeed("s1");
+                                            UserRideTmp[j].setTypeSpeed2Count(UserRideTmp[j].getTypeSpeed2Count() + Math.round(dss/3));
+                                            dss = 0;
+                                    } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevSpeed() == 2) {
+                                            UserRideTmp[j].getFilteredEntryRide().get(i).setTypeSpeed("s2");
+                                            dss += deltaTime;
+                                    } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevSpeed() == 3) {
+                                            UserRideTmp[j].getFilteredEntryRide().get(i).setTypeSpeed("s3");
+                                            UserRideTmp[j].setTypeSpeed2Count(UserRideTmp[j].getTypeSpeed2Count() + Math.round(dss/3));
+                                            dss = 0;
+                                    } 
+                               } else if (UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeSpeed() == "s3") {
+                                    if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevSpeed() == 0) {
+                                            UserRideTmp[j].getFilteredEntryRide().get(i).setTypeSpeed("normal point");
+                                            UserRideTmp[j].setTypeSpeed3Count(UserRideTmp[j].getTypeSpeed3Count() + Math.round(dss/3));
+                                            dss = 0;
+                                    } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevSpeed() == 1) {
+                                            UserRideTmp[j].getFilteredEntryRide().get(i).setTypeSpeed("s1");
+                                            UserRideTmp[j].setTypeSpeed3Count(UserRideTmp[j].getTypeSpeed3Count() + Math.round(dss/3));
+                                            dss = 0;
+                                    } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevSpeed() == 2) {
+                                            UserRideTmp[j].getFilteredEntryRide().get(i).setTypeSpeed("s2");
+                                            UserRideTmp[j].setTypeSpeed3Count(UserRideTmp[j].getTypeSpeed3Count() + Math.round(dss/3));
+                                            dss = 0;
+                                    } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevSpeed() == 3) {
+                                            UserRideTmp[j].getFilteredEntryRide().get(i).setTypeSpeed("s3");
+                                            dss += deltaTime;
+                                    }
+                               }
+                               // Конец выявления превышения скоростей.
+                               
+                               //Большое количество проверок условий соотношения ускорений в текущей и прошлой точках.
+                               if (UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeAcc() == "normal point") {
+                                   if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == 0)
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("normal point");
+                                   else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == 1)
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("acc1 started");
+                                   else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == 2)
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("acc2 started");
+                                   else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == 3)
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("acc3 started");
+                                   else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == -1)
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("brake1 started");
+                                   else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == -2)
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("brake2 started");
+                                   else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == -3)
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("brake3 started");
+                               } else if ((UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeAcc() == "acc1 started") || (UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeAcc() == "acc1 continued")) {
+                                   if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == 0) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("normal point");
+                                       UserRideTmp[j].setTypeAcc1Count(UserRideTmp[j].getTypeAcc1Count()+1);
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == 1) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("acc1 continued");
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == 2) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("acc2 continued");
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == 3) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("acc3 continued");
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == -1) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("brake1 started");
+                                       UserRideTmp[j].setTypeAcc1Count(UserRideTmp[j].getTypeAcc1Count()+1);
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == -2) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("brake2 started");
+                                       UserRideTmp[j].setTypeAcc2Count(UserRideTmp[j].getTypeAcc2Count()+1);
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == -3) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("brake3 continued");
+                                       UserRideTmp[j].setTypeAcc3Count(UserRideTmp[j].getTypeAcc3Count()+1);
+                                   }
+                               } else if ((UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeAcc() == "acc2 started") || (UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeAcc() == "acc2 continued")) {
+                                   if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == 0) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("normal point");
+                                       UserRideTmp[j].setTypeAcc2Count(UserRideTmp[j].getTypeAcc2Count()+1);
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == 1) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("acc1 started");
+                                       UserRideTmp[j].setTypeAcc2Count(UserRideTmp[j].getTypeAcc2Count()+1);
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == 2) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("acc2 continued");
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == 3) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("acc3 continued");
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == -1) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("brake1 started");
+                                       UserRideTmp[j].setTypeAcc2Count(UserRideTmp[j].getTypeAcc2Count()+1);
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == -2) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("brake2 started");
+                                       UserRideTmp[j].setTypeAcc2Count(UserRideTmp[j].getTypeAcc2Count()+1);
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == -3) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("brake3 started");
+                                       UserRideTmp[j].setTypeAcc2Count(UserRideTmp[j].getTypeAcc2Count()+1);
+                                   }
+                               } else if ((UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeAcc() == "acc3 started") || (UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeAcc() == "acc3 continued")) {
+                                   if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == 0) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("normal point");
+                                       UserRideTmp[j].setTypeAcc3Count(UserRideTmp[j].getTypeAcc3Count()+1);
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == 1) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("acc1 started");
+                                       UserRideTmp[j].setTypeAcc3Count(UserRideTmp[j].getTypeAcc3Count()+1);
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == 2) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("acc2 started");
+                                       UserRideTmp[j].setTypeAcc3Count(UserRideTmp[j].getTypeAcc3Count()+1);
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == 3) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("acc3 continued");
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == -1) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("brake1 started");
+                                       UserRideTmp[j].setTypeAcc3Count(UserRideTmp[j].getTypeAcc3Count()+1);
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == -2) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("brake2 started");
+                                       UserRideTmp[j].setTypeAcc3Count(UserRideTmp[j].getTypeAcc3Count()+1);
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == -3) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("brake3 started");
+                                       UserRideTmp[j].setTypeAcc3Count(UserRideTmp[j].getTypeAcc3Count()+1);
+                                   }
+                               } else if ((UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeAcc() == "brake1 started") || (UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeAcc() == "brake1 continued")) {
+                                   if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == 0) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("normal point");
+                                       UserRideTmp[j].setTypeBrake1Count(UserRideTmp[j].getTypeBrake1Count()+1);
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == 1) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("acc1 started");
+                                       UserRideTmp[j].setTypeBrake1Count(UserRideTmp[j].getTypeBrake1Count()+1);
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == 2) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("acc2 started");
+                                       UserRideTmp[j].setTypeBrake1Count(UserRideTmp[j].getTypeBrake1Count()+1);
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == 3) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("acc3 started");
+                                       UserRideTmp[j].setTypeBrake1Count(UserRideTmp[j].getTypeBrake1Count()+1);
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == -1) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("brake1 continued");
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == -2) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("brake2 started");
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == -3) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("brake3 started");
+                                   }
+                               }  else if ((UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeAcc() == "brake2 started") || (UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeAcc() == "brake2 continued")) {
+                                   if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == 0) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("normal point");
+                                       UserRideTmp[j].setTypeBrake2Count(UserRideTmp[j].getTypeBrake2Count()+1);
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == 1) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("acc1 started");
+                                       UserRideTmp[j].setTypeBrake2Count(UserRideTmp[j].getTypeBrake2Count()+1);
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == 2) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("acc2 started");
+                                       UserRideTmp[j].setTypeBrake2Count(UserRideTmp[j].getTypeBrake2Count()+1);
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == 3) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("acc3 started");
+                                       UserRideTmp[j].setTypeBrake2Count(UserRideTmp[j].getTypeBrake2Count()+1);
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == -1) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("brake1 started");
+                                       UserRideTmp[j].setTypeBrake2Count(UserRideTmp[j].getTypeBrake2Count()+1);
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == -2) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("brake2 continued");
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == -3) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("brake3 started");
+                                   }
+                               }  else if ((UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeAcc() == "brake3 started") || (UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeAcc() == "brake3 continued")) {
+                                   if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == 0) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("normal point");
+                                       UserRideTmp[j].setTypeBrake3Count(UserRideTmp[j].getTypeBrake3Count()+1);
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == 1) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("acc1 started");
+                                       UserRideTmp[j].setTypeBrake3Count(UserRideTmp[j].getTypeBrake3Count()+1);
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == 2) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("acc2 started");
+                                       UserRideTmp[j].setTypeBrake3Count(UserRideTmp[j].getTypeBrake3Count()+1);
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == 3) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("acc3 started");
+                                       UserRideTmp[j].setTypeBrake3Count(UserRideTmp[j].getTypeBrake3Count()+1);
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == -1) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("brake1 started");
+                                       UserRideTmp[j].setTypeBrake3Count(UserRideTmp[j].getTypeBrake3Count()+1);
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == -2) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("brake2 started");
+                                       UserRideTmp[j].setTypeBrake3Count(UserRideTmp[j].getTypeBrake3Count()+1);
+                                   } else if (UserRideTmp[j].getFilteredEntryRide().get(i).getSevAcc() == -3) {
+                                       UserRideTmp[j].getFilteredEntryRide().get(i).setTypeAcc("brake3 continued");
+                                   }
+                               }
+                               //Конец расчета ускорений/торможений
+                               
+                               //Начало расчета поворотов.
+                               double deltaTurn = UserRideTmp[j].getFilteredEntryRide().get(i).getTurn() - UserRideTmp[j].getFilteredEntryRide().get(i-1).getTurn();
+                               
+                               if ((UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeTurn() == "left turn finished") 
+                                       || (UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeTurn() == "right turn finished")
+                                       || (UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeTurn() == NULL)
+                                       || (UserRideTmp[j].getFilteredEntryRide().get(i-1).getSpeed() == 0)) {
+                                   UserRideTmp[j].getFilteredEntryRide().get(i).getTypeTurn() == "normal point";
+                               } else if (deltaTurn > 0.5) {
+                                    if (UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeTurn() == "normal point") {
+                                        UserRideTmp[j].getFilteredEntryRide().get(i).setTypeTurn("left turn started");
+                                    } else if (UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeTurn() == "left turn started")
+                                            ||(UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeTurn() == "left turn continued")) {
+					UserRideTmp[j].getFilteredEntryRide().get(i).setTypeTurn("left turn continued");
+                                    } else if ((UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeTurn() == "right turn started")
+                                            ||(UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeTurn() == "right turn continued")) {
+                                        UserRideTmp[j].getFilteredEntryRide().get(i).setTypeTurn("right turn finished");
+                                    }
+                               } else if (deltaTurn < -0.5) {
+                                    if (UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeTurn() == "normal point") {
+                                        UserRideTmp[j].getFilteredEntryRide().get(i).setTypeTurn("right turn started");
+                                    } else if (UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeTurn() == "right turn started")
+                                            ||(UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeTurn() == "right turn continued")) {
+					UserRideTmp[j].getFilteredEntryRide().get(i).setTypeTurn("right turn continued");
+                                    } else if ((UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeTurn() == "left turn started")
+                                            ||(UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeTurn() == "left turn continued")) {
+                                        UserRideTmp[j].getFilteredEntryRide().get(i).setTypeTurn("left turn finished");
+                                    }
+                               } else if ((deltaTurn >= -0.5) && (deltaTurn <= 0.5)) {
+                                    if (UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeTurn() == "normal point") {
+                                        UserRideTmp[j].getFilteredEntryRide().get(i).setTypeTurn("normal point");
+                                    } else if ((UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeTurn() == "left turn started")
+                                            ||(UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeTurn() == "left turn continued")) {
+                                        UserRideTmp[j].getFilteredEntryRide().get(i).setTypeTurn("left turn finished");                                    
+                                    } else if (UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeTurn() == "right turn started")||(UserRideTmp[j].getFilteredEntryRide().get(i-1).getTypeTurn() == "right turn continued")) {
+					UserRideTmp[j].getFilteredEntryRide().get(i).setTypeTurn("right turn continued");
+                                    }
+                               }
+                               if ((UserRideTmp[j].getFilteredEntryRide().get(i).getTypeTurn() == "left turn finished") || ((UserRideTmp[j].getFilteredEntryRide().get(i).getTypeTurn() == "right turn finished point"))) {
+                                   switch (UserRideTmp[j].getFilteredEntryRide().get(i).getSevTurn()) {
+                                       case 1: {
+                                           UserRideTmp[j].setTypeTurn1Count(UserRideTmp[j].getTypeTurn1Count()+1);
+                                           break;
+                                       }
+                                       case 2: {
+                                           UserRideTmp[j].setTypeTurn2Count(UserRideTmp[j].getTypeTurn2Count()+1);
+                                           break;
+                                       }
+                                       case 3: {
+                                           UserRideTmp[j].setTypeTurn3Count(UserRideTmp[j].getTypeTurn3Count()+1);
+                                           break;
+                                       }
+                                       case 0: {
+                                           break;
+                                       }
+                                   }
+                               }
+                               //Конец расчета поворотов.
+                            }
+                            //Конец подсчета статистики
+       
         catch (ClassNotFoundException ex) {
             Logger.getLogger(runner.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
