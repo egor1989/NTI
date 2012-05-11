@@ -8,7 +8,7 @@ package beans;
  *
  * @author steph
  */
-public class FilteredEntry  extends Entry{
+public class FilteredEntry  extends Entry {
        
 
        private String TypeAcc;
@@ -17,7 +17,11 @@ public class FilteredEntry  extends Entry{
        private int sevAcc;
        private int sevTurn;
        private int sevSpeed;
-
+       private double turn;
+       private double accel;
+       
+    
+       
     /**
      * @return the TypeAcc
      */
@@ -102,6 +106,22 @@ public class FilteredEntry  extends Entry{
         this.sevSpeed = sevSpeed;
     }
        
+    public double getTurn() {
+        return turn;
+    }        
+    
+    public void setTurn(double turn) {
+        this.turn = turn;
+    }
+
+    public double getAccel() {
+        return accel;
+    }        
+    
+    public void setAccel(double accel) {
+        this.accel = accel;
+    }
+
        
        
 }

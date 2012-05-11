@@ -146,9 +146,69 @@ public class runner implements Runnable {
                     {
                         if(UserRideTmp[j]!=null)
                         {
-                            for(i=1;i<UserRideTmp[j].getEntryRide().size();i++)
+                            for(i=1;i<UserRideTmp[j].getEntryRide().size()-1;i++)
                             {
                                 
+                                FilteredEntry[] FilteredArray = new FilteredEntry[UserRideTmp[j].getEntryRide().size()-1];
+                                FilteredArray[0].setTypeTurn("normal point");
+                                FilteredArray[0].setTypeAcc("normal point");
+                                FilteredArray[0].setTypeSpeed("normal point");
+				FilteredArray[i].setSevAcc(0);
+                                FilteredArray[i].setSevTurn(0);
+                                FilteredArray[i].setSevSpeed(0);
+                                double speed = FilteredArray[i].getSpeed();
+                                double deltaTime = FilteredArray[i].getTimestamp() - FilteredArray[i-1].getTimestamp();
+                                //$d += acos(sin($data[$i]['lat'])*sin($data[$i-1]['lat']) + cos($data[$i]['lat'])*cos($data[$i-1]['lat']) *  cos($data[$i-1]['lng']-$data[$i]['lng'])) * 111.2;
+                                if (FilteredArray[i].getLng() - FilteredArray[i-1].getLng() != 0) {
+                                    FilteredArray[i].setTurn(Math.atan((FilteredArray[i].getLat()-FilteredArray[i-1].getLat())/(FilteredArray[i].getLng()-FilteredArray[i-1].getLng())));
+                                    FilteredArray[0].setTurn(0);
+                                    double deltaTurn = FilteredArray[i].getTurn() - FilteredArray[i-1].getTurn();
+                                    double wAcc = Math.abs(deltaTurn/deltaTime);
+                                    if ((wAcc < 0.45) && (wAcc >= 0)) {
+                                        FilteredArray[i].setSevTurn(0);
+                                    } else if ((wAcc >= 0.45) && (wAcc < 0.6)) {
+                                        FilteredArray[i].setSevTurn(1);
+                                    } else if ((wAcc >= 0.6) && (wAcc < 0.75)) {
+                                        FilteredArray[i].setSevTurn(2);
+                                    } else if (wAcc >= 0.75) {
+                                        FilteredArray[i].setSevTurn(3);
+                                    }
+                                    
+                                    double deltaSpeed = speed - FilteredArray[i-1].getSpeed();
+                                    double accel = deltaSpeed/deltaTime;
+                                    //Высчитываем тип неравномерного движения (ускорение-торможение) через ускорение.
+                                    if (accel<-7.5) 
+					FilteredArray[i].setSevAcc(-3);
+                                    else if ((accel>=-7.5)&&(accel<-6)) 
+                                        FilteredArray[i].setSevAcc(-2);
+                                    else if ((accel>=-6)&&(accel<-4.5))
+					FilteredArray[i].setSevAcc(-1);
+                                    else if (accel>5) 
+                                        FilteredArray[i].setSevAcc(3);
+                                    else if ((accel>4)&&(accel<=5))
+                                        FilteredArray[i].setSevAcc(2);
+                                    else if ((accel>3.5)&&(accel<=4))
+                                        FilteredArray[i].setSevAcc(1);
+                                    else if ((accel>=-4.5)&&(accel<=3.5))
+                                        FilteredArray[i].setSevAcc(0);
+								
+								
+                                    if ((speed >= 0) && (speed <= 80)) 
+                                    	FilteredArray[i].setSevSpeed(0);
+                                    else if ((speed > 80) && (speed <= 110))
+					FilteredArray[i].setSevSpeed(1);
+                                    else if ((speed > 110) && (speed <= 130))
+					FilteredArray[i].setSevSpeed(2);
+                                    else if (speed > 130)
+                                        FilteredArray[i].setSevSpeed(3);
+                                
+                                } else {
+                                    FilteredArray[i].setTypeTurn("normal point");
+                                    FilteredArray[i].setTypeAcc("normal point");
+                                    FilteredArray[i].setSevTurn(0);
+                                    double wAcc = 0;
+                                    FilteredArray[i].setTurn(FilteredArray[i-1].getTurn());
+                                }
                             }
                         }
                     }
