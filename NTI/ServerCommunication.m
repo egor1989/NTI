@@ -398,7 +398,7 @@
  
 
 - (void)regUser:(NSString *)login password:(NSString *)password email:(NSString *)email{
-    
+    [TestFlight passCheckpoint: @"regUser"];
     NSLog(@"sendData login = %@ message = %@ email = %@", login, password, email);
     
     NSString *data = [NSString stringWithFormat:(@"%@%@%@%@%@"),@"data={\"method\":\"NTIregister\",\"params\":{\"login\":\"",login, @"\",\"password\":\"", password, @"\"}}"];
@@ -444,6 +444,7 @@
 
 
 - (void) authUser:(NSString *)login secret:(NSString *)message{
+    [TestFlight passCheckpoint: @"authUser"];
     [self infoAboutDevice];
     
     
@@ -493,12 +494,14 @@
 }
 
 + (BOOL) checkInternetConnection{
+    [TestFlight passCheckpoint: @"checkInternetConnection"];
     Reachability* reach = [Reachability reachabilityWithHostname:@"www.goodroads.ru"];
     
     NetworkStatus hostStatus = [reach currentReachabilityStatus];
     NSLog(@"internetUserPreference = %@", [[NSUserDefaults standardUserDefaults] boolForKey:@"internetUserPreference"]?@"YES":@"NO");
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"internetUserPreference"]) {
         if (hostStatus == NotReachable){
+            [TestFlight passCheckpoint: @"NotReachable"];
             NSLog(@"internet: -");
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Включите Интернет-соединение и повторите попытку" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
             [alert show];
@@ -507,10 +510,12 @@
         else return YES;
     }
     else if (hostStatus == ReachableViaWiFi){
+        [TestFlight passCheckpoint: @"wi-fi"];
         NSLog(@"internet: wi-fi");
         return YES;
         } 
-        else{ 
+        else{
+            [TestFlight passCheckpoint: @"notReachable"];
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Включите Интернет-соединение и повторите попытку" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
             [alert show];
             return NO;
@@ -519,16 +524,21 @@
 }
 
 + (BOOL) checkInternetConnectionForSend{
+    [TestFlight passCheckpoint: @"checkInternetConnection"];
     Reachability* reach = [Reachability reachabilityWithHostname:@"www.goodroads.ru"];
     
     NetworkStatus hostStatus = [reach currentReachabilityStatus];
     if (hostStatus == NotReachable){
+        [TestFlight passCheckpoint: @"notReachable"];
         NSLog(@"internet: -");
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Включите Интернет-соединение и повторите попытку" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
         [alert show];
         return NO;
     } 
-    else return YES;
+    else { 
+        [TestFlight passCheckpoint: @"+"];
+        return YES;
+    }
  
 }
 
@@ -554,6 +564,7 @@
 }
 
 - (void)getRouteFromServer:(float)timeInterval{
+    [TestFlight passCheckpoint: @"getRouteFromServer"];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSLog(@"cookie = %@", [userDefaults valueForKey:@"cookie"]);
     NSString *cookie = [userDefaults valueForKey:@"cookie"];
@@ -604,6 +615,7 @@
 }
 
 - (void)sendFeedBackToServerWithTitle:(NSString*)title andBody: (NSString*)body{
+    [TestFlight passCheckpoint: @"sendFeedBack"];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSLog(@"cookie = %@", [userDefaults valueForKey:@"cookie"]);
     NSString *cookie = [userDefaults valueForKey:@"cookie"];
@@ -645,6 +657,7 @@
 }
 
 - (void)sendInterviewToServerWithData:(NSDictionary*)data{
+    [TestFlight passCheckpoint: @"sendInterview"];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSLog(@"cookie = %@", [userDefaults valueForKey:@"cookie"]);
     NSString *cookie = [userDefaults valueForKey:@"cookie"];
