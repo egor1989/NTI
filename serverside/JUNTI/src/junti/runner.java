@@ -8,18 +8,15 @@ import beans.Entry;
 import beans.FilteredEntry;
 import beans.Ride;
 import com.google.gson.Gson;
-import com.mongodb.*;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import junti.DBConnection.MysqlDB;
 import junti.DBConnection.NamedParameterStatement;
-import junti.DBConnection.PostgresqlDB;
 
 /**
  *
@@ -31,7 +28,7 @@ public class runner {
 
 
    
-    public void update() {
+    public void update() throws SQLException, ClassNotFoundException {
         ResultSet rset = null;
         Statement s = null;
         Gson gson = new Gson();
@@ -41,7 +38,7 @@ public class runner {
         Integer UserId;
         String sql;
         String sqlmain;
-        try {
+  
             long server_time = 0;
             Integer Road_info = 0;
             Entry temp_entry;
@@ -58,24 +55,27 @@ public class runner {
             System.out.println("Start");
             //1 Для начала получаем все данные по дорогам
             //Выбираем всех пользователей для начала
-            sqlmain = "Select distinct(UID) as UserID from NTIEntry order by UserID;";
+            sqlmain = "Select distinct(UID) as UserID from NTIEntry where UID>0 order by UserID;";
             s = conn.createStatement();
             rset = s.executeQuery(sqlmain);
             while (rset.next()) 
                 {
                     //Если пользователь был авторизован, то обрабатываем его данные 
-                    if(rset.getInt("UserID")!=-3)
+                   
                         UserList.add(rset.getInt("UserID"));
                 }
             //Отлично, получили пользователей
             //Теперь начинаем получать поездки пользователя, которые
            for (Integer UID : UserList)
             {
-                    sqlmain = "Select * from NTIEntry where UID=:UID and Deleted=0 order by utimestamp;";
+                    sqlmain = "Select * from NTIEntry where UID=:UID and Deleted=0 AND lat != 0 AND lng != 0 group by utimestamp order by utimestamp;";
                     sql_p_main = new NamedParameterStatement(conn, sqlmain);
                     sql_p_main.setInt("UID", UID); 
                     rset=sql_p_main.executeQuery();
                     //Начинаем получать все точки
+                    UserRide.clear();
+                    UnfilteredEntry.clear();
+                    UnfilteredEntry.clear();
                     while (rset.next()) 
                     {
                         temp_entry= new Entry();
@@ -94,32 +94,33 @@ public class runner {
                     }
                     //Отлично, мы добавилии эти вот точки, теперь начинаем их обрабатывать 
                     //Для начала перегоним это в массив, тк так будет егче работать 
-                    UnfilteredCount=UnfilteredEntry.size();
                     Entry[] ArrayEntry=new Entry[UnfilteredEntry.size()];
                     UnfilteredEntry.toArray(ArrayEntry);
                     //Теперь очищаем его 
-                    UnfilteredEntry.clear();
-                    for(i=1;i<UnfilteredCount;i++)
+                   UnfilteredEntry.clear();
+                   System.out.println(UID+"  "+ArrayEntry.length);
+                   
+                    for(i=1;i<ArrayEntry.length;i++)
                     {
                         //Начинаем разбивание точек на пути
                         /*
                          * Точка является частью пути 
                          * 1)Скорость между 2-мя точками не должна быть более 200 км/ч
                          * 2)Время  между ними не должно превышать 5 мин
-                         */
+                        */
+                        //TODO: Сделать нормальную разбивку по поездкам
                         if((ArrayEntry[i].getTimestamp()-ArrayEntry[i-1].getTimestamp())<300 && DistanceBetweenPoints(ArrayEntry[i].getLat(),ArrayEntry[i-1].getLat(),ArrayEntry[i].getLng(),ArrayEntry[i-1].getLng())/((ArrayEntry[i].getTimestamp()-ArrayEntry[i-1].getTimestamp()))<200)
                         {
-                                    //Добавляем в массив
-                                   temp_entry= new Entry();
-                                   temp_entry=ArrayEntry[i-1];
-                                   UnfilteredEntry.add(temp_entry);
+                                temp_entry= new Entry();
+                                  temp_entry=ArrayEntry[i-1];
+                                 UnfilteredEntry.add(temp_entry);
                         }
                         else
                         {
                             temp_ride=new Ride();
-                            temp_ride.setEntryRide(UnfilteredEntry);
-                            
-                            UserRide.add(temp_ride);
+                           temp_ride.setEntryRide(UnfilteredEntry);
+              
+                          UserRide.add(temp_ride);
                             
                         }
                     }
@@ -127,8 +128,10 @@ public class runner {
                     //Если в поездке 0 скоростей больше половины - эт какая-то хуита ребята
                    Ride[] UserRideTmp=new Ride[UserRide.size()];
                    UserRide.toArray(UserRideTmp);
-                   UnfilteredCount=UserRide.size();
-                   for(int j=0;j<UnfilteredCount;j++)
+                 System.out.println(UID+"-->"+UserRideTmp.length);
+                 System.out.println(UID+"-->"+UserRide.size());
+                 UserRide.clear();
+                   for(int j=0;j<UserRideTmp.length;j++)
                     {
                         i=0;
                        
@@ -138,16 +141,24 @@ public class runner {
                         }
                         if(i*2<UserRideTmp[j].getEntryRide().size())
                         {
-                            UserRideTmp[j]=null;
+                            
+                        }
+                        else
+                        {
+                            UserRide.add(UserRideTmp[j]);
                         }
                     }
+                    System.out.println(UID+"-->"+UserRide.size());
+                   
+                   
                    //отлично, выкинули все элементы , которые были не нужны
                     //Теперь по каждой поездке, если она не нулевая начинаем высчитывать все данные
-                      for(int j=0;j<UnfilteredCount;j++)
-                    {
-                        if(UserRideTmp[j]!=null)
-                        {
+                      //for(int j=0;j<UnfilteredCount;j++)
+                    //{
+                      //  if(UserRideTmp[j]!=null)
+                       // {
                             //Подсчет крутости торможения/ускорения, поворота и скорости точки.
+                            /*
                             for(i=1;i<UserRideTmp[j].getEntryRide().size()-1;i++) 
                             {
                                 FilteredEntry[] FilteredArrayTmp = new FilteredEntry[UserRideTmp[j].getEntryRide().size()-1];
@@ -209,7 +220,7 @@ public class runner {
                             }
                             
                             //Подсчет статистики.
-                            
+                            /*
                             //Превышения скоростей:
                             double dss = 0;
                             for(i=1;i<UserRideTmp[j].getFilteredEntryRide().size()-1; i++) {
@@ -486,25 +497,25 @@ public class runner {
                                }
                                //Конец расчета поворотов.
                             }
+                            * */
+
                             //Haters gonna HATE 
                             //Дико бесят скобки НЕ НА НОВОЙ СТРОКЕ
                             //Так или иначе тут дейтсвительно кончается статистика
-                            System.out.println(UserRideTmp[j].getTypeSpeed3Count());
+                          //  System.out.println(UserRideTmp[j].getTypeSpeed3Count());
                                     
                             
                             
                             
                             
                             //Конец подсчета статистики
-                        }
-                    }
-            }
+                   //     }
+                //    }
+           // }
         }
-        catch (ClassNotFoundException ex) {
-            Logger.getLogger(runner.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(runner.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
+        
+
         try {
             conn.close();
         } catch (SQLException ex) {
@@ -517,7 +528,7 @@ public class runner {
     private static double  DistanceBetweenPoints( Double lat1,Double lat2,Double lng1,Double lng2 ) 
     {
   
-        return Math.acos(Math.sin(lat1)*Math.sin(lat2)+Math.cos(lat1)*Math.cos(lat2)*Math.cos(lng2)-lng1)*111.2;
+        return Math.acos(Math.sin(lat1)*Math.sin(lat2)+Math.cos(lat1)*Math.cos(lat2)*Math.cos(lng2-lng1))*111.2;
         
     }
 }

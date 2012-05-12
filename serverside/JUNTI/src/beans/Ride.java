@@ -30,7 +30,29 @@ public class Ride {
      private Integer TypeBrake2Count;
      private Integer TypeBrake3Count;
      private Double TotalDistance;
-
+      public Ride() 
+      {
+      TypeAcc1Count=0;
+      Score=0;
+      TimeStart=0;
+        TimeEnd    =0; 
+       TypeAcc1Count  =0;
+        TypeAcc2Count =0;       
+        TypeAcc3Count =0;       
+        TypeTurn1Count=0;       
+        TypeTurn2Count=0;       
+        TypeTurn3Count =0;      
+        TypeSpeed1Count =0;      
+        TypeSpeed2Count =0;     
+        TypeSpeed3Count =0;     
+        TypeBrake1Count =0;     
+        TypeBrake2Count =0;    
+        TypeBrake3Count =0;    
+        TotalDistance   =0.0;  
+        EntryRide=new  ArrayList<Entry>();
+        FilteredEntryRide=new  ArrayList<FilteredEntry>();
+              
+      }
     /**
      * @return the Entry
      */
@@ -228,7 +250,8 @@ public class Ride {
      * @param EntryRide the EntryRide to set
      */
     public void setEntryRide(ArrayList<Entry> EntryR) {
-        this.setEntryRide(EntryR);
+        
+       this.EntryRide=EntryR;
     }
 
     /**
