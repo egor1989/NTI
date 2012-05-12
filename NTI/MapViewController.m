@@ -7,6 +7,7 @@
 //
 
 #import "MapViewController.h"
+#import "TestFlight.h"
 
 @implementation MapViewController
 @synthesize mapView = _mapView;
@@ -15,7 +16,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    [TestFlight passCheckpoint:@"map view controller loaded"];
     [_mapView setDelegate:self];
     serverCommunication = [[ServerCommunication alloc]init ];
     [[NSNotificationCenter defaultCenter]	
@@ -38,6 +39,7 @@
     
     //загрузка последнего маршрута
     if ([ServerCommunication checkInternetConnection]) {
+         [TestFlight passCheckpoint:@"load last route"];
         [serverCommunication getRouteFromServer:0];
     }
 }

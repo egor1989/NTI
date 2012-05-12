@@ -379,7 +379,7 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     
-    NSLog(@"close");
+    [TestFlight passCheckpoint:@"close"];
     [recordAction eventRecord:@"close"];
     /*
      Called when the application is about to terminate.

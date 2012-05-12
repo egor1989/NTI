@@ -7,6 +7,7 @@
 //
 
 #import "ServerCommunication.h"
+#import "TestFlight.h"
 
 @implementation ServerCommunication
 @synthesize errors;
@@ -74,6 +75,7 @@
  */
 
 - (void)uploadData:(NSString *)fileContent{
+    [TestFlight passCheckpoint:@"uploadData"];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSLog(@"cookie = %@", [userDefaults valueForKey:@"cookie"]);
     NSString *cookie = [userDefaults valueForKey:@"cookie"]; 
@@ -112,12 +114,14 @@
     NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: &response error: &requestError ];
     
     if (requestError!=nil) {
+         [TestFlight passCheckpoint:[NSString stringWithFormat:@"%@", requestError]];
         NSLog(@"%@", requestError);
         NSLog(@"ERROR!ERROR!ERROR!");
     }
     
     returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
     NSLog(@"returnData: %@", returnString);
+    [TestFlight passCheckpoint:returnString];
     [self checkErrors:returnString method:@"sendData"];
     
     
@@ -177,7 +181,7 @@
 
 
 - (BOOL)checkErrors:(NSString *)answerString method:(NSString *)methodName{
-    
+     [TestFlight passCheckpoint:@"check errors in server answer"];
     SBJsonParser *jsonParser = [SBJsonParser new];
     NSArray *answer = [jsonParser objectWithString:answerString error:NULL];
     NSArray *error = [answer valueForKey:@"error"];
@@ -191,7 +195,7 @@
 
     switch (code) {
         case 0:
-            
+             [TestFlight passCheckpoint:@"OK"];
             if ([methodName isEqualToString: @"reg&auth"]){
                 info = @"Поздравляем!";
                 [userDefaults removeObjectForKey:@"cookie"];
@@ -216,6 +220,7 @@
              }
              else if ([methodName isEqualToString: @"sendData"]){
                   info = @"Файл пуст";
+                  [TestFlight passCheckpoint:@"file empty"];
              }
             break;
         case 4:
@@ -253,9 +258,11 @@
         case 43:
             info = @"Нет данных для пользователя";
             break;
-        case 88:
+        case 88: {
+             [TestFlight passCheckpoint:@"server unreachable"];
             info = @"Сервер временно не доступен";
             break;
+        }
             
         default:
             break;
@@ -267,10 +274,12 @@
 
 - (void)showResult{
     if (forgotPassword) {
+        
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:info delegate:self cancelButtonTitle:@"Еще раз" otherButtonTitles:@"Забыл пароль",nil];
         [alert show];
     }
     else {
+         [TestFlight passCheckpoint:@"alert - server answer"];
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ответ сервера" message:info delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
         [alert show];    
     }
@@ -279,6 +288,7 @@
 
 
 - (NSString *)getAllStatistic{
+     [TestFlight passCheckpoint:@"getAllStatistics"];
     
     NSString *cookie = [self refreshCookie]; 
     NSLog(@"cookie = %@", cookie);
@@ -313,12 +323,14 @@
     NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: &response error: &requestError ];
     
     if (requestError!=nil) {
+         [TestFlight passCheckpoint:[NSString stringWithFormat:@"%@", requestError]];
         NSLog(@"%@", requestError);
         NSLog(@"ERROR!ERROR!ERROR!");
     }
     
     returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
     NSLog(@"returnData: %@", returnString);
+    [TestFlight passCheckpoint: returnString];
     [self checkErrors:returnString method:@"stat"];
     if (!errors) return returnString; 
     else return @"error";
@@ -326,7 +338,7 @@
 
 
 - (NSString *)getLastStatistic{
-    
+     [TestFlight passCheckpoint: @"getLastStatistics"];
     NSString *cookie = [self refreshCookie]; 
     NSLog(@"cookie = %@", cookie);
 
@@ -375,6 +387,7 @@
     
     returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
     NSLog(@"returnData: %@", returnString);
+     [TestFlight passCheckpoint: returnString];
     [self checkErrors:returnString method:@"stat"];
     if (!errors) return returnString; 
     else return @"error";

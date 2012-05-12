@@ -31,6 +31,7 @@
 }
 
 - (IBAction)closeHelp:(id)sender{
+    
     [self dismissModalViewControllerAnimated:YES];
 }
 
