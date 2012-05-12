@@ -8,7 +8,7 @@
 
 #import "StatViewController.h"
 
-#define ROWSNUMBER 13
+#define ROWSNUMBER 12
 
 @implementation StatViewController
 @synthesize writeAction;
@@ -360,7 +360,7 @@
             }
             return cell;
         }
-            
+            /*     
         case 10:{
             static NSString *CellIdentifier = @"7";
             
@@ -381,7 +381,8 @@
             }
             return cell;
         }
-        case 11:{
+             */
+        case 10:{
             UITableViewCell *aCell = [tableView dequeueReusableCellWithIdentifier:@"internetCell"];
             if( aCell == nil ) {
                 aCell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault
@@ -399,7 +400,7 @@
 
         }
             
-        case 12:{
+        case 11:{
             static NSString *CellIdentifier = @"8";
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
