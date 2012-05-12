@@ -11,7 +11,7 @@
 @implementation ServerCommunication
 @synthesize errors;
 
-
+/*
 - (void)uploadData:(NSData *)fileContent{
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSLog(@"cookie = %@", [userDefaults valueForKey:@"cookie"]);
@@ -19,17 +19,9 @@
     NSLog(@"&");
     
     NSString *sJSON = [[NSString alloc] initWithData:fileContent encoding:NSASCIIStringEncoding]; 
-    //gzip
-    //NSData *compressJSON = [GzipCompress compressData:JSON error:nil];
-   // NSMutableData *firstPart = [NSData dataWithContentsOfFile:@"data={\"method\":\"addNTIFile\",\"params\":{\"ntifile\":"];
-   // NSData *secondPart = [NSData dataWithContentsOfFile:@"&zip=1}}"];
-   // [firstPart appendData:fileContent];
-    //NSMutableData *requestD = [firstPart appendData: fileContent];
-    NSString *requestContent = [NSString stringWithFormat:@"{\"method\":\"addNTIFile\",\"params\":{\"ntifile\":%@}",sJSON];
-    //fileContent = [NSString stringWithFormat:@"data={\"method\":\"addNTIFile\",\"params\":{\"ntifile\":data=%@ &zip=1}}",fileContent];
-    //fileContent=[@"data={\"method\":\"addNTIFile\",\"params\":{\"ntifile\":data=" stringByAppendingString:fileContent];
-    //fileContent=[fileContent stringByAppendingString:@"&zip=1}}"];
-    
+
+    NSString *requestContent = [NSString stringWithFormat:@"{\"method\":\"addNTIFile\",\"params\":{\"ntifile\":%@}}",@"12345qwerty12345qwerty"];
+        
     NSLog(@"Request: %@", requestContent);
         
    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
@@ -42,10 +34,6 @@
     NSLog(@"cData = %@", compressData);
     
     NSString* content = [compressData description];
-    
-   // NSString* s = [[NSString alloc] initWithBytes:[compressData description] length:sizeof([compressData description]) encoding:NSASCIIStringEncoding];
-   // NSString *content = [[NSString alloc] initWithData:compressData encoding: NSUTF8Encoding];
-    //NSLog(@"content=%@",content);
     
     NSString* requestDataFull = [NSString stringWithFormat:@"data=%@%@",content,@"&zip=1"];
     NSLog(@"%@", requestDataFull);
@@ -81,6 +69,58 @@
     [self checkErrors:returnString method:@"sendData"];
 
 
+}
+ 
+ */
+
+- (void)uploadData:(NSString *)fileContent{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSLog(@"cookie = %@", [userDefaults valueForKey:@"cookie"]);
+    NSString *cookie = [userDefaults valueForKey:@"cookie"]; 
+    //  NSString * cookie = [self refreshCookie];
+    
+    fileContent=[@"data={\"method\":\"addNTIFile\",\"params\":{\"ntifile\":" stringByAppendingString:fileContent];
+    fileContent=[fileContent stringByAppendingString:@"}}"];
+    
+    NSLog(@"Request: %@", fileContent);
+    
+    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                  timeoutInterval:60.0];
+    
+    requestData = [NSData dataWithBytes:[fileContent UTF8String] length:[fileContent length]];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody: requestData]; 
+    [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
+    [request setValue:@"gzip" forHTTPHeaderField:@"Content-Encoding"];
+    
+    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                @"http://nti.goodroads.ru/api/", NSHTTPCookieDomain,
+                                @"NTIKeys", NSHTTPCookieName,
+                                cookie, NSHTTPCookieValue,
+                                @"/", NSHTTPCookiePath,
+                                nil];
+    
+    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:[NSHTTPCookie cookieWithProperties:properties]];
+    NSHTTPCookie *fcookie = [NSHTTPCookie cookieWithProperties:properties]; //?
+    NSArray* fcookies = [NSArray arrayWithObjects: fcookie, nil];   //?
+    NSDictionary * headers = [NSHTTPCookie requestHeaderFieldsWithCookies:fcookies]; //?
+    
+    [request setAllHTTPHeaderFields:headers];
+    
+    NSError *requestError = nil;
+    NSURLResponse *response = nil;
+    NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: &response error: &requestError ];
+    
+    if (requestError!=nil) {
+        NSLog(@"%@", requestError);
+        NSLog(@"ERROR!ERROR!ERROR!");
+    }
+    
+    returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
+    NSLog(@"returnData: %@", returnString);
+    [self checkErrors:returnString method:@"sendData"];
+    
+    
 }
 
 - (BOOL)checkCookieExpires{

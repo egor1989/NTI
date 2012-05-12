@@ -111,6 +111,9 @@
 		532A46991502623A0070340D /* CSVConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 532A46981502623A0070340D /* CSVConverter.m */; };
 		5361751D1510FE6A00D290F1 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 5361751B1510FE6A00D290F1 /* Reachability.m */; };
 		536175231511098000D290F1 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 536175221511098000D290F1 /* SystemConfiguration.framework */; };
+		536C9E44155EA2F3007BE49C /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 536C9E40155EA2F3007BE49C /* libTestFlight.a */; };
+		536C9E45155EA2F3007BE49C /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 536C9E41155EA2F3007BE49C /* README.txt */; };
+		536C9E46155EA2F3007BE49C /* release_notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 536C9E42155EA2F3007BE49C /* release_notes.txt */; };
 		536E026F14F00625003A2B15 /* compass.png in Resources */ = {isa = PBXBuildFile; fileRef = 536E026E14F00625003A2B15 /* compass.png */; };
 		5381C8F7153046380012E99D /* RecordAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 5381C8F6153046380012E99D /* RecordAction.m */; };
 		539B29BE14F305C3007E6977 /* gps.png in Resources */ = {isa = PBXBuildFile; fileRef = 539B29BC14F305C3007E6977 /* gps.png */; };
@@ -315,6 +318,10 @@
 		5361751B1510FE6A00D290F1 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		5361751C1510FE6A00D290F1 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		536175221511098000D290F1 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		536C9E40155EA2F3007BE49C /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
+		536C9E41155EA2F3007BE49C /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
+		536C9E42155EA2F3007BE49C /* release_notes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = release_notes.txt; sourceTree = "<group>"; };
+		536C9E43155EA2F3007BE49C /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
 		536E026E14F00625003A2B15 /* compass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = compass.png; sourceTree = "<group>"; };
 		5381C8F5153046380012E99D /* RecordAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordAction.h; sourceTree = "<group>"; };
 		5381C8F6153046380012E99D /* RecordAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordAction.m; sourceTree = "<group>"; };
@@ -427,6 +434,7 @@
 				53E0A76D14DEC75D004E3E1B /* Foundation.framework in Frameworks */,
 				53E0A76F14DEC75D004E3E1B /* CoreGraphics.framework in Frameworks */,
 				2745ACB6152A344400253BF2 /* libCrittercism_v3_1_5.a in Frameworks */,
+				536C9E44155EA2F3007BE49C /* libTestFlight.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -713,6 +721,17 @@
 			name = Reachability;
 			sourceTree = "<group>";
 		};
+		536C9E3F155EA2F2007BE49C /* TestFlightSDK1.0 */ = {
+			isa = PBXGroup;
+			children = (
+				536C9E40155EA2F3007BE49C /* libTestFlight.a */,
+				536C9E41155EA2F3007BE49C /* README.txt */,
+				536C9E42155EA2F3007BE49C /* release_notes.txt */,
+				536C9E43155EA2F3007BE49C /* TestFlight.h */,
+			);
+			path = TestFlightSDK1.0;
+			sourceTree = "<group>";
+		};
 		53AAF04314FE26D700E12486 /* ServerCommunication */ = {
 			isa = PBXGroup;
 			children = (
@@ -745,6 +764,7 @@
 		53E0A75B14DEC75D004E3E1B = {
 			isa = PBXGroup;
 			children = (
+				536C9E3F155EA2F2007BE49C /* TestFlightSDK1.0 */,
 				2779258D15347C110062D871 /* MapKit.framework */,
 				2745AC4B152A344400253BF2 /* CrittercismSDK */,
 				53E0A77014DEC75D004E3E1B /* NTI */,
@@ -1087,6 +1107,8 @@
 				27637150152A4F16003FE70B /* Icon@2x.png in Resources */,
 				27792597153486800062D871 /* route.csv in Resources */,
 				277925AB15349FA90062D871 /* time.png in Resources */,
+				536C9E45155EA2F3007BE49C /* README.txt in Resources */,
+				536C9E46155EA2F3007BE49C /* release_notes.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1242,6 +1264,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/CrittercismSDK\"",
+					"\"$(SRCROOT)/TestFlightSDK1.0\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "237DFADE-47F7-49C9-BC7D-8CA012CD68B7";
@@ -1261,6 +1284,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/CrittercismSDK\"",
+					"\"$(SRCROOT)/TestFlightSDK1.0\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "4D9E5BD7-2BB3-46C0-AEAB-603F31E445C9";

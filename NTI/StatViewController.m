@@ -71,7 +71,7 @@
     countKm.textAlignment = UITextAlignmentRight;
     
     
-    lastTrip = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 89.0f, 27.0f)];;
+    lastTrip = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 100.0f, 27.0f)];;
     lastTrip.font = fontForLabel;
     lastTrip.textAlignment = UITextAlignmentRight;
     
@@ -452,7 +452,7 @@
             NSDateFormatter * date_format = [[NSDateFormatter alloc] init];
             [date_format setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"ru_RU"]];
             //[date_format setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"GMT"]];
-            [date_format setDateFormat: @"dd.mm HH:mm"];
+            [date_format setDateFormat: @"dd MMM HH:mm"];
            NSLog(@"date=%@", [NSDate dateWithTimeIntervalSince1970:[[statArray valueForKey:@"time"]doubleValue]]);
             NSString *string = [date_format stringFromDate:[NSDate dateWithTimeIntervalSince1970:[[statArray valueForKey:@"time"]doubleValue]]];
             lastTrip.text = string;
