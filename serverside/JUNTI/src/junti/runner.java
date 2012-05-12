@@ -25,13 +25,13 @@ import junti.DBConnection.PostgresqlDB;
  *
  * @author steph
  */
-public class runner implements Runnable {
+public class runner {
 
     private static Connection conn = null;
 
 
-    @Override
-    public void run() {
+   
+    public void update() {
         ResultSet rset = null;
         Statement s = null;
         Gson gson = new Gson();
@@ -486,6 +486,15 @@ public class runner implements Runnable {
                                }
                                //Конец расчета поворотов.
                             }
+                            //Haters gonna HATE 
+                            //Дико бесят скобки НЕ НА НОВОЙ СТРОКЕ
+                            //Так или иначе тут дейтсвительно кончается статистика
+                            System.out.println(UserRideTmp[j].getTypeSpeed3Count());
+                                    
+                            
+                            
+                            
+                            
                             //Конец подсчета статистики
                         }
                     }
@@ -495,7 +504,13 @@ public class runner implements Runnable {
             Logger.getLogger(runner.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(runner.class.getName()).log(Level.SEVERE, null, ex);
-        }        
+        }
+        try {
+            conn.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(runner.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        conn=null;
     }
           
     
