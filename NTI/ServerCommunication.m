@@ -155,12 +155,14 @@
 - (NSString *) refreshCookie{
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    if ([self checkCookieExpires]){
+    NSLog(@"refreshCookie");
+//    if ([self checkCookieExpires]){
 
         //if ([userDefaults objectForKey:@"cookie"]!=nil) {
             [self authUser:[userDefaults objectForKey:@"login"] secret:[userDefaults objectForKey:@"password"]];
+        NSLog(@"reAuth");
         //}
-    }
+//    }
     return [userDefaults objectForKey:@"cookie"];
     
 }
@@ -251,8 +253,6 @@
         }
         case 33:{
             info = @"Ошибка авторизации";
-            UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Ошибка авторизации" message:@"Пожалуйста перезайдите под своим логином. Это можно сделать в окне статистики." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [alertView show];
             break;
         }
         case 43:
@@ -564,10 +564,11 @@
 }
 
 - (void)getRouteFromServer:(float)timeInterval{
+    
     [TestFlight passCheckpoint: @"getRouteFromServer"];
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSLog(@"cookie = %@", [userDefaults valueForKey:@"cookie"]);
-    NSString *cookie = [userDefaults valueForKey:@"cookie"];
+//    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *cookie = [self refreshCookie]; 
+    NSLog(@"cookie = %@", cookie);
     NSString *timeString;
     if (timeInterval == 0) {
          timeString = @"data={\"method\":\"getPath\"}";
