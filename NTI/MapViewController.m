@@ -38,6 +38,10 @@
     
     //загрузка последнего маршрута
     if ([ServerCommunication checkInternetConnection]) {
+        waintingIndicator.hidden = NO;
+        [waintingIndicator startAnimating];
+        grayView.hidden = NO;
+        NSLog(@"getRoute");
         [serverCommunication getRouteFromServer:0];
     }
 }
@@ -49,7 +53,7 @@
         [waintingIndicator startAnimating];
         grayView.hidden = NO;
         NSLog(@"getRoute");
-        [serverCommunication getRouteFromServer:[[TheNotice object] timeIntervalSince1970]];
+        [serverCommunication getRouteFromServer:[[TheNotice object] doubleValue]];
     }
 }
 
