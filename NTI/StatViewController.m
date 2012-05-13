@@ -9,9 +9,11 @@
 #import "StatViewController.h"
 
 #define ROWSNUMBER 12
+#define firstTitle @"Статистика"
+#define secondTitle @"Информация"
 
 @implementation StatViewController
-@synthesize writeAction;
+@synthesize writeAction, tables;
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -37,7 +39,10 @@
     [super viewDidLoad];
     UIFont *fontForLabel = [UIFont fontWithName:@"Trebuchet MS" size:16]; 
     
-    //инициализация лейблов для таблицы
+    
+    
+    
+    /************инициализация лейблов для таблицы**********************/
     speedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];;
     speedLabel.font =            fontForLabel;
     speedLabel.textAlignment =   UITextAlignmentRight;
@@ -78,6 +83,8 @@
     
     recordImage = [[UIImageView alloc] initWithFrame:CGRectMake(280.0f, 7.0f, 27.0f, 27.0f)];
     
+    /***************************************************************/
+    
     if ([myAppDelegate canWriteToFile]) {
         [recordImage setImage:[UIImage imageNamed:@"green.png"]];
 
@@ -93,10 +100,11 @@
      name: @"canWriteToFile"
      object: nil];
     
-  //  NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-  //  if ([userDefaults integerForKey:@"segment"]) [self parse:[userDefaults valueForKey:@"lastStat"]];
-  //  else [self parse:[userDefaults valueForKey:@"allStat"]];
+    /************ инициализация элементов *******************/
+    NSArray *info = [NSArray arrayWithObjects:@"Имя", @"Запись", @"Скорость", @"Только Wi-Fi", @"Дата посл. поезки", nil];
+    NSArray *statistics = [NSArray arrayWithObjects:@"Общая оценка", @"Километраж", @"Превышение скорости", @"Качество разгонов", @"Качество торможений", @"Качество поворотов", nil];
     
+    self.tables = [NSDictionary dictionaryWithObjectsAndKeys:statistics, firstTitle  , info, secondTitle, nil];
     
 }
 
@@ -163,29 +171,78 @@
     else speedLabel.text =[NSString stringWithFormat:@"%.0f км/ч", speed];
 }
 
+- (NSInteger)curentEntries:(NSInteger)index {
+    NSArray *keys = [tables allKeys];
+    NSString *curentKey = [keys objectAtIndex:index];
+    NSArray *curentEntrie = [tables objectForKey:curentKey];
+    NSInteger numberEntries = [curentEntrie count];
+    return numberEntries;
+}
+
+
 #pragma mark - Table view data source
 
-/*
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
+//#warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return 1;
+    NSLog(@"section=%i",[tables count]);
+    return [tables count];
 }
-*/
+
+
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 
 {
-    return @"Ваша статистика";
+    //return nil;
+    if (section == 1) {
+        UIView* customView = [[UIView alloc] initWithFrame:CGRectMake(10.0, 0.0, 300.0, 44.0)];
+        
+        // create the button object
+        UIButton * headerBtn = [[UIButton alloc] initWithFrame:CGRectZero];
+        headerBtn.backgroundColor = [UIColor clearColor];
+        headerBtn.opaque = NO;
+        headerBtn.frame = CGRectMake(10.0, 0.0, 100.0, 30.0);
+        [headerBtn addTarget:self action:@selector(ActionEventForButton:) forControlEvents:UIControlEventTouchUpInside];
+        [customView addSubview:headerBtn];
+    }
+    return [[tables allKeys] objectAtIndex:section];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return ROWSNUMBER;
+   // NSArray *curentEntrie = [self curentStudents:section];
+    return  [self curentEntries:section];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    /*
+     static NSString *CellIdentifier = @"Cell";
+     
+     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+     if (cell == nil) {
+     cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+     }
+     
+     NSArray *curentStudents = [self curentStudents:indexPath.section];
+     cell.textLabel.text = [curentStudents objectAtIndex:indexPath.row];
+     
+     return cell;
+
+     */
+    
+//    static NSString *CellIdentifier = @"Cell";
+//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+//    if (cell == nil) {
+//        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+//    }
+    
+   // NSArray *curentStudents = [self curentStudents:indexPath.section];
+   // cell.textLabel.text = [curentStudents objectAtIndex:indexPath.row];
+    
+   // return cell;
+   
     NSString *name = [[NSUserDefaults standardUserDefaults] objectForKey:@"login"];
              
     switch( [indexPath row] ) {
@@ -415,7 +472,7 @@
 
        
 
-        
+     
 
         
         break;
@@ -591,5 +648,7 @@
      [self.navigationController pushViewController:detailViewController animated:YES];
      */
 }
+
+
 
 @end

@@ -31,10 +31,11 @@
     ServerCommunication *serverCommunication;
     UIImageView *recordImage;
     IBOutlet UIButton *helpButton;
-    
+    NSDictionary *tables;
 }
 
 @property (nonatomic) BOOL *writeAction;
+@property (nonatomic, retain) NSDictionary *tables;
 
 - (void) speedUpdate;
 - (IBAction)loginButton:(id)sender;
@@ -44,4 +45,5 @@
 - (void)changeImage;
 - (void)parse:(NSString *)result method:(NSString *)method;
 - (IBAction) internetUploadSwitch:(id)sender;
+- (NSInteger)curentEntries:(NSInteger)index;
 @end
