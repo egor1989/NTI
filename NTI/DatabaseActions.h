@@ -14,7 +14,7 @@
 #import "toJSON.h"
 #import "ServerCommunication.h"
 #import "CSVConverter.h"
-
+#import "GzipCompress.h"
 
 @interface DatabaseActions : NSObject{
     // Database variables

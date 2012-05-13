@@ -19,7 +19,7 @@
     return self;
 }
 
-- (NSString *)convert : (NSArray *)arrayForConvert{
+- (NSData *)convert : (NSArray *)arrayForConvert{
     // keys = [NSArray arrayWithObjects:@"timestamp", @"acX", @"acY",@"gpsSpeed",@"gpsCourse", nil];
 
     NSLog(@"convert");
@@ -29,11 +29,9 @@
     NSError *error = nil;
     NSData  *jsonArray = [NSJSONSerialization dataWithJSONObject:arrayForConvert options:NSJSONWritingPrettyPrinted error:&error]; 
     
-    NSString *JSON = [[NSString alloc] initWithData:jsonArray encoding:NSASCIIStringEncoding]; 
-    //NSLog(@"JSON %@", JSON);
+    //NSString *JSON = [[NSString alloc] initWithData:jsonArray encoding:NSASCIIStringEncoding]; 
     
-    
-    return JSON;
+    return jsonArray;
    
 }
 

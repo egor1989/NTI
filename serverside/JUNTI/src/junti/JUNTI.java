@@ -4,6 +4,7 @@
  */
 package junti;
 
+import java.sql.SQLException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -17,9 +18,11 @@ public class JUNTI {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-       ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+      // ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
         runner executor = new runner();
-        service.scheduleWithFixedDelay(executor, 0, 120, TimeUnit.SECONDS);
+        executor.update();
+       // service.scheduleWithFixedDelay(executor, 0, 120, TimeUnit.SECONDS);
+    
     }
 }

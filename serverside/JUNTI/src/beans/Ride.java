@@ -26,8 +26,33 @@ public class Ride {
      private Integer TypeSpeed1Count;
      private Integer TypeSpeed2Count;
      private Integer TypeSpeed3Count;
+     private Integer TypeBrake1Count;
+     private Integer TypeBrake2Count;
+     private Integer TypeBrake3Count;
      private Double TotalDistance;
-
+      public Ride() 
+      {
+      TypeAcc1Count=0;
+      Score=0;
+      TimeStart=0;
+        TimeEnd    =0; 
+       TypeAcc1Count  =0;
+        TypeAcc2Count =0;       
+        TypeAcc3Count =0;       
+        TypeTurn1Count=0;       
+        TypeTurn2Count=0;       
+        TypeTurn3Count =0;      
+        TypeSpeed1Count =0;      
+        TypeSpeed2Count =0;     
+        TypeSpeed3Count =0;     
+        TypeBrake1Count =0;     
+        TypeBrake2Count =0;    
+        TypeBrake3Count =0;    
+        TotalDistance   =0.0;  
+        EntryRide=new  ArrayList<Entry>();
+        FilteredEntryRide=new  ArrayList<FilteredEntry>();
+              
+      }
     /**
      * @return the Entry
      */
@@ -225,7 +250,8 @@ public class Ride {
      * @param EntryRide the EntryRide to set
      */
     public void setEntryRide(ArrayList<Entry> EntryR) {
-        this.setEntryRide(EntryR);
+        
+       this.EntryRide=EntryR;
     }
 
     /**
@@ -240,6 +266,48 @@ public class Ride {
      */
     public void setFilteredEntryRide(ArrayList<FilteredEntry> FilteredEntryRide) {
         this.FilteredEntryRide = FilteredEntryRide;
+    }
+
+    /**
+     * @return the TypeBrake1Count
+     */
+    public Integer getTypeBrake1Count() {
+        return TypeBrake1Count;
+    }
+
+    /**
+     * @param TypeBrake1Count the TypeBrake1Count to set
+     */
+    public void setTypeBrake1Count(Integer TypeBrake1Count) {
+        this.TypeBrake1Count = TypeBrake1Count;
+    }
+
+    /**
+     * @return the TypeBrake2Count
+     */
+    public Integer getTypeBrake2Count() {
+        return TypeBrake2Count;
+    }
+
+    /**
+     * @param TypeBrake2Count the TypeBrake2Count to set
+     */
+    public void setTypeBrake2Count(Integer TypeBrake2Count) {
+        this.TypeBrake2Count = TypeBrake2Count;
+    }
+
+    /**
+     * @return the TypeBrake3Count
+     */
+    public Integer getTypeBrake3Count() {
+        return TypeBrake3Count;
+    }
+
+    /**
+     * @param TypeBrake3Count the TypeBrake3Count to set
+     */
+    public void setTypeBrake3Count(Integer TypeBrake3Count) {
+        this.TypeBrake3Count = TypeBrake3Count;
     }
 
 }

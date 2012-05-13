@@ -20,5 +20,6 @@
 - (NSError *)setupStream;
 - (NSData *)compressBytes:(Bytef *)bytes length:(NSUInteger)length error:(NSError **)err shouldFinish:(BOOL)shouldFinish;
 + (NSError *)deflateErrorWithCode:(int)code;
+- (NSData *)gzipDeflate: (NSData*)uncompressedData; 
 
 @end
