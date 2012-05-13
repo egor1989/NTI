@@ -243,13 +243,21 @@
                 static NSString *CellIdentifier = @"Name";
                 UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                 if (cell == nil) {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
+                    cell.backgroundColor = [UIColor whiteColor];
                 cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
                 cell.textLabel.text = [curentEntrie objectAtIndex:indexPath.row];
                 cell.detailTextLabel.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"login"];
+                NSString *name = [[NSUserDefaults standardUserDefaults] objectForKey:@"login"];
+                    NSLog(@"NAME=%@",name);
+                    if (name == nil) {
+                        cell.detailTextLabel.text = @"";
+                    }
+                    else cell.detailTextLabel.text = name;   
                     
                 loginButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
                 [loginButton setFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];
+                loginButton.titleLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
                 cell.accessoryView = loginButton;
                 [loginButton setTitle:@"Выйти" forState:UIControlStateNormal];
                 [loginButton addTarget:self action:@selector(loginButton:) forControlEvents:UIControlEventTouchDown];
@@ -263,7 +271,9 @@
                 UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                 if (cell == nil) {
                 //cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
+                
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+                    cell.backgroundColor = [UIColor whiteColor];
                 cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
                 cell.textLabel.text=[curentEntrie objectAtIndex:indexPath.row];
                 [cell addSubview:recordImage];
@@ -274,8 +284,9 @@
                 static NSString *CellIdentifier = @"Speed";
                 UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                 if (cell == nil) {
-                    cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
                     cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+                    cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
+                    cell.backgroundColor = [UIColor whiteColor];
                 cell.textLabel.text=[curentEntrie objectAtIndex:indexPath.row];
                 cell.accessoryView = speedLabel;
                 }
@@ -286,10 +297,12 @@
                 UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                 if (cell == nil) {
                     cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+                    cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
                     cell.textLabel.text = [curentEntrie objectAtIndex:indexPath.row];
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 UISwitch *internetUploadSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
                 cell.accessoryView = internetUploadSwitch;
+                cell.backgroundColor = [UIColor whiteColor];
                 [internetUploadSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"internetUserPreference"] animated:NO];
                 [internetUploadSwitch addTarget:self action:@selector(internetUploadSwitch:) forControlEvents:UIControlEventValueChanged];
                 }
@@ -300,6 +313,8 @@
                 UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                 if (cell == nil) {
                     cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+                    cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
+                    cell.backgroundColor = [UIColor whiteColor];
                     cell.textLabel.text = [curentEntrie objectAtIndex:indexPath.row];
                     cell.accessoryView = lastTrip;
                 }
@@ -318,7 +333,7 @@
                 if (cell == nil) {
                     cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
                 cell = [[UITableViewCell alloc] initWithFrame:CGRectMake(0, 0, 250, 35)];
-                
+                cell.backgroundColor = [UIColor whiteColor];
                 UISegmentedControl *segmentedControl = [[UISegmentedControl alloc]  initWithItems: [NSArray arrayWithObjects: @"Посл. поездка", @"Все поездки", nil]];
                 
                 [segmentedControl setTitleTextAttributes:[NSDictionary dictionaryWithObject:[UIFont fontWithName:@"Trebuchet MS" size:14]
@@ -341,7 +356,11 @@
                 static NSString *CellIdentifier = @"Quality";
                 UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                 if (cell == nil) {
+                    
                     cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+                    cell.backgroundColor = [UIColor whiteColor];
+                    cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
+                    cell.textLabel.text = [curentEntrie objectAtIndex:indexPath.row];
                     cell.accessoryView = qualityDriving;
                 }
                 return cell;
@@ -350,7 +369,11 @@
                 static NSString *CellIdentifier = @"Km";
                 UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                 if (cell == nil) {
+                    cell.backgroundColor = [UIColor whiteColor];
                     cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+                    cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
+                    cell.backgroundColor = [UIColor whiteColor];
+                    cell.textLabel.text = [curentEntrie objectAtIndex:indexPath.row];
                     cell.accessoryView = countKm;
                 }
                 return cell;
@@ -360,24 +383,35 @@
                 UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                 if (cell == nil) {
                     cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+                    cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
+                    cell.backgroundColor = [UIColor whiteColor];
+                    cell.textLabel.text = [curentEntrie objectAtIndex:indexPath.row];
                     cell.accessoryView = speedMode;
                 }
                 return cell;
             }
             case 4:{
+                
                 static NSString *CellIdentifier = @"Acc";
                 UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                 if (cell == nil) {
                     cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+                    cell.backgroundColor = [UIColor whiteColor];
+                    cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
+                    cell.textLabel.text = [curentEntrie objectAtIndex:indexPath.row];
                 cell.accessoryView = acceleration;
                 }
                 return cell;
             }
             case 5:{
+                
                 static NSString *CellIdentifier = @"Dec";
                 UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                 if (cell == nil) {
                     cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+                    cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
+                    cell.backgroundColor = [UIColor whiteColor];
+                    cell.textLabel.text = [curentEntrie objectAtIndex:indexPath.row];
                 cell.accessoryView = deceleration;
                 }
                 return cell;
@@ -387,6 +421,9 @@
                 UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                 if (cell == nil) {
                     cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+                    cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
+                    cell.backgroundColor = [UIColor whiteColor];
+                    cell.textLabel.text = [curentEntrie objectAtIndex:indexPath.row];
                 cell.accessoryView = rotation;
                 }
                 return cell;
