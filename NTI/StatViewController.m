@@ -101,9 +101,11 @@
      object: nil];
     
     /************ инициализация элементов *******************/
+
     NSArray *info = [NSArray arrayWithObjects:@"Имя", @"Запись", @"Скорость", @"Только Wi-Fi", @"Дата посл. поезки", nil];
-    NSArray *statistics = [NSArray arrayWithObjects:@"Общая оценка", @"Километраж", @"Превышение скорости", @"Качество разгонов", @"Качество торможений", @"Качество поворотов", nil];
-    
+    NSArray *statistics = [NSArray arrayWithObjects:@"",@"Общая оценка", @"Километраж", @"Превышение скорости", @"Качество разгонов", @"Качество торможений", @"Качество поворотов", nil];
+   // NSArray *infoSubviews = [NSArray arrayWithObjects:name,@"",speedLabel,@"",lastTrip,nil];
+   // NSArray *statSubviews = [NSArray arrayWithObjects:@"",, nil];
     self.tables = [NSDictionary dictionaryWithObjectsAndKeys:statistics, firstTitle  , info, secondTitle, nil];
     
 }
@@ -171,12 +173,11 @@
     else speedLabel.text =[NSString stringWithFormat:@"%.0f км/ч", speed];
 }
 
-- (NSInteger)curentEntries:(NSInteger)index {
+- (NSArray *)curentEntries:(NSInteger)index {
     NSArray *keys = [tables allKeys];
     NSString *curentKey = [keys objectAtIndex:index];
     NSArray *curentEntrie = [tables objectForKey:curentKey];
-    NSInteger numberEntries = [curentEntrie count];
-    return numberEntries;
+    return curentEntrie;
 }
 
 
@@ -190,60 +191,167 @@
     return [tables count];
 }
 
+/*
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    
+    UIView* customView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 300.0, 44.0)];
+    
+    UILabel *myLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(50, 200, 200, 80)];
+	myLabel2.text = [[tables allKeys] objectAtIndex:section];
+	myLabel2.textAlignment = UITextAlignmentLeft;
+	myLabel2.font = [UIFont fontWithName:@"Trebuchet MS" size:14];
+
+	[customView addSubview:myLabel2];
+	
+    helpButton = [UIButton buttonWithType:UIButtonTypeInfoDark];
+    [helpButton setFrame:CGRectMake(0.0f, 250.0f, 19.0f, 17.0f)];
+    [helpButton addTarget:self action:@selector(helpButton:) forControlEvents:UIControlEventTouchDown];
+    [customView addSubview:helpButton];
+       
+     return customView;
+}
+ */
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 
 {
-    //return nil;
-    if (section == 1) {
-        UIView* customView = [[UIView alloc] initWithFrame:CGRectMake(10.0, 0.0, 300.0, 44.0)];
-        
-        // create the button object
-        UIButton * headerBtn = [[UIButton alloc] initWithFrame:CGRectZero];
-        headerBtn.backgroundColor = [UIColor clearColor];
-        headerBtn.opaque = NO;
-        headerBtn.frame = CGRectMake(10.0, 0.0, 100.0, 30.0);
-        [headerBtn addTarget:self action:@selector(ActionEventForButton:) forControlEvents:UIControlEventTouchUpInside];
-        [customView addSubview:headerBtn];
-    }
     return [[tables allKeys] objectAtIndex:section];
 }
+ 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-   // NSArray *curentEntrie = [self curentStudents:section];
-    return  [self curentEntries:section];
+    NSArray *curentEntrie = [self curentEntries:section];
+    return  [curentEntrie count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    /*
-     static NSString *CellIdentifier = @"Cell";
-     
-     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-     if (cell == nil) {
-     cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-     }
-     
-     NSArray *curentStudents = [self curentStudents:indexPath.section];
-     cell.textLabel.text = [curentStudents objectAtIndex:indexPath.row];
-     
-     return cell;
-
-     */
     
-//    static NSString *CellIdentifier = @"Cell";
-//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-//    if (cell == nil) {
-//        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-//    }
-    
-   // NSArray *curentStudents = [self curentStudents:indexPath.section];
-   // cell.textLabel.text = [curentStudents objectAtIndex:indexPath.row];
-    
-   // return cell;
-   
+    static NSString *CellIdentifier = @"Cell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     NSString *name = [[NSUserDefaults standardUserDefaults] objectForKey:@"login"];
+    
+    
+     if (cell == nil) {
+     cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+     }
+     cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
+     NSArray *curentEntrie = [self curentEntries:indexPath.section];
+    // cell.textLabel.text = [curentEntrie objectAtIndex:indexPath.row];
+    
+    if (indexPath.section == 0){
+        switch( [indexPath row] ){
+            case 0: {
+                loginButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+                [loginButton setFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];
+                cell.accessoryView = loginButton;
+                [loginButton setTitle:@"Выйти" forState:UIControlStateNormal];
+                [loginButton addTarget:self action:@selector(loginButton:) forControlEvents:UIControlEventTouchDown];
+                cell.detailTextLabel.text = name;
+                cell.textLabel.text = [curentEntrie objectAtIndex:indexPath.row];
+                return cell;
+            }
+            
+            case 1:{
+                
+                cell.textLabel.text=[curentEntrie objectAtIndex:indexPath.row];
+                [cell addSubview:recordImage];
+                return cell;
+            }
+            case 2:{
+                
+                cell.textLabel.text=[curentEntrie objectAtIndex:indexPath.row];
+                cell.accessoryView = speedLabel;
+                return cell;
+            }
+            case 3:{
+                
+                cell.textLabel.text = [curentEntrie objectAtIndex:indexPath.row];
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                UISwitch *internetUploadSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
+                cell.accessoryView = internetUploadSwitch;
+                [internetUploadSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"internetUserPreference"] animated:NO];
+                [internetUploadSwitch addTarget:self action:@selector(internetUploadSwitch:) forControlEvents:UIControlEventValueChanged];
+                return cell;
+            }
+            case 4:{
+                cell.textLabel.text = [curentEntrie objectAtIndex:indexPath.row];
+                cell.accessoryView = lastTrip;
+                return cell;
+            }
+            break;
+        }
+        
+    }
+    else {
+        switch( [indexPath row] ) {
+            case 0: {
+                cell = [[UITableViewCell alloc] initWithFrame:CGRectMake(0, 0, 250, 35)];
+                
+              //  helpButton = [UIButton buttonWithType:UIButtonTypeInfoDark];
+              //  [helpButton setFrame:CGRectMake(0.0f, 0.0f, 19.0f, 17.0f)];
+                
+             //   cell.accessoryView = helpButton;
+                
+             //   [helpButton addTarget:self action:@selector(helpButton:) forControlEvents:UIControlEventTouchDown];
+                
+                UISegmentedControl *segmentedControl = [[UISegmentedControl alloc]  initWithItems: [NSArray arrayWithObjects: @"Посл. поездка", @"Все поездки", nil]];
+                
+                [segmentedControl setTitleTextAttributes:[NSDictionary dictionaryWithObject:[UIFont fontWithName:@"Trebuchet MS" size:14]
+                                                                                     forKey:UITextAttributeFont] forState:UIControlStateNormal];
+                segmentedControl.frame = CGRectMake(35, 5, 250, 35);//x,y,widht, height 
+                segmentedControl.segmentedControlStyle = UISegmentedControlStylePlain;
+                
+                segmentedControl.selectedSegmentIndex = [[NSUserDefaults standardUserDefaults] integerForKey:@"segment"];
+                
+                [segmentedControl addTarget:self action:@selector(pickOne:) forControlEvents:UIControlEventValueChanged];
+                
+                
+                
+                [cell addSubview:segmentedControl];
+                return cell;
+                
+            }
+            case 1:{
+                cell.textLabel.text=[curentEntrie objectAtIndex:indexPath.row];;
+                cell.accessoryView = qualityDriving;
+                return cell;
+            }
+            case 2:{
+                cell.textLabel.text=[curentEntrie objectAtIndex:indexPath.row];;
+                cell.accessoryView = countKm;
+                return cell;
+            }
+            case 3:{
+                cell.textLabel.text=[curentEntrie objectAtIndex:indexPath.row];
+                cell.accessoryView = speedMode;
+                return cell;
+            }
+            case 4:{
+                cell.textLabel.text=@"Качество разгонов";
+                cell.accessoryView = acceleration;
+                return cell;
+            }
+            case 5:{
+                cell.textLabel.text=@"Качество торможения";
+                cell.accessoryView = deceleration;
+                return cell;
+            }
+            case 6:{
+                cell.textLabel.text=@"Качество поворотов";
+                cell.accessoryView = rotation;
+                return cell;
+            }
+            break;
+        }
+ 
+    }
+    return cell;
+     
+     
+
+   /* 
              
     switch( [indexPath row] ) {
             
@@ -282,64 +390,9 @@
             return cell; 
              
         }
-        case 1: {
-            
-            static NSString *CellIdentifier = @"Name";
-            
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-            if (cell == nil) {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
-                cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
-                cell.textLabel.text=@"Имя";
-                if (name == nil) {
-                    cell.detailTextLabel.text = @"";
-                }
-                else cell.detailTextLabel.text = name;
-                
-                loginButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-                [loginButton setFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];
-                loginButton.titleLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:15];
-                cell.accessoryView = loginButton;
-                [loginButton setTitle:@"Выйти" forState:UIControlStateNormal];
-                [loginButton addTarget:self action:@selector(loginButton:) forControlEvents:UIControlEventTouchDown];
-                
-                
-            }
-            return cell;
-        }
-            
-        case 2: {
-            static NSString *CellIdentifier = @"Record";
-            
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-            if (cell == nil) {
-                
-
-
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-                cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
-                cell.textLabel.text=@"Запись";
-                [cell addSubview:recordImage];
-                
-                
-                                
-            }
-            return cell;
-        }
-
-        case 3: {
-            static NSString *CellIdentifier = @"Speed";
-            
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-            if (cell == nil) {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-                cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
-                cell.textLabel.text=@"Скорость";
-                cell.accessoryView = speedLabel;
-            }
-            return cell;
-        }
-        case 4:{
+                   
+        
+                case 4:{
             static NSString *CellIdentifier = @"1";
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -417,28 +470,7 @@
             }
             return cell;
         }
-            /*     
-        case 10:{
-            static NSString *CellIdentifier = @"7";
-            
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-            if (cell == nil) {
-       
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-                cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
-                cell.textLabel.text=@"Файл";
-                                
-                sendButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-                [sendButton setFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];
-                sendButton.titleLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:15];
-                cell.accessoryView = sendButton;
-                [sendButton setTitle:@"Отправить" forState:UIControlStateNormal];
-                [sendButton addTarget:self action:@selector(sendButton:) forControlEvents:UIControlEventTouchDown];
 
-            }
-            return cell;
-        }
-             */
         case 10:{
             UITableViewCell *aCell = [tableView dequeueReusableCellWithIdentifier:@"internetCell"];
             if( aCell == nil ) {
@@ -478,6 +510,7 @@
         break;
     }
     return nil;
+    */
 }
 
 
@@ -648,6 +681,11 @@
      [self.navigationController pushViewController:detailViewController animated:YES];
      */
 }
+//- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+//{
+//    return 100.0;
+//}
+
 
 
 

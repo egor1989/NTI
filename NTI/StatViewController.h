@@ -45,5 +45,5 @@
 - (void)changeImage;
 - (void)parse:(NSString *)result method:(NSString *)method;
 - (IBAction) internetUploadSwitch:(id)sender;
-- (NSInteger)curentEntries:(NSInteger)index;
+- (NSArray *)curentEntries:(NSInteger)index;
 @end
