@@ -101,16 +101,6 @@
             NSArray *latLngArray = [[NSArray alloc] initWithObjects:[point valueForKey:@"lat"],[point valueForKey:@"lng"],nil];
             int type = [[point valueForKey:@"type"]intValue];
             int weight = [[point valueForKey:@"weight"]intValue];
-//            switch (type) {
-//                case 42:
-//                    [routeLineArray addObject:[self createRouteLine:allRoutesPointsArray[0][0]]];
-//                    break;
-//                case 0:
-//                    allRoutesPointsArray[0][0]
-//                    
-//                default:
-//                    break;
-//            }
             if (type == 42) {
                 [routeLineArray addObject:[self createRouteLine:allRoutesPointsArray[0][0]]];
                 [allRoutesPointsArray[0][0] removeAllObjects];
@@ -128,7 +118,7 @@
         //отрисовка специальных точек
         for (int i=1; i<=3; i++) {
             for (int j=1; j<=3; j++) {
-                [self specialPointsDraw:allRoutesPointsArray[i][j] :j];
+                [self specialPointsDraw:allRoutesPointsArray[i][j] withType:i andStrong:j];
             }
         }
     }
@@ -184,7 +174,7 @@
 }
 
 // Добавляет на карту слой - точку. В зависимости от типа точки присваивает ей определёный заголовок.
--(void) specialPointsDraw:(NSArray*) specialPointsArray: (int) pointType{
+-(void) specialPointsDraw:(NSArray*) specialPointsArray withType: (int) pointType andStrong: (int) pointStrong{
     NSArray *point = [[NSArray alloc] init ];
 	for(point in specialPointsArray)
 	{
@@ -193,7 +183,7 @@
 		CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(latitude, longitude);
         
         circleSpecial = [MKCircle circleWithCenterCoordinate:coordinate radius:6];
-        [circleSpecial setTitle:[NSString stringWithFormat:@"%d",pointType]];
+        [circleSpecial setTitle:[NSString stringWithFormat:@"type=%d.strong=%d",pointType, pointStrong]];
         [self.mapView addOverlay:circleSpecial];
 	}
     
@@ -222,7 +212,7 @@
         routeLineView.fillColor = [UIColor blueColor];
         routeLineView.strokeColor = [UIColor blueColor];
         routeLineView.lineWidth = 15;
-        routeLineView.alpha = 0.6;
+        routeLineView.alpha = 0.5;
 //        routeLineView.lineDashPhase = 15;
         
 		overlayView = routeLineView;
@@ -231,14 +221,34 @@
     
     MKCircle *circle = overlay;
     MKCircleView *circleView = [[MKCircleView alloc] initWithCircle:overlay];
-    if([circle.title isEqualToString:@"1"]){
-        circleView.strokeColor = circleView.fillColor = [UIColor greenColor];
+    if([circle.title isEqualToString:@"type=1.strong=1"]){
+        circleView.strokeColor = circleView.fillColor = [UIColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:0.3];
     }
-    else if([circle.title isEqualToString:@"2"]){
-        circleView.strokeColor = circleView.fillColor = [UIColor yellowColor];
+    else if([circle.title isEqualToString:@"type=1.strong=2"]){
+        circleView.strokeColor = circleView.fillColor = [UIColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:0.6];
     }
-    else if([circle.title isEqualToString:@"3"]){
-        circleView.strokeColor = circleView.fillColor = [UIColor redColor];
+    else if([circle.title isEqualToString:@"type=1.strong=3"]){
+        circleView.strokeColor = circleView.fillColor = [UIColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:1.0];
+    }
+    
+    else if([circle.title isEqualToString:@"type=2.strong=1"]){
+        circleView.strokeColor = circleView.fillColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.3];
+    }
+    else if([circle.title isEqualToString:@"type=2.strong=2"]){
+        circleView.strokeColor = circleView.fillColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.6];
+    }
+    else if([circle.title isEqualToString:@"type=2.strong=3"]){
+        circleView.strokeColor = circleView.fillColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:1.0];
+    }
+    
+    else if([circle.title isEqualToString:@"type=3.strong=1"]){
+        circleView.strokeColor = circleView.fillColor = [UIColor colorWithRed:1.0 green:1.0 blue:0.0 alpha:0.3];
+    }
+    else if([circle.title isEqualToString:@"type=3.strong=2"]){
+        circleView.strokeColor = circleView.fillColor = [UIColor colorWithRed:1.0 green:1.0 blue:0.0 alpha:0.6];
+    }
+    else if([circle.title isEqualToString:@"type=3.strong=3"]){
+        circleView.strokeColor = circleView.fillColor = [UIColor colorWithRed:1.0 green:1.0 blue:0.0 alpha:1.0];
     }
     return circleView;
 }

@@ -48,7 +48,7 @@
 -(void) mapDrawRoute;
 -(void) mapStopWaitingState;
 -(MKPolyline*) createRouteLine:(NSArray*) normalPointsArray;
--(void) specialPointsDraw:(NSArray*) specialPointsArray: (int) pointType;
+-(void) specialPointsDraw:(NSArray*) specialPointsArray withType: (int) pointType andStrong: (int) pointStrong;
 
 
 @end
