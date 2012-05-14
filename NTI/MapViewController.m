@@ -8,6 +8,7 @@
 
 #import "MapViewController.h"
 #import "TestFlight.h"
+#import ""
 
 @implementation MapViewController
 @synthesize mapView = _mapView;
@@ -112,8 +113,14 @@
         [routeLineArray addObject:[self createRouteLine:allRoutesPointsArray[0][0]]];
         
         //отрисовка маршрута (чёрная линия)
-        for (_routeLine in routeLineArray){
-            [_mapView addOverlay:_routeLine];
+        @try {
+            for (_routeLine in routeLineArray){
+                [_mapView addOverlay:_routeLine];
+            }
+        }
+        @catch (NSException *exception) {
+            NSLog(@"NSInvalidArgumentException in mapView");
+            [TestFlight passCheckpoint:@"NSInvalidArgumentException in mapView"];
         }
         //отрисовка специальных точек
         for (int i=1; i<=3; i++) {
@@ -202,10 +209,11 @@
 }
 
 
+
 #pragma mark MKMapViewDelegate
 - (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id <MKOverlay>)overlay
 {
-	if(overlay == self.routeLine)
+    if(overlay == self.routeLine)
 	{
         MKOverlayView* overlayView = nil;
         MKPolylineView *routeLineView = [[MKPolylineView alloc] initWithPolyline:self.routeLine];
