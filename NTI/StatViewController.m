@@ -193,23 +193,23 @@
 /*
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     
-    UIView* customView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 300.0, 44.0)];
-    
-    UILabel *myLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(50, 200, 200, 80)];
+    UIView* customView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 100.0, 44.0)];
+   // customView.backgroundColor = 
+    UILabel *myLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 200, 40)];
 	myLabel2.text = [[tables allKeys] objectAtIndex:section];
 	myLabel2.textAlignment = UITextAlignmentLeft;
-	myLabel2.font = [UIFont fontWithName:@"Trebuchet MS" size:14];
 
 	[customView addSubview:myLabel2];
 	
     helpButton = [UIButton buttonWithType:UIButtonTypeInfoDark];
-    [helpButton setFrame:CGRectMake(0.0f, 250.0f, 19.0f, 17.0f)];
+    [helpButton setFrame:CGRectMake(300.0f, 0.0f, 19.0f, 17.0f)];
     [helpButton addTarget:self action:@selector(helpButton:) forControlEvents:UIControlEventTouchDown];
     [customView addSubview:helpButton];
        
      return customView;
 }
  */
+ 
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 
@@ -227,12 +227,6 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-   // static NSString *CellIdentifier = @"Cell";
-   // UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-   //  if (cell == nil) {
-   //  cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-   // }
-    // cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
      NSArray *curentEntrie = [self curentEntries:indexPath.section];
     // cell.textLabel.text = [curentEntrie objectAtIndex:indexPath.row];
     

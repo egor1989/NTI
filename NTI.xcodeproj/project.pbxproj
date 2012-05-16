@@ -1227,6 +1227,7 @@
 				PROVISIONING_PROFILE = "945ACF9E-A880-4572-8BB2-D9BAB10DAAE6";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "945ACF9E-A880-4572-8BB2-D9BAB10DAAE6";
 				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = NO;
 			};
 			name = Debug;
 		};
@@ -1238,7 +1239,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Vladislav Efremov";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Vladislav Efremov";
-				COPY_PHASE_STRIP = YES;
+				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
@@ -1249,6 +1250,7 @@
 				PROVISIONING_PROFILE = "4D9E5BD7-2BB3-46C0-AEAB-603F31E445C9";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "4D9E5BD7-2BB3-46C0-AEAB-603F31E445C9";
 				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = NO;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

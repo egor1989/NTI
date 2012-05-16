@@ -24,7 +24,9 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {
 
-       
+    [TestFlight takeOff:@"14f03353d4c19f3233aafaac63a12ea2_NTAzMTgyMDEyLTAxLTAzIDA4OjMxOjUwLjY1ODIxMg"];
+    //[TestFlight setDeviceIdentifier:[[NSUserDefaults standardUserDefaults] stringForKey:@"login"]];
+    [TestFlight passCheckpoint:[[NSUserDefaults standardUserDefaults] stringForKey:@"login"]];  
     recordAction = [[RecordAction alloc] init];
     
     [recordAction eventRecord:@"open"]; 
@@ -77,8 +79,7 @@
     
     [Crittercism setUsername:[[NSUserDefaults standardUserDefaults] stringForKey:@"login"]];
     
-    [TestFlight takeOff:@"14f03353d4c19f3233aafaac63a12ea2_NTAzMTgyMDEyLTAxLTAzIDA4OjMxOjUwLjY1ODIxMg"];
-    [TestFlight setDeviceIdentifier:[[NSUserDefaults standardUserDefaults] stringForKey:@"login"]];
+    
    // NSLog(@"UI= %@",[[UIDevice currentDevice] uniqueIdentifier] );
     return YES;
     
