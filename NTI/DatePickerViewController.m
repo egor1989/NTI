@@ -22,7 +22,7 @@
 {
     [super viewDidLoad];
     NSDate *today = [NSDate date];
-    NSDate *minDate = [today dateByAddingTimeInterval: -432000];
+    NSDate *minDate = [today dateByAddingTimeInterval: -86400*20];
     NSDate *maxDate = [today dateByAddingTimeInterval: -900];
     datePicker.minimumDate = minDate;
     datePicker.maximumDate = maxDate;
@@ -30,18 +30,10 @@
 
 - (IBAction)doneButton:(id)sender {
     NSDate *myDate = datePicker.date;
-//    [self transitionFromViewController:_parentModalViewController
-//                      toViewController:_parentViewController
-//                              duration:0.4
-//                               options:UIViewAnimationOptionTransitionFlipFromLeft
-//                            animations:nil
-//                            completion:^(BOOL done){
-//                                [_parentViewController didMoveToParentViewController:self];
-//                                [_parentModalViewController removeFromParentViewController];
-//                            }];
+    NSLog(@"%@",myDate);
+    NSNumber *date = [NSNumber numberWithDouble:(floor([myDate timeIntervalSince1970] / 86400)*86400)]; //86400 - кол-во секунд в дне
     [self dismissModalViewControllerAnimated:YES];
-    NSLog(@"!!!!!doneButton");
-    [[NSNotificationCenter defaultCenter]	postNotificationName:	@"routePointsRequestSend" object:  myDate];
+    [[NSNotificationCenter defaultCenter]	postNotificationName:	@"routePointsRequestSend" object:  date];
 }
 
 #pragma mark - View lifecycle
