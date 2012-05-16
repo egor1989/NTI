@@ -47,7 +47,7 @@
     [recordAction startOfRecord];
     
     [self checkSpeedTimer];
-    
+    [self checkSendRight];
            
     motionManager = [[CMMotionManager alloc] init];
     if ([motionManager isGyroAvailable]) {
@@ -67,10 +67,7 @@
     offsetG             = 0;
     newCompassTarget    = 0;
     
-    [self.window makeKeyAndVisible];
-
-    [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
-    
+        
     
     [Crittercism initWithAppID:@"4f79a143b093154557000355" 
                         andKey:@"czvj5ewmgoxin8qsxzrjrgnd1y2b" 
@@ -79,8 +76,9 @@
     
     [Crittercism setUsername:[[NSUserDefaults standardUserDefaults] stringForKey:@"login"]];
     
+    [self.window makeKeyAndVisible];
     
-   // NSLog(@"UI= %@",[[UIDevice currentDevice] uniqueIdentifier] );
+    [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
     return YES;
     
 }
@@ -166,11 +164,11 @@
             [TestFlight passCheckpoint:@"checkSendRight: send"];
            [recordAction sendFile];
         }
+        else  {
+            [NSTimer scheduledTimerWithTimeInterval:600 target:self selector:@selector(sendTimer:) userInfo:nil repeats:NO];
+            [TestFlight passCheckpoint:@"checkSendRight: start timer"];
+        }
         
-    }
-    else  {
-        [NSTimer scheduledTimerWithTimeInterval:600 target:self selector:@selector(sendTimer:) userInfo:nil repeats:NO];
-        [TestFlight passCheckpoint:@"checkSendRight: start timer"];
     }
     
 }

@@ -76,9 +76,10 @@
 
 - (void)uploadData:(NSString *)fileContent{
     [TestFlight passCheckpoint:@"uploadData"];
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSLog(@"cookie = %@", [userDefaults valueForKey:@"cookie"]);
-    NSString *cookie = [userDefaults valueForKey:@"cookie"]; 
+    
+  //  NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSLog(@"cookie = %@", [self refreshCookie]);
+    NSString *cookie = [self refreshCookie]; 
     //  NSString * cookie = [self refreshCookie];
     
     fileContent=[@"data={\"method\":\"addNTIFile\",\"params\":{\"ntifile\":" stringByAppendingString:fileContent];
@@ -138,6 +139,7 @@
     //NSString * date_string = [date_format stringFromDate: now];
     //NSLog (@"Date: %@", date_string);
     
+    //NSLog(@"now = %@", now);
     //берем дату из текущих cookie
     NSLog(@"cookie = %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"cookieWithDate"]);
     NSString *cookieDate = [self getStringBetweenStrings:[[NSUserDefaults standardUserDefaults] objectForKey:@"cookieWithDate"] first:@"expires=" second:@"GMT"];
@@ -145,8 +147,16 @@
     
     NSDate * resultD = [date_format dateFromString: cookieDate]; 
     NSLog (@"%@", resultD); 
+    
+  //  NSString *nowTest = @"2012-05-16 12:50:12";
+  //  NSDate * nowT = [date_format dateFromString: nowTest]; 
+
+    
     NSComparisonResult comparetionResult = [now compare:resultD];
-    if (comparetionResult == NSOrderedAscending) return NO;
+    if (comparetionResult == NSOrderedAscending) {
+        NSLog(@"now less than resultD");    
+        return NO;
+    }
    // if (comparetionResult == NSOrderedDescending) NSLog (@"less");
 
     return YES;
@@ -156,13 +166,13 @@
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSLog(@"refreshCookie");
-//    if ([self checkCookieExpires]){
+    if ([self checkCookieExpires]){
 
         //if ([userDefaults objectForKey:@"cookie"]!=nil) {
             [self authUser:[userDefaults objectForKey:@"login"] secret:[userDefaults objectForKey:@"password"]];
         NSLog(@"reAuth");
         //}
-//    }
+    }
     return [userDefaults objectForKey:@"cookie"];
     
 }

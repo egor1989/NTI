@@ -99,7 +99,7 @@
      selector: @selector(changeImage)
      name: @"canWriteToFile"
      object: nil];
-    
+    [serverCommunication refreshCookie];
     /************ инициализация элементов *******************/
 
     NSArray *info = [NSArray arrayWithObjects:@"Имя", @"Запись", @"Скорость", @"Только Wi-Fi", @"Дата посл. поезки", nil];
