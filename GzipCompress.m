@@ -99,7 +99,7 @@
 }
 
 
-- (NSData *)gzipDeflate: (NSData*)uncompressedData 
++ (NSData *)gzipDeflate: (NSData*)uncompressedData 
 {
 	if ([uncompressedData length] == 0) return uncompressedData;
 	
@@ -141,7 +141,7 @@
 }
 
 
-- (NSData *)gzipInflate: (NSData*)compressedData
++ (NSData *)gzipInflate: (NSData*)compressedData
 {
 	if ([compressedData length] == 0) return compressedData;
 	

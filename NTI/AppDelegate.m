@@ -159,7 +159,7 @@
 
 -(void)checkSendRight{
     
-    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"pk"]>10) {
+    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"pk"]>1) {
         if ([ServerCommunication checkInternetConnection])  {
             [TestFlight passCheckpoint:@"checkSendRight: send"];
            [recordAction sendFile];
