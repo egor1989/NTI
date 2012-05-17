@@ -24,7 +24,9 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {
 
-       
+    [TestFlight takeOff:@"14f03353d4c19f3233aafaac63a12ea2_NTAzMTgyMDEyLTAxLTAzIDA4OjMxOjUwLjY1ODIxMg"];
+    //[TestFlight setDeviceIdentifier:[[NSUserDefaults standardUserDefaults] stringForKey:@"login"]];
+    [TestFlight passCheckpoint:[[NSUserDefaults standardUserDefaults] stringForKey:@"login"]];  
     recordAction = [[RecordAction alloc] init];
     
     [recordAction eventRecord:@"open"]; 
@@ -45,7 +47,7 @@
     [recordAction startOfRecord];
     
     [self checkSpeedTimer];
-    
+    [self checkSendRight];
            
     motionManager = [[CMMotionManager alloc] init];
     if ([motionManager isGyroAvailable]) {
@@ -65,10 +67,7 @@
     offsetG             = 0;
     newCompassTarget    = 0;
     
-    [self.window makeKeyAndVisible];
-
-    [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
-    
+        
     
     [Crittercism initWithAppID:@"4f79a143b093154557000355" 
                         andKey:@"czvj5ewmgoxin8qsxzrjrgnd1y2b" 
@@ -77,9 +76,9 @@
     
     [Crittercism setUsername:[[NSUserDefaults standardUserDefaults] stringForKey:@"login"]];
     
-    [TestFlight takeOff:@"14f03353d4c19f3233aafaac63a12ea2_NTAzMTgyMDEyLTAxLTAzIDA4OjMxOjUwLjY1ODIxMg"];
-    [TestFlight setDeviceIdentifier:[[NSUserDefaults standardUserDefaults] stringForKey:@"login"]];
-   // NSLog(@"UI= %@",[[UIDevice currentDevice] uniqueIdentifier] );
+    [self.window makeKeyAndVisible];
+    
+    [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
     return YES;
     
 }
@@ -160,16 +159,16 @@
 
 -(void)checkSendRight{
     
-    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"pk"]>10) {
+    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"pk"]>1) {
         if ([ServerCommunication checkInternetConnection])  {
             [TestFlight passCheckpoint:@"checkSendRight: send"];
            [recordAction sendFile];
         }
+        else  {
+            [NSTimer scheduledTimerWithTimeInterval:600 target:self selector:@selector(sendTimer:) userInfo:nil repeats:NO];
+            [TestFlight passCheckpoint:@"checkSendRight: start timer"];
+        }
         
-    }
-    else  {
-        [NSTimer scheduledTimerWithTimeInterval:600 target:self selector:@selector(sendTimer:) userInfo:nil repeats:NO];
-        [TestFlight passCheckpoint:@"checkSendRight: start timer"];
     }
     
 }

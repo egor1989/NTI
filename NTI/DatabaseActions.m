@@ -251,9 +251,11 @@ static sqlite3_stmt *readStmt = nil;
    
     NSString *cJSON = [[NSString alloc] initWithData:JSON encoding:NSASCIIStringEncoding]; 
     //NSLog(@"cJSON=%@",cJSON);
-  //! для шифрования  [serverCommunication uploadData: JSON]; 
+  // для шифрования  
+    [serverCommunication uploadData: JSON]; 
+    
     [TestFlight passCheckpoint: @"database-servercommunication - uploadData"];
-    [serverCommunication uploadData: cJSON]; 
+  // без шифрования [serverCommunication uploadData: cJSON]; 
     
     
 

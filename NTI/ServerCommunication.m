@@ -12,27 +12,30 @@
 @implementation ServerCommunication
 @synthesize errors;
 
-/*
 - (void)uploadData:(NSData *)fileContent{
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSLog(@"cookie = %@", [userDefaults valueForKey:@"cookie"]);
-    NSString *cookie = [userDefaults valueForKey:@"cookie"]; 
-    NSLog(@"&");
+    //NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+   // NSLog(@"cookie = %@", [userDefaults valueForKey:@"cookie"]);
+    NSString *cookie = [self refreshCookie]; 
+    NSLog(@"cookie = %@",cookie);
     
     NSString *sJSON = [[NSString alloc] initWithData:fileContent encoding:NSASCIIStringEncoding]; 
 
-    NSString *requestContent = [NSString stringWithFormat:@"{\"method\":\"addNTIFile\",\"params\":{\"ntifile\":%@}}",@"12345qwerty12345qwerty"];
+    NSString *requestContent = [NSString stringWithFormat:@"{\"method\":\"addNTIFile\",\"params\":{\"ntifile\":%@}}",sJSON];
         
     NSLog(@"Request: %@", requestContent);
         
    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
                                   timeoutInterval:60.0];
 
-    requestData = [NSData dataWithBytes:[requestContent UTF8String] length:[fileContent length]];
-    NSData *compressData = [GzipCompress compressData:requestData error:nil];
+    requestData = [NSData dataWithBytes:[requestContent UTF8String] length:[requestContent length]];
+//    NSLog(@"requestData = %@", requestData);
+   // NSData *compressData = [GzipCompress compressData:requestData error:nil];
+    NSData *compressData = [GzipCompress gzipDeflate:requestData];
+ //   NSData *uncompressData = [GzipCompress gzipInflate:compressData];
+  //   NSLog(@"requestData = %@", uncompressData);
     
     
-    NSLog(@"cData = %@", compressData);
+ //   NSLog(@"cData = %@", compressData);
     
     NSString* content = [compressData description];
     
@@ -41,7 +44,8 @@
     
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody: [NSData dataWithBytes:[requestDataFull UTF8String] length:[requestDataFull length]]];    
-    
+    [request setValue:@"gzip" forHTTPHeaderField:@"Content-Encoding"];
+    [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
      NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
      @"http://nti.goodroads.ru/api/", NSHTTPCookieDomain,
                                  @"NTIKeys", NSHTTPCookieName,
@@ -72,13 +76,14 @@
 
 }
  
- */
-
+ 
+/*
 - (void)uploadData:(NSString *)fileContent{
     [TestFlight passCheckpoint:@"uploadData"];
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSLog(@"cookie = %@", [userDefaults valueForKey:@"cookie"]);
-    NSString *cookie = [userDefaults valueForKey:@"cookie"]; 
+    
+  //  NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSLog(@"cookie = %@", [self refreshCookie]);
+    NSString *cookie = [self refreshCookie]; 
     //  NSString * cookie = [self refreshCookie];
     
     fileContent=[@"data={\"method\":\"addNTIFile\",\"params\":{\"ntifile\":" stringByAppendingString:fileContent];
@@ -126,7 +131,7 @@
     
     
 }
-
+*/
 - (BOOL)checkCookieExpires{
     //текущая дата в нужном формате
     NSDate * now = [NSDate date];
@@ -138,6 +143,7 @@
     //NSString * date_string = [date_format stringFromDate: now];
     //NSLog (@"Date: %@", date_string);
     
+    //NSLog(@"now = %@", now);
     //берем дату из текущих cookie
     NSLog(@"cookie = %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"cookieWithDate"]);
     NSString *cookieDate = [self getStringBetweenStrings:[[NSUserDefaults standardUserDefaults] objectForKey:@"cookieWithDate"] first:@"expires=" second:@"GMT"];
@@ -145,8 +151,16 @@
     
     NSDate * resultD = [date_format dateFromString: cookieDate]; 
     NSLog (@"%@", resultD); 
+    
+  //  NSString *nowTest = @"2012-05-16 12:50:12";
+  //  NSDate * nowT = [date_format dateFromString: nowTest]; 
+
+    
     NSComparisonResult comparetionResult = [now compare:resultD];
-    if (comparetionResult == NSOrderedAscending) return NO;
+    if (comparetionResult == NSOrderedAscending) {
+        NSLog(@"now less than resultD");    
+        return NO;
+    }
    // if (comparetionResult == NSOrderedDescending) NSLog (@"less");
 
     return YES;
@@ -156,13 +170,13 @@
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSLog(@"refreshCookie");
-//    if ([self checkCookieExpires]){
+    if ([self checkCookieExpires]){
 
         //if ([userDefaults objectForKey:@"cookie"]!=nil) {
             [self authUser:[userDefaults objectForKey:@"login"] secret:[userDefaults objectForKey:@"password"]];
         NSLog(@"reAuth");
         //}
-//    }
+    }
     return [userDefaults objectForKey:@"cookie"];
     
 }
@@ -290,8 +304,8 @@
 - (NSString *)getAllStatistic{
      [TestFlight passCheckpoint:@"getAllStatistics"];
     
-    NSString *cookie = [self refreshCookie]; 
-    NSLog(@"cookie = %@", cookie);
+    NSString *cookie = [[NSUserDefaults standardUserDefaults] valueForKey:@"cookie"]; 
+   // NSLog(@"cookie = %@", cookie);
 
     NSString *data = @"data={\"method\":\"getStatistics\"}";//,\"params\":{\"login\":\"",login, @"\",\"password\":\"", password, @"\"}}"];
     NSLog(@"Request: %@", data);
@@ -339,7 +353,7 @@
 
 - (NSString *)getLastStatistic{
      [TestFlight passCheckpoint: @"getLastStatistics"];
-    NSString *cookie = [self refreshCookie]; 
+   NSString *cookie = [[NSUserDefaults standardUserDefaults] valueForKey:@"cookie"]; 
     NSLog(@"cookie = %@", cookie);
 
     NSString *data = @"data={\"method\":\"getStatistics\",\"params\":{\"last\":\"1\"}}";//,\"params\":{\"login\":\"",login, @"\",\"password\":\"", password, @"\"}}"];
