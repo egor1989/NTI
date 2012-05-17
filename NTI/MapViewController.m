@@ -8,7 +8,6 @@
 
 #import "MapViewController.h"
 #import "TestFlight.h"
-#import ""
 
 @implementation MapViewController
 @synthesize mapView = _mapView;
@@ -17,6 +16,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    tempCount = 0;
     [TestFlight passCheckpoint:@"map view controller loaded"];
     [_mapView setDelegate:self];
     serverCommunication = [[ServerCommunication alloc]init ];
@@ -73,6 +73,7 @@
     NSArray *routeArray = [[NSArray alloc] init];
     answerArray = [jsonParser objectWithString:[TheNotice object] error:NULL];
     routeArray = [answerArray valueForKey:@"result"];
+    NSLog(@"RouteArray points NUMBER = %d",[routeArray count]);
     
     [waintingIndicator stopAnimating];
     grayView.hidden = YES;
@@ -80,6 +81,7 @@
     [self.mapView removeOverlays: self.mapView.overlays];
     [self parseRoute:routeArray];
     [self zoomInOnRoute];
+    NSLog(@"tempCount = %d", tempCount);
 }
 
 // Парсит маршрут и вызывает методы отрисовки
@@ -111,7 +113,7 @@
             }
         }
         [routeLineArray addObject:[self createRouteLine:allRoutesPointsArray[0][0]]];
-        
+        NSLog(@"normalPointsNumber = %d", [allRoutesPointsArray[0][0] count]);
         //отрисовка маршрута (чёрная линия)
         @try {
             for (_routeLine in routeLineArray){
@@ -135,6 +137,10 @@
 //Создаёт и возвращает линию маршрута. (Просто маршрут - без специальных точек)
 -(MKPolyline*) createRouteLine:(NSArray*) normalPointsArray1{
 	MKMapPoint* pointArr = malloc(sizeof(CLLocationCoordinate2D) * normalPointsArray1.count);
+    
+    
+    tempCount = tempCount + normalPointsArray1.count;
+    
     
 	for(int idx = 0; idx < normalPointsArray1.count; idx++)
 	{
@@ -183,6 +189,7 @@
 // Добавляет на карту слой - точку. В зависимости от типа точки присваивает ей определёный заголовок.
 -(void) specialPointsDraw:(NSArray*) specialPointsArray withType: (int) pointType andStrong: (int) pointStrong{
     NSArray *point = [[NSArray alloc] init ];
+    tempCount = tempCount + [specialPointsArray count];
 	for(point in specialPointsArray)
 	{
 		CLLocationDegrees latitude  = [[point objectAtIndex:0] doubleValue];

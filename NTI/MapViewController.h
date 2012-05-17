@@ -35,7 +35,9 @@
     bool isFirstRect;
     
     MKMapPoint northEastPoint; 
-	MKMapPoint southWestPoint; 
+	MKMapPoint southWestPoint;
+    
+    int tempCount;
 }
 
 @property (nonatomic, retain) IBOutlet MKMapView* mapView;
