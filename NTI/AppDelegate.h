@@ -13,7 +13,6 @@
 #import "AuthViewController.h"
 #import "DatabaseActions.h"
 #import "RecordAction.h"
-#import "TestFlight.h"
 
 
 

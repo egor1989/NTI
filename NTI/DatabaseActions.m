@@ -53,7 +53,7 @@ static sqlite3_stmt *readStmt = nil;
 	
 	// If the database already exists then return without doing anything
     if (success) {
-        [TestFlight passCheckpoint: @"dataBaseOpen"];
+       // [TestFlight passCheckpoint: @"dataBaseOpen"];
         NSLog(@"Data base already exist");
     }
 	if(success) return;
@@ -68,7 +68,7 @@ static sqlite3_stmt *readStmt = nil;
 }
 
 - (BOOL)addArray: (NSMutableArray *)data{
-    [TestFlight passCheckpoint: @"DataBase add array"];
+   // [TestFlight passCheckpoint: @"DataBase add array"];
     const char *sql = "INSERT INTO log(type, time, accX, accY, compass, direction, distance, latitude, longitude, speed) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     if(addStmt == nil) {
         if(sqlite3_prepare_v2(database, sql, -1, &addStmt, NULL) != SQLITE_OK){
@@ -117,7 +117,7 @@ static sqlite3_stmt *readStmt = nil;
 }
 
 - (BOOL)addEntrie: (NSString *)type{
-    [TestFlight passCheckpoint: @"addEntrie"];
+   // [TestFlight passCheckpoint: @"addEntrie"];
    // double currentTime = [[NSData data] timeIntervalSince1970];
     NSLog(@" time = %f, type = %@",[[NSDate date] timeIntervalSince1970], type);
     
@@ -162,7 +162,7 @@ static sqlite3_stmt *readStmt = nil;
 
 
 + (void) clearDatabase{
-    [TestFlight passCheckpoint: @"clear DB"];
+//    [TestFlight passCheckpoint: @"clear DB"];
     const char *sql = "delete from log";
     if(sqlite3_prepare_v2(database, sql, -1, &deleteStmt, NULL) != SQLITE_OK)
         NSAssert1(0, @"Error while creating delete statement. '%s'", sqlite3_errmsg(database));
@@ -178,7 +178,7 @@ static sqlite3_stmt *readStmt = nil;
 }
 
 - (void) sendDatabase{
-    [TestFlight passCheckpoint: @"send DB"];
+    //[TestFlight passCheckpoint: @"send DB"];
     NSThread* myThread = [[NSThread alloc] initWithTarget:self
                                         selector:@selector(sendDatabaseTr)
                                         object:nil];
@@ -191,7 +191,7 @@ static sqlite3_stmt *readStmt = nil;
 
 
 - (void) sendDatabaseTr{
-    [TestFlight passCheckpoint: @"sendDB thread"];
+    // [TestFlight passCheckpoint: @"sendDB thread"];
     NSArray *keys = [NSArray arrayWithObjects:@"timestamp", @"type", @"acc", @"gps", nil];
     dataArray = [[NSMutableArray alloc]init];
     
@@ -201,7 +201,7 @@ static sqlite3_stmt *readStmt = nil;
         // NSLog(@"%i", [userDefaults integerForKey:@"pk"]);
         
         for (NSInteger i=1;i<=([userDefaults integerForKey:@"pk"]/maxEntries)+1;i++) {
-            [TestFlight passCheckpoint: [NSString stringWithFormat:@"SELECT * FROM log WHERE rowid BETWEEN %i AND %i", (i-1)*maxEntries, i*maxEntries]];
+    //        [TestFlight passCheckpoint: [NSString stringWithFormat:@"SELECT * FROM log WHERE rowid BETWEEN %i AND %i", (i-1)*maxEntries, i*maxEntries]];
             const char * sql = [[NSString stringWithFormat:@"SELECT * FROM log WHERE rowid BETWEEN %i AND %i", (i-1)*maxEntries, i*maxEntries] UTF8String];
             
             // NSLog(@"%s", sql);
@@ -254,7 +254,7 @@ static sqlite3_stmt *readStmt = nil;
   // для шифрования  
     [serverCommunication uploadData: JSON]; 
     
-    [TestFlight passCheckpoint: @"database-servercommunication - uploadData"];
+ //   [TestFlight passCheckpoint: @"database-servercommunication - uploadData"];
   // без шифрования [serverCommunication uploadData: cJSON]; 
     
     
@@ -302,7 +302,7 @@ static sqlite3_stmt *readStmt = nil;
 
 
 + (void) finalizeStatements {
-	  [TestFlight passCheckpoint: @"finalizeStatements"];
+//	  [TestFlight passCheckpoint: @"finalizeStatements"];
 	if(database) sqlite3_close(database);
 	if(deleteStmt) sqlite3_finalize(deleteStmt);
 	if(addStmt) sqlite3_finalize(addStmt);

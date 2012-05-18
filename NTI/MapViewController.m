@@ -7,7 +7,7 @@
 //
 
 #import "MapViewController.h"
-#import "TestFlight.h"
+
 
 @implementation MapViewController
 @synthesize mapView = _mapView;
@@ -17,7 +17,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     tempCount = 0;
-    [TestFlight passCheckpoint:@"map view controller loaded"];
+ //   [TestFlight passCheckpoint:@"map view controller loaded"];
     [_mapView setDelegate:self];
     serverCommunication = [[ServerCommunication alloc]init ];
     [[NSNotificationCenter defaultCenter]	
@@ -44,7 +44,7 @@
         [waintingIndicator startAnimating];
         grayView.hidden = NO;
         NSLog(@"getRoute");
-         [TestFlight passCheckpoint:@"load last route"];
+    //     [TestFlight passCheckpoint:@"load last route"];
         [serverCommunication getRouteFromServer:0];
     }
 }
@@ -122,7 +122,7 @@
         }
         @catch (NSException *exception) {
             NSLog(@"NSInvalidArgumentException in mapView");
-            [TestFlight passCheckpoint:@"NSInvalidArgumentException in mapView"];
+     //       [TestFlight passCheckpoint:@"NSInvalidArgumentException in mapView"];
         }
         //отрисовка специальных точек
         for (int i=1; i<=3; i++) {

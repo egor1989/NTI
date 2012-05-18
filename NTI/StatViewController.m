@@ -35,7 +35,7 @@
             
 - (void)viewDidLoad
 {
-    [TestFlight passCheckpoint:@"StatView open"];
+//    [TestFlight passCheckpoint:@"StatView open"];
     [super viewDidLoad];
     UIFont *fontForLabel = [UIFont fontWithName:@"Trebuchet MS" size:16]; 
     
@@ -114,12 +114,12 @@
 - (void)changeImage{
     
     if ([myAppDelegate canWriteToFile]) {
-         [TestFlight passCheckpoint:@"Green logo"];
+//         [TestFlight passCheckpoint:@"Green logo"];
         [recordImage setImage:[UIImage imageNamed:@"green.png"]];
         [sendButton setUserInteractionEnabled:NO];
     }
     else {
-         [TestFlight passCheckpoint:@"Red logo"];
+//         [TestFlight passCheckpoint:@"Red logo"];
         [recordImage setImage:[UIImage imageNamed:@"red.png"]];
     }
     
@@ -127,7 +127,7 @@
 
 - (void)viewDidUnload
 {
-     [TestFlight passCheckpoint:@"StatView unload"];
+//     [TestFlight passCheckpoint:@"StatView unload"];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -136,7 +136,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
      [self.statTableView reloadData];
-     [TestFlight passCheckpoint:@"StatView didAppear"];
+//     [TestFlight passCheckpoint:@"StatView didAppear"];
     
    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -156,7 +156,7 @@
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-     [TestFlight passCheckpoint:@"StatView didDisappear"];
+//     [TestFlight passCheckpoint:@"StatView didDisappear"];
     [super viewDidDisappear:animated];
     
     [[NSNotificationCenter defaultCenter]	
@@ -443,13 +443,13 @@
     UISegmentedControl *segmentedControl = (UISegmentedControl *)sender;
     if ([segmentedControl selectedSegmentIndex]==0) {
             NSLog(@"за последнюю поездку");
-             [TestFlight passCheckpoint:@"PickOne last"];
+//             [TestFlight passCheckpoint:@"PickOne last"];
             [userDefaults setInteger:0 forKey:@"segment"];
             [self parse: [userDefaults valueForKey:@"lastStat"] method:@"lastStat"];
         }
     else {
         NSLog(@"за все время");
-        [TestFlight passCheckpoint:@"PickOne all"];
+//        [TestFlight passCheckpoint:@"PickOne all"];
         [userDefaults setInteger:1 forKey:@"segment"];
         [self parse: [userDefaults valueForKey:@"allStat"] method:@"allStat"];
     }
@@ -460,7 +460,7 @@
     NSLog(@"result = %@", result);
     
     if (result != nil) {
-        [TestFlight passCheckpoint:@"parse result"];
+//        [TestFlight passCheckpoint:@"parse result"];
         SBJsonParser *jsonParser = [SBJsonParser new];
         NSArray *answer = [jsonParser objectWithString:result error:NULL];
         NSArray *statArray = [answer valueForKey:@"result"];
@@ -499,12 +499,12 @@
     if ([sender isOn])
     {
         //only wi-fi
-        [TestFlight passCheckpoint:@"only wi-fi"];
+//        [TestFlight passCheckpoint:@"only wi-fi"];
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"internetUserPreference"];
     }
     else
     {
-        [TestFlight passCheckpoint:@"internet - 3G"];
+//        [TestFlight passCheckpoint:@"internet - 3G"];
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"internetUserPreference"]; 
     }
 }
@@ -548,7 +548,7 @@
 }
 */
 - (IBAction)loginButton:(id)sender{
-    [TestFlight passCheckpoint:@"logout"];
+//    [TestFlight passCheckpoint:@"logout"];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults removeObjectForKey:@"login"];
     [userDefaults removeObjectForKey:@"password"];
@@ -566,10 +566,10 @@
 - (IBAction)sendButton:(id)sender{
     
     
-    [TestFlight passCheckpoint:@"Send Button Pushed"];
+//    [TestFlight passCheckpoint:@"Send Button Pushed"];
     
     if ([ServerCommunication checkInternetConnectionForSend]){
-        [TestFlight passCheckpoint:@"send file"];
+//        [TestFlight passCheckpoint:@"send file"];
         [serverCommunication refreshCookie];
         
         
@@ -582,7 +582,7 @@
 }
 
 - (IBAction)helpButton:(id)sender{
-    [TestFlight passCheckpoint:@"Help Button Pushed"];
+//    [TestFlight passCheckpoint:@"Help Button Pushed"];
     StatHelpViewController *statHelpView = [self.storyboard instantiateViewControllerWithIdentifier: @"StatHelpViewController"];
     statHelpView.modalTransitionStyle = UIModalTransitionStylePartialCurl;
     [self presentModalViewController: statHelpView animated:YES];

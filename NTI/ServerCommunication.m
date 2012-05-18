@@ -7,7 +7,6 @@
 //
 
 #import "ServerCommunication.h"
-#import "TestFlight.h"
 
 @implementation ServerCommunication
 @synthesize errors;
@@ -197,7 +196,7 @@
 
 
 - (BOOL)checkErrors:(NSString *)answerString method:(NSString *)methodName{
-     [TestFlight passCheckpoint:@"check errors in server answer"];
+ //    [TestFlight passCheckpoint:@"check errors in server answer"];
     SBJsonParser *jsonParser = [SBJsonParser new];
     NSArray *answer = [jsonParser objectWithString:answerString error:NULL];
     NSArray *error = [answer valueForKey:@"error"];
@@ -211,7 +210,7 @@
 
     switch (code) {
         case 0:
-             [TestFlight passCheckpoint:@"OK"];
+         //    [TestFlight passCheckpoint:@"OK"];
             if ([methodName isEqualToString: @"reg&auth"]){
                 info = @"Поздравляем!";
                 [userDefaults removeObjectForKey:@"cookie"];
@@ -236,7 +235,7 @@
              }
              else if ([methodName isEqualToString: @"sendData"]){
                   info = @"Файл пуст";
-                  [TestFlight passCheckpoint:@"file empty"];
+                 // [TestFlight passCheckpoint:@"file empty"];
              }
             break;
         case 4:
@@ -273,7 +272,7 @@
             info = @"Нет данных для пользователя";
             break;
         case 88: {
-             [TestFlight passCheckpoint:@"server unreachable"];
+           //  [TestFlight passCheckpoint:@"server unreachable"];
             info = @"Сервер временно не доступен";
             break;
         }
@@ -293,7 +292,7 @@
         [alert show];
     }
     else {
-         [TestFlight passCheckpoint:@"alert - server answer"];
+   //      [TestFlight passCheckpoint:@"alert - server answer"];
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ответ сервера" message:info delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
         [alert show];    
     }
@@ -302,7 +301,7 @@
 
 
 - (NSString *)getAllStatistic{
-     [TestFlight passCheckpoint:@"getAllStatistics"];
+  //   [TestFlight passCheckpoint:@"getAllStatistics"];
     
     NSString *cookie = [[NSUserDefaults standardUserDefaults] valueForKey:@"cookie"]; 
    // NSLog(@"cookie = %@", cookie);
@@ -337,14 +336,14 @@
     NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: &response error: &requestError ];
     
     if (requestError!=nil) {
-         [TestFlight passCheckpoint:[NSString stringWithFormat:@"%@", requestError]];
+       //  [TestFlight passCheckpoint:[NSString stringWithFormat:@"%@", requestError]];
         NSLog(@"%@", requestError);
         NSLog(@"ERROR!ERROR!ERROR!");
     }
     
     returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
     NSLog(@"returnData: %@", returnString);
-    [TestFlight passCheckpoint: returnString];
+  //  [TestFlight passCheckpoint: returnString];
     [self checkErrors:returnString method:@"stat"];
     if (!errors) return returnString; 
     else return @"error";
@@ -352,7 +351,7 @@
 
 
 - (NSString *)getLastStatistic{
-     [TestFlight passCheckpoint: @"getLastStatistics"];
+//     [TestFlight passCheckpoint: @"getLastStatistics"];
    NSString *cookie = [[NSUserDefaults standardUserDefaults] valueForKey:@"cookie"]; 
     NSLog(@"cookie = %@", cookie);
 
@@ -401,7 +400,7 @@
     
     returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
     NSLog(@"returnData: %@", returnString);
-     [TestFlight passCheckpoint: returnString];
+//     [TestFlight passCheckpoint: returnString];
     [self checkErrors:returnString method:@"stat"];
     if (!errors) return returnString; 
     else return @"error";
@@ -412,7 +411,7 @@
  
 
 - (void)regUser:(NSString *)login password:(NSString *)password email:(NSString *)email{
-    [TestFlight passCheckpoint: @"regUser"];
+//    [TestFlight passCheckpoint: @"regUser"];
     NSLog(@"sendData login = %@ message = %@ email = %@", login, password, email);
     
     NSString *data = [NSString stringWithFormat:(@"%@%@%@%@%@"),@"data={\"method\":\"NTIregister\",\"params\":{\"login\":\"",login, @"\",\"password\":\"", password, @"\"}}"];
@@ -458,7 +457,7 @@
 
 
 - (void) authUser:(NSString *)login secret:(NSString *)message{
-    [TestFlight passCheckpoint: @"authUser"];
+//    [TestFlight passCheckpoint: @"authUser"];
     [self infoAboutDevice];
     
     
@@ -508,14 +507,14 @@
 }
 
 + (BOOL) checkInternetConnection{
-    [TestFlight passCheckpoint: @"checkInternetConnection"];
+//    [TestFlight passCheckpoint: @"checkInternetConnection"];
     Reachability* reach = [Reachability reachabilityWithHostname:@"www.goodroads.ru"];
     
     NetworkStatus hostStatus = [reach currentReachabilityStatus];
     NSLog(@"internetUserPreference = %@", [[NSUserDefaults standardUserDefaults] boolForKey:@"internetUserPreference"]?@"YES":@"NO");
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"internetUserPreference"]) {
         if (hostStatus == NotReachable){
-            [TestFlight passCheckpoint: @"NotReachable"];
+//            [TestFlight passCheckpoint: @"NotReachable"];
             NSLog(@"internet: -");
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Включите Интернет-соединение и повторите попытку" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
             [alert show];
@@ -524,12 +523,12 @@
         else return YES;
     }
     else if (hostStatus == ReachableViaWiFi){
-        [TestFlight passCheckpoint: @"wi-fi"];
+//        [TestFlight passCheckpoint: @"wi-fi"];
         NSLog(@"internet: wi-fi");
         return YES;
         } 
         else{
-            [TestFlight passCheckpoint: @"notReachable"];
+//            [TestFlight passCheckpoint: @"notReachable"];
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Включите Интернет-соединение и повторите попытку" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
             [alert show];
             return NO;
@@ -538,19 +537,19 @@
 }
 
 + (BOOL) checkInternetConnectionForSend{
-    [TestFlight passCheckpoint: @"checkInternetConnection"];
+//    [TestFlight passCheckpoint: @"checkInternetConnection"];
     Reachability* reach = [Reachability reachabilityWithHostname:@"www.goodroads.ru"];
     
     NetworkStatus hostStatus = [reach currentReachabilityStatus];
     if (hostStatus == NotReachable){
-        [TestFlight passCheckpoint: @"notReachable"];
+//        [TestFlight passCheckpoint: @"notReachable"];
         NSLog(@"internet: -");
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Включите Интернет-соединение и повторите попытку" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
         [alert show];
         return NO;
     } 
     else { 
-        [TestFlight passCheckpoint: @"+"];
+//        [TestFlight passCheckpoint: @"+"];
         return YES;
     }
  
@@ -579,8 +578,7 @@
 
 - (void)getRouteFromServer:(float)timeInterval{
     
-    [TestFlight passCheckpoint: @"getRouteFromServer"];
-//    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+//    [TestFlight passCheckpoint: @"getRouteFromServer"];
     NSString *cookie = [self refreshCookie]; 
     NSLog(@"cookie = %@", cookie);
     NSString *timeString;
@@ -630,7 +628,7 @@
 }
 
 - (void)sendFeedBackToServerWithTitle:(NSString*)title andBody: (NSString*)body{
-    [TestFlight passCheckpoint: @"sendFeedBack"];
+//    [TestFlight passCheckpoint: @"sendFeedBack"];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSLog(@"cookie = %@", [userDefaults valueForKey:@"cookie"]);
     NSString *cookie = [userDefaults valueForKey:@"cookie"];
@@ -672,7 +670,7 @@
 }
 
 - (void)sendInterviewToServerWithData:(NSDictionary*)data{
-    [TestFlight passCheckpoint: @"sendInterview"];
+//    [TestFlight passCheckpoint: @"sendInterview"];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSLog(@"cookie = %@", [userDefaults valueForKey:@"cookie"]);
     NSString *cookie = [userDefaults valueForKey:@"cookie"];
