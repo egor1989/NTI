@@ -47,7 +47,6 @@
 - (void) sendDatabase;
 + (void) finalizeStatements;
 - (void) convertAndSend;
-- (BOOL) deleteRowsFrom: (NSInteger)start To: (NSInteger)end;
 - (BOOL) addEntrie: (NSString *)type;
 - (void) sendDatabaseTr;
 
