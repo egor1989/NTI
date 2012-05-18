@@ -32,10 +32,12 @@
     UIImageView *recordImage;
     IBOutlet UIButton *helpButton;
     NSDictionary *tables;
+    IBOutlet UITableView *statTableView;
 }
 
 @property (nonatomic) BOOL *writeAction;
 @property (nonatomic, retain) NSDictionary *tables;
+@property (nonatomic) UITableView *statTableView;
 
 - (void) speedUpdate;
 - (IBAction)loginButton:(id)sender;

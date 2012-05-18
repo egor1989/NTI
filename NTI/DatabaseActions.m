@@ -249,7 +249,7 @@ static sqlite3_stmt *readStmt = nil;
   //  NSString *CSV = [csvConverter arrayToCSVString:dataArray];
     NSData *JSON = [jsonConvert convert:dataArray];
    
-    NSString *cJSON = [[NSString alloc] initWithData:JSON encoding:NSASCIIStringEncoding]; 
+  //  NSString *cJSON = [[NSString alloc] initWithData:JSON encoding:NSASCIIStringEncoding]; 
     //NSLog(@"cJSON=%@",cJSON);
   // для шифрования  
     [serverCommunication uploadData: JSON]; 

@@ -13,7 +13,7 @@
 #define secondTitle @"Информация"
 
 @implementation StatViewController
-@synthesize writeAction, tables;
+@synthesize writeAction, tables, statTableView;
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -135,11 +135,14 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
+     [self.statTableView reloadData];
      [TestFlight passCheckpoint:@"StatView didAppear"];
-    [super viewDidAppear:animated];
+    
+   
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     if ([userDefaults integerForKey:@"segment"]==0) [self parse:[userDefaults valueForKey:@"lastStat"] method:@"lastStat"];
     else [self parse:[userDefaults valueForKey:@"allStat"] method:@"allStat"];
+    
     
     //Прослушка notifications
     [[NSNotificationCenter defaultCenter]	
@@ -147,6 +150,7 @@
      selector: @selector(speedUpdate)
      name: @"locateNotification"
      object: nil]; 
+    [super viewDidAppear:animated];
 
 }
 
@@ -241,13 +245,14 @@
                     cell.backgroundColor = [UIColor whiteColor];
                 cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
                 cell.textLabel.text = [curentEntrie objectAtIndex:indexPath.row];
+                //NSLog(@"login = %@", [[NSUserDefaults standardUserDefaults]  objectForKey:@"login"]);
                 cell.detailTextLabel.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"login"];
-                NSString *name = [[NSUserDefaults standardUserDefaults] objectForKey:@"login"];
-                    NSLog(@"NAME=%@",name);
-                    if (name == nil) {
-                        cell.detailTextLabel.text = @"";
-                    }
-                    else cell.detailTextLabel.text = name;   
+              //  NSString *name = [[NSUserDefaults standardUserDefaults] objectForKey:@"login"];
+              //      NSLog(@"NAME=%@",name);
+              //      if (name == nil) {
+              //          cell.detailTextLabel.text = @"";
+              //      }
+              //      else cell.detailTextLabel.text = name;   
                     
                 loginButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
                 [loginButton setFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];
@@ -256,7 +261,8 @@
                 [loginButton setTitle:@"Выйти" forState:UIControlStateNormal];
                 [loginButton addTarget:self action:@selector(loginButton:) forControlEvents:UIControlEventTouchDown];
                 
-                }         
+                } 
+                else cell.detailTextLabel.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"login"];
                 return cell;
             }
             

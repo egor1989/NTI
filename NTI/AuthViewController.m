@@ -75,6 +75,10 @@
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             [userDefaults setValue:[serverCommunication getAllStatistic] forKey:@"allStat"];
             [userDefaults setValue:[serverCommunication getLastStatistic] forKey:@"lastStat"];
+            [userDefaults setValue:loginField.text forKey:@"login"];
+             [userDefaults synchronize];
+            
+             NSLog(@"login = %@", [userDefaults objectForKey:@"login"]);
 //            HelpViewController *helpView = [self.storyboard instantiateViewControllerWithIdentifier: @"HelpViewController"];
 //            helpView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
 //            [self presentModalViewController: helpView animated:YES];
