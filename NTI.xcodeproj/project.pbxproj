@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		271AAFC21565467E007D1223 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 271AAFC11565467E007D1223 /* libz.dylib */; };
 		2745ACB6152A344400253BF2 /* libCrittercism_v3_1_5.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2745AC50152A344400253BF2 /* libCrittercism_v3_1_5.a */; };
 		2745ACB7152A344400253BF2 /* crittercism-arrow-l.png in Resources */ = {isa = PBXBuildFile; fileRef = 2745AC6C152A344400253BF2 /* crittercism-arrow-l.png */; };
 		2745ACB8152A344400253BF2 /* crittercism-arrow-l@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2745AC6D152A344400253BF2 /* crittercism-arrow-l@2x.png */; };
@@ -173,6 +174,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		271AAFC11565467E007D1223 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		2745AC4C152A344400253BF2 /* CrashReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrashReporter.h; sourceTree = "<group>"; };
 		2745AC4D152A344400253BF2 /* Crittercism.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Crittercism.h; sourceTree = "<group>"; };
 		2745AC4E152A344400253BF2 /* CrittercismJSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrittercismJSONKit.h; sourceTree = "<group>"; };
@@ -419,6 +421,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				271AAFC21565467E007D1223 /* libz.dylib in Frameworks */,
 				2779258E15347C110062D871 /* MapKit.framework in Frameworks */,
 				53A560DC1535CFCB00520781 /* CoreTelephony.framework in Frameworks */,
 				2745AD01152A347300253BF2 /* QuartzCore.framework in Frameworks */,
@@ -764,6 +767,7 @@
 		53E0A75B14DEC75D004E3E1B = {
 			isa = PBXGroup;
 			children = (
+				271AAFC11565467E007D1223 /* libz.dylib */,
 				536C9E3F155EA2F2007BE49C /* TestFlightSDK1.0 */,
 				2779258D15347C110062D871 /* MapKit.framework */,
 				2745AC4B152A344400253BF2 /* CrittercismSDK */,

@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="1.1" toolsVersion="2182" systemVersion="11D50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="4">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="1.0" toolsVersion="1938" systemVersion="10K549" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="4">
     <dependencies>
+        <deployment defaultVersion="1280" identifier="iOS"/>
         <development defaultVersion="4200" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1179"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="933"/>
     </dependencies>
     <scenes>
-        <!--Develop View Controller - First-->
         <scene sceneID="11">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="10" sceneMemberID="firstResponder"/>
@@ -273,7 +273,6 @@
             </objects>
             <point key="canvasLocation" x="1809" y="-304"/>
         </scene>
-        <!--Feed Back View Controller - Отзыв-->
         <scene sceneID="CbX-tD-odD">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kcQ-sX-0s3" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -351,7 +350,6 @@
             </objects>
             <point key="canvasLocation" x="1809" y="1692"/>
         </scene>
-        <!--Plot View Controller - Second-->
         <scene sceneID="13">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="12" sceneMemberID="firstResponder"/>
@@ -366,7 +364,6 @@
             </objects>
             <point key="canvasLocation" x="1809" y="284"/>
         </scene>
-        <!--Date Picker View Controller - Map-->
         <scene sceneID="Tcr-zr-v4U">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S3r-Rd-BnD" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -379,7 +376,7 @@
                                 <rect key="frame" x="0.0" y="244" width="320" height="216"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <date key="date" timeIntervalSinceReferenceDate="353164292.84771502">
-                                    <!--2012-03-11 13:11:32 +0000-->
+                                    <!--2012-03-11 16:11:32 +0300-->
                                 </date>
                                 <locale key="locale" localeIdentifier="en_US"/>
                                 <timeZone key="timeZone" name="America/Los_Angeles">
@@ -437,7 +434,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
             </objects>
             <point key="canvasLocation" x="2219" y="752"/>
         </scene>
-        <!--Map Help View Controller-->
         <scene sceneID="88e-Ie-WRo">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lRb-vs-SAS" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -464,7 +460,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" id="cum-LJ-WAC">
                                 <rect key="frame" x="20" y="98" width="288" height="249"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <string key="text">Точками на карте отображаются потенциально опасные маневры. При этом красным отображаются их экстремальные значения, которые могли привести к заносу автомобиля или ДТП, а зеленым отображаются небольшое отклонение от нормы и потенциально опасные маневры. Желтым цветом отображаются средние значения.</string>
+                                <string key="text">Точками на карте отображаются потенциально опасные маневры. Красным цветом - торможения, зелёным - ускорния, жёлтым - повороты. При этом чем опаснее манёвр, тем меньше прозначность точки.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -483,7 +479,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
             </objects>
             <point key="canvasLocation" x="2219" y="1326"/>
         </scene>
-        <!--Map View Controller - Title-->
         <scene sceneID="1Qp-Kz-5Ox">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZKL-mj-7Oa" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -550,7 +545,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
             </objects>
             <point key="canvasLocation" x="1545" y="956"/>
         </scene>
-        <!--Iterview View Controller-->
         <scene sceneID="YEX-YE-F7z">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="saj-gN-sfG" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -703,7 +697,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
             </objects>
             <point key="canvasLocation" x="967" y="-939"/>
         </scene>
-        <!--Stat View Controller - Статистика-->
         <scene sceneID="aDC-Fh-98B">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VNG-QV-faK" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -739,7 +732,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
             </objects>
             <point key="canvasLocation" x="1861" y="-898"/>
         </scene>
-        <!--Stat Help View Controller-->
         <scene sceneID="jOn-7G-0OQ">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cIj-7I-tzH" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -878,7 +870,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
             </objects>
             <point key="canvasLocation" x="2251" y="-901"/>
         </scene>
-        <!--Help View Controller-->
         <scene sceneID="zqs-27-2pC">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DiC-Vp-zsw" sceneMemberID="firstResponder"/>
@@ -938,7 +929,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
             </objects>
             <point key="canvasLocation" x="681" y="-22"/>
         </scene>
-        <!--Registration View Controller-->
         <scene sceneID="xc9-ib-aDx">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DRI-69-MY8" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1031,7 +1021,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
             </objects>
             <point key="canvasLocation" x="575" y="-939"/>
         </scene>
-        <!--Auth View Controller-->
         <scene sceneID="Xpe-hI-8Qz">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jaw-vu-xTK" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1110,7 +1099,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
             </objects>
             <point key="canvasLocation" x="109" y="-939"/>
         </scene>
-        <!--Tab Bar Controller-->
         <scene sceneID="15">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="14" sceneMemberID="firstResponder"/>
@@ -1145,6 +1133,140 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <image name="second.png" width="30" height="30"/>
         <image name="time.png" width="128" height="128"/>
     </resources>
+    <classes>
+        <class className="AuthViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/AuthViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="authButton:"/>
+                <relationship kind="action" name="regButton:"/>
+                <relationship kind="outlet" name="loginField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="passwordField" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="DatePickerViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/DatePickerViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="doneButton:"/>
+                <relationship kind="outlet" name="datePicker" candidateClass="UIDatePicker"/>
+            </relationships>
+        </class>
+        <class className="DevelopViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/DevelopViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="acceleration:"/>
+                <relationship kind="action" name="actionButton:"/>
+                <relationship kind="action" name="clearDB:"/>
+                <relationship kind="action" name="deceleration:"/>
+                <relationship kind="action" name="feedBackButton:"/>
+                <relationship kind="action" name="leftRot:"/>
+                <relationship kind="action" name="rightRot:"/>
+                <relationship kind="action" name="sendFile:"/>
+                <relationship kind="outlet" name="accX" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="accY" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="accZ" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="accelButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="action" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="course" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="decelButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="feedBackButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="gpsRow" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="leftButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="northRow" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="northValue" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="rightButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="rowCourse" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="rowDegrees" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="speed" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="time" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="timerLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="writeLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="FeedBackViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/FeedBackViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="done:"/>
+                <relationship kind="action" name="rightItem:"/>
+                <relationship kind="outlet" name="grayView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="navItem" candidateClass="UINavigationItem"/>
+                <relationship kind="outlet" name="rightItem" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="textField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="textView" candidateClass="UITextView"/>
+                <relationship kind="outlet" name="waintingIndicator" candidateClass="UIActivityIndicatorView"/>
+            </relationships>
+        </class>
+        <class className="HelpViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/HelpViewController.h"/>
+        </class>
+        <class className="IterviewViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/IterviewViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="doneAction"/>
+                <relationship kind="outlet" name="ageField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="autoCategoryField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="autoPowerField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="insuranceCompanyField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="numberOfDtpField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
+                <relationship kind="outlet" name="sexField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="skillField" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="MapHelpViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MapHelpViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="okButton:"/>
+            </relationships>
+        </class>
+        <class className="MapViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MapViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="grayView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="mapView" candidateClass="MKMapView"/>
+                <relationship kind="outlet" name="waintingIndicator" candidateClass="UIActivityIndicatorView"/>
+            </relationships>
+        </class>
+        <class className="MyTextField" superclassName="UITextField">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MyTextField.h"/>
+        </class>
+        <class className="Plot" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/Plot.h"/>
+        </class>
+        <class className="PlotViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/PlotViewController.h"/>
+        </class>
+        <class className="RegistrationViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RegistrationViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="cancelButton:"/>
+                <relationship kind="action" name="goButton:"/>
+                <relationship kind="outlet" name="againPasswordField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="emailField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="nameField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="passwordField" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="StatHelpViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/StatHelpViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="closeHelp:"/>
+                <relationship kind="outlet" name="closeHelp" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
+            </relationships>
+        </class>
+        <class className="StatViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/StatViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="helpButton:"/>
+                <relationship kind="action" name="internetUploadSwitch:"/>
+                <relationship kind="action" name="loginButton:"/>
+                <relationship kind="action" name="sendButton:"/>
+                <relationship kind="outlet" name="helpButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="loginButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="sendButton" candidateClass="UIButton"/>
+            </relationships>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

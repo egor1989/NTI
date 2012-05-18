@@ -55,7 +55,7 @@ public class runner {
             System.out.println("Start");
             //1 Для начала получаем все данные по дорогам
             //Выбираем всех пользователей для начала
-            sqlmain = "Select distinct(UID) as UserID from NTIEntry where UID>0 order by UserID;";
+            sqlmain = "Select distinct(UID) as UserID from NTIEntry order by UserID;";
             s = conn.createStatement();
             rset = s.executeQuery(sqlmain);
             while (rset.next()) 
@@ -68,7 +68,7 @@ public class runner {
             //Теперь начинаем получать поездки пользователя, которые
            for (Integer UID : UserList)
             {
-                    sqlmain = "Select * from NTIEntry where UID=:UID and Deleted=0 AND lat != 0 AND lng != 0 group by utimestamp order by utimestamp;";
+                    sqlmain = "Select * from NTIEntry where UID=:UID and Deleted=0 AND lat != 0 AND lng != 0 and (speed>0 and speed<50) group by utimestamp order by utimestamp;";
                     sql_p_main = new NamedParameterStatement(conn, sqlmain);
                     sql_p_main.setInt("UID", UID); 
                     rset=sql_p_main.executeQuery();
@@ -109,27 +109,38 @@ public class runner {
                          * 2)Время  между ними не должно превышать 5 мин
                         */
                         //TODO: Сделать нормальную разбивку по поездкам
-                        if((ArrayEntry[i].getTimestamp()-ArrayEntry[i-1].getTimestamp())<300 && DistanceBetweenPoints(ArrayEntry[i].getLat(),ArrayEntry[i-1].getLat(),ArrayEntry[i].getLng(),ArrayEntry[i-1].getLng())/((ArrayEntry[i].getTimestamp()-ArrayEntry[i-1].getTimestamp()))<200)
+                        if(UnfilteredEntry.size()!=0)
                         {
-                                temp_entry= new Entry();
-                                  temp_entry=ArrayEntry[i-1];
+                            if((UnfilteredEntry.get(UnfilteredEntry.size()-1).getTimestamp()-ArrayEntry[i-1].getTimestamp())<300 && DistanceBetweenPoints(UnfilteredEntry.get(UnfilteredEntry.size()-1).getLat(),ArrayEntry[i-1].getLat(),UnfilteredEntry.get(UnfilteredEntry.size()-1).getLng(),ArrayEntry[i-1].getLng())<150)
+                            {
+                                
+                                    temp_entry= new Entry();
+                                 temp_entry=ArrayEntry[i-1];
                                  UnfilteredEntry.add(temp_entry);
+                            }
+                            else
+                            {
+                             temp_ride=new Ride();
+                             temp_ride.setEntryRide(UnfilteredEntry);
+                             UserRide.add(temp_ride);
+                             UnfilteredEntry.clear();
+                             
+                            
+                            }
                         }
                         else
                         {
-                            temp_ride=new Ride();
-                           temp_ride.setEntryRide(UnfilteredEntry);
-              
-                          UserRide.add(temp_ride);
-                            
+                                 temp_entry= new Entry();
+                                 temp_entry=ArrayEntry[i-1];
+                                 UnfilteredEntry.add(temp_entry);
                         }
                     }
                     //Теперь удаляем определенно херовые поезки
                     //Если в поездке 0 скоростей больше половины - эт какая-то хуита ребята
                    Ride[] UserRideTmp=new Ride[UserRide.size()];
                    UserRide.toArray(UserRideTmp);
-                 System.out.println(UID+"-->"+UserRideTmp.length);
-                 System.out.println(UID+"-->"+UserRide.size());
+                  System.out.println(UID+"-->"+UserRideTmp.length);
+                  System.out.println(UID+"-->"+UserRide.size());
                  UserRide.clear();
                    for(int j=0;j<UserRideTmp.length;j++)
                     {
@@ -138,8 +149,8 @@ public class runner {
                         for(Entry temptmp : UserRideTmp[j].getEntryRide())
                         {
                            if(temptmp.getSpeed()==0)i++;     
-                        }
-                        if(i*2<UserRideTmp[j].getEntryRide().size())
+                                  }
+                        if(i*2>UserRideTmp[j].getEntryRide().size())
                         {
                             
                         }
