@@ -262,7 +262,6 @@ static sqlite3_stmt *readStmt = nil;
     [serverCommunication uploadData: JSON]; 
     
   // без шифрования [serverCommunication uploadData: cJSON]; 
-    
 
 }
 

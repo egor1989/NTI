@@ -46,8 +46,6 @@
 
 -(void) parseRoute: (NSArray*) routeArray;
 -(void) zoomInOnRoute;
--(void) mapWaitingState;
--(void) mapDrawRoute;
 -(void) mapStopWaitingState;
 -(MKPolyline*) createRouteLine:(NSArray*) normalPointsArray;
 -(void) specialPointsDraw:(NSArray*) specialPointsArray withType: (int) pointType andStrong: (int) pointStrong;

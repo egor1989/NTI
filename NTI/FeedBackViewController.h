@@ -27,8 +27,8 @@
 }
 @property (nonatomic, retain) UITextView *textView;
 
-- (IBAction)rightItem:(id)sender;
--(IBAction) done:(id) sender;
+//- (IBAction)rightItem:(id)sender;
+//-(IBAction) done:(id) sender;
 -(void) feedBackWaitingState;
 
 - (void)doneAction;

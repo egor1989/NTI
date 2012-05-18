@@ -21,9 +21,9 @@
 }
 
 -(NSString *)encryptionPassword:(NSData *) password;
-- (NSData *) stringFromHex:(NSString *)str ;
-- (NSString *) stringWithHexBytes: (NSData *) encrypted;
-- (NSString *) decryptMessage: (NSString *) message;
+//- (NSData *) stringFromHex:(NSString *)str ;
+//- (NSString *) stringWithHexBytes: (NSData *) encrypted;
+//- (NSString *) decryptMessage: (NSString *) message;
 
 
 @end

@@ -35,7 +35,7 @@
             
 - (void)viewDidLoad
 {
-//    [TestFlight passCheckpoint:@"StatView open"];
+    [FileController write:@"StatView did load\n"];
     [super viewDidLoad];
     UIFont *fontForLabel = [UIFont fontWithName:@"Trebuchet MS" size:16]; 
     
@@ -86,10 +86,12 @@
     /***************************************************************/
     
     if ([myAppDelegate canWriteToFile]) {
+        [FileController write:@"green logo\n"];
         [recordImage setImage:[UIImage imageNamed:@"green.png"]];
 
     }
     else {
+        [FileController write: @"red logo\n"];
         [recordImage setImage:[UIImage imageNamed:@"red.png"]];
         //[sendButton setEnabled: YES];
     }
@@ -114,12 +116,12 @@
 - (void)changeImage{
     
     if ([myAppDelegate canWriteToFile]) {
-//         [TestFlight passCheckpoint:@"Green logo"];
+        [FileController write:@"Green logo\n"];
         [recordImage setImage:[UIImage imageNamed:@"green.png"]];
         [sendButton setUserInteractionEnabled:NO];
     }
     else {
-//         [TestFlight passCheckpoint:@"Red logo"];
+         [FileController write:@"Red logo\n"];
         [recordImage setImage:[UIImage imageNamed:@"red.png"]];
     }
     
@@ -127,7 +129,7 @@
 
 - (void)viewDidUnload
 {
-//     [TestFlight passCheckpoint:@"StatView unload"];
+     [FileController write:@"StatView unload\n"];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -136,7 +138,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
      [self.statTableView reloadData];
-//     [TestFlight passCheckpoint:@"StatView didAppear"];
+     [FileController write:@"StatView didAppear\n"];
     
    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -156,7 +158,7 @@
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-//     [TestFlight passCheckpoint:@"StatView didDisappear"];
+     [FileController write:@"StatView didDisappear\n"];
     [super viewDidDisappear:animated];
     
     [[NSNotificationCenter defaultCenter]	
@@ -193,26 +195,6 @@
     // Return the number of sections.
     return [tables count];
 }
-
-/*
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    
-    UIView* customView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 100.0, 44.0)];
-   // customView.backgroundColor = 
-    UILabel *myLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 200, 40)];
-	myLabel2.text = [[tables allKeys] objectAtIndex:section];
-	myLabel2.textAlignment = UITextAlignmentLeft;
-
-	[customView addSubview:myLabel2];
-	
-    helpButton = [UIButton buttonWithType:UIButtonTypeInfoDark];
-    [helpButton setFrame:CGRectMake(300.0f, 0.0f, 19.0f, 17.0f)];
-    [helpButton addTarget:self action:@selector(helpButton:) forControlEvents:UIControlEventTouchDown];
-    [customView addSubview:helpButton];
-       
-     return customView;
-}
- */
  
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -235,7 +217,7 @@
     // cell.textLabel.text = [curentEntrie objectAtIndex:indexPath.row];
     
     if (indexPath.section == 0){
-      //  NSLog(@"first");
+
         switch( [indexPath row] ){
             case 0: {
                 static NSString *CellIdentifier = @"Name";
@@ -247,12 +229,7 @@
                 cell.textLabel.text = [curentEntrie objectAtIndex:indexPath.row];
                 //NSLog(@"login = %@", [[NSUserDefaults standardUserDefaults]  objectForKey:@"login"]);
                 cell.detailTextLabel.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"login"];
-              //  NSString *name = [[NSUserDefaults standardUserDefaults] objectForKey:@"login"];
-              //      NSLog(@"NAME=%@",name);
-              //      if (name == nil) {
-              //          cell.detailTextLabel.text = @"";
-              //      }
-              //      else cell.detailTextLabel.text = name;   
+ 
                     
                 loginButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
                 [loginButton setFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];
@@ -325,7 +302,7 @@
         
     }
     if (indexPath.section == 1) {
-       // NSLog(@"second");
+
         switch( [indexPath row] ) {
             case 0: {
                 static NSString *CellIdentifier = @"Segment";
@@ -443,13 +420,13 @@
     UISegmentedControl *segmentedControl = (UISegmentedControl *)sender;
     if ([segmentedControl selectedSegmentIndex]==0) {
             NSLog(@"за последнюю поездку");
-//             [TestFlight passCheckpoint:@"PickOne last"];
+             [FileController write:@"PickOne last\n"];
             [userDefaults setInteger:0 forKey:@"segment"];
             [self parse: [userDefaults valueForKey:@"lastStat"] method:@"lastStat"];
         }
     else {
         NSLog(@"за все время");
-//        [TestFlight passCheckpoint:@"PickOne all"];
+        [FileController write:@"PickOne all\n"];
         [userDefaults setInteger:1 forKey:@"segment"];
         [self parse: [userDefaults valueForKey:@"allStat"] method:@"allStat"];
     }
@@ -460,7 +437,7 @@
     NSLog(@"result = %@", result);
     
     if (result != nil) {
-//        [TestFlight passCheckpoint:@"parse result"];
+        [FileController write:@"parse result\n"];
         SBJsonParser *jsonParser = [SBJsonParser new];
         NSArray *answer = [jsonParser objectWithString:result error:NULL];
         NSArray *statArray = [answer valueForKey:@"result"];
@@ -499,12 +476,12 @@
     if ([sender isOn])
     {
         //only wi-fi
-//        [TestFlight passCheckpoint:@"only wi-fi"];
+        [FileController write:@"switch - only wi-fi\n"];
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"internetUserPreference"];
     }
     else
     {
-//        [TestFlight passCheckpoint:@"internet - 3G"];
+        [FileController write:@"switch - internet - 3G\n"];
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"internetUserPreference"]; 
     }
 }
@@ -548,7 +525,7 @@
 }
 */
 - (IBAction)loginButton:(id)sender{
-//    [TestFlight passCheckpoint:@"logout"];
+    [FileController write:@"logout\n"];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults removeObjectForKey:@"login"];
     [userDefaults removeObjectForKey:@"password"];
@@ -566,10 +543,10 @@
 - (IBAction)sendButton:(id)sender{
     
     
-//    [TestFlight passCheckpoint:@"Send Button Pushed"];
+    [FileController write:@"Send Button Pushed\n"];
     
     if ([ServerCommunication checkInternetConnectionForSend]){
-//        [TestFlight passCheckpoint:@"send file"];
+        [FileController write:@"try send file\n"];
         [serverCommunication refreshCookie];
         
         
@@ -582,7 +559,7 @@
 }
 
 - (IBAction)helpButton:(id)sender{
-//    [TestFlight passCheckpoint:@"Help Button Pushed"];
+    [FileController write:@"Help Button Pushed"];
     StatHelpViewController *statHelpView = [self.storyboard instantiateViewControllerWithIdentifier: @"StatHelpViewController"];
     statHelpView.modalTransitionStyle = UIModalTransitionStylePartialCurl;
     [self presentModalViewController: statHelpView animated:YES];
