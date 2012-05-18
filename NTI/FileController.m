@@ -34,6 +34,30 @@
 	return self;
 }
 
++ (void)write:(NSString *)data{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+	// get array of paths
+	NSArray *dirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	// get documents directory path
+	NSString *docDirectory = [dirPath objectAtIndex:0];
+    
+    NSString *path = [docDirectory stringByAppendingPathComponent: @"log"];
+    
+    NSLog(@"************* writeToFile *************");
+    if(![fileManager fileExistsAtPath:path]){
+        [fileManager createFileAtPath:path contents:nil attributes:nil];
+        NSLog(@"file created");
+    }
+    
+    NSFileHandle *fileHandle = [NSFileHandle fileHandleForWritingAtPath:path];
+    [fileHandle seekToEndOfFile];
+    NSData* myData = [data dataUsingEncoding:NSUTF8StringEncoding];
+    [fileHandle writeData:myData];
+    [fileHandle closeFile];
+    NSLog(@"ok");
+}
+
+
 - (BOOL) writeToFile:(NSString *)myString fileName: (NSString *)fileName{
     
     NSLog(@"fileName %@", fileName);
@@ -96,33 +120,6 @@
     
     return YES;
     
-    
-    
-	//Test whether this file exists now that we have tried to remove it
-/*	if([self.fileMgr fileExistsAtPath:self.filePath])
-	{
-		NSLog(@"File exists try removing it");
-		// attempt to delete file from documents directory
-		[fileMgr removeItemAtPath:self.filePath error:nil];
-        
-		if([self.fileMgr fileExistsAtPath:self.filePath])
-		{
-			NSLog(@"File still exists after trying to remove it");
-            return FALSE;
-		}
-		else 
-		{
-			NSLog(@"We've successfully removed the file");
-            return TRUE;
-		}
-	}
-	else {
-		NSLog(@"File does not exist no need to remove it.");
-        return FALSE;
-		
-	}
-  */  
-    
 }
 
 - (NSMutableArray *) getAllFiles{
@@ -140,9 +137,6 @@
 - (NSString *) readFile: (NSString *)path{
     
     NSLog(@"************* readFileAction *************");
-	
-    
-    
 	//Test whether this file exists before we read it
 	if([self.fileMgr fileExistsAtPath:path])
 	{
@@ -191,18 +185,9 @@
 }
 
 -(NSData *)makeArchive {
-   // BOOL isDir=NO;	
+	
     NSError *error = nil;
-    NSArray *subpaths = [self.fileMgr contentsOfDirectoryAtPath:self.documentsDirectory error:&error];	
-   // NSString *exportPath = @"exportData";
-    //NSFileManager *fileManager = [NSFileManager defaultManager];	
-    //if ([fileManager fileExistsAtPath:exportPath isDirectory:&isDir] && isDir){
-    //    subpaths = [fileManager subpathsAtPath:exportPath];
-   // }
-    
-  //  NSLog(@"fileName %@", fileName);
-  //  self.filePath = [documentsDirectory stringByAppendingPathComponent: fileName];
-
+    NSArray *subpaths = [self.fileMgr contentsOfDirectoryAtPath:self.documentsDirectory error:&error];
     
     NSString *archivePath = [documentsDirectory stringByAppendingPathComponent: @"exportData.zip"];//@"exportData.zip";
     

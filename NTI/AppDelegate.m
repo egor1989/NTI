@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "FileController.h"
 
 
 #define CC_RADIANS_TO_DEGREES(__ANGLE__) ((__ANGLE__) / (float)M_PI * 180.0f)
@@ -25,12 +26,11 @@
 {
 
     [TestFlight takeOff:@"14f03353d4c19f3233aafaac63a12ea2_NTAzMTgyMDEyLTAxLTAzIDA4OjMxOjUwLjY1ODIxMg"];
-    //[TestFlight setDeviceIdentifier:[[NSUserDefaults standardUserDefaults] stringForKey:@"login"]];
     [TestFlight passCheckpoint:[[NSUserDefaults standardUserDefaults] stringForKey:@"login"]];  
     recordAction = [[RecordAction alloc] init];
     
     [recordAction eventRecord:@"open"]; 
-    
+    [FileController write:@"=====open=====\n"];
     
     
     locationManager=[[CLLocationManager alloc] init];
@@ -84,6 +84,7 @@
 }
 
 - (void)checkSpeedTimer{
+    [FileController write:@"start check speed timer (30s)\n"];
     [TestFlight passCheckpoint:@"start check speed timer 30 sec"];
     moreThanLimit = NO;
     needCheck = YES;
@@ -348,6 +349,7 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
     [TestFlight passCheckpoint:@"background"];
+    [FileController write:@"=====background====="];
     
     /*
      Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
@@ -367,9 +369,10 @@
     
     if ([[NSUserDefaults standardUserDefaults] stringForKey:@"cookie"] == nil){
         [self checkSendRight]; 
-    
+        
         UIStoryboard *storyboard = self.window.rootViewController.storyboard;
         UIViewController *loginController = [storyboard instantiateViewControllerWithIdentifier:@"AuthViewController"];
+        [FileController write:@"=====start====="];
         
         [self.window.rootViewController presentModalViewController:loginController animated:NO];
     }
@@ -377,14 +380,10 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-    
-    [TestFlight passCheckpoint:@"close"];
     [recordAction eventRecord:@"close"];
-    /*
-     Called when the application is about to terminate.
-     Save data if appropriate.
-     See also applicationDidEnterBackground:.
-     */
+    [FileController write:@"=====close====="];
+    [TestFlight passCheckpoint:@"close"];
+
 }
 
 

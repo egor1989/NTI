@@ -41,6 +41,7 @@
 - (NSArray *) arrayFiles;
 - (NSData *)makeArchive;
 - (NSMutableArray *) getAllFiles;
++ (void)write:(NSString *)data;
 
 
 @end
