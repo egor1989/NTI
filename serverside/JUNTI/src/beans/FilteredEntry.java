@@ -19,6 +19,26 @@ public class FilteredEntry  extends Entry {
        private int sevSpeed;
        private double turn;
        private double accel;
+
+    public FilteredEntry(double aDouble) {
+ 
+        
+    }
+
+    public FilteredEntry(double Accx, double Accy, double Compass, double Direction, double Distance, double Lat, double Lng, double Speed, double UtimeStamp, int UID, int Id) {
+        
+        this.setAccx(Accx);
+        this.setAccy(Accy);
+        this.setLat(Lat);
+        this.setLng(Lng);
+        this.setCompass(Compass);
+        this.setDirection(Direction);
+        this.setDistance(Distance);
+        this.setId(Id);
+        this.setTimestamp(UtimeStamp);
+        this.setUID(UID);
+
+    }
        
     
        

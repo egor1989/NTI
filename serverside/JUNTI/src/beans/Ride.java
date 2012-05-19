@@ -11,7 +11,6 @@ import java.util.ArrayList;
  * @author steph
  */
 public class Ride {
-     private ArrayList<Entry> EntryRide;
      private ArrayList<FilteredEntry> FilteredEntryRide;
      
      private Integer Score;
@@ -49,10 +48,13 @@ public class Ride {
         TypeBrake2Count =0;    
         TypeBrake3Count =0;    
         TotalDistance   =0.0;  
-        EntryRide=new  ArrayList<Entry>();
         FilteredEntryRide=new  ArrayList<FilteredEntry>();
               
       }
+
+    public Ride(Ride ride) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
     /**
      * @return the Entry
      */
@@ -242,17 +244,6 @@ public class Ride {
     /**
      * @return the EntryRide
      */
-    public ArrayList<Entry> getEntryRide() {
-        return EntryRide;
-    }
-
-    /**
-     * @param EntryRide the EntryRide to set
-     */
-    public void setEntryRide(ArrayList<Entry> EntryR) {
-        
-       this.EntryRide=EntryR;
-    }
 
     /**
      * @return the FilteredEntryRide
@@ -308,6 +299,14 @@ public class Ride {
      */
     public void setTypeBrake3Count(Integer TypeBrake3Count) {
         this.TypeBrake3Count = TypeBrake3Count;
+    }
+
+    public void setTimeStart(double timestamp) {
+        this.TimeStart=(int)timestamp;
+    }
+
+    public void setTimeEnd(double timestamp) {
+         this.TimeEnd=(int)timestamp;
     }
 
 }
