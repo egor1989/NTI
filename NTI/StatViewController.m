@@ -93,7 +93,6 @@
     else {
         [FileController write: @"red logo\n"];
         [recordImage setImage:[UIImage imageNamed:@"red.png"]];
-        //[sendButton setEnabled: YES];
     }
     
     [[NSNotificationCenter defaultCenter]	
@@ -104,12 +103,9 @@
     [serverCommunication refreshCookie];
     /************ инициализация элементов *******************/
 
-    NSArray *info = [NSArray arrayWithObjects:@"Имя", @"Запись", @"Скорость", @"Только Wi-Fi", @"Дата посл. поезки", nil];
+    NSArray *info = [NSArray arrayWithObjects:@"Имя", @"Запись", @"Скорость", @"Только Wi-Fi", @"Дата посл. поезки",@"Тестовый файл", nil];
     NSArray *statistics = [NSArray arrayWithObjects:@"",@"Общая оценка", @"Километраж", @"Превышение скорости", @"Качество разгонов", @"Качество торможений", @"Качество поворотов", nil];
-   // NSArray *infoSubviews = [NSArray arrayWithObjects:name,@"",speedLabel,@"",lastTrip,nil];
-   // NSArray *statSubviews = [NSArray arrayWithObjects:@"",, nil];
     self.tables = [NSDictionary dictionaryWithObjectsAndKeys:statistics, firstTitle  , info, secondTitle, nil];
-    
 }
 
 
@@ -118,7 +114,6 @@
     if ([myAppDelegate canWriteToFile]) {
         [FileController write:@"Green logo\n"];
         [recordImage setImage:[UIImage imageNamed:@"green.png"]];
-        [sendButton setUserInteractionEnabled:NO];
     }
     else {
          [FileController write:@"Red logo\n"];
@@ -297,6 +292,28 @@
                 }
                 return cell;
             }
+            
+            case 5: {
+                static NSString *CellIdentifier = @"File";
+                UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+                if (cell == nil) {
+                    cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
+                    cell.backgroundColor = [UIColor whiteColor];
+                    cell.textLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
+                    cell.textLabel.text = [curentEntrie objectAtIndex:indexPath.row];
+                    
+                    
+                    sendButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+                    [sendButton setFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];
+                    sendButton.titleLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
+                    cell.accessoryView = sendButton;
+                    [sendButton setTitle:@"Отправить" forState:UIControlStateNormal];
+                    [sendButton addTarget:self action:@selector(sendButton:) forControlEvents:UIControlEventTouchDown];
+                    
+                } 
+                return cell;
+            }
+
             break;
         }
         
@@ -543,20 +560,43 @@
 - (IBAction)sendButton:(id)sender{
     
     
-    [FileController write:@"Send Button Pushed\n"];
+    MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] initWithNibName:@"Email" bundle:nil];
+    picker.mailComposeDelegate = self;
     
-    if ([ServerCommunication checkInternetConnectionForSend]){
-        [FileController write:@"try send file\n"];
-        [serverCommunication refreshCookie];
-        
-        
-        [[myAppDelegate recordAction] endOfRecord];
-        [myAppDelegate stopRecord];
-        [[myAppDelegate recordAction] sendFile];
-        
-    }
+    
+    
+	// Set the subject of email
+    [picker setSubject:@"NTI"];
+    
+	// Add email addresses
+    // Notice three sections: "to" "cc" and "bcc"	
+    [picker setToRecipients:[NSArray arrayWithObjects:@"alekseenko.lena@gmail.com",  @"peacock7team@gmail.com", nil]];		
+    
+	// Fill out the email body text
+	NSString *emailBody = @"NTI log file";
+    
+	// This is not an HTML formatted email
+	[picker setMessageBody:emailBody isHTML:NO];
+    
+    
+    
+   // NSData *attachment = [fileController makeArchive];
+    
+    // Attach  data to the email
+    
+	
+	//[picker addAttachmentData:attachment mimeType:@"application/zip" fileName:@"NTI"];
+    
+    
+	// Show email view
+	
+	[self presentModalViewController:picker animated:YES];
+    
+	// Release picker
+
     
 }
+ 
 
 - (IBAction)helpButton:(id)sender{
     [FileController write:@"Help Button Pushed"];

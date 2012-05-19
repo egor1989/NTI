@@ -12,11 +12,13 @@
 #import "RecordAction.h"
 #import "ServerCommunication.h"
 #import "StatHelpViewController.h"
+#import <MessageUI/MessageUI.h>
+#import <MessageUI/MFMailComposeViewController.h>
 
 
 #define myAppDelegate (AppDelegate*) [[UIApplication sharedApplication] delegate]
 
-@interface StatViewController : UITableViewController{
+@interface StatViewController : UITableViewController <MFMailComposeViewControllerDelegate>{
     UILabel *speedLabel;
     IBOutlet UIButton *loginButton;
     UILabel *qualityDriving;
@@ -41,7 +43,7 @@
 
 - (void) speedUpdate;
 - (IBAction)loginButton:(id)sender;
-- (IBAction)sendButton:(id)sender;
+//- (IBAction)sendButton:(id)sender;
 - (IBAction)helpButton:(id)sender;
 - (void) pickOne:(id)sender;
 - (void)changeImage;

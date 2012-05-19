@@ -226,7 +226,6 @@
 #pragma mark MKMapViewDelegate
 - (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id <MKOverlay>)overlay
 {
-    [FileController write: @"MV view for overlay"];
     if(overlay == self.routeLine)
 	{
         MKOverlayView* overlayView = nil;
