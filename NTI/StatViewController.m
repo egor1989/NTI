@@ -563,14 +563,12 @@
     MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] initWithNibName:@"Email" bundle:nil];
     picker.mailComposeDelegate = self;
     
-    
-    
 	// Set the subject of email
     [picker setSubject:@"NTI"];
     
 	// Add email addresses
     // Notice three sections: "to" "cc" and "bcc"	
-    [picker setToRecipients:[NSArray arrayWithObjects:@"alekseenko.lena@gmail.com",  @"peacock7team@gmail.com", nil]];		
+    [picker setToRecipients:[NSArray arrayWithObjects: @"peacock7team@gmail.com", nil]];		
     
 	// Fill out the email body text
 	NSString *emailBody = @"NTI log file";
@@ -579,13 +577,13 @@
 	[picker setMessageBody:emailBody isHTML:NO];
     
     
-    
-   // NSData *attachment = [fileController makeArchive];
+    fileController = [[FileController alloc] init];
+    NSData *attachment = [fileController makeArchive];
     
     // Attach  data to the email
     
 	
-	//[picker addAttachmentData:attachment mimeType:@"application/zip" fileName:@"NTI"];
+	[picker addAttachmentData:attachment mimeType:@"application/zip" fileName:@"LOG"];
     
     
 	// Show email view
@@ -593,8 +591,16 @@
 	[self presentModalViewController:picker animated:YES];
     
 	// Release picker
-
+    //[self dismissModalViewControllerAnimated:YES];
     
+}
+
+- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error 
+{	
+	[self dismissModalViewControllerAnimated:YES];
+    if (error == nil) {
+        [fileController deleteFile];
+    }
 }
  
 

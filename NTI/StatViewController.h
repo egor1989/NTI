@@ -14,11 +14,12 @@
 #import "StatHelpViewController.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
-
+#import "FileController.h"
+#import <CoreMotion/CoreMotion.h>
 
 #define myAppDelegate (AppDelegate*) [[UIApplication sharedApplication] delegate]
 
-@interface StatViewController : UITableViewController <MFMailComposeViewControllerDelegate>{
+@interface StatViewController : UITableViewController <UINavigationControllerDelegate, MFMailComposeViewControllerDelegate>{
     UILabel *speedLabel;
     IBOutlet UIButton *loginButton;
     UILabel *qualityDriving;
@@ -35,6 +36,7 @@
     IBOutlet UIButton *helpButton;
     NSDictionary *tables;
     IBOutlet UITableView *statTableView;
+    FileController *fileController;
 }
 
 @property (nonatomic) BOOL *writeAction;

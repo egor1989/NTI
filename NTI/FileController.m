@@ -41,7 +41,7 @@
 	// get documents directory path
 	NSString *docDirectory = [dirPath objectAtIndex:0];
     
-    NSString *path = [docDirectory stringByAppendingPathComponent: @"log"];
+    NSString *path = [docDirectory stringByAppendingPathComponent: @"logfile"];
     
     NSLog(@"************* writeToFile *************");
     if(![fileManager fileExistsAtPath:path]){
@@ -97,9 +97,8 @@
     
 	NSLog(@"************* deleteFileAction *************");
 	NSError *error = nil;
-    for (NSString *file in [self.fileMgr contentsOfDirectoryAtPath:self.documentsDirectory error:&error])
-    {    
-        NSString *deleteFilePath = [self.documentsDirectory stringByAppendingPathComponent:file];
+       
+        NSString *deleteFilePath = [self.documentsDirectory stringByAppendingPathComponent:@"logfile"];
         NSLog(@"File : %@", deleteFilePath);
         
         BOOL fileDeleted = [self.fileMgr removeItemAtPath:deleteFilePath error:&error];
@@ -108,15 +107,6 @@
         {
             NSLog(@"ERROR!");
         }
-    }
-    
-    NSUserDefaults *userDefaults =[NSUserDefaults standardUserDefaults];
-    [userDefaults setInteger:0 forKey: @"accelFileNumber"];
-    [userDefaults setInteger:0 forKey: @"decelFileNumber"];
-    [userDefaults setInteger:0 forKey: @"leftRotFileNumber"];
-    [userDefaults setInteger:0 forKey: @"rightRotFileNumber"];
-    [userDefaults setInteger:0 forKey: @"otherFile"];
-    [userDefaults synchronize];
     
     return YES;
     
@@ -186,21 +176,21 @@
 
 -(NSData *)makeArchive {
 	
-    NSError *error = nil;
-    NSArray *subpaths = [self.fileMgr contentsOfDirectoryAtPath:self.documentsDirectory error:&error];
+   // NSError *error = nil;
+   // NSArray *subpaths = [self.fileMgr contentsOfDirectoryAtPath:self.documentsDirectory error:&error];
     
-    NSString *archivePath = [documentsDirectory stringByAppendingPathComponent: @"exportData.zip"];//@"exportData.zip";
+    NSString *archivePath = [documentsDirectory stringByAppendingPathComponent: @"logfile.zip"];
     
     ZipArchive *archiver = [[ZipArchive alloc] init];
     [archiver CreateZipFile2:archivePath];
-    for(NSString *path in subpaths){		
+    //for(NSString *path in subpaths){		
         // Only add it if it's not a directory. ZipArchive will take care of those.
         //NSString *deleteFilePath = [self.documentsDirectory stringByAppendingPathComponent:file];
-        NSString *longPath = [self.documentsDirectory stringByAppendingPathComponent:path];
+        NSString *longPath = [self.documentsDirectory stringByAppendingPathComponent:@"logfile"];
        // if([self.fileMgr fileExistsAtPath:longPath isDirectory:&isDir] && !isDir){
-            [archiver addFileToZip:longPath newname:path];		
+            [archiver addFileToZip:longPath newname:@"logfile"];		
         //}
-    }
+    //}
     
    // NSString *fileContent = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"data.zip"];
     BOOL successCompressing = [archiver CloseZipFile2]; 
