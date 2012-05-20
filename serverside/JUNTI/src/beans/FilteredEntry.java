@@ -20,10 +20,6 @@ public class FilteredEntry  extends Entry {
        private double turn;
        private double accel;
 
-    public FilteredEntry(double aDouble) {
- 
-        
-    }
 
     public FilteredEntry(double Accx, double Accy, double Compass, double Direction, double Distance, double Lat, double Lng, double Speed, double UtimeStamp, int UID, int Id) {
         
@@ -34,10 +30,18 @@ public class FilteredEntry  extends Entry {
         this.setCompass(Compass);
         this.setDirection(Direction);
         this.setDistance(Distance);
+        this.setSpeed(Speed);
         this.setId(Id);
         this.setTimestamp(UtimeStamp);
         this.setUID(UID);
-
+        this.TypeAcc="";
+        this.TypeTurn="";
+        this.TypeSpeed="";
+        this.sevAcc=0;
+        this.sevTurn=0;
+        this.sevSpeed=0;
+        this.turn=0;
+        this.accel=0;
     }
        
     
@@ -142,6 +146,10 @@ public class FilteredEntry  extends Entry {
         this.accel = accel;
     }
 
+public void toString(double accel) {
+System.out.println("Lat"+this.getLat());
+System.out.println("Lng"+this.getLng());
+    }
        
        
 }

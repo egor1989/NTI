@@ -13,7 +13,6 @@ import java.util.ArrayList;
 public class Ride {
      private ArrayList<FilteredEntry> FilteredEntryRide;
      
-     private Integer Score;
      private Integer TimeStart;
      private Integer TimeEnd;
      private Integer TypeAcc1Count;
@@ -32,7 +31,6 @@ public class Ride {
       public Ride() 
       {
       TypeAcc1Count=0;
-      Score=0;
       TimeStart=0;
         TimeEnd    =0; 
        TypeAcc1Count  =0;
@@ -62,16 +60,6 @@ public class Ride {
     /**
      * @return the Score
      */
-    public Integer getScore() {
-        return Score;
-    }
-
-    /**
-     * @param Score the Score to set
-     */
-    public void setScore(Integer Score) {
-        this.Score = Score;
-    }
 
     /**
      * @return the TimeStart
