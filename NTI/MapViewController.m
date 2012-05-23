@@ -7,7 +7,6 @@
 //
 
 #import "MapViewController.h"
-#import "FileController.h"
 
 @implementation MapViewController
 @synthesize mapView = _mapView;
@@ -17,7 +16,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     tempCount = 0;
-    [FileController write:@"map view controller loaded\n"];
+    NSLog(@"map view controller loaded");
     [_mapView setDelegate:self];
     serverCommunication = [[ServerCommunication alloc]init ];
     [[NSNotificationCenter defaultCenter]	
@@ -40,7 +39,6 @@
     
     //загрузка последнего маршрута
     if ([ServerCommunication checkInternetConnection]) {
-        [FileController write:@"load last route\n"];
         waintingIndicator.hidden = NO;
         [waintingIndicator startAnimating];
         grayView.hidden = NO;
@@ -55,7 +53,6 @@
         waintingIndicator.hidden = NO;
         [waintingIndicator startAnimating];
         grayView.hidden = NO;
-        [FileController write: @"getRoute"];
         NSLog(@"getRoute");
         [serverCommunication getRouteFromServer:[[TheNotice object] doubleValue]];
     }
@@ -69,7 +66,6 @@
 
 // метод верхнего уровня для отрисовки маршрута на карте. Вызывается из ServerCommunication, после получения ответа от сервера
 -(void) parseAnswer: (NSNotification*) TheNotice{
-    [FileController write: @"MV parse answer\n"];
     SBJsonParser *jsonParser = [SBJsonParser new];
     NSArray *answerArray = [[NSArray alloc] init];
     NSArray *routeArray = [[NSArray alloc] init];
@@ -89,7 +85,7 @@
 // Парсит маршрут и вызывает методы отрисовки
 -(void) parseRoute: (NSArray*) routeArray
 {
-    [FileController write: @"MV parse route\n"];
+    NSLog(@"MV parse route");
     NSArray *point = [[NSArray alloc] init];
     NSMutableArray *routeLineArray = [[NSMutableArray alloc] init];
     NSMutableArray *allRoutesPointsArray[4][4];
@@ -125,7 +121,6 @@
         }
         @catch (NSException *exception) {
             NSLog(@"NSInvalidArgumentException in mapView");
-           [FileController write:@"NSInvalidArgumentException in mapView\n"];
         }
         //отрисовка специальных точек
         for (int i=1; i<=3; i++) {
@@ -139,7 +134,6 @@
 
 //Создаёт и возвращает линию маршрута. (Просто маршрут - без специальных точек)
 -(MKPolyline*) createRouteLine:(NSArray*) normalPointsArray1{
-    [FileController write: @"MV create route line\n"];
 	MKMapPoint* pointArr = malloc(sizeof(CLLocationCoordinate2D) * normalPointsArray1.count);
     
     
@@ -192,7 +186,7 @@
 
 // Добавляет на карту слой - точку. В зависимости от типа точки присваивает ей определёный заголовок.
 -(void) specialPointsDraw:(NSArray*) specialPointsArray withType: (int) pointType andStrong: (int) pointStrong{
-    [FileController write: @"MV parse answer\n"];
+    NSLog(@"MV parse answer");
     NSArray *point = [[NSArray alloc] init ];
     tempCount = tempCount + [specialPointsArray count];
 	for(point in specialPointsArray)
@@ -211,7 +205,7 @@
 //масштабирование на маршруте
 -(void) zoomInOnRoute
 {
-    [FileController write: @"MV zoom in route\n"];
+    NSLog(@"MV zoom in route");
 	[self.mapView setVisibleMapRect:_routeRect];
 }
 

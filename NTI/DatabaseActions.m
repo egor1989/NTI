@@ -34,7 +34,7 @@ static sqlite3_stmt *readStmt = nil;
     else NSLog(@"error! base not open");
     userDefaults = [NSUserDefaults standardUserDefaults];
     jsonConvert = [[toJSON alloc]init];
-    fileController = [[FileController alloc] init];
+
     csvConverter = [[CSVConverter alloc] init];
     serverCommunication = [[ServerCommunication alloc] init];
     return self;
@@ -53,7 +53,6 @@ static sqlite3_stmt *readStmt = nil;
 	
 	// If the database already exists then return without doing anything
     if (success) {
-        [FileController write:@"dataBaseOpen"];
         NSLog(@"Data base already exist");
     }
 	if(success) return;
@@ -68,7 +67,7 @@ static sqlite3_stmt *readStmt = nil;
 }
 
 - (BOOL)addArray: (NSMutableArray *)data{
-    [FileController write:@"DataBase add array\n"];
+    NSLog(@"DataBase add array");
     const char *sql = "INSERT INTO log(type, time, accX, accY, compass, direction, distance, latitude, longitude, speed) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     if(addStmt == nil) {
         if(sqlite3_prepare_v2(database, sql, -1, &addStmt, NULL) != SQLITE_OK){
@@ -92,7 +91,7 @@ static sqlite3_stmt *readStmt = nil;
         
         
         if(SQLITE_DONE != sqlite3_step(addStmt)){
-            [FileController write: @"database error\n"];
+            NSLog(@"database error");
             NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
             return NO;
         }
@@ -102,7 +101,7 @@ static sqlite3_stmt *readStmt = nil;
             pk = sqlite3_last_insert_rowid(database);
 //            NSLog(@"addRecord %i",pk);
             [userDefaults setInteger:pk forKey:@"pk"];
-            [FileController write: [NSString stringWithFormat:@"add entie-%i\n",pk]];
+            NSLog(@"add entrie%i",pk);
             
         }
         
@@ -120,7 +119,7 @@ static sqlite3_stmt *readStmt = nil;
 
 - (BOOL)addEntrie: (NSString *)type{
     
-    [FileController write:@"addEntrie\n"];
+    NSLog(@"addEntrie");
    // double currentTime = [[NSData data] timeIntervalSince1970];
     NSLog(@" time = %f, type = %@",[[NSDate date] timeIntervalSince1970], type);
     
@@ -128,7 +127,7 @@ static sqlite3_stmt *readStmt = nil;
     if(addEntr == nil) {
         if(sqlite3_prepare_v2(database, sql, -1, &addEntr, NULL) != SQLITE_OK){
             NSAssert1(0, @"Error while creating add statement. '%s'", sqlite3_errmsg(database));
-            [FileController write: @"database error\n"];
+            NSLog( @"database error");
             return NO;
         }
     }
@@ -140,7 +139,7 @@ static sqlite3_stmt *readStmt = nil;
     //
     
     if(SQLITE_DONE != sqlite3_step(addEntr)){
-        [FileController write: @"database error\n"];
+        NSLog(@"database error");
         NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
         return NO;
     }
@@ -148,7 +147,6 @@ static sqlite3_stmt *readStmt = nil;
         //SQLite provides a method to get the last primary key inserted by using sqlite3_last_insert_rowid
         //sqlite3_
         pk = sqlite3_last_insert_rowid(database);
-        [FileController write: [NSString stringWithFormat:@"add entie-%i\n",pk]];
         NSLog(@"addRecord %i",pk);
         [userDefaults setInteger:pk forKey:@"pk"];
         
@@ -168,7 +166,7 @@ static sqlite3_stmt *readStmt = nil;
 
 
 + (void) clearDatabase{
-    [FileController write: @"clear DB\n"];
+    NSLog(@"clear DB");
     const char *sql = "delete from log";
     if(sqlite3_prepare_v2(database, sql, -1, &deleteStmt, NULL) != SQLITE_OK)
         NSAssert1(0, @"Error while creating delete statement. '%s'", sqlite3_errmsg(database));
@@ -184,7 +182,7 @@ static sqlite3_stmt *readStmt = nil;
 }
 
 - (void) sendDatabase{
-    [FileController write: @"send DB\n"];
+    NSLog(@"send DB");
     NSThread* myThread = [[NSThread alloc] initWithTarget:self
                                         selector:@selector(sendDatabaseTr)
                                         object:nil];
@@ -197,21 +195,17 @@ static sqlite3_stmt *readStmt = nil;
 
 
 - (void) sendDatabaseTr{
-    [FileController write: @"sendDB thread\n"];
+    NSLog(@"sendDB thread");
     NSArray *keys = [NSArray arrayWithObjects:@"timestamp", @"type", @"acc", @"gps", nil];
     dataArray = [[NSMutableArray alloc]init];
     
     
     if(sqlite3_open([databasePath UTF8String], &database) == SQLITE_OK) {
         
-        // NSLog(@"%i", [userDefaults integerForKey:@"pk"]);
-        
         for (NSInteger i=1;i<=([userDefaults integerForKey:@"pk"]/maxEntries)+1;i++) {
-            [FileController write: [NSString stringWithFormat:@"SELECT * FROM log WHERE rowid BETWEEN %i AND %i\n", (i-1)*maxEntries, i*maxEntries]];
+            NSLog(@"SELECT * FROM log WHERE rowid BETWEEN %i AND %i\n", (i-1)*maxEntries, i*maxEntries);
             const char * sql = [[NSString stringWithFormat:@"SELECT * FROM log WHERE rowid BETWEEN %i AND %i", (i-1)*maxEntries, i*maxEntries] UTF8String];
-            
-            // NSLog(@"%s", sql);
-            
+
             if(sqlite3_prepare_v2(database, sql, -1, &readStmt, NULL) == SQLITE_OK){
                 
                 while(sqlite3_step(readStmt) == SQLITE_ROW){
@@ -239,7 +233,7 @@ static sqlite3_stmt *readStmt = nil;
     sqlite3_finalize(readStmt);
     [serverCommunication showResult];
     if (![serverCommunication errors]){
-        [FileController write: @"DBsend - no errors\n"];
+        NSLog(@"DBsend - no errors");
         [DatabaseActions clearDatabase];
         [userDefaults setValue: [serverCommunication getLastStatistic] forKey:@"lastStat"];
         [userDefaults setValue: [serverCommunication getAllStatistic] forKey:@"allStat"];
@@ -267,7 +261,7 @@ static sqlite3_stmt *readStmt = nil;
 
 
 + (void) finalizeStatements {
-    [FileController write: @"finalizeStatements\n"];
+    NSLog(@"finalizeStatements");
 	if(database) sqlite3_close(database);
 	if(deleteStmt) sqlite3_finalize(deleteStmt);
 	if(addStmt) sqlite3_finalize(addStmt);

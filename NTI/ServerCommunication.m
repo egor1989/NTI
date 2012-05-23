@@ -7,13 +7,12 @@
 //
 
 #import "ServerCommunication.h"
-#import "FileController.h"
 
 @implementation ServerCommunication
 @synthesize errors;
 
 - (void)uploadData:(NSData *)fileContent{
-    [FileController write:@"SC -upload data\n"];
+    NSLog(@"SC -upload data");
     NSString *cookie = [self refreshCookie]; 
     NSLog(@"cookie = %@",cookie);
     
@@ -39,7 +38,7 @@
     NSString* content = [compressData description];
     
     NSString* requestDataFull = [NSString stringWithFormat:@"data=%@%@",content,@"&zip=1"];
-    NSLog(@"%@", requestDataFull);
+   // NSLog(@"%@", requestDataFull);
     
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody: [NSData dataWithBytes:[requestDataFull UTF8String] length:[requestDataFull length]]];    
@@ -65,13 +64,10 @@
     
     if (requestError!=nil) {
         NSLog(@"%@", requestError);
-        [FileController write:[NSString stringWithFormat:@"%@\n", requestError]];
-        NSLog(@"ERROR!ERROR!ERROR!");
     }
     
     returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
     NSLog(@"returnData: %@", returnString);
-    [FileController write: [NSString stringWithFormat:@"returnString=%@\n",returnString]];
     [self checkErrors:returnString method:@"sendData"];
 
 
@@ -134,7 +130,7 @@
 }
 */
 - (BOOL)checkCookieExpires{
-    [FileController write:@"check cookie expires\n"];
+    NSLog(@"check cookie expires");
     //текущая дата в нужном формате
     NSDate * now = [NSDate date];
     NSDateFormatter * date_format = [[NSDateFormatter alloc] init];
@@ -160,7 +156,6 @@
     
     NSComparisonResult comparetionResult = [now compare:resultD];
     if (comparetionResult == NSOrderedAscending) {
-        [FileController write:@"not need refresh\n"];
         NSLog(@"now less than resultD");    
         return NO;
     }
@@ -170,7 +165,6 @@
 }
 
 - (NSString *) refreshCookie{
-    [FileController write:@"refresh cookie\n"];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSLog(@"refreshCookie");
     if ([self checkCookieExpires]){
@@ -200,7 +194,7 @@
 
 
 - (BOOL)checkErrors:(NSString *)answerString method:(NSString *)methodName{
-    [FileController write:@"SC check errors\n"];
+    NSLog(@"SC check errors");
     SBJsonParser *jsonParser = [SBJsonParser new];
     NSArray *answer = [jsonParser objectWithString:answerString error:NULL];
     NSArray *error = [answer valueForKey:@"error"];
@@ -218,12 +212,12 @@
                 info = @"Поздравляем!";
                 [userDefaults removeObjectForKey:@"cookie"];
                 [userDefaults setValue:[answer valueForKey:@"result"] forKey:@"cookie"];
-                [FileController write:@"auth or reg - OK\n"];
+                NSLog(@"auth or reg - OK");
                 [userDefaults synchronize];
             }
             if ([methodName isEqualToString: @"sendData"]){
                 info = @"Данные успешно отправлены";
-                [FileController write:@"send - OK\n"];
+                NSLog(@"send - OK");
                 
             }
             //для получения данных
@@ -240,7 +234,7 @@
              }
              else if ([methodName isEqualToString: @"sendData"]){
                   info = @"Файл пуст";
-                [FileController write:@"empty file\n"];
+                NSLog(@"empty file");
              }
             break;
         case 4:
@@ -266,29 +260,29 @@
         case 32:{
             info = @"Неверная дата";
             UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:info message:@"Данных по поездке за указанный период не существует. Пожалуйста выберите другую дату" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [FileController write:@"bad data\n"];
+            NSLog(@"bad data");
             [alertView show];
             break;
         }
         case 33:{
             info = @"Ошибка авторизации";
-            [FileController write:@"auth error\n"];
+            NSLog(@"auth error");
             break;
         }
         case 43: {
             info = @"Нет данных для пользователя";
-            [FileController write:@"haven't data for user\n"];
+            NSLog(@"haven't data for user");
             break;
         }
         case 88: {
-           [FileController write:@"server unrechable\n"];
+           NSLog(@"server unrechable");
             info = @"Сервер временно не доступен";
             break;
         }
             
         default:{
             info = @"Ошибка";
-            [FileController write:@"unknown error\n"];
+            NSLog(@"unknown error");
             break;
         }
     }
@@ -304,7 +298,7 @@
         [alert show];
     }
     else {
-        [FileController write:@"alert - server answer\n"];
+        NSLog(@"alert - server answer");
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ответ сервера" message:info delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
         [alert show];    
     }
@@ -313,7 +307,6 @@
 
 
 - (NSString *)getAllStatistic{
-    [FileController write:@"get all stat\n"];
     
     NSString *cookie = [[NSUserDefaults standardUserDefaults] valueForKey:@"cookie"]; 
 
@@ -347,14 +340,11 @@
     NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: &response error: &requestError ];
     
     if (requestError!=nil) {
-         [FileController write:[NSString stringWithFormat:@"%@\n", requestError]];
         NSLog(@"%@", requestError);
-        NSLog(@"ERROR!ERROR!ERROR!");
     }
     
     returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
     NSLog(@"returnData: %@", returnString);
-    [FileController write:returnString];
     [self checkErrors:returnString method:@"stat"];
     if (!errors) return returnString; 
     else return @"error";
@@ -362,7 +352,6 @@
 
 
 - (NSString *)getLastStatistic{
-    [FileController write:@"get last stat\n"];
    NSString *cookie = [[NSUserDefaults standardUserDefaults] valueForKey:@"cookie"]; 
     NSLog(@"cookie = %@", cookie);
 
@@ -396,13 +385,10 @@
     
     if (requestError!=nil) {
         NSLog(@"%@", requestError);
-        [FileController write: [NSString stringWithFormat:@"%@\n", requestError]];
-        NSLog(@"ERROR!ERROR!ERROR!");
     }
     
     returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
     NSLog(@"returnData: %@", returnString);
-    [FileController write:returnString];
     [self checkErrors:returnString method:@"stat"];
     if (!errors) return returnString; 
     else return @"error";
@@ -413,7 +399,6 @@
  
 
 - (void)regUser:(NSString *)login password:(NSString *)password email:(NSString *)email{
-    [FileController write:@"reg user\n"];
     NSLog(@"sendData login = %@ message = %@ email = %@", login, password, email);
     
     NSString *data = [NSString stringWithFormat:(@"%@%@%@%@%@"),@"data={\"method\":\"NTIregister\",\"params\":{\"login\":\"",login, @"\",\"password\":\"", password, @"\"}}"];
@@ -432,8 +417,6 @@
     
     if (requestError!=nil) {
         NSLog(@"%@", requestError);
-        [FileController write:@"request error- reg\n"];
-        NSLog(@"ERROR!ERROR!ERROR!");
     }
     
     returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
@@ -441,7 +424,6 @@
     [self checkErrors:returnString method:@"reg&auth"];
     
     if (!errors) {
-        [FileController write:@"reg - OK\n"];
         NSDictionary *fields = [(NSHTTPURLResponse *)response allHeaderFields];
         NSString *cookieWithDate = [fields valueForKey:@"Set-Cookie"];
       //  NSLog(@"Cookie: %@", cookie);
@@ -461,7 +443,6 @@
 
 
 - (void) authUser:(NSString *)login secret:(NSString *)message{
-    [FileController write:@"auth user"];
     [self infoAboutDevice];
     
     NSString *data = [NSString stringWithFormat:(@"data={\"method\":\"NTIauth\",\"params\":{\"login\":\"%@%@%@%@%@%@%@%@%@%@%@%@"),login, @"\",\"secret\":\"", message,@"\",\"device\":\"", deviceName,@"\",\"model\":\"", model,@"\",\"version\":\"", systemVersion, @"\",\"carrier\":\"", carrierName, @"\"}}"];
@@ -481,8 +462,6 @@
     
     if (requestError!=nil) {
         NSLog(@"%@", requestError);
-        [FileController write:@"request error - auth\n"];
-        NSLog(@"ERROR!ERROR!ERROR!");
     }
     returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
     NSLog(@"returnData: %@", returnString);
@@ -498,7 +477,6 @@
         [userDefaults setValue: cookieWithDate forKey:@"cookieWithDate"];
         [userDefaults synchronize];
         NSLog(@"cookie - %@", [userDefaults valueForKey:@"cookie"]);
-        [FileController write:@"auth - OK\n"];
         info = @"Поздравляем! Авторизация прошла успешно";
         
         //на таб
@@ -508,14 +486,12 @@
 }
 
 + (BOOL) checkInternetConnection{
-    [FileController write:@"check internet connection\n"];
     Reachability* reach = [Reachability reachabilityWithHostname:@"www.goodroads.ru"];
     
     NetworkStatus hostStatus = [reach currentReachabilityStatus];
     NSLog(@"internetUserPreference = %@", [[NSUserDefaults standardUserDefaults] boolForKey:@"internetUserPreference"]?@"YES":@"NO");
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"internetUserPreference"]) {
         if (hostStatus == NotReachable){
-            [FileController write:@"check all - not reachable\n"];
             NSLog(@"internet: -");
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Включите Интернет-соединение и повторите попытку" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
             [alert show];
@@ -524,12 +500,11 @@
         else return YES;
     }
     else if (hostStatus == ReachableViaWiFi){
-        [FileController write:@"check wi-fi - OK\n"];
         NSLog(@"internet: wi-fi");
         return YES;
         } 
         else{
-            [FileController write:@"check wi-fi - NO\n"];
+            NSLog(@"internet: -");
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Включите Интернет-соединение и повторите попытку" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
             [alert show];
             return NO;
@@ -560,8 +535,7 @@
 }
 
 - (void)getRouteFromServer:(float)timeInterval{
-    [FileController write:@"get route from server\n"];
-
+    NSLog(@"Get Route from server");
     NSString *cookie = [self refreshCookie]; 
     NSLog(@"cookie = %@", cookie);
     NSString *timeString;
@@ -611,7 +585,6 @@
 }
 
 - (void)sendFeedBackToServerWithTitle:(NSString*)title andBody: (NSString*)body{
-    [FileController write:@"send feedback\n"];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSLog(@"cookie = %@", [userDefaults valueForKey:@"cookie"]);
     NSString *cookie = [userDefaults valueForKey:@"cookie"];
@@ -653,7 +626,6 @@
 }
 
 - (void)sendInterviewToServerWithData:(NSDictionary*)data{
-    [FileController write:@"send interview\n"];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSLog(@"cookie = %@", [userDefaults valueForKey:@"cookie"]);
     NSString *cookie = [userDefaults valueForKey:@"cookie"];
