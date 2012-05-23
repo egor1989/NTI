@@ -35,7 +35,7 @@
             
 - (void)viewDidLoad
 {
-    [FileController write:@"StatView did load\n"];
+    NSLog(@"StatView did load");
     [super viewDidLoad];
     UIFont *fontForLabel = [UIFont fontWithName:@"Trebuchet MS" size:16]; 
     
@@ -86,12 +86,12 @@
     /***************************************************************/
     
     if ([myAppDelegate canWriteToFile]) {
-        [FileController write:@"green logo\n"];
+        NSLog(@"green logo");
         [recordImage setImage:[UIImage imageNamed:@"green.png"]];
 
     }
     else {
-        [FileController write: @"red logo\n"];
+        NSLog(@"red logo");
         [recordImage setImage:[UIImage imageNamed:@"red.png"]];
     }
     
@@ -112,11 +112,11 @@
 - (void)changeImage{
     
     if ([myAppDelegate canWriteToFile]) {
-        [FileController write:@"Green logo\n"];
+        NSLog(@"Green logo");
         [recordImage setImage:[UIImage imageNamed:@"green.png"]];
     }
     else {
-         [FileController write:@"Red logo\n"];
+         NSLog(@"Red logo");
         [recordImage setImage:[UIImage imageNamed:@"red.png"]];
     }
     
@@ -124,7 +124,7 @@
 
 - (void)viewDidUnload
 {
-     [FileController write:@"StatView unload\n"];
+     NSLog(@"StatView unload");
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -133,7 +133,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
      [self.statTableView reloadData];
-     [FileController write:@"StatView didAppear\n"];
+     NSLog(@"StatView didAppear");
     
    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -153,7 +153,7 @@
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-     [FileController write:@"StatView didDisappear\n"];
+     NSLog(@"StatView didDisappear");
     [super viewDidDisappear:animated];
     
     [[NSNotificationCenter defaultCenter]	
@@ -436,14 +436,12 @@
     
     UISegmentedControl *segmentedControl = (UISegmentedControl *)sender;
     if ([segmentedControl selectedSegmentIndex]==0) {
-            NSLog(@"за последнюю поездку");
-             [FileController write:@"PickOne last\n"];
+             NSLog(@"PickOne last");
             [userDefaults setInteger:0 forKey:@"segment"];
             [self parse: [userDefaults valueForKey:@"lastStat"] method:@"lastStat"];
         }
     else {
-        NSLog(@"за все время");
-        [FileController write:@"PickOne all\n"];
+        NSLog(@"PickOne all");
         [userDefaults setInteger:1 forKey:@"segment"];
         [self parse: [userDefaults valueForKey:@"allStat"] method:@"allStat"];
     }
@@ -454,7 +452,7 @@
     NSLog(@"result = %@", result);
     
     if (result != nil) {
-        [FileController write:@"parse result\n"];
+        NSLog(@"parse result");
         SBJsonParser *jsonParser = [SBJsonParser new];
         NSArray *answer = [jsonParser objectWithString:result error:NULL];
         NSArray *statArray = [answer valueForKey:@"result"];
@@ -493,12 +491,12 @@
     if ([sender isOn])
     {
         //only wi-fi
-        [FileController write:@"switch - only wi-fi\n"];
+        NSLog(@"switch - only wi-fi");
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"internetUserPreference"];
     }
     else
     {
-        [FileController write:@"switch - internet - 3G\n"];
+        NSLog(@"switch - internet - 3G");
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"internetUserPreference"]; 
     }
 }
@@ -542,7 +540,7 @@
 }
 */
 - (IBAction)loginButton:(id)sender{
-    [FileController write:@"logout\n"];
+    NSLog(@"logout");
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults removeObjectForKey:@"login"];
     [userDefaults removeObjectForKey:@"password"];
@@ -605,7 +603,7 @@
  
 
 - (IBAction)helpButton:(id)sender{
-    [FileController write:@"Help Button Pushed"];
+    NSLog(@"Help Button Pushed");
     StatHelpViewController *statHelpView = [self.storyboard instantiateViewControllerWithIdentifier: @"StatHelpViewController"];
     statHelpView.modalTransitionStyle = UIModalTransitionStylePartialCurl;
     [self presentModalViewController: statHelpView animated:YES];

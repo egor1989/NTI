@@ -197,9 +197,9 @@
     //for(NSString *path in subpaths){		
         // Only add it if it's not a directory. ZipArchive will take care of those.
         //NSString *deleteFilePath = [self.documentsDirectory stringByAppendingPathComponent:file];
-        NSString *longPath = [self.documentsDirectory stringByAppendingPathComponent:@"logfile"];
+        NSString *longPath = [self.documentsDirectory stringByAppendingPathComponent:@"newlogfile"];
        // if([self.fileMgr fileExistsAtPath:longPath isDirectory:&isDir] && !isDir){
-            [archiver addFileToZip:longPath newname:@"logfile"];		
+            [archiver addFileToZip:longPath newname:@"newlogfile"];		
         //}
     //}
     

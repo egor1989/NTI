@@ -81,7 +81,7 @@
 }
 
 - (void)checkSpeedTimer{
-    [FileController write:@"start check speed timer (30s)\n"];
+    NSLog(@"start check speed timer (30s)");
     moreThanLimit = NO;
     needCheck = YES;
     m5Km = 0;
@@ -92,11 +92,11 @@
 }
 
 -(void) timerFired: (NSTimer *)timer{
-   [FileController write:@"stop check speed timer (30s)\n"];
+  
     NSLog(@"moreThanLimit = %@", moreThanLimit?@"YES":@"NO");
     NSLog(@"30sec");
     if (!moreThanLimit) {
-        [FileController write:@"start timer (5m)\n"];
+        NSLog(@"start timer (5m)");
         [self stopGPSDetect];
         [self stopMotionDetect];
         canWriteToFile = NO;
@@ -107,7 +107,6 @@
     }
     else {
         [self startMotionDetect];
-        [FileController write:@"start recording\n"];
         needCheck = NO;
         kmch5 = YES;
         canWriteToFile = YES;
@@ -121,9 +120,8 @@
 
 -(void)fiveMinTimer{
     NSLog(@"5min");
-    [FileController write:@"5 min\n"];
     if (kmch5) {
-        [FileController write:@"kmch5=YES\n"];
+        NSLog(@"kmch5=YES");
         moreThanLimit = NO;
         kmch5 = NO;
         needCheck = YES;
@@ -132,7 +130,7 @@
         [NSTimer scheduledTimerWithTimeInterval:180 target:self selector:@selector(checkAfterFiveMin) userInfo:nil repeats:NO];
     }
     else {
-        [FileController write:@"kmch5=NO\n"];
+        NSLog(@"kmch5=NO");
         [NSTimer scheduledTimerWithTimeInterval:180 target:self selector:@selector(checkSpeedTimer) userInfo:nil repeats:NO];
     }
 }
@@ -141,7 +139,6 @@
     
     NSLog(@"after 5 min moreThanLimit = %@", moreThanLimit?@"YES":@"NO");
     if (!moreThanLimit) {
-        [FileController write:@"stop 5 min timer-NO\n"];
         [self checkSpeedTimer];
         canWriteToFile = NO;
         [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
@@ -149,7 +146,6 @@
         [self checkSendRight];
     }
     else {
-        [FileController write:@"stop 5 min timer-YES\n"];
         needCheck = NO;
         kmch5 = YES;
     }
@@ -160,18 +156,17 @@
     
     if ([[NSUserDefaults standardUserDefaults] integerForKey:@"pk"]>10) {
         if ([ServerCommunication checkInternetConnection])  {
-            [FileController write:@"checkSendRight: send\n"];
+            NSLog(@"checkSendRight: send");
            [recordAction sendFile];
         }
         else  {
             [NSTimer scheduledTimerWithTimeInterval:600 target:self selector:@selector(sendTimer:) userInfo:nil repeats:NO];
-            [FileController write:@"checkSendRight: start timer\n"];
+            NSLog(@"checkSendRight: start timer");
         }
     }
 }
 
 -(void)sendTimer{
-    [FileController write:@"stop send timer\n"];
     [self checkSendRight];
 }
 
@@ -179,14 +174,14 @@
 
 //gps
 -(void)stopGPSDetect{
-    [FileController write:@"stopGPSDetect\n"];
+    NSLog(@"stopGPSDetect");
     [locationManager stopUpdatingLocation];
     [locationManager stopUpdatingHeading];
     gpsState=NO;
 }
 
 -(void)startGPSDetect{
-    [FileController write:@"startGPSDetect\n"];
+    NSLog(@"startGPSDetect");
     [locationManager startUpdatingLocation];
     [locationManager startUpdatingHeading];
     gpsState=YES;
@@ -207,7 +202,7 @@
         if (newLocation.speed > SPEED) {
             m5Km++;
             if (m5Km > 5){
-                [FileController write:@"needCheck-location manager: m5km>5, writing\n"];
+                NSLog(@"needCheck-location manager: m5km>5, writing");
                 needCheck = NO;
                 moreThanLimit = YES;
                 canWriteToFile = YES;
@@ -220,7 +215,7 @@
         if (newLocation.speed < SPEED){
             l5Km++;
             if (l5Km > 5) {
-                [FileController write:@"kmch5-location manager: l5km>5, 5 min timer\n"];
+                NSLog(@"kmch5-location manager: l5km>5, 5 min timer");
                 [self fiveMinTimer];                
                 
             }
@@ -286,7 +281,7 @@
 //motion
 
 -(void) startMotionDetect{
-    [FileController write:@"startMotionDetect\n"];
+    NSLog(@"startMotionDetect");
     [motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue currentQueue] 
                                        withHandler:^(CMDeviceMotion *motion, NSError *error) {
                                            CMAttitude *currentAttitude = motion.attitude;
@@ -310,19 +305,19 @@
 }
 
 - (void)stopMotionDetect {
-    [FileController write:@"stopMotionDetect\n"];
+    NSLog(@"stopMotionDetect");
     [motionManager stopDeviceMotionUpdates];
 }
 
 - (void)stopRecord{
-    [FileController write:@"stopRecord\n"];
+    NSLog(@"stopRecord");
     canWriteToFile = NO;
     [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
     [self stopGPSDetect];
     [self stopMotionDetect];
 }
 - (void)startRecord{
-    [FileController write:@"startRecord\n"];
+    NSLog(@"startRecord");
     [self startMotionDetect];
     [self checkSpeedTimer];
 }
@@ -341,7 +336,7 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    [FileController write:@"=====background=====\n"];
+    NSLog(@"=====background=====");
     
     /*
      Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
@@ -354,7 +349,7 @@
     /*
      Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
      */
-    [FileController write:@"=====foreground=====\n"];
+    NSLog(@"=====foreground=====");
     [self startRecord];
 }
 
@@ -366,7 +361,7 @@
         
         UIStoryboard *storyboard = self.window.rootViewController.storyboard;
         UIViewController *loginController = [storyboard instantiateViewControllerWithIdentifier:@"AuthViewController"];
-        [FileController write:@"=====didBecomeActive=====\n"];
+        NSLog(@"=====didBecomeActive=====");
         [self.window.rootViewController presentModalViewController:loginController animated:NO];
     }
 }
@@ -374,7 +369,7 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     [recordAction eventRecord:@"close"];
-    [FileController write:@"=====close=====\n"];
+    NSLog(@"=====close=====");
 }
 
 
