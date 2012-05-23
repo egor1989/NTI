@@ -19,10 +19,8 @@ public class JUNTI {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-      // ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+       ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
         runner executor = new runner();
-        executor.update();
-       // service.scheduleWithFixedDelay(executor, 0, 120, TimeUnit.SECONDS);
-    
+        service.scheduleWithFixedDelay(executor, 0, 3600, TimeUnit.SECONDS);
     }
 }
