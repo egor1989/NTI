@@ -57,6 +57,17 @@
     NSLog(@"ok");
 }
 
++ (NSString *)filePath{
+    //NSFileManager *fileManager = [NSFileManager defaultManager];
+	// get array of paths
+	NSArray *dirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	// get documents directory path
+	NSString *docDirectory = [dirPath objectAtIndex:0];
+    
+    NSString *path = [docDirectory stringByAppendingPathComponent: @"newlogfile"];
+    return path;
+}
+
 
 - (BOOL) writeToFile:(NSString *)myString fileName: (NSString *)fileName{
     

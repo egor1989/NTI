@@ -27,7 +27,8 @@
     recordAction = [[RecordAction alloc] init];
     
     [recordAction eventRecord:@"open"]; 
-    [FileController write:[NSString stringWithFormat:@"=====open=====%@\n", [NSDate date]]];
+    
+    freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);
     
     locationManager=[[CLLocationManager alloc] init];
     locationManager.delegate=self;
