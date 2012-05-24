@@ -130,6 +130,22 @@ class lays_model extends CI_Model {
 		}
 	}
 	
+
+		public function LoadRawData($dataId) {
+		$dataId=mysql_real_escape_string($dataId);
+		$q = $this->db->query("SELECT * FROM `NTIUserDrivingEntry` WHERE `DrivingID`=$dataId and (`TypeAcc` NOT LIKE 'normal point' or `TurnType` NOT LIKE 'normal point' or `TypeSpeed`  NOT LIKE  'normal point') order by `utimestamp` ");
+		if ($q->num_rows() > 0) {
+			return $q->result_array();
+		} 
+		else {
+
+			return -1;
+		}
+	}
+
+
+
+
 	
 	
 	
@@ -220,50 +236,7 @@ $da['is_set']=-1;
 
 
 	public function getTotalStatsByTime($userid,$time1,$time2) {
-		$usr=mysql_real_escape_string($userid);
-		
-			/*
-			$results['total_time'] 			= $total_time;
-			$results['total_trips']			= $m;
-			$results['total_turn1']			= $total_turn1;
-			$results['total_turn2']			= $total_turn2;
-			$results['total_turn3']			= $total_turn3;
-			$results['total_acc1']			= $total_acc1;
-			$results['total_acc2']			= $total_acc2;
-			$results['total_acc3']			= $total_acc3;
-			$results['total_brake1']		= $total_brake1;
-			$results['total_brake2']		= $total_brake2;
-			$results['total_brake3']		= $total_brake3;
-			$results['total_prev1']			= $total_speed1;
-			$results['total_prev2']			= $total_speed2;
-			$results['total_prev3']			= $total_speed3;
-			$results['total_turns'] 		= $total_turn1 + $total_turn2 + $total_turn3;
-			$results['total_accs'] 			= $total_acc1 + $total_acc2 + $total_acc3; 
-			$results['total_brakes'] 		= $total_brake1 + $total_brake2 + $total_brake3;
-			$results['total_excesses'] 		= $total_speed1 + $total_speed2 + $total_speed3; 
-			$results['total_dist']			= $total_dist;
-			$results['total_acc_score'] 	= $total_acc_score;
-			$results['total_brk_score'] 	= $total_brk_score;
-			$results['total_crn_score'] 	= $total_crn_score;
-			$results['total_spd_score'] 	= $total_spd_score;
-			$results['total_all_score'] 	= $total_all_score;
-			* $results['is_set'] = -1;
-			* */
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+		$usr=mysql_real_escape_string($userid);		
 		$q = $this->db->query("SELECT sum(`TotalBrake1Count`*0.1+`TotalBrake2Count`*0.25+`TotalBrake3Count`*0.65)/count(*) as BrakeK,sum(`TotalAcc1Count`*0.1+`TotalAcc2Count`*0.25+`TotalAcc3Count`*0.65)/count(*) as AccK,sum(`TotalSpeed1Count`*0.1+`TotalSpeed2Count`*0.25+`TotalSpeed3Count`*0.65)/count(*) as SpeedK,sum(`TotalTurn1Count`*0.1+`TotalTurn2Count`*0.25+`TotalTurn3Count`*0.65)/count(*) as TurnK  FROM `NTIUserDrivingTrack` ");
 			foreach($q->result() as $row) {
 				$BrakeK = $row->BrakeK;

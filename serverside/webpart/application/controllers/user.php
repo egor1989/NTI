@@ -14,7 +14,7 @@ class User extends CI_Controller {
 			$checker=$this->userModel->checkrealation($this->session->userdata('id'),$urls);
 				if($checker==1 || $this->session->userdata('rights')==3)
 				{
-						
+
 					$this->load->view('header',$new_data);
 					$rs['trr'] = $this->lays_model->getTotalStats($urls);//Получеие статистики по пользователю
 					$rs['total_trips']=count($rs['trr'])-1;
@@ -26,6 +26,34 @@ class User extends CI_Controller {
 		} else
 			header("Location: http://nti.goodroads.ru/");
 	}
+	
+	
+	
+		public function raw() {
+		if($this->session->userdata('rights')>=2)
+		{
+			$this->load->model('userModel');
+			$this->load->model('lays_model');
+			$new_data['rights']=$this->session->userdata('rights');
+			$this->load->helper('url');
+			$urls=$this->uri->segment(3);
+			$userDataId=$this->userModel->getUIDByDataID($urls);
+			$checker=$this->userModel->checkrealation($this->session->userdata('id'),$userDataId);
+				if(($checker==1 || $this->session->userdata('rights')==3) && $userDataId!=-1)
+				{
+
+					$this->load->view('header',$new_data);
+					$rs['trr']= $this->lays_model->LoadRawData($urls);
+					$this->load->view('raw',$rs);
+					$this->load->view('footer');
+		}
+		else
+			header("Location: http://nti.goodroads.ru/");
+		} else
+			header("Location: http://nti.goodroads.ru/");
+	}
+	
+	
 	
 	
 	

@@ -558,6 +558,30 @@
 				}
 						
 		}
+		
+		
+		
+		
+		
+				function getUIDByDataID($DataId)
+				{
+					//Функция возвращает ID пользователя относительно его поездки
+					$DataId=mysql_real_escape_string($DataId);
+					$q = $this->db->query("SELECT UID FROM `NTIUserDrivingTrack` WHERE `Id`=$DataId Limit 1");
+					if ($q->num_rows() > 0) {
+					foreach($q->result() as $row) 
+					{
+						return $row->UID;
+					}
+				}
+				else
+				{
+					return -1;
+				}
+			}
+		
+		
+
 		function passwordremember($email)
 	{
 				$password= random_string('alnum', 64);

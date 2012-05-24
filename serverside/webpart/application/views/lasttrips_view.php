@@ -27,8 +27,11 @@
 			<tr>
 				<td>
 					<br>
-					<span style="color:black"> Начало поездки:<br><?echo date('d.m.Y H:i:s',$trr[$c]['TimeStart']); ?></span><br><br>
-					<span style="color:black"> Конец  поездки:<br><?echo date('d.m.Y H:i:s',$trr[$c]['TimeEnd']);?></span>
+					<span style="color:black"> Начало поездки:<br><?echo date('d.m.Y H:i:s',$trr[$c]['TimeStart']); ?></span><br>
+					<span style="color:black"> Конец  поездки:<br><?echo date('d.m.Y H:i:s',$trr[$c]['TimeEnd']);?></span><br/>
+					<a href="/user/raw/<?echo $trr[$c]['Id'];?>">Просмотреть данные</a>
+					
+					
 				</td>
 				<td>	
 				    <span style="color:red">Легких поворотов: <?echo $trr[$c]['TotalTurn1Count'];?></span><br>
