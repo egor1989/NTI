@@ -32,20 +32,33 @@ function rand_str($length = 64, $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijkl
 
 function connec_to_db()
 {
-$dblocation = "localhost";  
-$dbname = "NTI";  
-$dbuser = "steph";  
-$dbpasswd = "trinitro"; 
+	$dblocation = "localhost";  
+	$dbname = "NTI";  
+	$dbuser = "steph";  
+	$dbpasswd = "trinitro"; 
  $dbcnx= mysql_connect($dblocation, $dbuser, $dbpasswd);
 if (!$dbcnx)    {      return 0;  }  
 if (!mysql_select_db($dbname,$dbcnx) )    {      return 0;    }  
 mysql_query('SET NAMES cp1251'); 
 return 1;
 }
-//print_r( $_POST);
-//exit();
+
 
 $data=$_POST['data'];
+$zip=$_POST['zip'];
+
+if($zip==1)
+{
+	$data=str_replace("<","",$data);
+	$data=str_replace(">","",$data);
+	$data=str_replace(" ","",$data);
+	$data=gzdecodes(pack('H*',$data));
+}
+
+function gzdecodes($data) 
+{ 
+   return gzinflate(substr($data,10,-8)); 
+} 
 if(!isset($_POST))
 {
 	$data = file_get_contents("php://input");
@@ -389,7 +402,7 @@ function getStatistics($param)
 				$n++;
 			}
 
-		$R = 6371; // km
+		$R = 111.2; //$R = 6371; // km *666*
 		//Если дданные есть:
 		if (mysql_num_rows($result)>0) {
 			$k = 0;
@@ -505,7 +518,7 @@ function getStatistics($param)
 			$ttime = 0;
 		
 			$unfilteredData=$grouped;
-			
+			$d=0;
 			for($m=0;$m<count($unfilteredData);$m++) {
 				unset($data);
 				$drivingScore = 0;
@@ -528,6 +541,10 @@ function getStatistics($param)
 				$data=$unfilteredData[$m];
 					$j=count($data);
 					$dss = 0;
+
+					
+					
+					$last_time= $data[1]['utimestamp'];
 						for ($i = 1; $i < $j-1; $i++)
 						{
 							$typeTurn[0] = "normal point";
@@ -539,26 +556,20 @@ function getStatistics($param)
 							$sevSpeed = 0;
 							$speed = $data[$i]['speed'];	
 							$deltaTime = $data[$i]['utimestamp'] - $data[$i-1]['utimestamp'];
-							
+							$d += acos(sin($data[$i]['lat'])*sin($data[$i-1]['lat']) + cos($data[$i]['lat'])*cos($data[$i-1]['lat']) *  cos($data[$i-1]['lng']-$data[$i]['lng'])) * 111.2;
+	
 							if ( ($data[$i]['lng']-$data[$i-1]['lng']) != 0  )
 							{
 							
 								$turn[$i] = atan(($data[$i]['lat']-$data[$i-1]['lat'])/($data[$i]['lng']-$data[$i-1]['lng']));
-				
 								$turn[0] = 0;
 								$deltaTurn = $turn[$i] - $turn[$i-1];
 								$wAcc = abs($deltaTurn/($deltaTime));
 														
-								//Высчитываем тип поворота через угловое ускорение.					
-								if (($wAcc < 0.45) && ($wAcc >= 0)) {
-									$sevTurn = 0;									
-								} else 	if (($wAcc >= 0.45) && ($wAcc < 0.6))	{
-									$sevTurn = 1;
-								} else 	if (($wAcc >= 0.6) && ($wAcc < 0.75)){
-									$sevTurn = 2;
-								} else if ($wAcc >= 0.75) {
-									$sevTurn = 3;
-								}
+								if (($wAcc < 0.45) && ($wAcc >= 0)) {$sevTurn = 0;} 
+								else 	if (($wAcc >= 0.45) && ($wAcc < 0.6))	{$sevTurn = 1;} 
+								else 	if (($wAcc >= 0.6) && ($wAcc < 0.75)){$sevTurn = 2;	} 
+								else if ($wAcc >= 0.75) {$sevTurn = 3;}
 								
 								$deltaSpeed = $speed - $data[$i-1]['speed'];
 								$accel[$i] = $deltaSpeed/$deltaTime;
@@ -612,7 +623,6 @@ function getStatistics($param)
 									if ($sevSpeed == 0) {
 										$typeSpeed[$i] = "normal point";
 										//if ($dss > 3) {}
-									
 										$speed1 = $speed1 + floor($dss/3);
 										$dss = 0;
 									
@@ -699,10 +709,10 @@ function getStatistics($param)
 										$acc1++;
 									} else if ($sevAcc == -2) {
 										$typeAcc[$i] = "brake2 started";
-										$acc2++;
+										$acc1++;
 									} else if ($sevAcc == -3) {
 										$typeAcc[$i] = "brake3 started";
-										$acc3++;
+										$acc1++;
 									}
 								} else	if (($typeAcc[$i-1] == "acc2 started") || ($typeAcc[$i-1] == "acc2 continued")) {
 									if ($sevAcc == 0) {
@@ -889,42 +899,25 @@ function getStatistics($param)
 						if(isset($data[$j-2]['utimestamp']))	{
 						
 							$fullTime = ($data[$j-2]['utimestamp'] - $data[0]['utimestamp']);
-							if($fullTime!=0) {
-							
-							//$number=$m;
-						
+							if($fullTime!=0) {					
 								$results['score'] 		+= 		($coef1 * ($speed1 + $turn1 + $acc1 + $brake1) + $coef2 * ($speed2 + $turn2 + $acc2 + $brake2) + $coef3 * ($speed3 + $turn3 + $acc3 + $brake3)) / ($fullTime/3600);
 								$results['score_speed'] 	+=($coef1 * ($speed1) + $coef2 * ($speed2) + $coef3 * ($speed3)) / ($fullTime/3600);
 								$results['score_turn'] 	+=($coef1 * ($turn1) + $coef2 * ($turn2) + $coef3 * ($turn3)) / ($fullTime/3600);
 								$results['score_acc'] 	+=($coef1 * ($acc1) + $coef2 * ($acc2) + $coef3 * ($acc3)) / ($fullTime/3600);
 								$results['score_brake'] 	+=($coef1 * ($brake1) + $coef2 * ($brake2) + $coef3 * ($brake3)) / ($fullTime/3600);
-								 
-								 
-								 
-								 
-								/* 
-									$results['time'] 		+=	 	$fullTime; 
-									$results['turn1']		+=		$turn1;
-									$results['turn2']		+=		$turn2;
-									$results['turn3']		+=		$turn3;
-								$results['acc1']		+=		$acc1;
-								$results['acc2']		+=		$acc2;
-								$results['acc3']		+=		$acc3;
-								$results['brake1']		+=		$brake1;
-								$results['brake2']		+=		$brake2;
-								$results['brake3']		+=		$brake3;
-								$results['prev1']		+=		$speed1;
-								$results['prev2']		+=		$speed2;
-								$results['prev3']		+=		$speed3;
-								*/
-								
+								$results['distance']+=$d;				
 							}
 						}	
 			} 
 			
 			$errortype=array('info'=>"",'code'=>  0);
-		//	$ret=array('total_score'=>floor($results['score']),'time'=>floor($results['time']),'turn1'=>$results['turn1'],'turn2'=>$results['turn2'],'turn3'=>$results['turn3'],'acc1'=>$results['acc1'],'acc2'=>$results['acc2'],'acc3'=>$results['acc3'],'brake1'=>$results['brake1'],'brake2'=>$results['brake2'],'brake3'=>$results['brake3'],'prev1'=>$results['prev1'],'prev2'=>$results['prev2'],'prev3'=>$results['prev3']);
-			$ret=array('total_score'=>floor($results['score']),'score_speed'=>floor($results['score_speed']),'score_turn'=>floor($results['score_turn']),'score_acc'=>floor($results['score_acc']),'score_brake'=>floor($results['score_brake']));
+			if(isset($param['last']) && $param['last']>0)
+			$ret=array('total_score'=>floor($results['score']),'score_speed'=>floor($results['score_speed']),'score_turn'=>floor($results['score_turn']),'score_acc'=>floor($results['score_acc']),'score_brake'=>floor($results['score_brake']),'distance'=>floor($results['distance']),'time'=>$last_time);
+			else
+			{
+					$ret=array('total_score'=>floor($results['score']),'score_speed'=>floor($results['score_speed']),'score_turn'=>floor($results['score_turn']),'score_acc'=>floor($results['score_acc']),'score_brake'=>floor($results['score_brake']),'distance'=>floor($results['distance']),'time'=>0);
+		
+				}
 			
 			$res=array('result'=>$ret,'error'=> $errortype);
 			echo json_encode($res);	
@@ -933,8 +926,10 @@ function getStatistics($param)
 			
 		}
 		else {
-			$errortype=array('info'=>"No data for the user with ID($UID)",'code'=>  43);
-			$res=array('result'=>-1,'error'=> $errortype);
+			$errortype=array('info'=>"",'code'=>  0);
+			$ret=array('total_score'=>0,'score_speed'=>0,'score_turn'=>0,'score_acc'=>0,'score_brake'=>0,'distance'=>0,'time'=>0);
+		
+			$res=array('result'=>$ret,'error'=> $errortype);
 			echo json_encode($res);	
 			exit();
 		}
@@ -1021,9 +1016,9 @@ function getPath($param)
 			{
 				$typeTurn[0] = 'normal point';
 				$typeAcc[0] = 'normal point';
-				$sevTurn = 0;
-				$sevAcc = 0;
-				$sevSpeed = 0;
+				$sevTurn[0] = 0;
+				$sevAcc[0] = 0;
+				$sevSpeed[0] = 0;
 				$speed = $encData[$i]['speed'];	
 				$deltaTime = ($encData[$i]['utimestamp'] - $encData[$i-1]['utimestamp']);
 				if ( ($encData[$i]['lng']-$encData[$i-1]['lng']) != 0  )
@@ -1033,10 +1028,53 @@ function getPath($param)
 					$deltaTurn = $turn[$i] - $turn[$i-1];
 					$wAcc = abs($deltaTurn/$deltaTime);
 					$radius = $speed/$wAcc;
+											
+																			if (($speed >= 0) && ($speed <= 80)) 
+									$sevSpeed[$i] = 0;
+								else if (($speed > 80) && ($speed <= 110))
+									$sevSpeed[$i] = 1;
+								else if (($speed > 110) && ($speed <= 130))
+									$sevSpeed[$i] = 2;
+								else if ($speed > 130)
+									$sevSpeed[$i] = 3;
+								
+											
+													
+								//Высчитываем тип поворота через угловое ускорение.					
+								if (($wAcc < 0.45) && ($wAcc >= 0)) {
+									$sevTurn[$i] = 0;									
+								} else 	if (($wAcc >= 0.45) && ($wAcc < 0.6))	{
+									$sevTurn[$i] = 1;
+								} else 	if (($wAcc >= 0.6) && ($wAcc < 0.75)){
+									$sevTurn[$i] = 2;
+								} else if ($wAcc >= 0.75) {
+									$sevTurn[$i] = 3;
+								}
+								
+								$deltaSpeed = $speed - $encData[$i-1]['speed'];
+								$accel[$i] = $deltaSpeed/$deltaTime;
+								
+								//Высчитываем тип неравномерного движения (ускорение-торможение) через ускорение.
+								if ($accel[$i]<-7.5) {
+									$sevAcc[$i] = -3;
+								} else if (($accel[$i]>=-7.5)&&($accel[$i]<-6)) {
+									$sevAcc[$i] = -2;
+								} else if (($accel[$i]>=-6)&&($accel[$i]<-4.5)) {
+									$sevAcc[$i] = -1;
+								} else if ($accel[$i]>5) {
+									$sevAcc[$i] = 3;
+								} else if (($accel[$i]>4)&&($accel[$i]<=5)){
+									$sevAcc[$i] = 2;
+								} else if (($accel[$i]>3.5)&&($accel[$i]<=4)) {
+									$sevAcc[$i] = 1;
+								} else if (($accel[$i]>=-4.5)&&($accel[$i]<=3.5)) {
+									$sevAcc[$i] = 0;
+								}
+					
 					
 				}
 				else 	
-				{
+				{	$sevAcc[$i] = 0;
 					$sevTurn[$i] = 0;
 					$wAcc = 0;
 					$radius = 0;
@@ -1044,55 +1082,107 @@ function getPath($param)
 				$timeSum = 0;
 				$sumSpeed = 0;
 
-	if ($deltaTime!=0){
-		$deltaSpeed = $speed - $encData[$i-1]['speed'];
-		$accel[$i] = $deltaSpeed/$deltaTime;
-		if ($accel[$i]<-7.5) {
-		  $sevAcc = -3;
-		  $brake3++;
-		} else if ($accel[$i]<-6){
-		  $sevAcc = -2;
-		  $brake2++;
-		} else if ($accel[$i]<-4.5){
-		  $sevAcc = -1;
-		  $brake1++;
-		} else if ($accel[$i]>5){
-		  $sevAcc = 3;
-		  $acc3++;
-		} else if ($accel[$i]>4){
-		  $sevAcc = 2;
-		  $acc2++;
-		} else if ($accel[$i]>3.5){
-		  $sevAcc = 1;
-		  $acc1++;
-		} else {
-		  $sevAcc = 0;
-		}
-	}
-		$vg[$i]=0;
-		if ($sevAcc==1) $vg[$i]=1;
-		if ($sevAcc==2) $vg[$i]=2;
-		if ($sevAcc==3) $vg[$i]=3;
-	    if ($sevAcc==-1) $vg[$i]=-1;
-		if ($sevAcc==-2) $vg[$i]=-2;
-		if ($sevAcc==-3) $vg[$i]=-3;
+
+
 		
 
 			}
 
 		
-		$vg[1]=42;
+
 		$k=0;
 		$R = 6371; // km
 		for ($i = 1; $i < $j; $i++)
 		{
-				
+				$vg=1;
 				$d = acos(sin($encData[$i]['lat'])*sin($encData[$i-1]['lat']) + cos($encData[$i]['lat'])*cos($encData[$i-1]['lat']) *  cos($encData[$i-1]['lng']-$encData[$i]['lng'])) * $R;
-				if(($encData[$i]['utimestamp']-$encData[$i-1]['utimestamp']>300) || (($d)/($encData[$i]['utimestamp']-$encData[$i-1]['utimestamp']))>40)$vg[$i]=42;			
+				if(($encData[$i]['utimestamp']-$encData[$i-1]['utimestamp']>300) || (($d)/($encData[$i]['utimestamp']-$encData[$i-1]['utimestamp']))>40)$vg=42;			
 				$ret_arr[$k]['lat']=$encData[$i]['lat'];
 				$ret_arr[$k]['lng']=$encData[$i]['lng'];
-				$ret_arr[$k]['type']=$vg[$i];
-				$ret_arr[$k]['waht']=$accel[$i];			
+				
+				//Вычисляем , что отправлять
+				if($vg!=42)
+				{
+				if($sevAcc[$i]!=0)
+				{
+					if($sevTurn[$i]==0)
+					{
+						if($sevAcc[$i]<0)
+						{
+							$ret_arr[$k]['type']=2;
+							$ret_arr[$k]['weight']=$sevAcc[$i]*(-1);
+						}
+						else
+						{
+							$ret_arr[$k]['type']=1;
+							$ret_arr[$k]['weight']=$sevAcc[$i];
+						}
+					}
+					else
+					{
+						if($sevAcc[$i]<0)
+						{
+							if($sevAcc[$i]*(-1)>=$sevTurn[$i])
+							{
+									$ret_arr[$k]['type']=2;
+									$ret_arr[$k]['weight']=$sevAcc[$i]*(-1);
+							}
+							else
+							{
+									$ret_arr[$k]['type']=3;
+									$ret_arr[$k]['weight']=$sevTurn[$i];
+							}
+						}
+						else
+						{
+							if($sevAcc[$i]>=$sevTurn[$i])
+							{
+									$ret_arr[$k]['type']=1;
+									$ret_arr[$k]['weight']=$sevAcc[$i];
+							}
+							else
+							{
+									$ret_arr[$k]['type']=3;
+									$ret_arr[$k]['weight']=$sevTurn[$i];
+							}	
+						}
+					}
+				}
+				else if($sevAcc[$i]==0 && $sevSpeed[$i]==0)
+				{
+					
+					if($sevTurn[$i]>0)
+					{
+						$ret_arr[$k]['type']=3;
+						$ret_arr[$k]['weight']=$sevTurn[$i];
+					}
+					else
+					{
+						$ret_arr[$k]['type']=0;
+						$ret_arr[$k]['weight']=0;
+					}
+				}
+				else
+				{
+					if($sevSpeed[$i]>0)
+					{
+						$ret_arr[$k]['type']=4;
+						$ret_arr[$k]['weight']=$sevSpeed[$i];
+					}
+					else
+					{
+						$ret_arr[$k]['type']=0;
+						$ret_arr[$k]['weight']=0;
+					}
+				}
+			}
+			else
+			{
+				
+				$ret_arr[$k]['type']=42;
+				$ret_arr[$k]['weight']=42;
+			}
+						
 				$k++;
 		}
 		
@@ -1202,10 +1292,10 @@ function getPath($param)
 			$j=count($encData);
 			for ($i = 1; $i < $j; $i++)
 			{
-				$typeTurn[0] = 'normal point';
+			$typeTurn[0] = 'normal point';
 				$typeAcc[0] = 'normal point';
-				$sevTurn = 0;
-				$sevAcc = 0;
+				$sevTurn[0] = 0;
+				$sevAcc[0] = 0;
 				$sevSpeed = 0;
 				$speed = $encData[$i]['speed'];	
 				$deltaTime = ($encData[$i]['utimestamp'] - $encData[$i-1]['utimestamp']);
@@ -1217,9 +1307,43 @@ function getPath($param)
 					$wAcc = abs($deltaTurn/$deltaTime);
 					$radius = $speed/$wAcc;
 					
+						//Высчитываем тип поворота через угловое ускорение.					
+								if (($wAcc < 0.45) && ($wAcc >= 0)) {
+									$sevTurn[$i] = 0;									
+								} else 	if (($wAcc >= 0.45) && ($wAcc < 0.6))	{
+									$sevTurn[$i] = 1;
+								} else 	if (($wAcc >= 0.6) && ($wAcc < 0.75)){
+									$sevTurn[$i] = 2;
+								} else if ($wAcc >= 0.75) {
+									$sevTurn[$i] = 3;
+								}
+								
+								$deltaSpeed = $speed - $encData[$i-1]['speed'];
+								$accel[$i] = $deltaSpeed/$deltaTime;
+								
+								//Высчитываем тип неравномерного движения (ускорение-торможение) через ускорение.
+								if ($accel[$i]<-7.5) {
+									$sevAcc[$i] = -3;
+								} else if (($accel[$i]>=-7.5)&&($accel[$i]<-6)) {
+									$sevAcc[$i] = -2;
+								} else if (($accel[$i]>=-6)&&($accel[$i]<-4.5)) {
+									$sevAcc[$i] = -1;
+								} else if ($accel[$i]>5) {
+									$sevAcc[$i] = 3;
+								} else if (($accel[$i]>4)&&($accel[$i]<=5)){
+									$sevAcc[$i] = 2;
+								} else if (($accel[$i]>3.5)&&($accel[$i]<=4)) {
+									$sevAcc[$i] = 1;
+								} else if (($accel[$i]>=-4.5)&&($accel[$i]<=3.5)) {
+									$sevAcc[$i] = 0;
+								}
+					
+					
+					
 				}
 				else 	
 				{
+					$sevAcc[$i] = 0;
 					$sevTurn[$i] = 0;
 					$wAcc = 0;
 					$radius = 0;
@@ -1227,51 +1351,104 @@ function getPath($param)
 				$timeSum = 0;
 				$sumSpeed = 0;
 
-	if ($deltaTime!=0){
-		$deltaSpeed = $speed - $encData[$i-1]['speed'];
-		$accel[$i] = $deltaSpeed/$deltaTime;
-		if ($accel[$i]<-7.5) {
-		  $sevAcc = -3;
-		  $brake3++;
-		} else if ($accel[$i]<-6){
-		  $sevAcc = -2;
-		  $brake2++;
-		} else if ($accel[$i]<-4.5){
-		  $sevAcc = -1;
-		  $brake1++;
-		} else if ($accel[$i]>5){
-		  $sevAcc = 3;
-		  $acc3++;
-		} else if ($accel[$i]>4){
-		  $sevAcc = 2;
-		  $acc2++;
-		} else if ($accel[$i]>3.5){
-		  $sevAcc = 1;
-		  $acc1++;
-		} else {
-		  $sevAcc = 0;
-		}
-	}
-		$vg[$i]=0;
-		$vg[$i]=$sevAcc;
+
 			}
 
 		
-		$vg[1]=42;
+
 		$k=0;
 		$R = 6371; // km
 		for ($i = 1; $i < $j; $i++)
 		{
-				
+				$vg=1;
 				$d = acos(sin($encData[$i]['lat'])*sin($encData[$i-1]['lat']) + cos($encData[$i]['lat'])*cos($encData[$i-1]['lat']) *  cos($encData[$i-1]['lng']-$encData[$i]['lng'])) * $R;
-				if(($encData[$i]['utimestamp']-$encData[$i-1]['utimestamp']>300) || (($d)/($encData[$i]['utimestamp']-$encData[$i-1]['utimestamp']))>40)$vg[$i]=42;			
+				if(($encData[$i]['utimestamp']-$encData[$i-1]['utimestamp']>300) || (($d)/($encData[$i]['utimestamp']-$encData[$i-1]['utimestamp']))>40)$vg=42;			
 				$ret_arr[$k]['lat']=$encData[$i]['lat'];
 				$ret_arr[$k]['lng']=$encData[$i]['lng'];
-				$ret_arr[$k]['type']=$vg[$i];
-				$ret_arr[$k]['waht']=$accel[$i];			
+							if($vg!=42)
+				{
+				if($sevAcc[$i]!=0)
+				{
+					if($sevTurn[$i]==0)
+					{
+						if($sevAcc[$i]<0)
+						{
+							$ret_arr[$k]['type']=2;
+							$ret_arr[$k]['weight']=$sevAcc[$i]*(-1);
+						}
+						else
+						{
+							$ret_arr[$k]['type']=1;
+							$ret_arr[$k]['weight']=$sevAcc[$i];
+						}
+					}
+					else
+					{
+						if($sevAcc[$i]<0)
+						{
+							if($sevAcc[$i]*(-1)>=$sevTurn[$i])
+							{
+									$ret_arr[$k]['type']=2;
+									$ret_arr[$k]['weight']=$sevAcc[$i]*(-1);
+							}
+							else
+							{
+									$ret_arr[$k]['type']=3;
+									$ret_arr[$k]['weight']=$sevTurn[$i];
+							}
+						}
+						else
+						{
+							if($sevAcc[$i]>=$sevTurn[$i])
+							{
+									$ret_arr[$k]['type']=1;
+									$ret_arr[$k]['weight']=$sevAcc[$i];
+							}
+							else
+							{
+									$ret_arr[$k]['type']=3;
+									$ret_arr[$k]['weight']=$sevTurn[$i];
+							}	
+						}
+					}
+				}
+				else if($sevAcc[$i]==0 && $sevSpeed[$i]==0)
+				{
+					
+					if($sevTurn[$i]>0)
+					{
+						$ret_arr[$k]['type']=3;
+						$ret_arr[$k]['weight']=$sevTurn[$i];
+					}
+					else
+					{
+						$ret_arr[$k]['type']=0;
+						$ret_arr[$k]['weight']=0;
+					}
+				}
+				else
+				{
+					if($sevSpeed[$i]>0)
+					{
+						$ret_arr[$k]['type']=4;
+						$ret_arr[$k]['weight']=$sevSpeed[$i];
+					}
+					else
+					{
+						$ret_arr[$k]['type']=0;
+						$ret_arr[$k]['weight']=0;
+					}
+				}
+			}
+			else
+			{
+				
+				$ret_arr[$k]['type']=42;
+				$ret_arr[$k]['weight']=42;
+			}
+						
 				$k++;
 		}
-		
 		if($k!=0)
 		{
 		

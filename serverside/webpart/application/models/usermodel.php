@@ -11,7 +11,7 @@
 		
 			$password=hash('sha256', $password);
 
-			$query = $this->db->get_where('NTIUsers', array('Login' => $login, 'Password' => $password));
+			$query = $this->db->get_where('NTIUsers', array('Login' => $login, 'Password' => $password, 'Deleted' => 0));
 			if($query->num_rows()>0){
 			
 				foreach($query->result() as $row)

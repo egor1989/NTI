@@ -6,6 +6,17 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="Description" content="<?if(!isset($descr))echo "Проект по автоматизированному контролю состояния дорожного покрытия GoodRoads";else echo $descr;?>">
 <meta name="Keywords" content="<?if(!isset($keywords))echo "goodroads,дорожное покрытие,гудроадс,ямы на дорогах, качество покрытия, качество асфальта, качество дороги";else echo $keywords;?>">
+<link rel="stylesheet" href="../../css/ui-lightness/jquery-ui-1.8.20.custom.css">
+<script src="../../js/libs/jquery-1.7.2.js"></script>
+<script src="../../js/libs/jquery.ui.core.js"></script>
+<script src="../../js/libs/jquery.ui.widget.js"></script>
+<script src="../../js/libs/jquery.ui.datepicker.js"></script>
+<script>
+	$(function() {
+		$( ".dateField" ).datepicker({ dateFormat: "dd-mm-yy" });
+		//
+	});
+</script>
 <link rel="stylesheet" type="text/css" href="/css/main.css" /> 
 </head>
 <body>
@@ -96,8 +107,7 @@ else if(isset($rights) && $rights==3){?>
 	<div id="menuitems" class="menuitems"> 
 		<div id="menuitem1" class="menuitem"><a href="/search" class="hrefmenu" >Поиск</a></div> 
 		<div id="menuitem2" class="menuitem"><a href="/all/users" class="hrefmenu" >Управление пользователями</a></div> 
-		<div id="menuitem2" class="menuitem"><a href="/all/ck" class="hrefmenu" >Управление экспертами</a></div> 
-		<div id="menuitem2" class="menuitem"><a href="/tickets" class="hrefmenu" >Все заявки</a></div> 
+		<div id="menuitem3" class="menuitem"><a href="/all/ck" class="hrefmenu" >Управление экспертами</a></div> 
 		<div id="menuitem4" class="menuitem"><a href="/user/logout" class="hrefmenu" >Выход</a></div> 
 	</div>
 </div> 
@@ -106,6 +116,7 @@ else if(isset($rights) && $rights==3){?>
 <div id="menu" class="menu"> 
 	<div id="menuitems" class="menuitems"> 
 		<div id="menuitem1" class="menuitem"><a href="/user/search" class="hrefmenu" >Подробная информация по движению</a></div> 
+		<div id="menuitem2" class="menuitem "><a href="/fback" class="hrefmenu" >Обратная связь</a></div>
 		<div id="menuitem3" class="menuitem "><a href="/user/logout" class="hrefmenu" >Выход</a></div> 
 	</div>
 </div> 

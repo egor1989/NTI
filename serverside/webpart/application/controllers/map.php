@@ -3,15 +3,23 @@
 class Map extends CI_Controller {
 	public function index()
 	{	
-		$new_data['map_type']=3;
-		$new_data['menu']=1;
-		$new_data['library']=2;
-						$this->load->library('session');
-		$this->session->set_userdata('map',"beta");
-		$this->load->view('header',$new_data);
-		$this->load->view('map_content',$new_data);
-		$this->load->view('footer');
-    
+		if ($this->session->userdata('rights') != 3) {
+			header("Location: http://nti.goodroads.ru/");
+		} else {
+			$new_data['map_type']=3;
+			$new_data['menu']=1;
+			$new_data['library']=2;
+			$this->load->library('session');
+			
+			$new_data['rights'] = $this->session->userdata('rights');
+			
+			$this->load->model('lays_model');
+			$new_data['userslist'] = $this->lays_model->getById();
+			$this->session->set_userdata('map',"beta");
+			$this->load->view('header',$new_data);
+			$this->load->view('map_content',$new_data);
+			$this->load->view('footer');
+		}
 	}
 	public function full()
 	{	
@@ -57,6 +65,58 @@ class Map extends CI_Controller {
 		$item=trim($this->input->post());
 		echo json_encode($data);
 	}
+	
+	function viewtrips() {
+		echo "123"."<br>";
+		if ($this->session->userdata('rights') != 3) {
+			header("Location: http://nti.goodroads.ru/");
+		} else {
+			//$i = $this->input->post('userid');
+		}
+	}
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
