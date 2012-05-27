@@ -17,6 +17,106 @@ define(NO_FUNCTION_SET_INFO, "No action set, or function is incorrect");
 
 
 $dbcnx=0;
+
+class EntryRide {
+	
+private $lat;
+private $lng;
+private $compass;
+private $direction;
+private $timestamp;
+private $distance;
+private $speed;
+private $accx;
+private $accy;
+
+ function EntryRide() {
+	//Constructor
+ }
+ //Incapsulation
+ public function setLat($lat){$this->lat=$lat;}
+ public function setLng($lng) {$this->lng=$lng;}
+ public function setCompass($compass){	$this->compass=$compass; }
+ public function setDirection($direction){	$this->direction=$direction; }
+ public function setTimestamp($timestamp) {	$this->timestamp=$timestamp; }
+ public function setDistance($distance) {	$this->distance=$distance; }
+ public function setSpeed($speed) {	$this->speed=$speed; }
+ public function setAccx($accx) {	$this->accx=$accx; }
+ public function setAccy($accy) {	$this->accy=$accy; }
+ public function getLat($lat){return($this->lat);}
+ public function getLng($lng) {return($this->lng);}
+ public function getCompass($compass){	return($this->compass); }
+ public function getDirection($direction){	return($this->direction); }
+ public function getTimestamp($timestamp) {	return($this->timestamp); }
+ public function getDistance($distance) {	return($this->distance); }
+ public function getSpeed($speed) {	return($this->speed); }
+ public function getAccx($accx) {	return($this->accx); }
+ public function getAccy($accy) {	return($this->accy); }
+
+}
+
+
+
+class UserEntry extends EntryRide {
+
+private $sevAcc;
+private $TypeAcc;
+private $sevTurn;
+private $TurnType;
+private $TypeSpeed;
+private $sevSpeed;
+private $Turn;
+private $Accel;
+ function UserEntry() {
+	//Constructor
+ }
+ //Incapsulation
+ public function setsevAcc($sevAcc){$this->sevAcc=$sevAcc;}
+ public function setTypeAcc($TypeAcc){$this->TypeAcc=$TypeAcc;}
+ public function setsevTurn($sevTurn){$this->sevTurn=$sevTurn;}
+ public function setTurnType($TurnType){$this->TurnType=$TurnType;}
+ public function setTypeSpeed($TypeSpeed){$this->TypeSpeed=$TypeSpeed;}
+ public function setsevSpeed($sevSpeed){$this->sevSpeed=$sevSpeed;}
+ public function setTurn($Turn){$this->Turn=$Turn;}
+ public function setAccel($Accel){$this->Accel=$Accel;}
+  
+ public function getsevAcc(){	return($this->sevAcc);}
+ public function getTypeAcc(){	return($this->TypeAcc);}
+ public function getsevTurn(){	return($this->sevTurn);}
+ public function getTurnType(){	return($this->TurnType);}
+ public function getTypeSpeed(){	return($this->TypeSpeed);}
+ public function getsevSpeed(){	return($this->sevSpeed);}
+ public function getTurn(){return($this->Turn);}
+ public function getAccel(){return($this->Accel);}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function distance_between_points($lat1,$lat2,$lng1,$lng2)
+{
+	//Функция возвращает расстояние между 2-мя точками в километрах
+	return acos(sin($lat1)*sin($lat2)+cos($lat1)*cos($lat2)*cos($lng2-$lng1))*111.2;
+	
+}
+
+
+
 function rand_str($length = 64, $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890')
 {
     $chars_length = (strlen($chars) - 1);
@@ -71,7 +171,6 @@ if(!isset($_POST))
 	}
 
 }
-
 $json = json_decode($data,true);
 switch(json_last_error())
     {
@@ -308,51 +407,473 @@ function addNTIFile($param)
 	if (strlen($ins) > 10) 
 	{
 		$UID=NTI_Cookie_check();
-		$m = new Mongo(); 
-		$db = $m->NTI;
-		$NTIInfo=$db->NTIInfo;
 		$utmstamp=time();
-		
+		//Монго? - не, не слышал
+		//Тк делаем , лучше пусть будет переносима с приемлемыми результатами
 		
 		$qq = json_decode($ins,true);	
 		if ($qq != NULL) 
 		{
-			$insert_data=array(
-				'UID'=>$UID,
-				'UnixTimeStamp'=>$utmstamp,
-				'NTIFile'=>$ntifile
-				);
-			$NTIInfo->insert($insert_data);		
 			
 			if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
 			mysql_query("INSERT into NTIFile (UID,File) values ('$UID','$ins')");
 			$fileid = mysql_insert_id();
 			$k = 0;
+			//Начинаем обрабатывать и разбивать
+			$i=0;
+			$n=0;
 			while ($qq[$k]) 
 			{
-				$accx = $qq[$k]['acc']['x'];
-				$accy = $qq[$k]['acc']['y'];
-				$lat =  $qq[$k]['gps']['latitude'];
-				$lng = $qq[$k]['gps']['longitude'];
-				$direction = $qq[$k]['gps']['direction'];
-				$compass = $qq[$k]['gps']['compass'];
-				$speed = $qq[$k]['gps']['speed'];
-				$distance = $qq[$k]['gps']['distance'];
-				$utimestamp = $qq[$k]['timestamp'];
-					$accx = mysql_real_escape_string($accx);
-					$accy = mysql_real_escape_string($accy);
-					$lat = mysql_real_escape_string($lat);
-					$lng = mysql_real_escape_string($lng); 
-					$direction = mysql_real_escape_string($direction);
-					$compass = mysql_real_escape_string($compass);
-					$speed = mysql_real_escape_string($speed);
-					$distance = mysql_real_escape_string($distance);
-					$utimestamp = mysql_real_escape_string($utimestamp);
-					$str = "INSERT INTO NTIEntry (UID, accx, accy, distance, lat, lng, direction, compass, speed, utimestamp, FileId) VALUES ($UID, $accx, $accy, $distance, $lat, $lng, $direction, $compass, $speed, $utimestamp, $fileid)";
-					mysql_query($str);
-				//echo $str;
+				if($i>0)
+				{
+					if($qq[$k]['timestamp']-$ArrayEntry[$n][$i-1]->getTimestamp<600)
+					{
+						$ArrayEntry[$n][$i]=new UserEntry();
+						$ArrayEntry[$n][$i]->setLat($qq[$k]['gps']['latitude']);
+						$ArrayEntry[$n][$i]->setLng($qq[$k]['gps']['longitude']);
+						$ArrayEntry[$n][$i]->setAccx($qq[$k]['acc']['x']);
+						$ArrayEntry[$n][$i]->setAccy($qq[$k]['acc']['y']);
+						$ArrayEntry[$n][$i]->setDirection($qq[$k]['gps']['direction']);
+						$ArrayEntry[$n][$i]->setDistance($qq[$k]['gps']['distance']);
+						$ArrayEntry[$n][$i]->setSpeed($qq[$k]['gps']['speed']);
+						$ArrayEntry[$n][$i]->setCompass($qq[$k]['gps']['compass']);
+						$ArrayEntry[$n][$i]->setTimestamp($qq[$k]['timestamp']);
+						$i++;
+					}
+					else
+					{
+						$n++;
+						$i=0;
+						$ArrayEntry[$n][$i]=new UserEntry();
+						$ArrayEntry[$n][$i]->setLat($qq[$k]['gps']['latitude']);
+						$ArrayEntry[$n][$i]->setLng($qq[$k]['gps']['longitude']);
+						$ArrayEntry[$n][$i]->setAccx($qq[$k]['acc']['x']);
+						$ArrayEntry[$n][$i]->setAccy($qq[$k]['acc']['y']);
+						$ArrayEntry[$n][$i]->setDirection($qq[$k]['gps']['direction']);
+						$ArrayEntry[$n][$i]->setDistance($qq[$k]['gps']['distance']);
+						$ArrayEntry[$n][$i]->setSpeed($qq[$k]['gps']['speed']);
+						$ArrayEntry[$n][$i]->setCompass($qq[$k]['gps']['compass']);
+						$ArrayEntry[$n][$i]->setTimestamp($qq[$k]['timestamp']);
+						$i++;
+					}
+				}
+				else
+				{
+						$n++;
+						$i=0;
+						$ArrayEntry[$n][$i]=new UserEntry();
+						$ArrayEntry[$n][$i]->setLat($qq[$k]['gps']['latitude']);
+						$ArrayEntry[$n][$i]->setLng($qq[$k]['gps']['longitude']);
+						$ArrayEntry[$n][$i]->setAccx($qq[$k]['acc']['x']);
+						$ArrayEntry[$n][$i]->setAccy($qq[$k]['acc']['y']);
+						$ArrayEntry[$n][$i]->setDirection($qq[$k]['gps']['direction']);
+						$ArrayEntry[$n][$i]->setDistance($qq[$k]['gps']['distance']);
+						$ArrayEntry[$n][$i]->setSpeed($qq[$k]['gps']['speed']);
+						$ArrayEntry[$n][$i]->setCompass($qq[$k]['gps']['compass']);
+						$ArrayEntry[$n][$i]->setTimestamp($qq[$k]['timestamp']);
+						$i++;
+				}
+
+				
+				//$str = "INSERT INTO NTIEntry (UID, accx, accy, distance, lat, lng, direction, compass, speed, utimestamp, FileId) VALUES ($UID, $accx, $accy, $distance, $lat, $lng, $direction, $compass, $speed, $utimestamp, $fileid)";
+				//mysql_query($str);
 				$k++;
 			}
+			//Разбили по времени
+			//Теперь перебирем поездки и высчитываем данные 
+			for($i=1;$i<$n;$i++)
+			{
+				
+				
+					$acc1=0;
+					$acc2=0;       
+					$acc3=0;       
+					$turn1=0;       
+					$turn2=0;       
+					$turn3=0;      
+					$speed1=0;      
+					$speed2=0;     
+					$speed3=0;     
+					$brake1=0;     
+				$brake2=0;    
+					$brake3=0;    
+				if(count($ArrayEntry[$i])>50)
+				{
+					$ArrayEntry[$i][0]->setsevAcc(0);
+					$ArrayEntry[$i][0]->setsevTurn(0);
+					$ArrayEntry[$i][0]->setsevSpeed(0);
+					$ArrayEntry[$i][0]->setTurnType("normal point");
+					$ArrayEntry[$i][0]->setTypeSpeed("normal point");
+					$ArrayEntry[$i][0]->setTypeAcc("normal point");
+					
+					for($j=1;$j<count($ArrayEntry[$i]);$j++)
+					{
+						$ArrayEntry[$i][$j]->setsevAcc(0);
+						$ArrayEntry[$i][$j]->setsevTurn(0);
+						$ArrayEntry[$i][$j]->setsevSpeed(0);
+						$ArrayEntry[$i][$j]->setTurnType("normal point");
+						$ArrayEntry[$i][$j]->setTypeSpeed("normal point");
+						$ArrayEntry[$i][$j]->setTypeAcc("normal point");
+						$speed=$ArrayEntry[$i][$j]->getSpeed();
+						$deltaTime=$ArrayEntry[$i][$j]->getTimestamp()-$ArrayEntry[$i][$j-1]->getTimestamp();
+						if($ArrayEntry[$i][$j]->getLng()-$ArrayEntry[$i][$j-1]->getLng()!=0)
+						{
+								$ArrayEntry[$i][$j]->setTurn(atan(($ArrayEntry[$i][$j]->getLat()-$ArrayEntry[$i][$j-1]->getLat())/($ArrayEntry[$i][$j]->getLng()-$ArrayEntry[$i][$j-1]->getLng())));
+								$deltaTurn = 	$ArrayEntry[$i][$j]->getTurn() - $ArrayEntry[$i][$j-1]->getTurn();
+								$wAcc = abs($deltaTurn/($deltaTime));
+														
+								if (($wAcc < 0.45) && ($wAcc >= 0)) {$ArrayEntry[$i][$j]->setsevTurn(0);} 
+								else if (($wAcc >= 0.45) && ($wAcc < 0.6))	{$ArrayEntry[$i][$j]->setsevTurn(1);} 
+								else if (($wAcc >= 0.6) && ($wAcc < 0.75)){$ArrayEntry[$i][$j]->setsevTurn(2);} 
+								else if ($wAcc >= 0.75) {$ArrayEntry[$i][$j]->setsevTurn(3);}
+								$deltaSpeed = $speed - $ArrayEntry[$i][$j-1]->getSpeed();
+								$accel = $deltaSpeed/$deltaTime;
+								//Высчитываем тип неравномерного движения (ускорение-торможение) через ускорение.
+								if ($accel<-7.5) $ArrayEntry[$i][$j]->setsevAcc(-3);
+								else if (($accel>=-7.5)&&($accel<-6))$ArrayEntry[$i][$j]->setsevAcc(-2);
+								else if (($accel>=-6)&&($accel<-4.5))$ArrayEntry[$i][$j]->setsevAcc(-1);
+								else if ($accel>5)$ArrayEntry[$i][$j]->setsevAcc(3);
+								else if (($accel>4)&&($accel<=5))$ArrayEntry[$i][$j]->setsevAcc(2);
+								else if (($accel>3.5)&&($accel<=4))$ArrayEntry[$i][$j]->setsevAcc(1);
+								else if (($accel>=-4.5)&&($accel<=3.5))$ArrayEntry[$i][$j]->setsevAcc(0);
+								//Рассчитываем превышения скорости. Превышение (1,2,3 уровня) засчитывается, если движение осуществлялось на соответствующей скорости 5 секунд. 
+								//И далее еще по очку превышения (1,2,3 уровня) за каждые ПОЛНЫЕ ТРИ секунд движения на превышенной скорости.
+								if (($speed >= 0) && ($speed <= 80))$ArrayEntry[$i][$j]->setsevSpeed(0); 
+								else if (($speed > 80) && ($speed <= 110))$ArrayEntry[$i][$j]->setsevSpeed(1); 
+								else if (($speed > 110) && ($speed <= 130))	$ArrayEntry[$i][$j]->setsevSpeed(2); 
+								else if ($speed > 130)$ArrayEntry[$i][$j]->setsevSpeed(3); 
+								if ($ArrayEntry[$i][$j-1]->getTypeSpeed() == "normal point") {
+									if ($ArrayEntry[$i][$j]->getsevSpeed() == 0) {
+										$ArrayEntry[$i][$j]->setTypeSpeed("normal point");
+									} else if ($ArrayEntry[$i][$j]->getsevSpeed() == 1) {
+										$ArrayEntry[$i][$j]->setTypeSpeed("s1");
+										$dss = $deltaTime;
+									} else if ($ArrayEntry[$i][$j]->getsevSpeed() == 2) {
+										$ArrayEntry[$i][$j]->setTypeSpeed("s2");
+										$dss = $deltaTime;
+									} else if ($ArrayEntry[$i][$j]->getsevSpeed() == 3) {
+										$ArrayEntry[$i][$j]->setTypeSpeed("s3");
+										$dss = $deltaTime;
+									}
+								} else if ($ArrayEntry[$i][$j-1]->getTypeSpeed()  == "s1") {
+
+									if ($ArrayEntry[$i][$j]->getsevSpeed() == 0) {
+
+										$ArrayEntry[$i][$j]->setTypeSpeed("normal point");
+										$speed1 = $speed1 + floor($dss/3);
+										$dss = 0;
+									
+									} else if ($ArrayEntry[$i][$j]->getsevSpeed() == 1) {
+										$ArrayEntry[$i][$j]->setTypeSpeed("s1");
+											$dss += $deltaTime;
+									} else if ($ArrayEntry[$i][$j]->getsevSpeed() == 2) {
+										$ArrayEntry[$i][$j]->setTypeSpeed("s2");
+										$speed1 = $speed1 +floor($dss/3);
+										$dss = 0;
+									} else if ($ArrayEntry[$i][$j]->getsevSpeed() == 3) {
+										$ArrayEntry[$i][$j]->setTypeSpeed("s3");
+										$speed1 += floor($dss/3);
+										$dss = 0;
+									}
+								} else if ($ArrayEntry[$i][$j-1]->getTypeSpeed()  == "s2") {
+									if ($ArrayEntry[$i][$j]->getsevSpeed() == 0) {
+										$ArrayEntry[$i][$j]->setTypeSpeed("normal point");
+										$speed2 += floor($dss/3);
+										$dss = 0;
+									} else if ($ArrayEntry[$i][$j]->getsevSpeed() == 1) {
+										$ArrayEntry[$i][$j]->setTypeSpeed("s1");
+										$speed2 = $speed2 +floor($dss/3);
+										$dss = 0;
+									} else if ($ArrayEntry[$i][$j]->getsevSpeed() == 2) {
+										$ArrayEntry[$i][$j]->setTypeSpeed("s2");
+										$dss += $deltaTime;
+									} else if ($ArrayEntry[$i][$j]->getsevSpeed() == 3) {
+										$ArrayEntry[$i][$j]->setTypeSpeed("s3");
+										$speed2 += floor($dss/3);
+										$dss = 0;
+									}
+								} else if ($ArrayEntry[$i][$j-1]->getTypeSpeed()  == "s3") {
+									if ($ArrayEntry[$i][$j]->getsevSpeed() == 0) {
+										$ArrayEntry[$i][$j]->setTypeSpeed("normal point");
+										$speed3 += floor($dss/3);
+										$dss = 0;
+									} else if ($ArrayEntry[$i][$j]->getsevSpeed() == 1) {
+										$ArrayEntry[$i][$j]->setTypeSpeed("s1");
+										$speed3 += floor($dss/3);
+										$dss = 0;
+									} else if ($ArrayEntry[$i][$j]->getsevSpeed() == 2) {
+										$ArrayEntry[$i][$j]->setTypeSpeed("s2");
+										$speed3 += floor($dss/3);
+										$dss = 0;
+									} else if ($ArrayEntry[$i][$j]->getsevSpeed() == 3) {
+										$ArrayEntry[$i][$j]->setTypeSpeed("s3");
+										$dss += $deltaTime;
+									}
+								}
+								// Конец выявления превышения скорости.
+								///////////////////////////////////////////////////////////////////////////////////////
+								
+								//Большое количество проверок условий соотношения ускорений в текущей и прошлой точках.
+								
+								
+								if ($ArrayEntry[$i][$j-1]->getTypeAcc() == "normal point") {
+									if ($ArrayEntry[$i][$j]->getsevAcc() == 0) {
+										$ArrayEntry[$i][$j]->setTypeAcc("normal point");
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 1) {
+										$ArrayEntry[$i][$j]->setTypeAcc("acc1 started");
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 2) {
+										$ArrayEntry[$i][$j]->setTypeAcc("acc2 started");
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 3) {
+										$ArrayEntry[$i][$j]->setTypeAcc("acc3 started");
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == -1) {
+										$ArrayEntry[$i][$j]->setTypeAcc("brake1 started");
+									} else if ($ArrayEntry[$i][$j]->getsevAcc()== -2) {
+										$ArrayEntry[$i][$j]->setTypeAcc("brake2 started");
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == -3) {
+										$ArrayEntry[$i][$j]->setTypeAcc("brake3 started");
+									}
+								} else	if (($ArrayEntry[$i][$j-1]->getTypeAcc()== "acc1 started") || ($ArrayEntry[$i][$j-1]->getTypeAcc() == "acc1 continued")) {
+									if ($ArrayEntry[$i][$j]->getsevAcc() == 0) {
+										$ArrayEntry[$i][$j]->setTypeAcc("normal point");
+										$acc1++;
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 1) {
+										$ArrayEntry[$i][$j]->setTypeAcc("acc1 continued");
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 2) {
+										$ArrayEntry[$i][$j]->setTypeAcc("acc2 continued");
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 3) {
+										$ArrayEntry[$i][$j]->setTypeAcc("acc3 continued");
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == -1) {
+										$ArrayEntry[$i][$j]->setTypeAcc("brake1 started");
+										$acc1++;
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == -2) {
+										$ArrayEntry[$i][$j]->setTypeAcc("brake2 started");
+										$acc1++;
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == -3) {
+										$ArrayEntry[$i][$j]->setTypeAcc("brake3 started");
+										$acc1++;
+									}
+								} else	if (($ArrayEntry[$i][$j-1]->getTypeAcc()== "acc2 started") || ($ArrayEntry[$i][$j-1]->getTypeAcc() == "acc2 continued")) {
+									if ($ArrayEntry[$i][$j]->getsevAcc() == 0) {
+
+										$ArrayEntry[$i][$j]->setTypeAcc("normal point");
+										$acc2++;
+									} else if ($ArrayEntry[$i][$j]->getsevAcc()== 1) {
+										$ArrayEntry[$i][$j]->setTypeAcc("acc1 started");
+										$acc2++;
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 2) {
+										$ArrayEntry[$i][$j]->setTypeAcc("acc2 continued");
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 3) {
+										$ArrayEntry[$i][$j]->setTypeAcc("acc3 continued");
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == -1) {
+										$ArrayEntry[$i][$j]->setTypeAcc("brake1 started");
+										$acc2++;
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == -2) {
+										$ArrayEntry[$i][$j]->setTypeAcc("brake2 started");
+										$acc2++;
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == -3) {
+										$ArrayEntry[$i][$j]->setTypeAcc("brake3 started");
+										$acc2++;
+									}
+								} else	if (($ArrayEntry[$i][$j-1]->getTypeAcc() == "acc3 started") || ($ArrayEntry[$i][$j-1]->getTypeAcc() == "acc3 continued")) {
+									if ($ArrayEntry[$i][$j]->getsevAcc() == 0) {
+										$ArrayEntry[$i][$j]->setTypeAcc("normal point");
+										$acc3++;
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 1) {
+										$ArrayEntry[$i][$j]->setTypeAcc("acc1 started");
+										$acc3++;
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 2) {
+										$ArrayEntry[$i][$j]->setTypeAcc("acc2 started");
+										$acc3++;
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 3) {
+										$ArrayEntry[$i][$j]->setTypeAcc("acc3 continued");
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == -1) {
+										$ArrayEntry[$i][$j]->setTypeAcc("brake1 started");
+										$acc3++;
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == -2) {
+										$ArrayEntry[$i][$j]->setTypeAcc("brake2 started");
+										$acc3++;
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == -3) {
+										$ArrayEntry[$i][$j]->setTypeAcc("brake3 started");
+										$acc3++;
+									}
+								} else	if (($ArrayEntry[$i][$j-1]->getTypeAcc() == "brake1 started") || ($ArrayEntry[$i][$j-1]->getTypeAcc() == "brake1 continued")) {
+									if ($ArrayEntry[$i][$j]->getsevAcc() == 0) {
+										$ArrayEntry[$i][$j]->setTypeAcc("normal point");
+										$brake1++;
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 1) {
+										$ArrayEntry[$i][$j]->setTypeAcc("acc1 started");
+										$brake1++;
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 2) {
+										$ArrayEntry[$i][$j]->setTypeAcc("acc2 started");
+										$brake1++;
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 3) {
+										$ArrayEntry[$i][$j]->setTypeAcc("acc3 started");
+										$brake1++;
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == -1) {
+										$ArrayEntry[$i][$j]->setTypeAcc("brake1 continued");
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == -2) {
+										$ArrayEntry[$i][$j]->setTypeAcc("brake2 started");
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == -3) {
+										$ArrayEntry[$i][$j]->setTypeAcc("brake3 started");
+									}
+								} else if (($ArrayEntry[$i][$j-1]->getTypeAcc() == "brake2 started") || ($ArrayEntry[$i][$j-1]->getTypeAcc() == "brake2 continued")) {
+									if ($ArrayEntry[$i][$j]->getsevAcc()== 0) {
+										$ArrayEntry[$i][$j]->setTypeAcc("normal point");
+										$brake2++;
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 1) {
+										$ArrayEntry[$i][$j]->setTypeAcc("acc1 started");
+										$brake2++;
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 2) {
+										$ArrayEntry[$i][$j]->setTypeAcc("acc2 started");
+										$brake2++;
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 3) {
+										$ArrayEntry[$i][$j]->setTypeAcc("acc3 started");
+										$brake2++;
+									} else if ($ArrayEntry[$i][$j]->getsevAcc()== -1) {
+										$ArrayEntry[$i][$j]->setTypeAcc("brake1 started");
+										$brake2++;
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == -2) {
+										$ArrayEntry[$i][$j]->setTypeAcc("brake2 continued");
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == -3) {
+										$ArrayEntry[$i][$j]->setTypeAcc("brake3 started");
+									}
+								} else	if (($ArrayEntry[$i][$j-1]->getTypeAcc() == "brake3 started") || ($ArrayEntry[$i][$j-1]->getTypeAcc() == "brake3 continued")) {
+									if ($ArrayEntry[$i][$j]->getsevAcc() == 0) {
+										$ArrayEntry[$i][$j]->setTypeAcc("normal point");
+										$brake3++;
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 1) {
+										$ArrayEntry[$i][$j]->setTypeAcc("acc1 started");
+										$brake3++;
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 2) {
+										$ArrayEntry[$i][$j]->setTypeAcc( "acc2 started");
+										$brake3++;
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 3) {
+										$ArrayEntry[$i][$j]->setTypeAcc("acc3 started");
+										$brake3++;
+									} else if ($ArrayEntry[$i][$j]->getsevAcc()== -1) {
+										$ArrayEntry[$i][$j]->setTypeAcc("brake1 started");
+										$brake3++;
+									} else if ($ArrayEntry[$i][$j]->getsevAcc() == -2) {
+										$ArrayEntry[$i][$j]->setTypeAcc("brake2 started");
+										$brake3++;
+									} else if ($ArrayEntry[$i][$j]->getsevAcc()== -3) {
+
+										$ArrayEntry[$i][$j]->setTypeAcc("brake3 continued");
+									}
+								}
+						
+								//После поворота - нормальная точка.
+								
+								if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn finished") || ($ArrayEntry[$i][$j-1]->getTurnType() == "right turn finished") || ($speed == 0) ) {
+									$ArrayEntry[$i][$j]->setTurnType("normal point");
+								// Отклонение > 0.5 - после нормальной точки начинаем поворот налево, либо продолжаем поворот налево после уже начатого, либо завершаем, если это был поворот направо.
+								} else 	if ($deltaTurn > 0.5)   {
+									if ($ArrayEntry[$i][$j-1]->getTurnType() == "normal point") $ArrayEntry[$i][$j]->setTurnType( "left turn started");
+									if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "left turn continued"))$ArrayEntry[$i][$j]->setTurnType("left turn continued");
+									if (($ArrayEntry[$i][$j-1]->getTurnType() == "right turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "right turn continued"))$ArrayEntry[$i][$j]->setTurnType("right turn finished");
+								// Отклонение > 0.5 - после нормальной точки начинаем поворот направо, либо продолжаем поворот направо после уже начатого, либо завершаем, если это был поворот налево.
+								} else 	if ($deltaTurn < -0.5)	{
+									if ($ArrayEntry[$i][$j-1]->getTurnType() == "normal point")$ArrayEntry[$i][$j]->setTurnType("right turn started");
+									if (($ArrayEntry[$i][$j-1]->getTurnType() == "right turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "right turn continued"))$ArrayEntry[$i][$j]->setTurnType("right turn continued");
+									if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "left turn continued"))$ArrayEntry[$i][$j]->setTurnType("left turn finished");
+								} else	{
+								// Отклонение между -0.5 и 0.5 - после нормальной точки идет нормальная, а после начатых поворотов налево или направо - продолженные повороты соответственно налево и направо.
+									if ($ArrayEntry[$i][$j-1]->getTurnType() == "normal point")$ArrayEntry[$i][$j]->setTurnType("normal point");
+									if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "left turn continued"))$ArrayEntry[$i][$j]->setTurnType("left turn finished");
+									if (($ArrayEntry[$i][$j-1]->getTurnType() == "right turn started")||($typeTurn[$i-1] == "right turn continued"))$ArrayEntry[$i][$j]->setTurnType( "right turn finished");
+								}
+								
+								
+								
+								
+								if (($ArrayEntry[$i][$j]->getTurnType() == "left turn finished") || ($ArrayEntry[$i][$j]->getTurnType() == "right turn finished")) 
+								{
+									switch ($ArrayEntry[$i][$j]->getsevTurn()) {
+											case 1: {$turn1++;break;}
+											case 2: {$turn2++;break;}
+											case 3: {$turn3++;break;}
+											case 0: {break;}
+										}
+								}	
+						}
+						
+						
+						
+						
+						
+					}
+					$TimeStart=$ArrayEntry[$i][0];
+					$TimeEnd=$ArrayEntry[$i][0];
+					
+					//Теперь ищем начало и конец поездки 
+					for($j=0;$j<count($ArrayEntry[$i]);$j++)
+					{
+						if($ArrayEntry[$i][$j]<$TimeStart)$TimeStart=$ArrayEntry[$i][$j];
+						if($ArrayEntry[$i][$j]>$TimeEnd)$TimeEnd=$ArrayEntry[$i][$j];
+					}
+					//Теперь ищем расстояние, которое проехали в поездке
+					//Для этого не будем полагаться на мобильник и посчитаем всё руками
+					$TotalDistance=0;
+					for($j=0;$j<count($ArrayEntry[$i])-1;$j++)
+					{
+						$TotalDistance+=distance_between_points($ArrayEntry[$i][$j]->getLat(),$ArrayEntry[$i][$j+1]->getLat(),$ArrayEntry[$i][$j]->getLng(),$ArrayEntry[$i][$j+1]->getLng());
+					}
+					$TypeAcc1Count  =$acc1;
+					$TypeAcc2Count =$acc2;       
+					$TypeAcc3Count =$acc3;       
+					$TypeTurn1Count=$turn1;       
+					$TypeTurn2Count=$turn2;       
+					$TypeTurn3Count =$turn3;      
+					$TypeSpeed1Count =$speed1;      
+					$TypeSpeed2Count =$speed2;     
+					$TypeSpeed3Count =$speed3;     
+					$TypeBrake1Count =$brake1;     
+					$TypeBrake2Count =$brake2;    
+					$TypeBrake3Count =$brake3;    
+					//Перебираем все элементы для поиска конечного
+					//посчитали i ую поездку
+					//Теперь проверим , есть ли уже именно с этим пользователем поездки 
+					//Для этого получаем все временнные метки 
+					//Для того, чтобы поездка соединилась должны выполняться следующие условия
+					//Лучше ебану пример запросом
+					/*
+					SELECT `TimeStart`,`TimeEnd`,`Id` FROM `NTIUserDrivingTrack` WHERE UID=8 and
+					(`TimeStart`>=1334857038 and 1334857238 >=`TimeStart` and 1334857238<=`TimeEnd`)
+					OR
+					(`TimeStart`<=1334857038 and 1334857238<=`TimeEnd`)
+					OR
+					(`TimeStart`<=1334857038 and 1334857038 <=`TimeEnd` and 1334857238>=`TimeEnd`)
+					OR
+					(`TimeStart`>=1334857038 and 1334857238>=`TimeEnd`)
+					 */ 
+					
+					
+					$result = mysql_query("	SELECT * FROM `NTIUserDrivingTrack` WHERE UID=8 and (`TimeStart`>=$TimeStart and $TimeEnd >=`TimeStart` and $TimeEnd<=`TimeEnd`) OR	(`TimeStart`<=$TimeStart and $TimeEnd<=`TimeEnd`)	OR	(`TimeStart`<=$TimeStart and $TimeStart <=`TimeEnd` and $TimeEnd>=`TimeEnd`)OR	(`TimeStart`>=$TimeStart and $TimeEnd>=`TimeEnd`)OR	(`TimeStart`>=$TimeEnd and TimeStart-$TimeEnd<300)	OR	(`TimeEnd`<=$TimeStart and $TimeStart-`TimeEnd`<300)");
+					while($row = mysql_fetch_array($result)) 
+					{	//Для начала получаем все данные этих поездк
+						$TypeAcc1Count  = $row['lat'];
+						$TypeAcc2Count =$row['lat'];       
+						$TypeAcc3Count =$row['lat'];       
+						$TypeTurn1Count=$row['lat'];       
+						$TypeTurn2Count=$row['lat'];       
+						$TypeTurn3Count =$row['lat'];      
+						$TypeSpeed1Count =$row['lat'];      
+						$TypeSpeed2Count =$row['lat'];     
+						$TypeSpeed3Count =$row['lat'];     
+						$TypeBrake1Count =$row['lat'];     
+						$TypeBrake2Count =$row['lat'];    
+						$TypeBrake3Count =$row['lat'];    
+						$TotalDistance=$row['lat'];	
+					}
+					
+					
+					
+					
+					
+					
+				}
+			}
+
 			$errortype=array('info'=>"All okey",'code'=>  0);
 			$res=array('result'=>1,'error'=> $errortype);
 			echo json_encode($res);	
