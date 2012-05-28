@@ -13,9 +13,6 @@ define(NO_METHOD_SET_INFO, "No difintion state set, or function is incorrect");
 define(NO_FUNCTION_SET_CODE, 5);
 define(NO_FUNCTION_SET_INFO, "No action set, or function is incorrect");
 
-
-
-
 $dbcnx=0;
 
 class EntryRide {
@@ -90,22 +87,6 @@ private $Accel;
  public function getAccel(){return($this->Accel);}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 function distance_between_points($lat1,$lat2,$lng1,$lng2)
@@ -473,10 +454,17 @@ function addNTIFile($param)
 						$ArrayEntry[$n][$i]->setTimestamp($qq[$k]['timestamp']);
 						$i++;
 				}
-
-				
-				//$str = "INSERT INTO NTIEntry (UID, accx, accy, distance, lat, lng, direction, compass, speed, utimestamp, FileId) VALUES ($UID, $accx, $accy, $distance, $lat, $lng, $direction, $compass, $speed, $utimestamp, $fileid)";
-				//mysql_query($str);
+				$lat=mysql_real_escape_string($qq[$k]['gps']['latitude']);
+				$lng=mysql_real_escape_string($qq[$k]['gps']['longitude']);
+				$accx=mysql_real_escape_string($qq[$k]['acc']['x']);
+				$accy=mysql_real_escape_string($qq[$k]['acc']['y']);
+				$direction=mysql_real_escape_string($qq[$k]['gps']['direction']);
+				$distance=mysql_real_escape_string($qq[$k]['gps']['distance']);
+				$speed=mysql_real_escape_string($qq[$k]['gps']['speed']);
+				$compass=mysql_real_escape_string($qq[$k]['gps']['compass']);
+				$utimestamp=mysql_real_escape_string($qq[$k]['timestamp']);
+				$str = "INSERT INTO NTIEntry (UID, accx, accy, distance, lat, lng, direction, compass, speed, utimestamp, FileId) VALUES ($UID, $accx, $accy, $distance, $lat, $lng, $direction, $compass, $speed, $utimestamp, $fileid)";
+				mysql_query($str);
 				$k++;
 			}
 			//Разбили по времени
@@ -495,7 +483,7 @@ function addNTIFile($param)
 					$speed2=0;     
 					$speed3=0;     
 					$brake1=0;     
-				$brake2=0;    
+					$brake2=0;    
 					$brake3=0;    
 				if(count($ArrayEntry[$i])>50)
 				{
@@ -802,8 +790,8 @@ function addNTIFile($param)
 						
 						
 					}
-					$TimeStart=$ArrayEntry[$i][0];
-					$TimeEnd=$ArrayEntry[$i][0];
+					$TimeStart=$ArrayEntry[$i][0];//Подходит под определение ближайшей
+					$TimeEnd=$ArrayEntry[$i][0];//Хз может быть и перемешанно , пусть поищет
 					
 					//Теперь ищем начало и конец поездки 
 					for($j=0;$j<count($ArrayEntry[$i]);$j++)
@@ -829,7 +817,36 @@ function addNTIFile($param)
 					$TypeSpeed3Count =$speed3;     
 					$TypeBrake1Count =$brake1;     
 					$TypeBrake2Count =$brake2;    
-					$TypeBrake3Count =$brake3;    
+					$TypeBrake3Count =$brake3;
+					$sql_insert_str="insert into NTIUserDrivingTrack(UID,TotalAcc1Count,TotalAcc2Count,TotalAcc3Count,TotalBrake1Count,TotalBrake2Count,TotalBrake3Count,TotalSpeed1Count,TotalSpeed2Count,TotalSpeed3Count,TotalTurn1Count,TotalTurn2Count,TotalTurn3Count,TimeStart,TimeEnd,TotalDistance) values ($UID,$TypeAcc1Count,$TypeAcc2Count,$TypeAcc3Count,$TypeBrake1Count,$TypeBrake2Count,$TypeBrake3Count,$TypeSpeed1Count,$TypeSpeed2Count,$TypeSpeed3Count,$TypeTurn1Count,$TypeTurn2Count,$TypeTurn3Count,$TimeStart,$TimeEnd,$TotalDistance)";
+					mysql_query($sql_insert_str);
+					$TrackID = mysql_insert_id();
+					//Теперь заносим эти же данные в EntrRide
+					for($j=0;$j<count($ArrayEntry[$i]);$j++)
+					{
+						$accx=$ArrayEntry[$i][$j]->getAccx();
+						$accy=$ArrayEntry[$i][$j]->getAccy();					
+						$distance=$ArrayEntry[$i][$j]->getDistance();
+						$lat=$ArrayEntry[$i][$j]->getLat();
+						$lng=$ArrayEntry[$i][$j]->getLng();
+						$direction=$ArrayEntry[$i][$j]->getDirection();
+						$compass=$ArrayEntry[$i][$j]->getCompass();
+						$speed=$ArrayEntry[$i][$j]->getSpeed();
+						$utimestamp=$ArrayEntry[$i][$j]->getTimestamp();
+						$DrivingID=$TrackID;
+						$Blat=0;
+						$Blng=0;
+						$sevAcc=$ArrayEntry[$i][$j]->getsevAcc();
+						$TypeAcc=$ArrayEntry[$i][$j]->getTypeAcc();
+						$sevTurn=$ArrayEntry[$i][$j]->getsevTurn();
+						$TurnType=$ArrayEntry[$i][$j]->getTurnType();
+						$TypeSpeed=$ArrayEntry[$i][$j]->getTypeSpeed();
+						$sevSpeed=$ArrayEntry[$i][$j]->getsevSpeed();				
+						$sql_insert_str="insert into NTIUserDrivingEntry(UID,accx,accy,distance,lat,lng,direction,compass,speed,utimestamp,DrivingID,Blat,Blng,sevAcc,TypeAcc,sevTurn,TurnType,TypeSpeed,sevSpeed) values ('$UID','$accx','$accy','$distance','$lat','$lng','$direction','$compass','$speed','$utimestamp','$DrivingID','$Blat','$Blng','$sevAcc','$TypeAcc','$sevTurn','$TurnType','$TypeSpeed','$sevSpeed')";
+						mysql_query($sql_insert_str);
+
+					}
+
 					//Перебираем все элементы для поиска конечного
 					//посчитали i ую поездку
 					//Теперь проверим , есть ли уже именно с этим пользователем поездки 
@@ -847,7 +864,8 @@ function addNTIFile($param)
 					(`TimeStart`>=1334857038 and 1334857238>=`TimeEnd`)
 					 */ 
 					
-					
+					/*TODO:
+					 * Сделать объединение поездок
 					$result = mysql_query("	SELECT * FROM `NTIUserDrivingTrack` WHERE UID=8 and (`TimeStart`>=$TimeStart and $TimeEnd >=`TimeStart` and $TimeEnd<=`TimeEnd`) OR	(`TimeStart`<=$TimeStart and $TimeEnd<=`TimeEnd`)	OR	(`TimeStart`<=$TimeStart and $TimeStart <=`TimeEnd` and $TimeEnd>=`TimeEnd`)OR	(`TimeStart`>=$TimeStart and $TimeEnd>=`TimeEnd`)OR	(`TimeStart`>=$TimeEnd and TimeStart-$TimeEnd<300)	OR	(`TimeEnd`<=$TimeStart and $TimeStart-`TimeEnd`<300)");
 					while($row = mysql_fetch_array($result)) 
 					{	//Для начала получаем все данные этих поездк
@@ -865,13 +883,14 @@ function addNTIFile($param)
 						$TypeBrake3Count =$row['lat'];    
 						$TotalDistance=$row['lat'];	
 					}
-					
+					*/
 					
 					
 					
 					
 					
 				}
+				//Если же ментше 50 - нахуй за борт
 			}
 
 			$errortype=array('info'=>"All okey",'code'=>  0);
@@ -905,565 +924,77 @@ function addNTIFile($param)
 
 function getStatistics($param)
 {
+	
 		if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
 		$UID=NTI_Cookie_check();
 		if($UID>0)
 		{
-		$result = mysql_query("SELECT * FROM NTIEntry where UID=$UID AND lat != 0 AND lng != 0 group by utimestamp order by utimestamp");
-		$n=0;
-		//Если не было поездок за текущий период или не передано ни одной точки.
-			while($row = mysql_fetch_array($result)) {
-		
-				$data[$n]['lat'] = $row['lat'];
-				$data[$n]['lng'] = $row['lng'];
-				$data[$n]['compass'] = $row['compass'];
-				$data[$n]['speed'] = $row['speed'];
-				$data[$n]['distance'] = $row['distance'];
-				$data[$n]['utimestamp'] = $row['utimestamp'];
-				$n++;
-			}
-
-		$R = 111.2; //$R = 6371; // km *666*
-		//Если дданные есть:
-		if (mysql_num_rows($result)>0) {
-			$k = 0;
-			$m = 0;
-			$grouped[$k][$m]=$data[0];
-			$n = count($data)-1;
-			for ($i=1;$i<$n-1;$i++) {
-				if (($data[$i]['utimestamp'] - $grouped[$k][$m]['utimestamp'] < 300) && 
-						((acos(sin($data[$i]['lat'])*sin($grouped[$k][$m]['lat']) + cos($data[$i]['lat'])*cos($grouped[$k][$m]['lat']) *  cos($grouped[$k][$m]['lng']-$data[$i]['lng'])) * $R)/($data[$i]['utimestamp'] - $grouped[$k][$m]['utimestamp']) < 180))
-					{
-						$m++;
-						$grouped[$k][$m] = $data[$i];
-					}
-					else
-					{
-
-
-							$k++;
-							$m = 0; 
-							$grouped[$k][$m] = $data[$i];
-					}
-				
-			}
 			
-			
-			
-				
-				$w = 0;
-				$n=0;
-				for($i=0;$i<count($grouped);$i++) {
-					$w=0;
-					for ($v=1; $v<count($grouped[$i]); $v++) {
-						if ($grouped[$i][$v]['lng'] != $grouped[$i][$v-1]['lng'] ) {
-							$unfilteredData[$n][$w] = $grouped[$i][$v-1];
-							$w++;
-						}
-					}
-					$n++;
-				}
-				unset($grouped);
-				$v=0;
-			for($i=0;$i<$n;$i++)
+			//Для начала высчитываем общую статистику по поездкам региона	
+			$result=mysql_query("SELECT sum(`TotalBrake1Count`*0.1+`TotalBrake2Count`*0.25+`TotalBrake3Count`*0.65)/count(*) as BrakeK,sum(`TotalAcc1Count`*0.1+`TotalAcc2Count`*0.25+`TotalAcc3Count`*0.65)/count(*) as AccK,sum(`TotalSpeed1Count`*0.1+`TotalSpeed2Count`*0.25+`TotalSpeed3Count`*0.65)/count(*) as SpeedK,sum(`TotalTurn1Count`*0.1+`TotalTurn2Count`*0.25+`TotalTurn3Count`*0.65)/count(*) as TurnK  FROM `NTIUserDrivingTrack` ");
+			while ($row = mysql_fetch_array($result)) 
 			{
-			if(isset($unfilteredData[$i]))
-				if(count($unfilteredData[$i])>10)
-				{
-					if(($unfilteredData[$i][count($unfilteredData[$i])-1]['distance']-$unfilteredData[$i][0]['distance'])>0.1)
-					{
-						$notneed=0;
-						for($g=0;$g<count($unfilteredData[$i]);$g++)if($unfilteredData[$i][$g]['speed']==0)$notneed++;
-						if($notneed*2<count($unfilteredData[$i]))
-						{
-							$grouped[$v]=$unfilteredData[$i];
-							$v++;
-						}
-					}
-				}
+				$BrakeK = $row['BrakeK'];
+			    $AccK = $row['AccK'];
+				$SpeedK = $row['SpeedK'];
+				$TurnK = $row['TurnK'];
 			}
-			
-			
-
-			$grouped=array_reverse($grouped);
-			
-			$z=count($grouped);
-			if (isset($param['last']) && $param['last']>0) {
-				
-				if ($z >= 2)for ($i=1;$i<$z;$i++)unset($grouped[$i]);
-			//$grouped=array_reverse($grouped);			
-			}
-						
-			unset($results);
-			$results['score']=0;
-			$results['score_speed']=0;
-			$results['score_turn']=0;
-			$results['score_acc']=0;
-			$results['score_brake']=0;
-			//$results['score'] =0;				 
-			$results['time'] =	0;
-			$results['turn1']=	0;
-			$results['turn2']=	0;
-			$results['turn3']=0;
-			$results['acc1']=0;
-			$results['acc2']=	0;
-			$results['acc3']=	0;
-			$results['brake1']=	0;
-			$results['brake2']	=	0;
-			$results['brake3']=0;
-			$results['prev1']=0;
-			$results['prev2']=	0;
-			$results['prev3']=0;
-			$results['tscore'] = 0;
-			$total_time=0;
-			$total_score=0;
-			$total_turn=0;
-			$total_acc=0;
-			$total_brake=0;
-			$total_turn1=0;
-			$total_turn2=0;
-			$total_turn3=0;
-			$total_acc1=0;
-			$total_acc2=0;
-			$total_acc3=0;
-			$total_brake1=0;
-			$total_brake2=0;
-			$total_brake3=0;
-			$total_prev1=0;
-			$total_prev2=0;
-			$total_prev3=0;
-			$tt = 0;
-			$ta = 0;
-			$tp = 0;
-			$tb = 0;
-			$ttime = 0;
-		
-			$unfilteredData=$grouped;
-			$d=0;
-			for($m=0;$m<count($unfilteredData);$m++) {
-				unset($data);
-				$drivingScore = 0;
-				$coef1 = 0.1;
-				$coef2 = 0.2;
-				$coef3 = 0.6;
-				$deltaSpeed=0;
-				$speed1=0;
-				$speed2=0;
-				$speed3=0;
-				$acc1=0;
-				$acc2=0;
-				$acc3=0;
-				$brake1=0;
-				$brake2=0;
-				$brake3=0;
-				$turn1=0;
-				$turn2=0;
-				$turn3=0;
-				$data=$unfilteredData[$m];
-					$j=count($data);
-					$dss = 0;
-
-					
-					
-					$last_time= $data[1]['utimestamp'];
-						for ($i = 1; $i < $j-1; $i++)
-						{
-							$typeTurn[0] = "normal point";
-							$typeAcc[0] = "normal point";
-							$typeSpeed[0] = "normal point";
-							
-							$sevTurn = 0;
-							$sevAcc = 0;
-							$sevSpeed = 0;
-							$speed = $data[$i]['speed'];	
-							$deltaTime = $data[$i]['utimestamp'] - $data[$i-1]['utimestamp'];
-							$d += acos(sin($data[$i]['lat'])*sin($data[$i-1]['lat']) + cos($data[$i]['lat'])*cos($data[$i-1]['lat']) *  cos($data[$i-1]['lng']-$data[$i]['lng'])) * 111.2;
-	
-							if ( ($data[$i]['lng']-$data[$i-1]['lng']) != 0  )
-							{
-							
-								$turn[$i] = atan(($data[$i]['lat']-$data[$i-1]['lat'])/($data[$i]['lng']-$data[$i-1]['lng']));
-								$turn[0] = 0;
-								$deltaTurn = $turn[$i] - $turn[$i-1];
-								$wAcc = abs($deltaTurn/($deltaTime));
-														
-								if (($wAcc < 0.45) && ($wAcc >= 0)) {$sevTurn = 0;} 
-								else 	if (($wAcc >= 0.45) && ($wAcc < 0.6))	{$sevTurn = 1;} 
-								else 	if (($wAcc >= 0.6) && ($wAcc < 0.75)){$sevTurn = 2;	} 
-								else if ($wAcc >= 0.75) {$sevTurn = 3;}
-								
-								$deltaSpeed = $speed - $data[$i-1]['speed'];
-								$accel[$i] = $deltaSpeed/$deltaTime;
-								
-								//Высчитываем тип неравномерного движения (ускорение-торможение) через ускорение.
-								if ($accel[$i]<-7.5) {
-									$sevAcc = -3;
-								} else if (($accel[$i]>=-7.5)&&($accel[$i]<-6)) {
-									$sevAcc = -2;
-								} else if (($accel[$i]>=-6)&&($accel[$i]<-4.5)) {
-									$sevAcc = -1;
-								} else if ($accel[$i]>5) {
-									$sevAcc = 3;
-								} else if (($accel[$i]>4)&&($accel[$i]<=5)){
-									$sevAcc = 2;
-								} else if (($accel[$i]>3.5)&&($accel[$i]<=4)) {
-									$sevAcc = 1;
-								} else if (($accel[$i]>=-4.5)&&($accel[$i]<=3.5)) {
-									$sevAcc = 0;
-								}
-								
-								
-								//Рассчитываем превышения скорости. Превышение (1,2,3 уровня) засчитывается, если движение осуществлялось на соответствующей скорости 5 секунд. 
-								//И далее еще по очку превышения (1,2,3 уровня) за каждые ПОЛНЫЕ ТРИ секунд движения на превышенной скорости.
-								if (($speed >= 0) && ($speed <= 80)) 
-									$sevSpeed = 0;
-								else if (($speed > 80) && ($speed <= 110))
-									$sevSpeed = 1;
-								else if (($speed > 110) && ($speed <= 130))
-									$sevSpeed = 2;
-								else if ($speed > 130)
-									$sevSpeed = 3;
-								
-								//$typeSpeed[$i] = "normal point";
-						
-								if ($typeSpeed[$i-1] == "normal point") {
-									if ($sevSpeed == 0) {
-										$typeSpeed[$i] = "normal point";
-									} else if ($sevSpeed == 1) {
-										$typeSpeed[$i] = "s1";
-										$dss = $deltaTime;
-									} else if ($sevSpeed == 2) {
-										$typeSpeed[$i] = "s2";
-										$dss = $deltaTime;
-									} else if ($sevSpeed == 3) {
-										$typeSpeed[$i] = "s3";
-										$dss = $deltaTime;
-									}
-								} else if ($typeSpeed[$i-1] == "s1") {
-
-									if ($sevSpeed == 0) {
-										$typeSpeed[$i] = "normal point";
-										//if ($dss > 3) {}
-										$speed1 = $speed1 + floor($dss/3);
-										$dss = 0;
-									
-									} else if ($sevSpeed == 1) {
-
-										$typeSpeed[$i] = "s1";
-										$dss += $deltaTime;
-									} else if ($sevSpeed == 2) {
-										$typeSpeed[$i] = "s2";
-										$speed1 = $speed1 +floor($dss/3);
-										$dss = 0;
-									} else if ($sevSpeed == 3) {
-										$typeSpeed[$i] = "s3";
-										$speed1 += floor($dss/3);
-										$dss = 0;
-									}
-								} else if ($typeSpeed[$i-1] == "s2") {
-									if ($sevSpeed == 0) {
-										$typeSpeed[$i] = "normal point";
-										$speed2 += floor($dss/3);
-										$dss = 0;
-									} else if ($sevSpeed == 1) {
-										$typeSpeed[$i] = "s1";
-										$speed2 = $speed2 +floor($dss/3);
-										$dss = 0;
-									} else if ($sevSpeed == 2) {
-										$typeSpeed[$i] = "s2";
-										$dss += $deltaTime;
-									} else if ($sevSpeed == 3) {
-										$typeSpeed[$i] = "s3";
-										$speed2 += floor($dss/3);
-										$dss = 0;
-									}
-								} else if ($typeSpeed[$i-1] == "s3") {
-									if ($sevSpeed == 0) {
-										$typeSpeed[$i] = "normal point";
-										$speed3 += floor($dss/3);
-										$dss = 0;
-									} else if ($sevSpeed == 1) {
-										$typeSpeed[$i] = "s1";
-										$speed3 += floor($dss/3);
-										$dss = 0;
-									} else if ($sevSpeed == 2) {
-										$typeSpeed[$i] = "s2";
-										$speed3 += floor($dss/3);
-										$dss = 0;
-									} else if ($sevSpeed == 3) {
-										$typeSpeed[$i] = "s3";
-										$dss += $deltaTime;
-									}
-								}
-								// Конец выявления превышения скорости.
-								///////////////////////////////////////////////////////////////////////////////////////
-								
-								//Большое количество проверок условий соотношения ускорений в текущей и прошлой точках.
-								if ($typeAcc[$i-1] == "normal point") {
-									if ($sevAcc == 0) {
-										$typeAcc[$i] = "normal point";
-									} else if ($sevAcc == 1) {
-										$typeAcc[$i] = "acc1 started";
-									} else if ($sevAcc == 2) {
-										$typeAcc[$i] = "acc2 started";
-									} else if ($sevAcc == 3) {
-										$typeAcc[$i] = "acc3 started";
-									} else if ($sevAcc == -1) {
-										$typeAcc[$i] = "brake1 started";
-									} else if ($sevAcc == -2) {
-										$typeAcc[$i] = "brake2 started";
-									} else if ($sevAcc == -3) {
-										$typeAcc[$i] = "brake3 started";
-									}
-								} else	if (($typeAcc[$i-1] == "acc1 started") || ($typeAcc[$i-1] == "acc1 continued")) {
-									if ($sevAcc == 0) {
-										$typeAcc[$i] = "normal point";
-										$acc1++;
-									} else if ($sevAcc == 1) {
-										$typeAcc[$i] = "acc1 continued";
-									} else if ($sevAcc == 2) {
-										$typeAcc[$i] = "acc2 continued";
-									} else if ($sevAcc == 3) {
-										$typeAcc[$i] = "acc3 continued";
-									} else if ($sevAcc == -1) {
-										$typeAcc[$i] = "brake1 started";
-										$acc1++;
-									} else if ($sevAcc == -2) {
-										$typeAcc[$i] = "brake2 started";
-										$acc1++;
-									} else if ($sevAcc == -3) {
-										$typeAcc[$i] = "brake3 started";
-										$acc1++;
-									}
-								} else	if (($typeAcc[$i-1] == "acc2 started") || ($typeAcc[$i-1] == "acc2 continued")) {
-									if ($sevAcc == 0) {
-										$typeAcc[$i] = "normal point";
-										$acc2++;
-									} else if ($sevAcc == 1) {
-										$typeAcc[$i] = "acc1 started";
-										$acc2++;
-									} else if ($sevAcc == 2) {
-										$typeAcc[$i] = "acc2 continued";
-									} else if ($sevAcc == 3) {
-										$typeAcc[$i] = "acc3 continued";
-									} else if ($sevAcc == -1) {
-										$typeAcc[$i] = "brake1 started";
-										$acc2++;
-									} else if ($sevAcc == -2) {
-										$typeAcc[$i] = "brake2 started";
-										$acc2++;
-									} else if ($sevAcc == -3) {
-										$typeAcc[$i] = "brake3 started";
-										$acc2++;
-									}
-								} else	if (($typeAcc[$i-1] == "acc3 started") || ($typeAcc[$i-1] == "acc3 continued")) {
-									if ($sevAcc == 0) {
-										$typeAcc[$i] = "normal point";
-										$acc3++;
-									} else if ($sevAcc == 1) {
-										$typeAcc[$i] = "acc1 started";
-										$acc3++;
-									} else if ($sevAcc == 2) {
-										$typeAcc[$i] = "acc2 started";
-										$acc3++;
-									} else if ($sevAcc == 3) {
-										$typeAcc[$i] = "acc3 continued";
-									} else if ($sevAcc == -1) {
-										$typeAcc[$i] = "brake1 started";
-										$acc3++;
-									} else if ($sevAcc == -2) {
-										$typeAcc[$i] = "brake2 started";
-										$acc3++;
-									} else if ($sevAcc == -3) {
-										$typeAcc[$i] = "brake3 started";
-										$acc3++;
-									}
-								} else	if (($typeAcc[$i-1] == "brake1 started") || ($typeAcc[$i-1] == "brake1 continued")) {
-									if ($sevAcc == 0) {
-										$typeAcc[$i] = "normal point";
-										$brake1++;
-									} else if ($sevAcc == 1) {
-										$typeAcc[$i] = "acc1 started";
-										$brake1++;
-									} else if ($sevAcc == 2) {
-										$typeAcc[$i] = "acc2 started";
-										$brake1++;
-									} else if ($sevAcc == 3) {
-										$typeAcc[$i] = "acc3 started";
-										$brake1++;
-									} else if ($sevAcc == -1) {
-										$typeAcc[$i] = "brake1 continued";
-									} else if ($sevAcc == -2) {
-										$typeAcc[$i] = "brake2 started";
-									} else if ($sevAcc == -3) {
-										$typeAcc[$i] = "brake3 started";
-									}
-								} else if (($typeAcc[$i-1] == "brake2 started") || ($typeAcc[$i-1] == "brake2 continued")) {
-									if ($sevAcc == 0) {
-										$typeAcc[$i] = "normal point";
-										$brake2++;
-									} else if ($sevAcc == 1) {
-										$typeAcc[$i] = "acc1 started";
-										$brake2++;
-									} else if ($sevAcc == 2) {
-										$typeAcc[$i] = "acc2 started";
-										$brake2++;
-									} else if ($sevAcc == 3) {
-										$typeAcc[$i] = "acc3 started";
-										$brake2++;
-									} else if ($sevAcc == -1) {
-										$typeAcc[$i] = "brake1 started";
-										$brake2++;
-									} else if ($sevAcc == -2) {
-										$typeAcc[$i] = "brake2 continued";
-									} else if ($sevAcc == -3) {
-										$typeAcc[$i] = "brake3 started";
-									}
-								} else	if (($typeAcc[$i-1] == "brake3 started") || ($typeAcc[$i-1] == "brake3 continued")) {
-									if ($sevAcc == 0) {
-										$typeAcc[$i] = "normal point";
-										$brake3++;
-									} else if ($sevAcc == 1) {
-										$typeAcc[$i] = "acc1 started";
-										$brake3++;
-									} else if ($sevAcc == 2) {
-										$typeAcc[$i] = "acc2 started";
-										$brake3++;
-									} else if ($sevAcc == 3) {
-										$typeAcc[$i] = "acc3 started";
-										$brake3++;
-									} else if ($sevAcc == -1) {
-										$typeAcc[$i] = "brake1 started";
-										$brake3++;
-									} else if ($sevAcc == -2) {
-										$typeAcc[$i] = "brake2 started";
-										$brake3++;
-									} else if ($sevAcc == -3) {
-										$typeAcc[$i] = "brake3 continued";
-									}
-								}
-								
-																	
-								//После поворота - нормальная точка.
-								if (($typeTurn[$i-1] == "left turn finished") || ($typeTurn[$i-1] == "right turn finished") || (!isset($typeTurn[$i-1])) || ($speed == 0) ) {
-									$typeTurn[$i] = "normal point";
-								// Отклонение > 0.5 - после нормальной точки начинаем поворот налево, либо продолжаем поворот налево после уже начатого, либо завершаем, если это был поворот направо.
-								} else 	if ($deltaTurn > 0.5)   {
-									if ($typeTurn[$i-1] == "normal point") 
-										$typeTurn[$i] = "left turn started";
-									if (($typeTurn[$i-1] == "left turn started")||($typeTurn[$i-1] == "left turn continued")) 
-										$typeTurn[$i] = "left turn continued";
-									if (($typeTurn[$i-1] == "right turn started")||($typeTurn[$i-1] == "right turn continued")) {
-										$typeTurn[$i] = "right turn finished";
-										///////
-									}
-								// Отклонение > 0.5 - после нормальной точки начинаем поворот направо, либо продолжаем поворот направо после уже начатого, либо завершаем, если это был поворот налево.
-								} else 	if ($deltaTurn < -0.5)	{
-									if ($typeTurn[$i-1] == "normal point") 
-										$typeTurn[$i] = "right turn started";
-									if (($typeTurn[$i-1] == "right turn started")||($typeTurn[$i-1] == "right turn continued")) 
-										$typeTurn[$i] = "right turn continued";
-									if (($typeTurn[$i-1] == "left turn started")||($typeTurn[$i-1] == "left turn continued")) {
-										$typeTurn[$i] = "left turn finished";
-										///////
-									}
-								} else	{
-								// Отклонение между -0.5 и 0.5 - после нормальной точки идет нормальная, а после начатых поворотов налево или направо - продолженные повороты соответственно налево и направо.
-									if ($typeTurn[$i-1] == "normal point") 
-										$typeTurn[$i] = "normal point";
-									if (($typeTurn[$i-1] == "left turn started")||($typeTurn[$i-1] == "left turn continued")) {
-										$typeTurn[$i] = "left turn finished";
-										///////
-									}
-									if (($typeTurn[$i-1] == "right turn started")||($typeTurn[$i-1] == "right turn continued")) {
-										$typeTurn[$i] = "right turn finished";
-										///////
-									}
-								}
-								
-								if (($typeTurn[$i] == "left turn finished") || ($typeTurn[$i] == "right turn finished")) {
-									switch ($sevTurn) {
-											case 1: {
-												$turn1++;
-												break;
-											}
-											case 2: {
-												$turn2++;
-												break;
-											}
-											case 3: {
-												$turn3++;
-												break;
-											}
-											case 0: {
-												break;
-											}
-										}
-								}
-							}
-							else 	
-							{
-								$typeTurn[$i] = "normal point";
-								$typeAcc[$i] = "normal point";
-								$sevTurn = 0;
-								$wAcc = 0;
-								$radius = 0;
-								$turn[$i] = $turn[$i-1];
-							}
-						
-							$timeSum = 0;
-							$sumSpeed = 0;
-						
-							
-				
-						}
-						if(isset($data[$j-2]['utimestamp']))	{
-						
-							$fullTime = ($data[$j-2]['utimestamp'] - $data[0]['utimestamp']);
-							if($fullTime!=0) {					
-								$results['score'] 		+= 		($coef1 * ($speed1 + $turn1 + $acc1 + $brake1) + $coef2 * ($speed2 + $turn2 + $acc2 + $brake2) + $coef3 * ($speed3 + $turn3 + $acc3 + $brake3)) / ($fullTime/3600);
-								$results['score_speed'] 	+=($coef1 * ($speed1) + $coef2 * ($speed2) + $coef3 * ($speed3)) / ($fullTime/3600);
-								$results['score_turn'] 	+=($coef1 * ($turn1) + $coef2 * ($turn2) + $coef3 * ($turn3)) / ($fullTime/3600);
-								$results['score_acc'] 	+=($coef1 * ($acc1) + $coef2 * ($acc2) + $coef3 * ($acc3)) / ($fullTime/3600);
-								$results['score_brake'] 	+=($coef1 * ($brake1) + $coef2 * ($brake2) + $coef3 * ($brake3)) / ($fullTime/3600);
-								$results['distance']+=$d;				
-							}
-						}	
-			} 
-			
-			$errortype=array('info'=>"",'code'=>  0);
+			 $score_speed=0;
+			 $score_turn=0;
+			 $score_brake=0;
+			 $score_acc=0;
+			 $distance=0;
+			 $total_score=0;
+			 $time=0;
 			if(isset($param['last']) && $param['last']>0)
-			$ret=array('total_score'=>floor($results['score']),'score_speed'=>floor($results['score_speed']),'score_turn'=>floor($results['score_turn']),'score_acc'=>floor($results['score_acc']),'score_brake'=>floor($results['score_brake']),'distance'=>floor($results['distance']),'time'=>$last_time);
+			{
+				$result=mysql_query("SELECT * FROM `NTIUserDrivingTrack` where UID=$UID order by Id DESC Limit 1");
+				while ($row = mysql_fetch_array($result)) 
+				{
+					$score_speed = 100*($row['TotalSpeed1Count']+ $row['TotalSpeed2Count'] +$row['TotalSpeed3Count'])/$SpeedK ;
+					$score_turn =100*($row['TotalTurn1Count']+ $row['TotalTurn2Count'] +$row['TotalTurn3Count'])/$TurnK ;
+					$score_brake =100*($row['TotalBrake1Count']+ $row['TotalBrake2Count'] +$row['TotalBrake3Count'])/$BrakeK ;
+					$score_acc = 100*($row['TotalAcc1Count']+ $row['TotalAcc2Count'] +$row['TotalAcc3Count'])/$AccK ;
+					$distance= $row['TotalDistance'];
+					$total_score = $score_speed +$score_turn+$score_brake+$score_acc;
+					$time=$row['TimeEnd']-$row['TimeStart'];
+				}
+				
+			}
 			else
 			{
-					$ret=array('total_score'=>floor($results['score']),'score_speed'=>floor($results['score_speed']),'score_turn'=>floor($results['score_turn']),'score_acc'=>floor($results['score_acc']),'score_brake'=>floor($results['score_brake']),'distance'=>floor($results['distance']),'time'=>0);
-		
-				}
 			
+				$result=mysql_query("SELECT * FROM `NTIUserDrivingTrack` where UID=$UID ");
+				while ($row = mysql_fetch_array($result)) 
+				{
+					$score_speed += 100*($row['TotalSpeed1Count']+ $row['TotalSpeed2Count'] +$row['TotalSpeed3Count'])/$SpeedK ;
+					$score_turn +=100*($row['TotalTurn1Count']+ $row['TotalTurn2Count'] +$row['TotalTurn3Count'])/$TurnK ;
+					$score_brake +=100*($row['TotalBrake1Count']+ $row['TotalBrake2Count'] +$row['TotalBrake3Count'])/$BrakeK ;
+					$score_acc += 100*($row['TotalAcc1Count']+ $row['TotalAcc2Count'] +$row['TotalAcc3Count'])/$AccK ;
+					$distance+= $row['TotalDistance'];
+					$time+=$row['TimeEnd']-$row['TimeStart'];
+				}
+				$total_score += $score_speed +$score_turn+$score_brake+$score_acc;
+			}
+			$errortype=array('info'=>"",'code'=>  0);
+			$score_speed=floor($score_speed);
+			$score_turn=floor( $score_turn);
+			$score_brake=floor($score_brake);
+			$score_acc=floor($score_acc);
+			$distance=floor($distance);
+			$total_score=floor( $total_score);
+			$ret=array('total_score'=>$total_score,'score_speed'=> $score_speed,'score_turn'=>$score_turn,'score_acc'=>$score_acc,'score_brake'=>$score_brake,'distance'=>$distance,'time'=>$time);
 			$res=array('result'=>$ret,'error'=> $errortype);
 			echo json_encode($res);	
 			exit();	
-			
-			
 		}
-		else {
-			$errortype=array('info'=>"",'code'=>  0);
-			$ret=array('total_score'=>0,'score_speed'=>0,'score_turn'=>0,'score_acc'=>0,'score_brake'=>0,'distance'=>0,'time'=>0);
-		
-			$res=array('result'=>$ret,'error'=> $errortype);
+		else
+		{
+			$errortype=array('info'=>"Connection broken or you are not authorized",'code'=>  33);
+			$res=array('result'=>-1,'error'=> $errortype);
 			echo json_encode($res);	
-			exit();
+			exit();	
 		}
-		return $results;
-}
-else
-{
-		$errortype=array('info'=>"Connection broken or you are not authorized",'code'=>  33);
-		$res=array('result'=>-1,'error'=> $errortype);
-		echo json_encode($res);	
-		exit();
-}
-	
 }
 
 
@@ -1483,11 +1014,12 @@ function getPath($param)
 	{
 		$last=0;//Отвечает за то , чтобы выбрать последнюю поезку
 		if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
+	
 		if(isset($param['time']) && !isset($param['till']) and $param['time']>0)
 		{
 		
-		$start=strtotime(date("D M j 00:00:00 T Y",$time));
-		$end= strtotime(date("D M j 23:59:59 T Y",$time));
+			$start=strtotime(date("D M j 00:00:00 T Y",$time));
+			$end= strtotime(date("D M j 23:59:59 T Y",$time));
 			$query = "select * from (SELECT * FROM NTIEntry where utimestamp<=$end and utimestamp>=$start and UID=$UID and (lat!=0 or lng!=0) and utimestamp!=0 group by utimestamp) as st group by `lat`,`lng` order by utimestamp";
 		}
 		else if(isset($param['time']) && isset($param['till'])  and $param['time']>0  and $param['till']>0)
