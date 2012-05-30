@@ -68,9 +68,7 @@
 			<?
 			if (($trr['tscore'] != 0)&&($total_trips > 1)) {
 ?>
-				<span style="color:red">Средний счет последних <?echo $total_trips; ?> поездок: <?echo floor($trr['tscore']/$total_trips);?> points</span>
-				<br>
-				<span style="color:red">Суммарный счет последних <?echo $total_trips; ?> поездок: <?echo floor($trr['tscore']);?> points</span>
+								<span style="color:red">Суммарный счет последних <?echo $total_trips; ?> поездок: <?echo floor($trr['tscore']);?> points</span>
 				<?
 			}
 		} 

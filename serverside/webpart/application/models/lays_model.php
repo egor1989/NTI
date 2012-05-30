@@ -114,14 +114,15 @@ class lays_model extends CI_Model {
 				$da[$n]['TotalTurn2Count'] = $row->TotalTurn2Count;
 				$da[$n]['TotalTurn3Count'] = $row->TotalTurn3Count;
 				$da[$n]['total_dist']=0;
-				$da[$n]['total_acc_score'] =  100*($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*.025+ $row->TotalAcc3Count*0.65)/$AccK;
-				$da[$n]['total_brk_score'] = 100*($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*.025+ $row->TotalBrake3Count*0.65)/$BrakeK;
-				$da[$n]['total_crn_score'] = 100*($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*.025+ $row->TotalTurn3Count*0.65)/$TurnK;
-				$da[$n]['total_spd_score'] =100*($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*.025+ $row->TotalSpeed3Count*0.65)/$AccK;
-				$da[$n]['total_all_score'] =($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*.025+ $row->TotalAcc3Count*0.65)+($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*.025+ $row->TotalBrake3Count*0.65)+($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*.025+ $row->TotalTurn3Count*0.65)+($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*.025+ $row->TotalSpeed3Count*0.65);
-				$da['tscore'] +=($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*.025+ $row->TotalAcc3Count*0.65)+($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*.025+ $row->TotalBrake3Count*0.65)+($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*.025+ $row->TotalTurn3Count*0.65)+($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*.025+ $row->TotalSpeed3Count*0.65);
+				$da[$n]['total_acc_score'] =  100*($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*0.25+ $row->TotalAcc3Count*0.65)/$AccK;
+				$da[$n]['total_brk_score'] = 100*($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*0.25+ $row->TotalBrake3Count*0.65)/$BrakeK;
+				$da[$n]['total_crn_score'] = 100*($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*0.25+ $row->TotalTurn3Count*0.65)/$TurnK;
+				$da[$n]['total_spd_score'] =100*($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*0.25+ $row->TotalSpeed3Count*0.65)/$AccK;
+				$da[$n]['total_all_score'] =($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*0.25+ $row->TotalAcc3Count*0.65)+($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*0.25+ $row->TotalBrake3Count*0.65)+($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*0.25+ $row->TotalTurn3Count*0.65)+($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*0.25+ $row->TotalSpeed3Count*0.65);
+				$da['tscore'] +=($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*0.25+ $row->TotalAcc3Count*0.65)+($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*0.25+ $row->TotalBrake3Count*0.65)+($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*0.25+ $row->TotalTurn3Count*0.65)+($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*0.25+ $row->TotalSpeed3Count*0.65);
 				$n++;
 			}
+			if($n>0)$da['tscore']=$da['tscore']/$n;
 			return $da;
 		} 
 		else {
@@ -191,7 +192,7 @@ class lays_model extends CI_Model {
 				$da['total_all_score']=0;
 				$da['is_set']=1;
 
-
+$n=0;
 		if ($q->num_rows() > 0) {
 			foreach($q->result() as $row) {
 				
@@ -214,13 +215,27 @@ class lays_model extends CI_Model {
 				$da['total_excesses'] += $row->TotalSpeed1Count+$row->TotalSpeed2Count+$row->TotalSpeed3Count;
 				$da['total_turns'] += $row->TotalTurn1Count+$row->TotalTurn2Count+$row->TotalTurn3Count;
 				$da['total_dist']=0;
-				$da['total_acc_score'] +=  100*($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*.025+ $row->TotalAcc3Count*0.65)/$AccK;
-				$da['total_brk_score'] += 100*($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*.025+ $row->TotalBrake3Count*0.65)/$BrakeK;
-				$da['total_crn_score'] += 100*($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*.025+ $row->TotalTurn3Count*0.65)/$TurnK;
-				$da['total_spd_score'] +=100*($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*.025+ $row->TotalSpeed3Count*0.65)/$AccK;
-				$da['total_all_score'] +=($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*.025+ $row->TotalAcc3Count*0.65)+($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*.025+ $row->TotalBrake3Count*0.65)+($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*.025+ $row->TotalTurn3Count*0.65)+($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*.025+ $row->TotalSpeed3Count*0.65);
+				$da['total_acc_score'] +=  100*($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*0.25+ $row->TotalAcc3Count*0.65)/$AccK;
+				$da['total_brk_score'] += 100*($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*0.25+ $row->TotalBrake3Count*0.65)/$BrakeK;
+				$da['total_crn_score'] += 100*($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*0.25+ $row->TotalTurn3Count*0.65)/$TurnK;
+				$da['total_spd_score'] +=100*($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*0.25+ $row->TotalSpeed3Count*0.65)/$AccK;
+				$da['total_all_score'] +=($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*0.25+ $row->TotalAcc3Count*0.65)+($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*0.25+ $row->TotalBrake3Count*0.65)+($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*0.25+ $row->TotalTurn3Count*0.65)+($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*0.25+ $row->TotalSpeed3Count*0.65);
 				$da['is_set']=1;
+				$n++;
 			}
+						if($n>0)
+						{
+							
+							
+							
+				$da['total_acc_score']=$da['total_acc_score']/$n;
+				$da['total_brk_score']=$da['total_brk_score']/$n;
+				$da['total_crn_score']=$da['total_crn_score']/$n;
+				$da['total_spd_score']=$da['total_spd_score'] /$n;
+				$da['total_all_score']=$da['total_all_score']/$n;
+			}
+
+						
 			return $da;
 		} 
 		else {

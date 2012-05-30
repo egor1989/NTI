@@ -951,13 +951,13 @@ function getStatistics($param)
 				$result=mysql_query("SELECT * FROM `NTIUserDrivingTrack` where UID=$UID order by Id DESC Limit 1");
 				while ($row = mysql_fetch_array($result)) 
 				{
-					$score_speed = 100*($row['TotalSpeed1Count']+ $row['TotalSpeed2Count'] +$row['TotalSpeed3Count'])/$SpeedK ;
-					$score_turn =100*($row['TotalTurn1Count']+ $row['TotalTurn2Count'] +$row['TotalTurn3Count'])/$TurnK ;
-					$score_brake =100*($row['TotalBrake1Count']+ $row['TotalBrake2Count'] +$row['TotalBrake3Count'])/$BrakeK ;
-					$score_acc = 100*($row['TotalAcc1Count']+ $row['TotalAcc2Count'] +$row['TotalAcc3Count'])/$AccK ;
+					$score_speed = 100*($row['TotalSpeed1Count']*0.1+ $row['TotalSpeed2Count']*0.25 +$row['TotalSpeed3Count']*0.65)/$SpeedK ;
+					$score_turn =100*($row['TotalTurn1Count']*0.1+ $row['TotalTurn2Count']*0.25 +$row['TotalTurn3Count']*0.65)/$TurnK ;
+					$score_brake =100*($row['TotalBrake1Count']*0.1+ $row['TotalBrake2Count']*0.25 +$row['TotalBrake3Count']*0.65)/$BrakeK ;
+					$score_acc = 100*($row['TotalAcc1Count']*0.1+ $row['TotalAcc2Count']*0.25 +$row['TotalAcc3Count']*0.65)/$AccK ;
 					$distance= $row['TotalDistance'];
 					$total_score = $score_speed +$score_turn+$score_brake+$score_acc;
-					$time=$row['TimeEnd']-$row['TimeStart'];
+					$time=$row['TimeStart'];
 				}
 				
 			}
@@ -965,16 +965,26 @@ function getStatistics($param)
 			{
 			
 				$result=mysql_query("SELECT * FROM `NTIUserDrivingTrack` where UID=$UID ");
+				$n=0;
 				while ($row = mysql_fetch_array($result)) 
 				{
-					$score_speed += 100*($row['TotalSpeed1Count']+ $row['TotalSpeed2Count'] +$row['TotalSpeed3Count'])/$SpeedK ;
-					$score_turn +=100*($row['TotalTurn1Count']+ $row['TotalTurn2Count'] +$row['TotalTurn3Count'])/$TurnK ;
-					$score_brake +=100*($row['TotalBrake1Count']+ $row['TotalBrake2Count'] +$row['TotalBrake3Count'])/$BrakeK ;
-					$score_acc += 100*($row['TotalAcc1Count']+ $row['TotalAcc2Count'] +$row['TotalAcc3Count'])/$AccK ;
+					$score_speed += 100*($row['TotalSpeed1Count']*0.1+ $row['TotalSpeed2Count']*0.25 +$row['TotalSpeed3Count']*0.65)/$SpeedK ;
+					$score_turn +=100*($row['TotalTurn1Count']*0.1+ $row['TotalTurn2Count']*0.25 +$row['TotalTurn3Count']*0.65)/$TurnK ;
+					$score_brake +=100*($row['TotalBrake1Count']*0.1+ $row['TotalBrake2Count']*0.25 +$row['TotalBrake3Count']*0.65)/$BrakeK ;
+					$score_acc += 100*($row['TotalAcc1Count']*0.1+ $row['TotalAcc2Count']*0.25 +$row['TotalAcc3Count']*0.65)/$AccK ;
 					$distance+= $row['TotalDistance'];
 					$time+=$row['TimeEnd']-$row['TimeStart'];
+					$n++;
 				}
-				$total_score += $score_speed +$score_turn+$score_brake+$score_acc;
+				if($n>0)
+				{
+					$score_speed=$score_speed/$n;
+					$score_turn=$score_turn/$n;
+					$score_brake=$score_brake/$n;
+					$score_acc=$score_acc/$n;
+					$total_score = ($score_speed +$score_turn+$score_brake+$score_acc);
+				}
+				
 			}
 			$errortype=array('info'=>"",'code'=>  0);
 			$score_speed=floor($score_speed);
@@ -1031,6 +1041,7 @@ function getPath($param)
 		}
 		$result = mysql_query($query);
 		$n = 0;
+		$curDrivingId=0;
 		while ($row = mysql_fetch_array($result)) 
 		{
 			$ret_arr[$n]['lat'] = $row['lat'];
@@ -1107,8 +1118,14 @@ function getPath($param)
 						$ret_arr[$n]['weight']=0;
 					}
 				}
-
+		if(		$curDrivingId!=$row['DrivingId'])
+		{
+					$ret_arr[$n]['type']=42;
+					$ret_arr[$n]['weight']=42;
+					$curDrivingId=$row['DrivingId'];
+		}
 			$n++;
+			
 		}
 	
 

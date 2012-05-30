@@ -51,7 +51,6 @@
 				<span style="font-size: 12px;">Очки превышений: <?echo floor($row['stats']['total_spd_score']);?></span><br>
 				<span style="font-size: 12px;">Всего поездок: <?echo floor($row['stats']['total_trips']);?></span><br>
 				<span style="font-size: 12px;">Общий километраж: <?echo floor($row['stats']['total_dist']);?> км.</span><br>
-				<span style="font-size: 12px;">Средний счет поездки: <?echo floor($row['stats']['total_all_score']/$row['stats']['total_trips']);?></span><br>
 				<span style="font-size: 12px;">Суммарный счет: <?echo floor($row['stats']['total_all_score']);?></span><br>
 			</td>
 					<?}
