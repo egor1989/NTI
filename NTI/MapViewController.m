@@ -88,8 +88,8 @@
     NSLog(@"MV parse route");
     NSArray *point = [[NSArray alloc] init];
     NSMutableArray *routeLineArray = [[NSMutableArray alloc] init];
-    NSMutableArray *allRoutesPointsArray[4][4];
-    for (int i=0; i<=3; i++) {
+    NSMutableArray *allRoutesPointsArray[5][4];
+    for (int i=0; i<=4; i++) {
         for (int j=0; j<=3; j++) {
             allRoutesPointsArray[i][j] = [[NSMutableArray alloc] init];
         }
