@@ -188,10 +188,11 @@ $new_data['rights']=0;
 		$length = strlen($password);
 		if(strtolower($password) != $password){$strength += 1;}
 		if(strtoupper($password) == $password) {$strength += 1;}
-		if($length >= 8 && $length <= 15){$strength += 1;}
-		if($length >= 16 && $length <=35){$strength += 2;}
+		if($length >= 8 && $length <= 15){$strength += 50;}
+		if($length >= 16 && $length <=35){$strength += 80;}
 		if($length > 35){$strength += 3;}
 		preg_match_all('/[0-9]/', $password, $numbers);
+		
 		$strength += count($numbers[0]);
 		preg_match_all('/[|!@#$%&*\/=?,;.:\-_+~^\\\]/', $password, $specialchars);
 		$strength += sizeof($specialchars[0]);
@@ -200,6 +201,7 @@ $new_data['rights']=0;
 		$strength += $num_unique_chars * 2;
 		$strength = $strength > 99 ? 99 : $strength;
 		$strength = floor($strength / 10 + 1);
+		
 		if ($this->security->xss_clean($email, TRUE) === FALSE || $this->security->xss_clean($fname, TRUE) === FALSE || $this->security->xss_clean($sname, TRUE) === FALSE || $this->security->xss_clean($password, TRUE) === FALSE)	{
 			$new_data['map_type'] = 2;
 			$new_data['show_menu'] = -1;
@@ -225,7 +227,7 @@ $new_data['rights']=0;
 			$this->load->view('footer');
 			return;
 		}
-		if($strength<4)	{
+		if($strength<2)	{
 			$new_data['map_type'] = 2;
 			$new_data['show_menu'] = -1;
 			$new_data['specinfo'] = "Пароль слишком простой<br/>";

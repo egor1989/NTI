@@ -951,13 +951,13 @@ function getStatistics($param)
 				$result=mysql_query("SELECT * FROM `NTIUserDrivingTrack` where UID=$UID order by Id DESC Limit 1");
 				while ($row = mysql_fetch_array($result)) 
 				{
-					$score_speed = 100*($row['TotalSpeed1Count']+ $row['TotalSpeed2Count'] +$row['TotalSpeed3Count'])/$SpeedK ;
-					$score_turn =100*($row['TotalTurn1Count']+ $row['TotalTurn2Count'] +$row['TotalTurn3Count'])/$TurnK ;
-					$score_brake =100*($row['TotalBrake1Count']+ $row['TotalBrake2Count'] +$row['TotalBrake3Count'])/$BrakeK ;
-					$score_acc = 100*($row['TotalAcc1Count']+ $row['TotalAcc2Count'] +$row['TotalAcc3Count'])/$AccK ;
+					$score_speed = 100*($row['TotalSpeed1Count']*0.1+ $row['TotalSpeed2Count']*0.25 +$row['TotalSpeed3Count']*0.65)/$SpeedK ;
+					$score_turn =100*($row['TotalTurn1Count']*0.1+ $row['TotalTurn2Count']*0.25 +$row['TotalTurn3Count']*0.65)/$TurnK ;
+					$score_brake =100*($row['TotalBrake1Count']*0.1+ $row['TotalBrake2Count']*0.25 +$row['TotalBrake3Count']*0.65)/$BrakeK ;
+					$score_acc = 100*($row['TotalAcc1Count']*0.1+ $row['TotalAcc2Count']*0.25 +$row['TotalAcc3Count']*0.65)/$AccK ;
 					$distance= $row['TotalDistance'];
 					$total_score = $score_speed +$score_turn+$score_brake+$score_acc;
-					$time=$row['TimeEnd']-$row['TimeStart'];
+					$time=$row['TimeStart'];
 				}
 				
 			}
@@ -965,16 +965,26 @@ function getStatistics($param)
 			{
 			
 				$result=mysql_query("SELECT * FROM `NTIUserDrivingTrack` where UID=$UID ");
+				$n=0;
 				while ($row = mysql_fetch_array($result)) 
 				{
-					$score_speed += 100*($row['TotalSpeed1Count']+ $row['TotalSpeed2Count'] +$row['TotalSpeed3Count'])/$SpeedK ;
-					$score_turn +=100*($row['TotalTurn1Count']+ $row['TotalTurn2Count'] +$row['TotalTurn3Count'])/$TurnK ;
-					$score_brake +=100*($row['TotalBrake1Count']+ $row['TotalBrake2Count'] +$row['TotalBrake3Count'])/$BrakeK ;
-					$score_acc += 100*($row['TotalAcc1Count']+ $row['TotalAcc2Count'] +$row['TotalAcc3Count'])/$AccK ;
+					$score_speed += 100*($row['TotalSpeed1Count']*0.1+ $row['TotalSpeed2Count']*0.25 +$row['TotalSpeed3Count']*0.65)/$SpeedK ;
+					$score_turn +=100*($row['TotalTurn1Count']*0.1+ $row['TotalTurn2Count']*0.25 +$row['TotalTurn3Count']*0.65)/$TurnK ;
+					$score_brake +=100*($row['TotalBrake1Count']*0.1+ $row['TotalBrake2Count']*0.25 +$row['TotalBrake3Count']*0.65)/$BrakeK ;
+					$score_acc += 100*($row['TotalAcc1Count']*0.1+ $row['TotalAcc2Count']*0.25 +$row['TotalAcc3Count']*0.65)/$AccK ;
 					$distance+= $row['TotalDistance'];
 					$time+=$row['TimeEnd']-$row['TimeStart'];
+					$n++;
 				}
-				$total_score += $score_speed +$score_turn+$score_brake+$score_acc;
+				if($n>0)
+				{
+					$score_speed=$score_speed/$n;
+					$score_turn=$score_turn/$n;
+					$score_brake=$score_brake/$n;
+					$score_acc=$score_acc/$n;
+					$total_score = ($score_speed +$score_turn+$score_brake+$score_acc);
+				}
+				
 			}
 			$errortype=array('info'=>"",'code'=>  0);
 			$score_speed=floor($score_speed);
@@ -1007,239 +1017,119 @@ function getPath($param)
 	
 	$time=$param['time'];
 	$till=$param['till'];
-	$day=$param['day'];
-	
 	$UID=NTI_Cookie_check();
 	if($UID>0)
 	{
-		$last=0;//Отвечает за то , чтобы выбрать последнюю поезку
 		if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
-	
 		if(isset($param['time']) && !isset($param['till']) and $param['time']>0)
 		{
 		
 			$start=strtotime(date("D M j 00:00:00 T Y",$time));
 			$end= strtotime(date("D M j 23:59:59 T Y",$time));
-			$query = "select * from (SELECT * FROM NTIEntry where utimestamp<=$end and utimestamp>=$start and UID=$UID and (lat!=0 or lng!=0) and utimestamp!=0 group by utimestamp) as st group by `lat`,`lng` order by utimestamp";
+			$query = "Select NTIUserDrivingEntry.* from (SELECT `Id` FROM `NTIUserDrivingTrack` WHERE UID=$UID and (`TimeStart`>=$start and $end >=`TimeStart` and $end<=`TimeEnd`) OR (`TimeStart`<=$start and $end<=`TimeEnd`) OR 	(`TimeStart`<=$start and $start <=`TimeEnd` and $end>=`TimeEnd`) OR (`TimeStart`>=$start and $end>=`TimeEnd`)) as Driving,NTIUserDrivingEntry where NTIUserDrivingEntry.`DrivingID`=Driving.Id group by `utimestamp`";
 		}
 		else if(isset($param['time']) && isset($param['till'])  and $param['time']>0  and $param['till']>0)
 		{
-				$time=mysql_real_escape_string($time);
-				$till=mysql_real_escape_string($till);
-				$query = "SELECT * FROM NTIEntry where utimestamp>=$time and utimestamp<=$till and UID=$UID and (lat!=0 or lng!=0) and utimestamp!=0 group by utimestamp order by utimestamp";
-		}
-		else if(isset($param['day']) && $param['day']>0)
-		{
-				$day=time()-86400;//Все даты за день до этого 
-				$query = "SELECT * FROM NTIEntry where utimestamp>=$day and UID=$UID and (lat!=0 or lng!=0) and utimestamp!=0 group by utimestamp order by utimestamp";
+				$start=mysql_real_escape_string($time);
+				$end=mysql_real_escape_string($till);
+				$query = "Select NTIUserDrivingEntry.* from (SELECT `Id` FROM `NTIUserDrivingTrack` WHERE UID=$UID and (`TimeStart`>=$start and $end >=`TimeStart` and $end<=`TimeEnd`) OR (`TimeStart`<=$start and $end<=`TimeEnd`) OR 	(`TimeStart`<=$start and $start <=`TimeEnd` and $end>=`TimeEnd`) OR (`TimeStart`>=$start and $end>=`TimeEnd`)) as Driving,NTIUserDrivingEntry where NTIUserDrivingEntry.`DrivingID`=Driving.Id group by `utimestamp`";
 		}
 		else
 		{
 				//иначе будем возвращать последнюю поездку
-				$query = "Select * from (SELECT * FROM NTIEntry where UID=$UID and (lat!=0 or lng!=0) and utimestamp!=0 group by utimestamp) as st group by `lat`,`lng` order by utimestamp";
-				$last=1;
+				$query = "Select NTIUserDrivingEntry.* from (SELECT `Id` FROM `NTIUserDrivingTrack` WHERE UID=$UID order by Id DESC Limit 1) as Driving,NTIUserDrivingEntry where NTIUserDrivingEntry.`DrivingID`=Driving.Id group by `utimestamp`";
 		}
 		$result = mysql_query($query);
-		$c = 0;
 		$n = 0;
+		$curDrivingId=0;
 		while ($row = mysql_fetch_array($result)) 
 		{
-			$encData[$n]['lat'] = $row['lat'];
-			$encData[$n]['lng'] = $row['lng'];
-			$encData[$n]['compass'] = $row['compass'];
-			$encData[$n]['speed'] = $row['speed'];
-			$encData[$n]['distance'] = $row['distance'];
-			$encData[$n]['utimestamp'] = $row['utimestamp'];
-			$n++;
-		}
-		//Начинаем группировку
-		if($last==0)
-		{
-		$k=0;
-		$m=0;
-			$drivingScore = 0;
-			$coef1 = 0.1;
-			$coef2 = 0.2;
-			$coef3 = 0.6;
-			$speedType = 0;
-			$deltaSpeed=0;
-			$acc = 0;
-			$j=count($encData);
-			for ($i = 1; $i < $j; $i++)
-			{
-				$typeTurn[0] = 'normal point';
-				$typeAcc[0] = 'normal point';
-				$sevTurn[0] = 0;
-				$sevAcc[0] = 0;
-				$sevSpeed[0] = 0;
-				$speed = $encData[$i]['speed'];	
-				$deltaTime = ($encData[$i]['utimestamp'] - $encData[$i-1]['utimestamp']);
-				if ( ($encData[$i]['lng']-$encData[$i-1]['lng']) != 0  )
+			$ret_arr[$n]['lat'] = $row['lat'];
+			$ret_arr[$n]['lng'] = $row['lng'];
+				if($row['sevAcc']!=0)
 				{
-					$turn[$i] = atan(($encData[$i]['lat']-$encData[$i-1]['lat'])/($encData[$i]['lng']-$encData[$i-1]['lng']));
-					$turn[0] = 0;
-					$deltaTurn = $turn[$i] - $turn[$i-1];
-					$wAcc = abs($deltaTurn/$deltaTime);
-					$radius = $speed/$wAcc;
-											
-																			if (($speed >= 0) && ($speed <= 80)) 
-									$sevSpeed[$i] = 0;
-								else if (($speed > 80) && ($speed <= 110))
-									$sevSpeed[$i] = 1;
-								else if (($speed > 110) && ($speed <= 130))
-									$sevSpeed[$i] = 2;
-								else if ($speed > 130)
-									$sevSpeed[$i] = 3;
-								
-											
-													
-								//Высчитываем тип поворота через угловое ускорение.					
-								if (($wAcc < 0.45) && ($wAcc >= 0)) {
-									$sevTurn[$i] = 0;									
-								} else 	if (($wAcc >= 0.45) && ($wAcc < 0.6))	{
-									$sevTurn[$i] = 1;
-								} else 	if (($wAcc >= 0.6) && ($wAcc < 0.75)){
-									$sevTurn[$i] = 2;
-								} else if ($wAcc >= 0.75) {
-									$sevTurn[$i] = 3;
-								}
-								
-								$deltaSpeed = $speed - $encData[$i-1]['speed'];
-								$accel[$i] = $deltaSpeed/$deltaTime;
-								
-								//Высчитываем тип неравномерного движения (ускорение-торможение) через ускорение.
-								if ($accel[$i]<-7.5) {
-									$sevAcc[$i] = -3;
-								} else if (($accel[$i]>=-7.5)&&($accel[$i]<-6)) {
-									$sevAcc[$i] = -2;
-								} else if (($accel[$i]>=-6)&&($accel[$i]<-4.5)) {
-									$sevAcc[$i] = -1;
-								} else if ($accel[$i]>5) {
-									$sevAcc[$i] = 3;
-								} else if (($accel[$i]>4)&&($accel[$i]<=5)){
-									$sevAcc[$i] = 2;
-								} else if (($accel[$i]>3.5)&&($accel[$i]<=4)) {
-									$sevAcc[$i] = 1;
-								} else if (($accel[$i]>=-4.5)&&($accel[$i]<=3.5)) {
-									$sevAcc[$i] = 0;
-								}
-					
-					
-				}
-				else 	
-				{	$sevAcc[$i] = 0;
-					$sevTurn[$i] = 0;
-					$wAcc = 0;
-					$radius = 0;
-				}
-				$timeSum = 0;
-				$sumSpeed = 0;
-
-
-
-		
-
-			}
-
-		
-
-		$k=0;
-		$R = 6371; // km
-		for ($i = 1; $i < $j; $i++)
-		{
-				$vg=1;
-				$d = acos(sin($encData[$i]['lat'])*sin($encData[$i-1]['lat']) + cos($encData[$i]['lat'])*cos($encData[$i-1]['lat']) *  cos($encData[$i-1]['lng']-$encData[$i]['lng'])) * $R;
-				if(($encData[$i]['utimestamp']-$encData[$i-1]['utimestamp']>300) || (($d)/($encData[$i]['utimestamp']-$encData[$i-1]['utimestamp']))>40)$vg=42;			
-				$ret_arr[$k]['lat']=$encData[$i]['lat'];
-				$ret_arr[$k]['lng']=$encData[$i]['lng'];
-				
-				//Вычисляем , что отправлять
-				if($vg!=42)
-				{
-				if($sevAcc[$i]!=0)
-				{
-					if($sevTurn[$i]==0)
+					if($row['sevTurn']==0)
 					{
-						if($sevAcc[$i]<0)
+						if($row['sevAcc']<0)
 						{
-							$ret_arr[$k]['type']=2;
-							$ret_arr[$k]['weight']=$sevAcc[$i]*(-1);
+							$ret_arr[$n]['type']=2;
+							$ret_arr[$n]['weight']=$row['sevAcc']*(-1);
 						}
 						else
 						{
-							$ret_arr[$k]['type']=1;
-							$ret_arr[$k]['weight']=$sevAcc[$i];
+							$ret_arr[$n]['type']=1;
+							$ret_arr[$n]['weight']=$row['sevAcc'];
 						}
 					}
 					else
 					{
-						if($sevAcc[$i]<0)
+						if($row['sevAcc']<0)
 						{
-							if($sevAcc[$i]*(-1)>=$sevTurn[$i])
+							if($row['sevAcc']*(-1)>=$row['sevTurn'])
 							{
-									$ret_arr[$k]['type']=2;
-									$ret_arr[$k]['weight']=$sevAcc[$i]*(-1);
+									$ret_arr[$n]['type']=2;
+									$ret_arr[$n]['weight']=$row['sevAcc']*(-1);
 							}
 							else
 							{
-									$ret_arr[$k]['type']=3;
-									$ret_arr[$k]['weight']=$sevTurn[$i];
+									$ret_arr[$n]['type']=3;
+									$ret_arr[$n]['weight']=$row['sevTurn'];
 							}
 						}
 						else
 						{
-							if($sevAcc[$i]>=$sevTurn[$i])
+							if($row['sevAcc']>=$row['sevTurn'])
 							{
-									$ret_arr[$k]['type']=1;
-									$ret_arr[$k]['weight']=$sevAcc[$i];
+									$ret_arr[$n]['type']=1;
+									$ret_arr[$n]['weight']=$row['sevAcc'];
 							}
 							else
 							{
-									$ret_arr[$k]['type']=3;
-									$ret_arr[$k]['weight']=$sevTurn[$i];
+									$ret_arr[$n]['type']=3;
+									$ret_arr[$n]['weight']=$row['sevTurn'];
 							}	
 						}
 					}
 				}
-				else if($sevAcc[$i]==0 && $sevSpeed[$i]==0)
+				else if($row['sevAcc']==0 && $row['sevSpeed']==0)
 				{
 					
-					if($sevTurn[$i]>0)
+					if($row['sevTurn']>0)
 					{
-						$ret_arr[$k]['type']=3;
-						$ret_arr[$k]['weight']=$sevTurn[$i];
+						$ret_arr[$n]['type']=3;
+						$ret_arr[$n]['weight']=$row['sevTurn'];
 					}
 					else
 					{
-						$ret_arr[$k]['type']=0;
-						$ret_arr[$k]['weight']=0;
+						$ret_arr[$n]['type']=0;
+						$ret_arr[$n]['weight']=0;
 					}
 				}
 				else
 				{
-					if($sevSpeed[$i]>0)
+					if($row['sevSpeed']>0)
 					{
-						$ret_arr[$k]['type']=4;
-						$ret_arr[$k]['weight']=$sevSpeed[$i];
+						$ret_arr[$n]['type']=4;
+						$ret_arr[$n]['weight']=$row['sevTurn'];
 					}
 					else
 					{
-						$ret_arr[$k]['type']=0;
-						$ret_arr[$k]['weight']=0;
+						$ret_arr[$n]['type']=0;
+						$ret_arr[$n]['weight']=0;
 					}
 				}
-			}
-			else
-			{
-				
-				$ret_arr[$k]['type']=42;
-				$ret_arr[$k]['weight']=42;
-			}
-						
-				$k++;
+		if(		$curDrivingId!=$row['DrivingId'])
+		{
+					$ret_arr[$n]['type']=42;
+					$ret_arr[$n]['weight']=42;
+					$curDrivingId=$row['DrivingId'];
 		}
-		
-		if($k!=0)
+			$n++;
+			
+		}
+	
+
+		if($n!=0)
 		{
 		
 			$errortype=array('info'=>"",'code'=>  0);
@@ -1255,276 +1145,6 @@ function getPath($param)
 			exit();
 
 		}
-	}
-	else
-	{
-		if($n<=1)
-		{
-			$errortype=array('info'=>"There is no data with such time",'code'=>  32);
-			$res=array('result'=>-1,'error'=> $errortype);
-			echo json_encode($res);	
-			exit();
-		}
-
-		//Если нудно взять только последнюю поездку
-		//Для начала берем группировку
-		$R = 6371; // km
-		//Если дданные есть:
-		if (mysql_num_rows($result)>0) {
-			$k = 0;
-			$m = 0;
-			$grouped[$k][$m]=$encData[0];
-			$n = count($encData)-1;
-			for ($i=1;$i<$n-1;$i++) {
-				if (($encData[$i]['utimestamp'] - $grouped[$k][$m]['utimestamp'] < 300) && 
-						((acos(sin($encData[$i]['lat'])*sin($grouped[$k][$m]['lat']) + cos($encData[$i]['lat'])*cos($grouped[$k][$m]['lat']) *  cos($grouped[$k][$m]['lng']-$encData[$i]['lng'])) * $R)/($encData[$i]['utimestamp'] - $grouped[$k][$m]['utimestamp']) < 180))
-					{
-						$m++;
-						$grouped[$k][$m] = $encData[$i];
-					}
-					else
-					{
-      						$k++;
-							$m = 0; 
-							$grouped[$k][$m] = $encData[$i];
-					}
-				
-			}
-			
-			
-			
-				//Теперь фильтруем данные 
-				$w = 0;
-				$n=0;
-				for($i=0;$i<count($grouped);$i++) {
-					$w=0;
-					for ($v=1; $v<count($grouped[$i]); $v++) {
-						if ($grouped[$i][$v]['lng'] != $grouped[$i][$v-1]['lng'] ) {
-							$unfilteredData[$n][$w] = $grouped[$i][$v-1];
-							$w++;
-						}
-					}
-					$n++;
-				}
-				unset($grouped);
-				$v=0;
-				for($i=0;$i<$n;$i++)
-				{
-					if(isset($unfilteredData[$i]))
-					if(count($unfilteredData[$i])>10)
-					{
-						if(($unfilteredData[$i][count($unfilteredData[$i])-1]['distance']-$unfilteredData[$i][0]['distance'])>0.1)
-						{
-							$notneed=0;
-							for($g=0;$g<count($unfilteredData[$i]);$g++)//if($unfilteredData[$i][$g]['speed']==0)$notneed++;
-							if($notneed*2<count($unfilteredData[$i]))
-							{
-								$grouped[$v]=$unfilteredData[$i];
-								$v++;
-							}
-						}
-					}
-				}
-			
-			
-			//Теперь берем только последнюю поездку
-			$grouped=array_reverse($grouped);
-			$z=count($grouped);
-			if ($z >= 2)for ($i=1;$i<$z;$i++)unset($grouped[$i]);
-			unset($encData);
-			$encData=$grouped[0];
-			$k=0;
-			$m=0;
-			$drivingScore = 0;
-			$coef1 = 0.1;
-			$coef2 = 0.2;
-			$coef3 = 0.6;
-			$speedType = 0;
-			$deltaSpeed=0;
-			$acc = 0;
-			$j=count($encData);
-			for ($i = 1; $i < $j; $i++)
-			{
-			$typeTurn[0] = 'normal point';
-				$typeAcc[0] = 'normal point';
-				$sevTurn[0] = 0;
-				$sevAcc[0] = 0;
-				$sevSpeed = 0;
-				$speed = $encData[$i]['speed'];	
-				$deltaTime = ($encData[$i]['utimestamp'] - $encData[$i-1]['utimestamp']);
-				if ( ($encData[$i]['lng']-$encData[$i-1]['lng']) != 0  )
-				{
-					$turn[$i] = atan(($encData[$i]['lat']-$encData[$i-1]['lat'])/($encData[$i]['lng']-$encData[$i-1]['lng']));
-					$turn[0] = 0;
-					$deltaTurn = $turn[$i] - $turn[$i-1];
-					$wAcc = abs($deltaTurn/$deltaTime);
-					$radius = $speed/$wAcc;
-					
-						//Высчитываем тип поворота через угловое ускорение.					
-								if (($wAcc < 0.45) && ($wAcc >= 0)) {
-									$sevTurn[$i] = 0;									
-								} else 	if (($wAcc >= 0.45) && ($wAcc < 0.6))	{
-									$sevTurn[$i] = 1;
-								} else 	if (($wAcc >= 0.6) && ($wAcc < 0.75)){
-									$sevTurn[$i] = 2;
-								} else if ($wAcc >= 0.75) {
-									$sevTurn[$i] = 3;
-								}
-								
-								$deltaSpeed = $speed - $encData[$i-1]['speed'];
-								$accel[$i] = $deltaSpeed/$deltaTime;
-								
-								//Высчитываем тип неравномерного движения (ускорение-торможение) через ускорение.
-								if ($accel[$i]<-7.5) {
-									$sevAcc[$i] = -3;
-								} else if (($accel[$i]>=-7.5)&&($accel[$i]<-6)) {
-									$sevAcc[$i] = -2;
-								} else if (($accel[$i]>=-6)&&($accel[$i]<-4.5)) {
-									$sevAcc[$i] = -1;
-								} else if ($accel[$i]>5) {
-									$sevAcc[$i] = 3;
-								} else if (($accel[$i]>4)&&($accel[$i]<=5)){
-									$sevAcc[$i] = 2;
-								} else if (($accel[$i]>3.5)&&($accel[$i]<=4)) {
-									$sevAcc[$i] = 1;
-								} else if (($accel[$i]>=-4.5)&&($accel[$i]<=3.5)) {
-									$sevAcc[$i] = 0;
-								}
-					
-					
-					
-				}
-				else 	
-				{
-					$sevAcc[$i] = 0;
-					$sevTurn[$i] = 0;
-					$wAcc = 0;
-					$radius = 0;
-				}
-				$timeSum = 0;
-				$sumSpeed = 0;
-
-
-			}
-
-		
-
-		$k=0;
-		$R = 6371; // km
-		for ($i = 1; $i < $j; $i++)
-		{
-				$vg=1;
-				$d = acos(sin($encData[$i]['lat'])*sin($encData[$i-1]['lat']) + cos($encData[$i]['lat'])*cos($encData[$i-1]['lat']) *  cos($encData[$i-1]['lng']-$encData[$i]['lng'])) * $R;
-				if(($encData[$i]['utimestamp']-$encData[$i-1]['utimestamp']>300) || (($d)/($encData[$i]['utimestamp']-$encData[$i-1]['utimestamp']))>40)$vg=42;			
-				$ret_arr[$k]['lat']=$encData[$i]['lat'];
-				$ret_arr[$k]['lng']=$encData[$i]['lng'];
-							if($vg!=42)
-				{
-				if($sevAcc[$i]!=0)
-				{
-					if($sevTurn[$i]==0)
-					{
-						if($sevAcc[$i]<0)
-						{
-							$ret_arr[$k]['type']=2;
-							$ret_arr[$k]['weight']=$sevAcc[$i]*(-1);
-						}
-						else
-						{
-							$ret_arr[$k]['type']=1;
-							$ret_arr[$k]['weight']=$sevAcc[$i];
-						}
-					}
-					else
-					{
-						if($sevAcc[$i]<0)
-						{
-							if($sevAcc[$i]*(-1)>=$sevTurn[$i])
-							{
-									$ret_arr[$k]['type']=2;
-									$ret_arr[$k]['weight']=$sevAcc[$i]*(-1);
-							}
-							else
-							{
-									$ret_arr[$k]['type']=3;
-									$ret_arr[$k]['weight']=$sevTurn[$i];
-							}
-						}
-						else
-						{
-							if($sevAcc[$i]>=$sevTurn[$i])
-							{
-									$ret_arr[$k]['type']=1;
-									$ret_arr[$k]['weight']=$sevAcc[$i];
-							}
-							else
-							{
-									$ret_arr[$k]['type']=3;
-									$ret_arr[$k]['weight']=$sevTurn[$i];
-							}	
-						}
-					}
-				}
-				else if($sevAcc[$i]==0 && $sevSpeed[$i]==0)
-				{
-					
-					if($sevTurn[$i]>0)
-					{
-						$ret_arr[$k]['type']=3;
-						$ret_arr[$k]['weight']=$sevTurn[$i];
-					}
-					else
-					{
-						$ret_arr[$k]['type']=0;
-						$ret_arr[$k]['weight']=0;
-					}
-				}
-				else
-				{
-					if($sevSpeed[$i]>0)
-					{
-						$ret_arr[$k]['type']=4;
-						$ret_arr[$k]['weight']=$sevSpeed[$i];
-					}
-					else
-					{
-						$ret_arr[$k]['type']=0;
-						$ret_arr[$k]['weight']=0;
-					}
-				}
-			}
-			else
-			{
-				
-				$ret_arr[$k]['type']=42;
-				$ret_arr[$k]['weight']=42;
-			}
-						
-				$k++;
-		}
-		if($k!=0)
-		{
-		
-			$errortype=array('info'=>$k,'code'=>  0);
-			$res=array('result'=>$ret_arr,'error'=> $errortype);
-			echo json_encode($res);	
-			exit();
-		}	
-		else
-		{
-			$errortype=array('info'=>"There is no data with such time",'code'=>  32);
-			$res=array('result'=>-1,'error'=> $errortype);
-			echo json_encode($res);	
-			exit();
-
-		}
-		
-		
-		
-		
-			}
-	}
-
 	}
 	else
 	{
