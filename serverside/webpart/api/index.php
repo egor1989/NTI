@@ -404,10 +404,13 @@ function addNTIFile($param)
 			$i=0;
 			$n=0;
 			while ($qq[$k]) 
-			{
+			{	
+				if($qq[$k]['lat']!=0 && $qq[$k]['lng']!=0)
+				{
 				if($i>0)
 				{
-					if($qq[$k]['timestamp']-$ArrayEntry[$n][$i-1]->getTimestamp<600)
+					
+					if($qq[$k]['timestamp']-$ArrayEntry[$n][$i-1]->getTimestamp()<600)
 					{
 						$ArrayEntry[$n][$i]=new UserEntry();
 						$ArrayEntry[$n][$i]->setLat($qq[$k]['gps']['latitude']);
@@ -454,6 +457,7 @@ function addNTIFile($param)
 						$ArrayEntry[$n][$i]->setTimestamp($qq[$k]['timestamp']);
 						$i++;
 				}
+			}
 				$lat=mysql_real_escape_string($qq[$k]['gps']['latitude']);
 				$lng=mysql_real_escape_string($qq[$k]['gps']['longitude']);
 				$accx=mysql_real_escape_string($qq[$k]['acc']['x']);
@@ -467,11 +471,11 @@ function addNTIFile($param)
 				mysql_query($str);
 				$k++;
 			}
+			//print_r($ArrayEntry);
 			//Разбили по времени
 			//Теперь перебирем поездки и высчитываем данные 
-			for($i=1;$i<$n;$i++)
+			for($i=1;$i<=$n;$i++)
 			{
-				
 				
 					$acc1=0;
 					$acc2=0;       
@@ -496,6 +500,8 @@ function addNTIFile($param)
 					
 					for($j=1;$j<count($ArrayEntry[$i]);$j++)
 					{
+
+						
 						$ArrayEntry[$i][$j]->setsevAcc(0);
 						$ArrayEntry[$i][$j]->setsevTurn(0);
 						$ArrayEntry[$i][$j]->setsevSpeed(0);
@@ -503,7 +509,9 @@ function addNTIFile($param)
 						$ArrayEntry[$i][$j]->setTypeSpeed("normal point");
 						$ArrayEntry[$i][$j]->setTypeAcc("normal point");
 						$speed=$ArrayEntry[$i][$j]->getSpeed();
+						
 						$deltaTime=$ArrayEntry[$i][$j]->getTimestamp()-$ArrayEntry[$i][$j-1]->getTimestamp();
+						
 						if($ArrayEntry[$i][$j]->getLng()-$ArrayEntry[$i][$j-1]->getLng()!=0)
 						{
 								$ArrayEntry[$i][$j]->setTurn(atan(($ArrayEntry[$i][$j]->getLat()-$ArrayEntry[$i][$j-1]->getLat())/($ArrayEntry[$i][$j]->getLng()-$ArrayEntry[$i][$j-1]->getLng())));
@@ -770,10 +778,6 @@ function addNTIFile($param)
 									if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "left turn continued"))$ArrayEntry[$i][$j]->setTurnType("left turn finished");
 									if (($ArrayEntry[$i][$j-1]->getTurnType() == "right turn started")||($typeTurn[$i-1] == "right turn continued"))$ArrayEntry[$i][$j]->setTurnType( "right turn finished");
 								}
-								
-								
-								
-								
 								if (($ArrayEntry[$i][$j]->getTurnType() == "left turn finished") || ($ArrayEntry[$i][$j]->getTurnType() == "right turn finished")) 
 								{
 									switch ($ArrayEntry[$i][$j]->getsevTurn()) {
@@ -790,23 +794,20 @@ function addNTIFile($param)
 						
 						
 					}
-					$TimeStart=$ArrayEntry[$i][0];//Подходит под определение ближайшей
-					$TimeEnd=$ArrayEntry[$i][0];//Хз может быть и перемешанно , пусть поищет
+					$TimeStart=$ArrayEntry[$i][0]->getTimestamp();//Подходит под определение ближайшей
+					$TimeEnd=$ArrayEntry[$i][0]->getTimestamp();//Хз может быть и перемешанно , пусть поищет
 					
 					//Теперь ищем начало и конец поездки 
 					for($j=0;$j<count($ArrayEntry[$i]);$j++)
 					{
-						if($ArrayEntry[$i][$j]<$TimeStart)$TimeStart=$ArrayEntry[$i][$j];
-						if($ArrayEntry[$i][$j]>$TimeEnd)$TimeEnd=$ArrayEntry[$i][$j];
+						if($ArrayEntry[$i][$j]->getTimestamp()<$TimeStart)$TimeStart=$ArrayEntry[$i][$j]->getTimestamp();
+						if($ArrayEntry[$i][$j]->getTimestamp()>$TimeEnd)$TimeEnd=$ArrayEntry[$i][$j]->getTimestamp();
 					}
 					//Теперь ищем расстояние, которое проехали в поездке
-					//Для этого не будем полагаться на мобильник и посчитаем всё руками
-					$TotalDistance=0;
-					for($j=0;$j<count($ArrayEntry[$i])-1;$j++)
-					{
-						$TotalDistance+=distance_between_points($ArrayEntry[$i][$j]->getLat(),$ArrayEntry[$i][$j+1]->getLat(),$ArrayEntry[$i][$j]->getLng(),$ArrayEntry[$i][$j+1]->getLng());
-					}
-					$TypeAcc1Count  =$acc1;
+					
+					
+					$TotalDistance=$ArrayEntry[$i][count($ArrayEntry[$i])-1]->getDistance();
+					$TypeAcc1Count =$acc1;
 					$TypeAcc2Count =$acc2;       
 					$TypeAcc3Count =$acc3;       
 					$TypeTurn1Count=$turn1;       
@@ -818,10 +819,13 @@ function addNTIFile($param)
 					$TypeBrake1Count =$brake1;     
 					$TypeBrake2Count =$brake2;    
 					$TypeBrake3Count =$brake3;
-					$sql_insert_str="insert into NTIUserDrivingTrack(UID,TotalAcc1Count,TotalAcc2Count,TotalAcc3Count,TotalBrake1Count,TotalBrake2Count,TotalBrake3Count,TotalSpeed1Count,TotalSpeed2Count,TotalSpeed3Count,TotalTurn1Count,TotalTurn2Count,TotalTurn3Count,TimeStart,TimeEnd,TotalDistance) values ($UID,$TypeAcc1Count,$TypeAcc2Count,$TypeAcc3Count,$TypeBrake1Count,$TypeBrake2Count,$TypeBrake3Count,$TypeSpeed1Count,$TypeSpeed2Count,$TypeSpeed3Count,$TypeTurn1Count,$TypeTurn2Count,$TypeTurn3Count,$TimeStart,$TimeEnd,$TotalDistance)";
+
+					$sql_insert_str="insert into NTIUserDrivingTrack(UID,TotalAcc1Count,TotalAcc2Count,TotalAcc3Count,TotalBrake1Count,TotalBrake2Count,TotalBrake3Count,TotalSpeed1Count,TotalSpeed2Count,TotalSpeed3Count,TotalTurn1Count,TotalTurn2Count,TotalTurn3Count,TimeStart,TimeEnd,TotalDistance) values ('$UID','$TypeAcc1Count','$TypeAcc2Count','$TypeAcc3Count','$TypeBrake1Count','$TypeBrake2Count','$TypeBrake3Count','$TypeSpeed1Count','$TypeSpeed2Count','$TypeSpeed3Count','$TypeTurn1Count','$TypeTurn2Count','$TypeTurn3Count','$TimeStart','$TimeEnd','$TotalDistance')";
+					
 					mysql_query($sql_insert_str);
 					$TrackID = mysql_insert_id();
 					//Теперь заносим эти же данные в EntrRide
+					
 					for($j=0;$j<count($ArrayEntry[$i]);$j++)
 					{
 						$accx=$ArrayEntry[$i][$j]->getAccx();
@@ -847,48 +851,6 @@ function addNTIFile($param)
 
 					}
 
-					//Перебираем все элементы для поиска конечного
-					//посчитали i ую поездку
-					//Теперь проверим , есть ли уже именно с этим пользователем поездки 
-					//Для этого получаем все временнные метки 
-					//Для того, чтобы поездка соединилась должны выполняться следующие условия
-					//Лучше ебану пример запросом
-					/*
-					SELECT `TimeStart`,`TimeEnd`,`Id` FROM `NTIUserDrivingTrack` WHERE UID=8 and
-					(`TimeStart`>=1334857038 and 1334857238 >=`TimeStart` and 1334857238<=`TimeEnd`)
-					OR
-					(`TimeStart`<=1334857038 and 1334857238<=`TimeEnd`)
-					OR
-					(`TimeStart`<=1334857038 and 1334857038 <=`TimeEnd` and 1334857238>=`TimeEnd`)
-					OR
-					(`TimeStart`>=1334857038 and 1334857238>=`TimeEnd`)
-					 */ 
-					
-					/*TODO:
-					 * Сделать объединение поездок
-					$result = mysql_query("	SELECT * FROM `NTIUserDrivingTrack` WHERE UID=8 and (`TimeStart`>=$TimeStart and $TimeEnd >=`TimeStart` and $TimeEnd<=`TimeEnd`) OR	(`TimeStart`<=$TimeStart and $TimeEnd<=`TimeEnd`)	OR	(`TimeStart`<=$TimeStart and $TimeStart <=`TimeEnd` and $TimeEnd>=`TimeEnd`)OR	(`TimeStart`>=$TimeStart and $TimeEnd>=`TimeEnd`)OR	(`TimeStart`>=$TimeEnd and TimeStart-$TimeEnd<300)	OR	(`TimeEnd`<=$TimeStart and $TimeStart-`TimeEnd`<300)");
-					while($row = mysql_fetch_array($result)) 
-					{	//Для начала получаем все данные этих поездк
-						$TypeAcc1Count  = $row['lat'];
-						$TypeAcc2Count =$row['lat'];       
-						$TypeAcc3Count =$row['lat'];       
-						$TypeTurn1Count=$row['lat'];       
-						$TypeTurn2Count=$row['lat'];       
-						$TypeTurn3Count =$row['lat'];      
-						$TypeSpeed1Count =$row['lat'];      
-						$TypeSpeed2Count =$row['lat'];     
-						$TypeSpeed3Count =$row['lat'];     
-						$TypeBrake1Count =$row['lat'];     
-						$TypeBrake2Count =$row['lat'];    
-						$TypeBrake3Count =$row['lat'];    
-						$TotalDistance=$row['lat'];	
-					}
-					*/
-					
-					
-					
-					
-					
 				}
 				//Если же ментше 50 - нахуй за борт
 			}
@@ -956,7 +918,7 @@ function getStatistics($param)
 					$score_brake =100*($row['TotalBrake1Count']*0.1+ $row['TotalBrake2Count']*0.25 +$row['TotalBrake3Count']*0.65)/$BrakeK ;
 					$score_acc = 100*($row['TotalAcc1Count']*0.1+ $row['TotalAcc2Count']*0.25 +$row['TotalAcc3Count']*0.65)/$AccK ;
 					$distance= $row['TotalDistance'];
-					$total_score = $score_speed +$score_turn+$score_brake+$score_acc;
+					$total_score = $score_speed +$score_turn+$score_brake+$score_acc+$distance;
 					$time=$row['TimeStart'];
 				}
 				
@@ -982,7 +944,7 @@ function getStatistics($param)
 					$score_turn=$score_turn/$n;
 					$score_brake=$score_brake/$n;
 					$score_acc=$score_acc/$n;
-					$total_score = ($score_speed +$score_turn+$score_brake+$score_acc);
+					$total_score = ($score_speed +$score_turn+$score_brake+$score_acc+$distance);
 				}
 				
 			}
@@ -1017,22 +979,29 @@ function getPath($param)
 	
 	$time=$param['time'];
 	$till=$param['till'];
+	$day=$param['day'];
 	$UID=NTI_Cookie_check();
 	if($UID>0)
 	{
 		if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
-		if(isset($param['time']) && !isset($param['till']) and $param['time']>0)
+		if(isset($param['time']) && !isset($param['till']) and $param['time']>0 && !isset($param['day']))
 		{
 		
-			$start=strtotime(date("D M j 00:00:00 T Y",$time));
-			$end= strtotime(date("D M j 23:59:59 T Y",$time));
-			$query = "Select NTIUserDrivingEntry.* from (SELECT `Id` FROM `NTIUserDrivingTrack` WHERE UID=$UID and (`TimeStart`>=$start and $end >=`TimeStart` and $end<=`TimeEnd`) OR (`TimeStart`<=$start and $end<=`TimeEnd`) OR 	(`TimeStart`<=$start and $start <=`TimeEnd` and $end>=`TimeEnd`) OR (`TimeStart`>=$start and $end>=`TimeEnd`)) as Driving,NTIUserDrivingEntry where NTIUserDrivingEntry.`DrivingID`=Driving.Id group by `utimestamp`";
+			$start=mysql_real_escape_string($time);
+			$query = "Select NTIUserDrivingEntry.* from (SELECT `Id` FROM `NTIUserDrivingTrack` WHERE UID=$UID and `TimeStart`>=$start)) as Driving,NTIUserDrivingEntry where NTIUserDrivingEntry.`DrivingID`=Driving.Id group by `utimestamp`";
 		}
 		else if(isset($param['time']) && isset($param['till'])  and $param['time']>0  and $param['till']>0)
 		{
 				$start=mysql_real_escape_string($time);
 				$end=mysql_real_escape_string($till);
 				$query = "Select NTIUserDrivingEntry.* from (SELECT `Id` FROM `NTIUserDrivingTrack` WHERE UID=$UID and (`TimeStart`>=$start and $end >=`TimeStart` and $end<=`TimeEnd`) OR (`TimeStart`<=$start and $end<=`TimeEnd`) OR 	(`TimeStart`<=$start and $start <=`TimeEnd` and $end>=`TimeEnd`) OR (`TimeStart`>=$start and $end>=`TimeEnd`)) as Driving,NTIUserDrivingEntry where NTIUserDrivingEntry.`DrivingID`=Driving.Id group by `utimestamp`";
+		}
+		else if(isset($param['time']) && !isset($param['till'])  and $param['time']>0  && isset($param['day']) && $param['day']==1)
+		{
+			$start=strtotime(date("D M j 00:00:00 T Y",$time));
+			$end= strtotime(date("D M j 23:59:59 T Y",$time));
+			$query = "Select NTIUserDrivingEntry.* from (SELECT `Id` FROM `NTIUserDrivingTrack` WHERE UID=$UID and (`TimeStart`>=$start and $end >=`TimeStart` and $end<=`TimeEnd`) OR (`TimeStart`<=$start and $end<=`TimeEnd`) OR 	(`TimeStart`<=$start and $start <=`TimeEnd` and $end>=`TimeEnd`) OR (`TimeStart`>=$start and $end>=`TimeEnd`)) as Driving,NTIUserDrivingEntry where NTIUserDrivingEntry.`DrivingID`=Driving.Id group by `utimestamp`";
+
 		}
 		else
 		{
@@ -1132,7 +1101,7 @@ function getPath($param)
 		if($n!=0)
 		{
 		
-			$errortype=array('info'=>"",'code'=>  0);
+			$errortype=array('info'=>$query,'code'=>  0);
 			$res=array('result'=>$ret_arr,'error'=> $errortype);
 			echo json_encode($res);	
 			exit();
