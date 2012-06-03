@@ -1,14 +1,14 @@
 ﻿<div id="content" class="pageContent">
 <?
 	
-	if ((isset($total_trips))&&($total_trips> 0)) {
-		switch($total_trips) {
+	if ((isset($trr['total_trips']))&&($trr['total_trips']> 0)) {
+		switch($trr['total_trips']) {
 			case 1: 
 				echo "<h3>Последняя поездка:  </h3>"."<br>";
 				break;
 			
 			default: 
-				echo "<h3>Последние ".$total_trips." поездок:  </h3>"."<br>";
+				echo "<h3>Последние ".$trr['total_trips']." поездок:  </h3>"."<br>";
 				break;
 		}
 		?>	
@@ -23,7 +23,7 @@
 				</th>
 			</tr>
 		<?
-		for ($c=0;$c<$total_trips;$c++) {?>
+		for ($c=0;$c<$trr['total_trips'];$c++) {?>
 			<tr>
 				<td>
 					<br>
@@ -66,13 +66,13 @@
 		</table>
 		<br>
 			<?
-			if (($trr['tscore'] != 0)&&($total_trips > 1)) {
+			if (($trr['tscore'] != 0)&&($trr['total_trips'] > 1)) {
 ?>
-								<span style="color:red">Суммарный счет последних <?echo $total_trips; ?> поездок: <?echo floor($trr['tscore']);?> points</span>
+								<span style="color:red">Суммарный счет последних <?echo $trr['total_trips']; ?> поездок: <?echo floor($trr['tscore']);?> points</span>
 				<?
 			}
 		} 
-		else if ((isset($total_trips))&&($total_trips == -1)) {
+		else if ((isset($trr['total_trips']))&&($trr['total_trips'] == -1)) {
 		?>
 		<h3>Нет данных по поездкам или данные еще не поступили.</h3>
 	<?}

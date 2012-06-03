@@ -19,6 +19,7 @@ class lays_model extends CI_Model {
 		$q = $this->db->query("SELECT * FROM NTIUserDrivingTrack where UID=$userid order by Id DESC");
 		$n=0;
 		$da['tscore']=0;
+		$da['tdst']=0;
 		//Если не было поездок за текущий период или не передано ни одной точки.
 		if ($q->num_rows() > 0) {
 			foreach($q->result() as $row) {
@@ -42,11 +43,13 @@ class lays_model extends CI_Model {
 				$da[$n]['total_brk_score'] = 100*($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*.025+ $row->TotalBrake3Count*0.65)/($row->TotalDistance*$BrakeK);
 				$da[$n]['total_crn_score'] = 100*($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*.025+ $row->TotalTurn3Count*0.65)/($row->TotalDistance*$TurnK);
 				$da[$n]['total_spd_score'] =100*($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*.025+ $row->TotalSpeed3Count*0.65)/($row->TotalDistance*$AccK);
-				$da[$n]['total_all_score'] =($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*.025+ $row->TotalAcc3Count*0.65)*0.15+($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*.025+ $row->TotalBrake3Count*0.65)*0.35+($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*.025+ $row->TotalTurn3Count*0.65)*0.25+($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*.025+ $row->TotalSpeed3Count*0.65)*0.35;
-				$da['tscore'] +=($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*.025+ $row->TotalAcc3Count*0.65)*0.15+($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*.025+ $row->TotalBrake3Count*0.65)*0.35+($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*.025+ $row->TotalTurn3Count*0.65)*0.25+($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*.025+ $row->TotalSpeed3Count*0.65)*0.35;
+				$da[$n]['total_all_score'] =$row->TotalDistance*($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*.025+ $row->TotalAcc3Count*0.65)*0.15+($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*.025+ $row->TotalBrake3Count*0.65)*0.35+($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*.025+ $row->TotalTurn3Count*0.65)*0.25+($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*.025+ $row->TotalSpeed3Count*0.65)*0.35;
+				$da['tscore'] +=$row->TotalDistance*($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*.025+ $row->TotalAcc3Count*0.65)*0.15+($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*.025+ $row->TotalBrake3Count*0.65)*0.35+($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*.025+ $row->TotalTurn3Count*0.65)*0.25+($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*.025+ $row->TotalSpeed3Count*0.65)*0.35;
+				$da['tdst']=+$row->TotalDistance;
 				$n++;
 			}
-			if($n>0)$da['tscore']=$da['tscore']/$n;
+			$da['tscore']=$da['tscore']/$da['tdst'];
+			$da['total_trips']=$n;
 			return $da;
 		} 
 		else {
@@ -138,25 +141,19 @@ $n=0;
 				$da['total_brakes'] += $row->TotalBrake1Count+$row->TotalBrake2Count+$row->TotalBrake3Count;
 				$da['total_excesses'] += $row->TotalSpeed1Count+$row->TotalSpeed2Count+$row->TotalSpeed3Count;
 				$da['total_turns'] += $row->TotalTurn1Count+$row->TotalTurn2Count+$row->TotalTurn3Count;
-				$da['total_dist']=$row->TotalDistance;
+				$da['total_dist']+=$row->TotalDistance;
 				$da['total_acc_score'] +=  100*($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*0.25+ $row->TotalAcc3Count*0.65)/($row->TotalDistance*$AccK);
 				$da['total_brk_score'] += 100*($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*0.25+ $row->TotalBrake3Count*0.65)/($row->TotalDistance*$BrakeK);
 				$da['total_crn_score'] += 100*($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*0.25+ $row->TotalTurn3Count*0.65)/($row->TotalDistance*$TurnK);
 				$da['total_spd_score'] +=100*($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*0.25+ $row->TotalSpeed3Count*0.65)/($row->TotalDistance*$AccK);
-				$da['total_all_score'] +=($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*.025+ $row->TotalAcc3Count*0.65)*0.15+($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*.025+ $row->TotalBrake3Count*0.65)*0.35+($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*.025+ $row->TotalTurn3Count*0.65)*0.25+($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*.025+ $row->TotalSpeed3Count*0.65)*0.35;
+				$da['total_all_score'] +=$row->TotalDistance*($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*.025+ $row->TotalAcc3Count*0.65)*0.15+($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*.025+ $row->TotalBrake3Count*0.65)*0.35+($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*.025+ $row->TotalTurn3Count*0.65)*0.25+($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*.025+ $row->TotalSpeed3Count*0.65)*0.35;
 				$da['is_set']=1;
 				$n++;
 			}
 						if($n>0)
 						{
-							
-							
-							
-				$da['total_acc_score']=$da['total_acc_score']/$n;
-				$da['total_brk_score']=$da['total_brk_score']/$n;
-				$da['total_crn_score']=$da['total_crn_score']/$n;
-				$da['total_spd_score']=$da['total_spd_score'] /$n;
-				$da['total_all_score']=$da['total_all_score']/$n;
+
+				$da['total_all_score']=$da['total_all_score']/$da['total_dist'];
 }
 						
 			return $da;
@@ -190,6 +187,7 @@ $da['is_set']=-1;
 		$q = $this->db->query("SELECT * FROM NTIUserDrivingTrack where UID=$userid and ((TimeStart>=$time1 and TimeStart<=$time2) or (TimeStart<$time1 and TimeEnd>=$time1))");
 		$n=0;
 		$da['tscore']=0;
+		$da['tdst']=0;
 		//Если не было поездок за текущий период или не передано ни одной точки.
 		if ($q->num_rows() > 0) {
 			foreach($q->result() as $row) {
@@ -214,9 +212,10 @@ $da['is_set']=-1;
 				$da[$n]['total_spd_score'] =100*($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*0.25+ $row->TotalSpeed3Count*0.65)/($row->TotalDistance*$AccK);
 				$da[$n]['total_all_score'] =($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*.025+ $row->TotalAcc3Count*0.65)*0.15+($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*.025+ $row->TotalBrake3Count*0.65)*0.35+($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*.025+ $row->TotalTurn3Count*0.65)*0.25+($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*.025+ $row->TotalSpeed3Count*0.65)*0.35;
 				$da['tscore'] +=($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*.025+ $row->TotalAcc3Count*0.65)*0.15+($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*.025+ $row->TotalBrake3Count*0.65)*0.35+($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*.025+ $row->TotalTurn3Count*0.65)*0.25+($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*.025+ $row->TotalSpeed3Count*0.65)*0.35;
-
+	$da['tdst']=+$row->TotalDistance;
 				$n++;
 			}
+			$da['tscore'] =$da['tscore']/$da['tdst'];
 			return $da;
 		} 
 		else {
@@ -224,24 +223,6 @@ $da['is_set']=-1;
 			return -1;
 		}
 	}
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 	public function cksearch($ckid) {

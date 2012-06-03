@@ -17,7 +17,6 @@ class User extends CI_Controller {
 
 					$this->load->view('header',$new_data);
 					$rs['trr'] = $this->lays_model->getTotalStats($urls);//Получеие статистики по пользователю
-					$rs['total_trips']=count($rs['trr'])-1;
 					$this->load->view('lasttrips_view',$rs);
 					$this->load->view('footer');
 		}
