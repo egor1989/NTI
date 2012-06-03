@@ -11,6 +11,17 @@
 <script src="../../js/libs/jquery.ui.core.js"></script>
 <script src="../../js/libs/jquery.ui.widget.js"></script>
 <script src="../../js/libs/jquery.ui.datepicker.js"></script>
+        <link rel="stylesheet" href="http://openlayers.org/dev/theme/default/style.css" type="text/css">
+        <link rel="stylesheet" href="http://openlayers.org/dev/theme/default/google.css" type="text/css">
+        <script src="http://maps.google.com/maps/api/js?v=3.5&amp;sensor=false"></script>
+        <script src="http://openlayers.org/dev/OpenLayers.js"></script>
+
+
+
+
+<?if(isset($map_type) && $map_type==3){?>
+<script src="/js/nti.js"></script>
+	<?}?>
 <script>
 	$(function() {
 		$( ".dateField" ).datepicker({ dateFormat: "dd-mm-yy" });
@@ -19,7 +30,7 @@
 </script>
 <link rel="stylesheet" type="text/css" href="/css/main.css" /> 
 </head>
-<body>
+<body <?if(isset($map_type) && $map_type==3){?>onload="init();"<?}?>>
   <div itemscope itemtype="http://schema.org/Organization"> 
     <meta itemprop="url" content="peacockteam.org" /> 
  

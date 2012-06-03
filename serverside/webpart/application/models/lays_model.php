@@ -3,6 +3,78 @@
 class lays_model extends CI_Model {
 
 
+		public function getMapData($id) {
+			
+		$id=mysql_real_escape_string($id);
+		$q = $this->db->query("SELECT sum((`TotalBrake1Count`*0.1+`TotalBrake2Count`*0.25+`TotalBrake3Count`*0.65)/`TotalDistance`)/count(*) as BrakeK,sum((`TotalAcc1Count`*0.1+`TotalAcc2Count`*0.25+`TotalAcc3Count`*0.65)/`TotalDistance`)/count(*) as AccK,sum((`TotalSpeed1Count`*0.1+`TotalSpeed2Count`*0.25+`TotalSpeed3Count`*0.65)/`TotalDistance`)/count(*) as SpeedK,sum((`TotalTurn1Count`*0.1+`TotalTurn2Count`*0.25+`TotalTurn3Count`*0.65)/`TotalDistance`)/count(*) as TurnK  FROM `NTIUserDrivingTrack` ");
+			foreach($q->result() as $row) {
+				$BrakeK = $row->BrakeK;
+			    $AccK = $row->AccK;
+				$SpeedK = $row->SpeedK;
+				$TurnK = $row->TurnK;
+			}
+		$q = $this->db->query("SELECT * FROM NTIUserDrivingTrack where Id=$id order by Id DESC");
+		//Если не было поездок за текущий период или не передано ни одной точки.
+		if ($q->num_rows() > 0) {
+			foreach($q->result() as $row) {
+				$da['TimeStart'] = $row->TimeStart;
+				$da['TimeEnd'] = $row->TimeEnd;
+				$da['TotalAcc1Count'] = $row->TotalAcc1Count;
+				$da['TotalAcc2Count'] = $row->TotalAcc2Count;
+				$da['TotalAcc3Count'] = $row->TotalAcc3Count;
+				$da['TotalBrake1Count'] = $row->TotalBrake1Count;
+				$da['TotalBrake2Count'] = $row->TotalBrake2Count;
+				$da['TotalBrake3Count'] = $row->TotalBrake3Count;
+				$da['TotalSpeed1Count'] = $row->TotalSpeed1Count;
+				$da['TotalSpeed2Count'] = $row->TotalSpeed2Count;
+				$da['TotalSpeed3Count'] = $row->TotalSpeed3Count;
+				$da['TotalTurn1Count'] = $row->TotalTurn1Count;
+				$da['TotalTurn2Count'] = $row->TotalTurn2Count;
+				$da['TotalTurn3Count'] = $row->TotalTurn3Count;
+				$da['total_dist']=$row->TotalDistance;
+				$da['total_acc_score'] =  100*($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*.025+ $row->TotalAcc3Count*0.65)/($row->TotalDistance*$AccK);
+				$da['total_brk_score'] = 100*($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*.025+ $row->TotalBrake3Count*0.65)/($row->TotalDistance*$BrakeK);
+				$da['total_crn_score'] = 100*($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*.025+ $row->TotalTurn3Count*0.65)/($row->TotalDistance*$TurnK);
+				$da['total_spd_score'] =100*($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*.025+ $row->TotalSpeed3Count*0.65)/($row->TotalDistance*$AccK);
+				$da['total_all_score'] =$row->TotalDistance*($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*.025+ $row->TotalAcc3Count*0.65)*0.15+($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*.025+ $row->TotalBrake3Count*0.65)*0.35+($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*.025+ $row->TotalTurn3Count*0.65)*0.25+($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*.025+ $row->TotalSpeed3Count*0.65)*0.35;
+				$da['tscore'] =$row->TotalDistance*($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*.025+ $row->TotalAcc3Count*0.65)*0.15+($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*.025+ $row->TotalBrake3Count*0.65)*0.35+($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*.025+ $row->TotalTurn3Count*0.65)*0.25+($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*.025+ $row->TotalSpeed3Count*0.65)*0.35;
+				$da['tdst']=$row->TotalDistance;
+				
+			}
+			$da['tscore']=$da['tscore']/$da['tdst'];
+			return $da;
+		} 
+		else {
+			return -1;
+		}
+	}
+	    function getByRide($uid)
+	{			
+		$k=0;
+		$query = $this->db->query("SELECT * FROM `NTIUserDrivingEntry` where DrivingID=$uid");
+		
+			if($query->num_rows()>0){
+			
+				foreach ($query->result() as $row)
+                    {
+	                         $ret_data[$k]['lat']=$row->lat;
+	                         $ret_data[$k]['lng']=$row->lng;
+	                         $ret_data[$k]['compass']=$row->compass;
+	                         $ret_data[$k]['speed']=$row->speed;
+	                         $ret_data[$k]['distance']=$row->distance;
+	                         $ret_data[$k]['utimestamp']=$row->utimestamp;
+							$k++;
+					}
+					
+					return $ret_data;
+			}
+			else{
+				return false;
+			}
+		
+	}
+
+
 		public function getTotalStats($userid) {
 			
 		$usr=mysql_real_escape_string($userid);
