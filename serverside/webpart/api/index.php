@@ -405,7 +405,7 @@ function addNTIFile($param)
 			$n=0;
 			while ($qq[$k]) 
 			{	
-				if($qq[$k]['lat']!=0 && $qq[$k]['lng']!=0)
+				if($qq[$k]['gps']['latitude']!=0 && $qq[$k]['gps']['longitude']!=0)
 				{
 				if($i>0)
 				{
@@ -796,17 +796,17 @@ function addNTIFile($param)
 					}
 					$TimeStart=$ArrayEntry[$i][0]->getTimestamp();//Подходит под определение ближайшей
 					$TimeEnd=$ArrayEntry[$i][0]->getTimestamp();//Хз может быть и перемешанно , пусть поищет
-					
+					$TotalDistance=0;
 					//Теперь ищем начало и конец поездки 
 					for($j=0;$j<count($ArrayEntry[$i]);$j++)
 					{
 						if($ArrayEntry[$i][$j]->getTimestamp()<$TimeStart)$TimeStart=$ArrayEntry[$i][$j]->getTimestamp();
 						if($ArrayEntry[$i][$j]->getTimestamp()>$TimeEnd)$TimeEnd=$ArrayEntry[$i][$j]->getTimestamp();
+						if($TotalDistance<$ArrayEntry[$i][$j]->getDistance())$TotalDistance=$ArrayEntry[$i][$j]->getDistance();
 					}
 					//Теперь ищем расстояние, которое проехали в поездке
-					
-					
-					$TotalDistance=$ArrayEntry[$i][count($ArrayEntry[$i])-1]->getDistance();
+
+					if($TotalDistance<=0)$TotalDistance=1;
 					$TypeAcc1Count =$acc1;
 					$TypeAcc2Count =$acc2;       
 					$TypeAcc3Count =$acc3;       
