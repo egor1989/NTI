@@ -386,8 +386,6 @@
 	// This is not an HTML formatted email
 	[picker setMessageBody:emailBody isHTML:NO];
     
-    
-
     NSData *attachment = [fileController makeArchive];
     
     // Attach  data to the email

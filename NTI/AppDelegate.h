@@ -44,7 +44,9 @@
     DatabaseActions *databaseAction;
     BOOL needCheck;
     
-
+    NSTimer *timer30sec;
+    NSTimer *timer5min;
+    NSTimer *sendTimer;
 }
 
 -(void)stopGPSDetect;

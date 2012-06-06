@@ -28,16 +28,13 @@
     
     [recordAction eventRecord:@"open"]; 
     
-    freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);
+    //!!! раскомментить!!!!!!!!    freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);
     
     locationManager=[[CLLocationManager alloc] init];
     locationManager.delegate=self;
-    //locationManager.desiredAccuracy=kCLLocationAccuracyBest;
-    locationManager.desiredAccuracy= kCLLocationAccuracyNearestTenMeters;//kCLLocationAccuracyBestForNavigation; //
+    locationManager.desiredAccuracy= kCLLocationAccuracyNearestTenMeters;
     locationManager.distanceFilter = kCLDistanceFilterNone;
     
-
-
     lastLoc = [[CLLocation alloc] init];
     allDistance = 0;
     canWriteToFile = NO;//?
@@ -88,7 +85,7 @@
     l5Km = 0;
     kmch5 = NO;
     [self startGPSDetect];
-    [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(timerFired:) userInfo:nil repeats:NO];
+    timer30sec = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(timerFired:) userInfo:nil repeats:NO];
 }
 
 -(void) timerFired: (NSTimer *)timer{
@@ -127,11 +124,15 @@
         needCheck = YES;
         m5Km = 0;
         l5Km = 0;
-        [NSTimer scheduledTimerWithTimeInterval:180 target:self selector:@selector(checkAfterFiveMin) userInfo:nil repeats:NO];
+        timer5min = [NSTimer scheduledTimerWithTimeInterval:180 target:self selector:@selector(checkAfterFiveMin) userInfo:nil repeats:NO];
     }
     else {
         NSLog(@"kmch5=NO");
-        [NSTimer scheduledTimerWithTimeInterval:180 target:self selector:@selector(checkSpeedTimer) userInfo:nil repeats:NO];
+       //  timerWithTimeInterval:target:selector:userInfo:repeats:
+        
+        timer5min = [NSTimer timerWithTimeInterval:30 target:self selector:@selector(checkSpeedTimer) userInfo:nil repeats:NO];
+        [[NSRunLoop currentRunLoop] addTimer:timer5min forMode:NSRunLoopCommonModes];
+        //(void)addTimer:(NSTimer *)aTimer forMode:(NSString *)mode
     }
 }
 
@@ -160,7 +161,7 @@
            [recordAction sendFile];
         }
         else  {
-            [NSTimer scheduledTimerWithTimeInterval:600 target:self selector:@selector(sendTimer:) userInfo:nil repeats:NO];
+            sendTimer = [NSTimer scheduledTimerWithTimeInterval:600 target:self selector:@selector(sendTimer:) userInfo:nil repeats:NO];
             NSLog(@"checkSendRight: start timer");
         }
     }
@@ -328,6 +329,7 @@
 //lifecyrcle for programm							
 - (void)applicationWillResignActive:(UIApplication *)application
 {
+    NSLog(@"=====application will resign active (call or sms etc)=====");
     /*
      Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
      Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
@@ -337,10 +339,25 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
     NSLog(@"=====background=====");
+    NSLog(@"30s = %@, 5 min = %@, send = %@", [timer30sec isValid]?@"YES":@"NO", [timer5min isValid]?@"YES":@"NO", [sendTimer isValid]?@"YES":@"NO");
+    if ([timer30sec isValid]) {
+        [timer30sec invalidate];
+        [self checkSpeedTimer];
+    }
+    if ([timer5min isValid]) {
+        [timer5min invalidate];
+        [self fiveMinTimer];
+    }
+    if ([sendTimer isValid]) {
+        [sendTimer invalidate];
+        [self checkSendRight];
+    }
+    
+    
     
     /*
      Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
-     If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
      */
 }
 
