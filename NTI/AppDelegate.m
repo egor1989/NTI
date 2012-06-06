@@ -28,7 +28,8 @@
     
     [recordAction eventRecord:@"open"]; 
     
-    //!!! раскомментить!!!!!!!!    freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);
+    freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);
+
     
     locationManager=[[CLLocationManager alloc] init];
     locationManager.delegate=self;

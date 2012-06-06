@@ -1,5 +1,8 @@
 ﻿<div id="content" class="pageContent">
 	<div  id="loginview" class="loginview">
+		<?
+			if(isset($temp_info))echo $temp_info;
+		?>
 	<?php 
 		$this->load->helper('form');
 		$formAttr = array('id' => 'registrationForm');

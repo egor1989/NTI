@@ -88,8 +88,8 @@
     NSLog(@"MV parse route");
     NSArray *point = [[NSArray alloc] init];
     NSMutableArray *routeLineArray = [[NSMutableArray alloc] init];
-    NSMutableArray *allRoutesPointsArray[4][4];
-    for (int i=0; i<=3; i++) {
+    NSMutableArray *allRoutesPointsArray[5][4];
+    for (int i=0; i<=4; i++) {
         for (int j=0; j<=3; j++) {
             allRoutesPointsArray[i][j] = [[NSMutableArray alloc] init];
         }
@@ -123,9 +123,11 @@
             NSLog(@"NSInvalidArgumentException in mapView");
         }
         //отрисовка специальных точек
-        for (int i=1; i<=3; i++) {
-            for (int j=1; j<=3; j++) {
-                [self specialPointsDraw:allRoutesPointsArray[i][j] withType:i andStrong:j];
+        for (int i=1; i<=4; i++) {
+            for (int j=0; j<=3; j++) {
+                if (allRoutesPointsArray[i][j] != nil) {
+                    [self specialPointsDraw:allRoutesPointsArray[i][j] withType:i andStrong:j];
+                }
             }
         }
     }
@@ -264,6 +266,12 @@
     }
     else if([circle.title isEqualToString:@"type=3.strong=3"]){
         circleView.strokeColor = circleView.fillColor = [UIColor colorWithRed:1.0 green:1.0 blue:0.0 alpha:1.0];
+    }
+    
+    //превышения
+    if([circle.title isEqualToString:@"type=4.strong=0"]){
+//        circleView.strokeColor = circleView.fillColor = [UIColor colorWithRed:0.5 green:0.42 blue:0.16 alpha:1.0];
+        circleView.strokeColor = circleView.fillColor = [UIColor purpleColor];
     }
     return circleView;
 }

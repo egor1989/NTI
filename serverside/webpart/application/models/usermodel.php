@@ -11,7 +11,7 @@
 		
 			$password=hash('sha256', $password);
 
-			$query = $this->db->get_where('NTIUsers', array('Login' => $login, 'Password' => $password));
+			$query = $this->db->get_where('NTIUsers', array('Login' => $login, 'Password' => $password, 'Deleted' => 0));
 			if($query->num_rows()>0){
 			
 				foreach($query->result() as $row)
@@ -558,6 +558,30 @@
 				}
 						
 		}
+		
+		
+		
+		
+		
+				function getUIDByDataID($DataId)
+				{
+					//Функция возвращает ID пользователя относительно его поездки
+					$DataId=mysql_real_escape_string($DataId);
+					$q = $this->db->query("SELECT UID FROM `NTIUserDrivingTrack` WHERE `Id`=$DataId Limit 1");
+					if ($q->num_rows() > 0) {
+					foreach($q->result() as $row) 
+					{
+						return $row->UID;
+					}
+				}
+				else
+				{
+					return -1;
+				}
+			}
+		
+		
+
 		function passwordremember($email)
 	{
 				$password= random_string('alnum', 64);

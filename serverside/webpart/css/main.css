@@ -31,7 +31,17 @@ body
     min-width: 900px;
     background-image: url('images/header-bg2.png');
 }
-
+    #map {
+        border : 0;
+        height : 500px;
+        width:500px;
+    }
+    .smallmap {
+    width: 1024px;
+    height: 456px;
+    border: 1px solid #ccc;
+    
+}
 .header_left_shadow
 {
     background-image: url('images/header_left_shadow.png');
@@ -125,39 +135,6 @@ padding: 10px;
 .social.vk{background-image: url('images/vk_logo.png');}
 .social.fb{background-image: url('images/fb_logo.png');}
 .social.gp{background-image: url('images/gplus_logo.png');}
-
-.map_type
-{
-    position: relative;
-    float: left;
-    margin-right: 30px;
-}
-
-.map_layerItem
-{
-    position: relative;
-    float: left;
-    margin-right: 20px;
-    font-size: 11px;  
-    height: 40px;
-    width: 110px;
-}
-
-.map_layerType
-{
-    position: relative;
-    float: left;
-    width: 21px;
-    height: 21px;
-    padding-top: 2px;
-    padding-left: 1px;
-    margin-right: 4px;      
-}
-
-.map_layerType:hover
-{
-    cursor: pointer;
-}
 
 .redCHX{background-image: url('images/redCHX.png');}
 .greenCHX{background-image: url('images/greenCHX.png');}
@@ -509,29 +486,6 @@ a.languagebox_item_active
     color: #000000;
     text-decoration: underline;
     margin-right: 0px;
-}
-
-.map
-{
-    border-top: 1px solid gray;
-    border-left: 1px solid gray;
-    border-right: 1px solid gray;
-    border-bottom: 1px solid gray;
-    width: 70%;
-    background-color: #fff;
-    margin-left: 0%;
-    margin-top: 5px;
-    position: relative;
-    float: right;
-    overflow: hidden;
-    height: 700px;
-}
-.mapfull
-{
-    width: 100%;
-    position: absolute;
-    float: right;
-    height: 100%;
 }
 
 .iepageFooter

@@ -104,8 +104,10 @@ public class runner implements Runnable {
                             //TODO: Сделать нормальную разбивку по поездкам
                             if(UnfilteredEntry.size()>0)
                             {
-                                if(( ArrayEntry[i-1].getTimestamp()-UnfilteredEntry.get(UnfilteredEntry.size()-1).getTimestamp())<300 && DistanceBetweenPoints(UnfilteredEntry.get(UnfilteredEntry.size()-1).getLat(),ArrayEntry[i-1].getLat(),  UnfilteredEntry.get(UnfilteredEntry.size()-1).getLng(),ArrayEntry[i-1].getLng())<0.2)
-                                    {
+                                //if(( ArrayEntry[i-1].getTimestamp()-UnfilteredEntry.get(UnfilteredEntry.size()-1).getTimestamp())<600 && (1000*DistanceBetweenPoints(UnfilteredEntry.get(UnfilteredEntry.size()-1).getLat(),ArrayEntry[i-1].getLat(),  UnfilteredEntry.get(UnfilteredEntry.size()-1).getLng(),ArrayEntry[i-1].getLng())/( ArrayEntry[i-1].getTimestamp()-UnfilteredEntry.get(UnfilteredEntry.size()-1).getTimestamp()))<50)
+                                 if(( ArrayEntry[i-1].getTimestamp()-UnfilteredEntry.get(UnfilteredEntry.size()-1).getTimestamp())<600)
+                                
+                                {
                                      //   System.out.println((UnfilteredEntry.get(UnfilteredEntry.size()-1).getTimestamp()-ArrayEntry[i-1].getTimestamp())+"::::"+DistanceBetweenPoints(UnfilteredEntry.get(UnfilteredEntry.size()-1).getLat(),ArrayEntry[i-1].getLat(),  UnfilteredEntry.get(UnfilteredEntry.size()-1).getLng(),ArrayEntry[i-1].getLng()));
                                      UnfilteredEntry.add(ArrayEntry[i-1]);
                                  }
@@ -123,6 +125,14 @@ public class runner implements Runnable {
                             }
                           
                         }
+  
+                        
+                        
+                        
+                        
+                        
+                        
+                        
                         //Теперь удаляем определенно херовые поезки
                         //Если в поездке 0 скоростей больше половины - эт какая-то хуита ребята
 
