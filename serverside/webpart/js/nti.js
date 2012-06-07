@@ -8,7 +8,7 @@ function initGMap() {
     
     var gsat = new OpenLayers.Layer.Google(
         "Google Satellite",
-        {type: google.maps.MapTypeId.SATELLITE, numZoomLevels: 22}
+        {type: google.maps.MapTypeId.SATELLITE, numZoomLevels: 22, visibility: false}
     );
     var gphy = new OpenLayers.Layer.Google(
         "Google Physical",
@@ -16,7 +16,7 @@ function initGMap() {
     );
     var gmap = new OpenLayers.Layer.Google(
         "Google Streets", // the default
-        {numZoomLevels: 20, visibility: false}
+        {numZoomLevels: 20, visibility: true}
     );
     var ghyb = new OpenLayers.Layer.Google(
         "Google Hybrid",
@@ -33,15 +33,6 @@ function initGMap() {
     ), 5);
 }
 
-// length on great circle (km)
-function gCercle (lon1, lat1, lon2, lat2)
-{	return 2 * 6367 *
-			Math.asin( Math.sqrt ( 
-					Math.pow(Math.sin((lat1-lat2)/2),2)
-				+	( Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin((lon1-lon2)/2),2))
-				));
-}
-
 function handler(request) 
 {   document.getElementById('wait').style.display='none';
 	// Response as text
@@ -49,29 +40,6 @@ function handler(request)
     {	
 		return;
 	}
-	var drivingScore = 0;
-	var coef1 = 0.1;
-	var coef2 = 0.2;
-	var coef3 = 0.6;
-	var speedType = 0;
-	var deltaSpeed=0;
-	var speed1=0;
-	var speed2=0;
-	var speed3=0;
-	var acc1=0;
-	var acc2=0;
-	var acc3=0;
-	var brake1=0;
-	var brake2=0;
-	var brake3=0;
-	var turn1=0;
-	var turn2=0;
-	var turn3=0;
-	var accel = new Array();
-	var turn = new Array();
-	var typeTurn = new Array();
-	var typeAcc = new Array();
-	var acc = 0;
 	var i;
 	var t = request.responseText.replace(/\r/g,'').split('\n');
 	var features = new Array();
@@ -88,11 +56,6 @@ function handler(request)
 		// Filter distance on great circle
 		if (dmax>0)
 		{	// Don't filter the first one or when tagged
-			if (pt[i][6]=="" && i>0)
-			{	// Distance
-				//var d = gCercle(lon1,lat1, Number(pt[i][1])*Math.PI/180,Number(pt[i][0])*Math.PI/180);
-				//if (d < dmax) continue;
-			}
 			lon1 = Number(pt[i][1])*Math.PI/180;
 			lat1 = Number(pt[i][0])*Math.PI/180;
 			filteredPt[j]=pt[i];
@@ -101,160 +64,18 @@ function handler(request)
 	}
 	for (i=1; i<filteredPt.length; i++)
 	{
-	// Add the feature
 		var p = new OpenLayers.Geometry.Point(Number(filteredPt[i][1]), Number(filteredPt[i][0]));
 		p.transform(new OpenLayers.Projection('EPSG:4326'), this.getProjection());
-		typeTurn[0] = "normal point";
-		typeAcc[0] = "normal point";
-		var sevTurn = 0;
-		var sevAcc = 0;
-		var sevSpeed = 0;
 		speed = filteredPt[i][3];
 		var deltaTime = (filteredPt[i][5] - filteredPt[i-1][5])/1000;
-		if ((i!=0)&&((filteredPt[i][1]-filteredPt[i-1][1])!=0)){
-			turn[i] = Math.atan((filteredPt[i][0]-filteredPt[i-1][0])/(filteredPt[i][1]-filteredPt[i-1][1]));
-			turn[0] = 0;
-			var deltaTurn = turn[i] - turn[i-1];
-			wAcc = Math.abs(deltaTurn/deltaTime);
-			radius = speed/wAcc;
-			//var acc = (filteredPt[i][3] - filteredPt[i-1][3])/(filteredPt[i][5] - filteredPt[i][5])/3600;
-			if (speed < 90) {
-			  speedType = 0;
-			} else if (speed<110){
-			  speed1++;
-			  speedType = 1;
-			} else if (speed<130){
-			  speed2++;
-			  speedType = 2;
-			  } else {
-			  speed3++;
-			  speedType = 3;
-			  }
-			if ((wAcc<4.5)||(isNaN(wAcc))) {
-			  sevTurn = 0;
-			} else if (wAcc<6){
-			  sevTurn = 1;
-			  turn1++;
-			} else if (wAcc<7.5){
-			  sevTurn = 2;
-			  turn2++;
-			} else {
-			  sevTurn = 3;
-			  turn3++;
-			}
-			if ((typeTurn[i-1] == "left turn finished")||(typeTurn[i-1] == "right turn finished")||(typeTurn[i-1] == undefined)||(speed == 0)){
-				typeTurn[i] = "normal point";
-			} else if (deltaTurn > 0.5){
-				if (typeTurn[i-1] == "normal point") typeTurn[i] = "left turn started";
-				if ((typeTurn[i-1] == "left turn started")||(typeTurn[i-1] == "left turn continued")) typeTurn[i] = "left turn continued";
-				if ((typeTurn[i-1] == "right turn started")||(typeTurn[i-1] == "right turn continued")) typeTurn[i] = "right turn finished";
-			} else if (deltaTurn < -0.5){
-			    if (typeTurn[i-1] == "normal point") typeTurn[i] = "right turn started";
-				if ((typeTurn[i-1] == "right turn started")||(typeTurn[i-1] == "right turn continued")) typeTurn[i] = "right turn continued";
-				if ((typeTurn[i-1] == "left turn started")||(typeTurn[i-1] == "left turn continued")) typeTurn[i] = "left turn finished";
-			} else {
-			    if (typeTurn[i-1] == "normal point") typeTurn[i] = "normal point";
-				if ((typeTurn[i-1] == "left turn started")||(typeTurn[i-1] == "left turn continued")) typeTurn[i] = "left turn finished";
-				if ((typeTurn[i-1] == "right turn started")||(typeTurn[i-1] == "right turn continued")) typeTurn[i] = "right turn finished";
-			} 
-		} else {
-		  typeTurn[i] = "normal point";
-		  sevTurn[i] = 0;
-		  wAcc = 0;
-		  radius = 0;
-		}
-		
-		var timeSum = 0;
-		var sumSpeed = 0;
-		if ((i!=0)&&(deltaTime!=0)){
-			deltaSpeed = speed - filteredPt[i-1][3];
-			accel[i] = deltaSpeed/deltaTime;
-			if (accel[i]<-7.5) {
-			  sevAcc = -3;
-			  brake3++;
-			} else if (accel[i]<-6){
-			  sevAcc = -2;
-			  brake2++;
-			} else if (accel[i]<-4.5){
-			  sevAcc = -1;
-			  brake1++;
-			} else if (accel[i]>5){
-			  sevAcc = 3;
-			  acc3++;
-			} else if (accel[i]>4){
-			  sevAcc = 2;
-			  acc2++;
-			} else if (accel[i]>3.5){
-			  sevAcc = 1;
-			  acc1++;
-			} else {
-			  sevAcc = 0;
-			}
-		}
-			/*if (typeAcc[i-1]=="normal point") {
-			  if (deltaSpeed > 0){
-			    typeAcc = "start accel";
-			    accel[i] = deltaSpeed/deltaTime;
-			    timeSum = filteredPt[i][5];
-			    sumSpeed = speed;
-		      }
-			  if (deltaSpeed < 0) {
-			    typeAcc = "start brake";
-			    accel[i] = deltaSpeed/deltaTime;
-			    timeSum = filteredPt[i][5];
-			    sumSpeed = speed;
-		    } else {
-			    typeAcc = "normal point";
-			  }
-			}
-			if (typeAcc[i-1]=="start accel") {
-			  if (deltaSpeed > 0){
-			    typeAcc = "continue accel";
-			    accel[i] = deltaSpeed/deltaTime;
-			    sumSpeed += speed;
-				timeSum += filteredPt[i][5];
-		      }
-			  if (deltaSpeed < 0) {
-			    typeAcc = "start brake";
-			    accel[i] = deltaSpeed/deltaTime;
-			    timeSum = filteredPt[i][5];
-			    sumSpeed = speed;
-		    } else {
-			    typeAcc = "normal point";
-			  }
-			}
-			if (typeAcc[i-1]=="start brake") {
-			  if (deltaSpeed > 0){
-			    typeAcc = "start accel";
-			    accel[i] = deltaSpeed/deltaTime;
-			    sumSpeed = speed;
-		      }
-			  if (deltaSpeed < 0) {
-			    typeAcc = "continue brake";
-			    accel[i] = deltaSpeed/deltaTime;
-			    curTimeStart = filteredPt[i][5];
-			    sumSpeed = speed;
-		    } else {
-			    typeAcc = "normal point";
-			  }
-			}*/
-		
-		/*for acc and brake*/
-	    var color = "white";
-		if (sevAcc==1) color = "#c3eb0d";
-		if (sevAcc==2) color = "#0deb12";
-		if (sevAcc==3) color = "#0deb88";
-	    if (sevAcc==-1) color = "#ebc10d";
-		if (sevAcc==-2) color = "#eb610d";
-		if (sevAcc==-3) color = "#eb0d1b";
-		
-		/* for cornering*/
-		/*
-		var color = "white";
-		if (sevTurn==1) color = "green";
-		if (sevTurn==2) color = "#fc6";
-		if (sevTurn==3) color = "black";
-		*/
+	    var color = "#00ff00";
+	   
+		if (Number(filteredPt[i][6])==3 || Number(filteredPt[i][7])==3 || Number(filteredPt[i][6])==-3) color = "#ff0000";
+		else if (Number(filteredPt[i][6])==2 || Number(filteredPt[i][6])==-2) color = "#FFA07A";
+		else if (Number(filteredPt[i][6])==1 || Number(filteredPt[i][6])==-1) color = "#FFE4B5";
+		else if (Number(filteredPt[i][7])==2 && Number(filteredPt[i][6])==0) color = "#FFD700";
+		else if (Number(filteredPt[i][7])==1 && Number(filteredPt[i][6])==0) color = "#ffff00";
+
 		feature = new OpenLayers.Feature.Vector
 		(	new OpenLayers.Geometry.Point(p.x,p.y), 
 			{	rot : 360-Number(filteredPt[i][2]),
@@ -262,12 +83,10 @@ function handler(request)
 				radius : 3+(Number(filteredPt[i][3])/10),
 				dist : Number(filteredPt[i][4]),
 				time : Number(deltaTime),
-				label : Number(filteredPt[i][6]),
-				typeTurn : String(typeTurn[i]),
-				wAcc : Number(wAcc),
-				severityTurn : Number(sevTurn),
-				accel : String(accel[i]),
-				severityAcc : Number(sevAcc)
+				label : filteredPt[i][9],
+				typeTurn : String(filteredPt[i][8]),
+				severityTurn : Number(filteredPt[i][7]),
+				severityAcc : Number(filteredPt[i][6])
 			}, { fillColor: color,
 			     rotation: 360-Number(filteredPt[i][2]),			// rotation as attribute
 				 pointRadius: 3+(Number(filteredPt[i][3])/10),	// radius as attribute
@@ -280,10 +99,7 @@ function handler(request)
 		);
 		features.push(feature);
    }
-    var fullTime = (filteredPt[filteredPt.length - 1][5] - filteredPt[0][5]) /1000 / 60 / 60;
-    drivingScore = (coef1 * (speed1 + turn1 + acc1 + brake1) + coef2 * (speed2 + turn2 + acc2 + brake2) 
-					+ coef3 * (speed3 + turn3 + acc3 + brake3)) / fullTime;
-	
+    	
 
    // Add to the layer
    this.amLayer.addFeatures(features);
@@ -337,9 +153,7 @@ function init()
 				+"Time : "+e.feature.attributes.time+"<br/>"
 				+"Label : "+e.feature.attributes.label+" <br/>"
 				+"TypeTurn: "+e.feature.attributes.typeTurn+" <br/>"
-				+"wAcc: "+e.feature.attributes.wAcc+" <br/>"
 				+"severityTurn: "+e.feature.attributes.severityTurn+" <br/>"
-				+"Acc: "+e.feature.attributes.accel+" <br/>"
 				+"SeverityAcc: "+e.feature.attributes.severityAcc;
         },
         "featureunselected": function(e) { document.getElementById("status").innerHTML = ""; }

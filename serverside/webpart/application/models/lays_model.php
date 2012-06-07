@@ -71,6 +71,16 @@ class lays_model extends CI_Model {
 	                         $ret_data[$k]['speed']=$row->speed;
 	                         $ret_data[$k]['distance']=$row->distance;
 	                         $ret_data[$k]['utimestamp']=$row->utimestamp;
+	                         $ret_data[$k]['sevAcc']=$row->sevAcc;
+	                         $ret_data[$k]['sevTurn']=$row->sevTurn;
+	                         $ret_data[$k]['sevSpeed']=$row->sevSpeed;
+	                         $ret_data[$k]['Info']="";
+	                         if($row->sevAcc!=0)$ret_data[$k]['Info'].=$row->TypeAcc."<br/>";
+	                         if($row->sevTurn!=0)$ret_data[$k]['Info'].=$row->TurnType."<br/>";
+	                         if($row->sevSpeed!=0)$ret_data[$k]['Info'].=$row->TypeSpeed."<br/>";
+	                         if($row->sevAcc==0 && $row->sevTurn==0 &&  $row->sevSpeed==0)
+	                         	 	 	$ret_data[$k]['Info']="normal point";
+
 							$k++;
 					}
 					
