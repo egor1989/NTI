@@ -805,7 +805,16 @@ function addNTIFile($param)
 						if($TotalDistance<$ArrayEntry[$i][$j]->getDistance())$TotalDistance=$ArrayEntry[$i][$j]->getDistance();
 					}
 					//Теперь ищем расстояние, которое проехали в поездке
-
+					$result=mysql_query("SELECT * FROM `NTICoef` order by ID desc limit 1");
+					while ($row = mysql_fetch_array($result)) 
+					{
+						$BrakeK = $row['BrakeK'];
+						$AccK = $row['AccK'];
+						$SpeedK = $row['SpeedK'];
+						$TurnK = $row['TurnK'];
+						$CoefID=$row['Id'];
+					}
+		
 					if($TotalDistance<=0)$TotalDistance=1;
 					$TypeAcc1Count =$acc1;
 					$TypeAcc2Count =$acc2;       
@@ -819,8 +828,12 @@ function addNTIFile($param)
 					$TypeBrake1Count =$brake1;     
 					$TypeBrake2Count =$brake2;    
 					$TypeBrake3Count =$brake3;
-
-					$sql_insert_str="insert into NTIUserDrivingTrack(UID,TotalAcc1Count,TotalAcc2Count,TotalAcc3Count,TotalBrake1Count,TotalBrake2Count,TotalBrake3Count,TotalSpeed1Count,TotalSpeed2Count,TotalSpeed3Count,TotalTurn1Count,TotalTurn2Count,TotalTurn3Count,TimeStart,TimeEnd,TotalDistance) values ('$UID','$TypeAcc1Count','$TypeAcc2Count','$TypeAcc3Count','$TypeBrake1Count','$TypeBrake2Count','$TypeBrake3Count','$TypeSpeed1Count','$TypeSpeed2Count','$TypeSpeed3Count','$TypeTurn1Count','$TypeTurn2Count','$TypeTurn3Count','$TimeStart','$TimeEnd','$TotalDistance')";
+					$score_speed = 0.35*100*($TypeSpeed1Count*0.1+ $TypeSpeed2Count*0.25 +$TypeSpeed3Count*0.65)/($TotalDistance*$SpeedK) ;
+					$score_turn =0.25*100*($TypeTurn1Count*0.1+ $TypeTurn2Count*0.25 +$TypeTurn3Count*0.65)/($TotalDistance*$TurnK) ;
+					$score_brake =0.35*100*($TypeBrake1Count*0.1+ $TypeBrake2Count*0.25 +$TypeBrake3Count*0.65)/($TotalDistance*$BrakeK) ;
+					$score_acc = 0.15*100*($TypeAcc1Count*0.1+ $TypeAcc2Count*0.25 +$TypeAcc3Count*0.65)/($TotalDistance*$AccK) ;
+			
+					$sql_insert_str="insert into NTIUserDrivingTrack(UID,TotalAcc1Count,TotalAcc2Count,TotalAcc3Count,TotalBrake1Count,TotalBrake2Count,TotalBrake3Count,TotalSpeed1Count,TotalSpeed2Count,TotalSpeed3Count,TotalTurn1Count,TotalTurn2Count,TotalTurn3Count,TimeStart,TimeEnd,TotalDistance,SpeedScore,	TurnScore,BrakeScore,AccScore,CurrentKCoefID) values ('$UID','$TypeAcc1Count','$TypeAcc2Count','$TypeAcc3Count','$TypeBrake1Count','$TypeBrake2Count','$TypeBrake3Count','$TypeSpeed1Count','$TypeSpeed2Count','$TypeSpeed3Count','$TypeTurn1Count','$TypeTurn2Count','$TypeTurn3Count','$TimeStart','$TimeEnd','$TotalDistance','$score_speed','$score_turn','$score_brake','$score_acc','$CoefID')";
 					
 					mysql_query($sql_insert_str);
 					$TrackID = mysql_insert_id();
@@ -897,7 +910,7 @@ function getStatistics($param)
 			while ($row = mysql_fetch_array($result)) 
 			{
 				$BrakeK = $row['BrakeK'];
-			    $AccK = $row['AccK'];
+			        $AccK = $row['AccK'];
 				$SpeedK = $row['SpeedK'];
 				$TurnK = $row['TurnK'];
 			}
@@ -913,12 +926,12 @@ function getStatistics($param)
 				$result=mysql_query("SELECT * FROM `NTIUserDrivingTrack` where UID=$UID order by Id DESC Limit 1");
 				while ($row = mysql_fetch_array($result)) 
 				{
-					$score_speed = 100*($row['TotalSpeed1Count']*0.1+ $row['TotalSpeed2Count']*0.25 +$row['TotalSpeed3Count']*0.65)/($row['TotalDistance']*$SpeedK) ;
-					$score_turn =100*($row['TotalTurn1Count']*0.1+ $row['TotalTurn2Count']*0.25 +$row['TotalTurn3Count']*0.65)/($row['TotalDistance']*$TurnK) ;
-					$score_brake =100*($row['TotalBrake1Count']*0.1+ $row['TotalBrake2Count']*0.25 +$row['TotalBrake3Count']*0.65)/($row['TotalDistance']*$BrakeK) ;
-					$score_acc = 100*($row['TotalAcc1Count']*0.1+ $row['TotalAcc2Count']*0.25 +$row['TotalAcc3Count']*0.65)/($row['TotalDistance']*$AccK) ;
+					$score_speed = 0.35*100*($row['TotalSpeed1Count']*0.1+ $row['TotalSpeed2Count']*0.25 +$row['TotalSpeed3Count']*0.65)/($row['TotalDistance']*$SpeedK) ;
+					$score_turn =0.25*100*($row['TotalTurn1Count']*0.1+ $row['TotalTurn2Count']*0.25 +$row['TotalTurn3Count']*0.65)/($row['TotalDistance']*$TurnK) ;
+					$score_brake =0.35*100*($row['TotalBrake1Count']*0.1+ $row['TotalBrake2Count']*0.25 +$row['TotalBrake3Count']*0.65)/($row['TotalDistance']*$BrakeK) ;
+					$score_acc = 0.15*100*($row['TotalAcc1Count']*0.1+ $row['TotalAcc2Count']*0.25 +$row['TotalAcc3Count']*0.65)/($row['TotalDistance']*$AccK) ;
 					$distance= $row['TotalDistance'];
-					$total_score = ($score_speed*0.35 +$score_turn*0.25+$score_brake*0.35+$score_acc*0.15)*$distance;
+					$total_score = $score_speed +$score_turn+$score_brake+$score_acc;
 					$time=$row['TimeStart'];
 				}
 				
@@ -930,13 +943,13 @@ function getStatistics($param)
 				$n=0;
 				while ($row = mysql_fetch_array($result)) 
 				{
-					$score_speed += 100*($row['TotalSpeed1Count']*0.1+ $row['TotalSpeed2Count']*0.25 +$row['TotalSpeed3Count']*0.65)/($row['TotalDistance']*$SpeedK) ;
-					$score_turn +=100*($row['TotalTurn1Count']*0.1+ $row['TotalTurn2Count']*0.25 +$row['TotalTurn3Count']*0.65)/($row['TotalDistance']*$TurnK) ;
-					$score_brake +=100*($row['TotalBrake1Count']*0.1+ $row['TotalBrake2Count']*0.25 +$row['TotalBrake3Count']*0.65)/($row['TotalDistance']*$BrakeK) ;
-					$score_acc += 100*($row['TotalAcc1Count']*0.1+ $row['TotalAcc2Count']*0.25 +$row['TotalAcc3Count']*0.65)/($row['TotalDistance']*$AccK) ;
+					$score_speed += 0.35*100*($row['TotalSpeed1Count']*0.1+ $row['TotalSpeed2Count']*0.25 +$row['TotalSpeed3Count']*0.65)/($row['TotalDistance']*$SpeedK) ;
+					$score_turn +=0.25*100*($row['TotalTurn1Count']*0.1+ $row['TotalTurn2Count']*0.25 +$row['TotalTurn3Count']*0.65)/($row['TotalDistance']*$TurnK) ;
+					$score_brake +=0.35*100*($row['TotalBrake1Count']*0.1+ $row['TotalBrake2Count']*0.25 +$row['TotalBrake3Count']*0.65)/($row['TotalDistance']*$BrakeK) ;
+					$score_acc += 0.15*100*($row['TotalAcc1Count']*0.1+ $row['TotalAcc2Count']*0.25 +$row['TotalAcc3Count']*0.65)/($row['TotalDistance']*$AccK) ;
 					$distance+= $row['TotalDistance'];
 					$time+=$row['TimeEnd']-$row['TimeStart'];
-					$total_score += ($score_speed*0.35 +$score_turn*0.25+$score_brake*0.35+$score_acc*0.15)*$distance;
+					$total_score += ($score_speed+$score_turn+$score_brake+$score_acc)*$distance;
 					$n++;
 				}
 				if($n>0)
@@ -945,7 +958,7 @@ function getStatistics($param)
 					$score_turn=$score_turn;
 					$score_brake=$score_brake;
 					$score_acc=$score_acc;
-					$total_score = $total_score/$distance;
+					$total_score = ($total_score/$distance)/$n;
 				}
 				
 			}
@@ -989,7 +1002,7 @@ function getPath($param)
 		{
 		
 			$start=mysql_real_escape_string($time);
-			$query = "Select NTIUserDrivingEntry.* from (SELECT `Id` FROM `NTIUserDrivingTrack` WHERE UID=$UID and `TimeStart`>=$start)) as Driving,NTIUserDrivingEntry where NTIUserDrivingEntry.`DrivingID`=Driving.Id group by `utimestamp`";
+			$query = "Select NTIUserDrivingEntry.* from (SELECT `Id` FROM `NTIUserDrivingTrack` WHERE UID=$UID and `TimeStart`>=$start) as Driving,NTIUserDrivingEntry where NTIUserDrivingEntry.`DrivingID`=Driving.Id group by `utimestamp`";
 		}
 		else if(isset($param['time']) && isset($param['till'])  and $param['time']>0  and $param['till']>0)
 		{
