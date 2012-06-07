@@ -32,12 +32,20 @@ class lays_model extends CI_Model {
 				$da['TotalTurn2Count'] = $row->TotalTurn2Count;
 				$da['TotalTurn3Count'] = $row->TotalTurn3Count;
 				$da['total_dist']=$row->TotalDistance;
-				$da['total_acc_score'] =  100*($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*.025+ $row->TotalAcc3Count*0.65)/($row->TotalDistance*$AccK);
-				$da['total_brk_score'] = 100*($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*.025+ $row->TotalBrake3Count*0.65)/($row->TotalDistance*$BrakeK);
-				$da['total_crn_score'] = 100*($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*.025+ $row->TotalTurn3Count*0.65)/($row->TotalDistance*$TurnK);
-				$da['total_spd_score'] =100*($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*.025+ $row->TotalSpeed3Count*0.65)/($row->TotalDistance*$AccK);
-				$da['total_all_score'] =$row->TotalDistance*($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*.025+ $row->TotalAcc3Count*0.65)*0.15+($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*.025+ $row->TotalBrake3Count*0.65)*0.35+($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*.025+ $row->TotalTurn3Count*0.65)*0.25+($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*.025+ $row->TotalSpeed3Count*0.65)*0.35;
-				$da['tscore'] =$row->TotalDistance*($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*.025+ $row->TotalAcc3Count*0.65)*0.15+($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*.025+ $row->TotalBrake3Count*0.65)*0.35+($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*.025+ $row->TotalTurn3Count*0.65)*0.25+($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*.025+ $row->TotalSpeed3Count*0.65)*0.35;
+				$da['total_acc_score'] =  $row->AccScore;
+				$da['total_brk_score'] = $row->BrakeScore;
+				$da['total_crn_score'] =$row->TurnScore;
+				$da['total_spd_score'] =$row->SpeedScore;
+				
+				$da['SpeedK'] =  $row->SpeedK;
+				$da['TurnK'] = $row->TurnK;
+				$da['AccK'] =$row->AccK;
+				$da['BrakeK'] =$row->BrakeK;
+				
+				
+				
+				$da['total_all_score'] =($da['total_acc_score']+$da['total_brk_score']+$da['total_crn_score']+$da['total_spd_score']);
+				$da['tscore'] =$row->TotalDistance*($da['total_acc_score']+$da['total_brk_score']+$da['total_crn_score']+$da['total_spd_score']);
 				$da['tdst']=$row->TotalDistance;
 				
 			}
@@ -78,15 +86,7 @@ class lays_model extends CI_Model {
 		public function getTotalStats($userid) {
 			
 		$usr=mysql_real_escape_string($userid);
-		$q = $this->db->query("SELECT sum((`TotalBrake1Count`*0.1+`TotalBrake2Count`*0.25+`TotalBrake3Count`*0.65)/`TotalDistance`)/count(*) as BrakeK,sum((`TotalAcc1Count`*0.1+`TotalAcc2Count`*0.25+`TotalAcc3Count`*0.65)/`TotalDistance`)/count(*) as AccK,sum((`TotalSpeed1Count`*0.1+`TotalSpeed2Count`*0.25+`TotalSpeed3Count`*0.65)/`TotalDistance`)/count(*) as SpeedK,sum((`TotalTurn1Count`*0.1+`TotalTurn2Count`*0.25+`TotalTurn3Count`*0.65)/`TotalDistance`)/count(*) as TurnK  FROM `NTIUserDrivingTrack` ");
-			foreach($q->result() as $row) {
-				$BrakeK = $row->BrakeK;
-			    $AccK = $row->AccK;
-				$SpeedK = $row->SpeedK;
-				$TurnK = $row->TurnK;
-			}
-		
-		
+
 		
 		$q = $this->db->query("SELECT * FROM NTIUserDrivingTrack where UID=$userid order by Id DESC");
 		$n=0;
@@ -111,12 +111,16 @@ class lays_model extends CI_Model {
 				$da[$n]['TotalTurn2Count'] = $row->TotalTurn2Count;
 				$da[$n]['TotalTurn3Count'] = $row->TotalTurn3Count;
 				$da[$n]['total_dist']=$row->TotalDistance;
-				$da[$n]['total_acc_score'] =  100*($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*.025+ $row->TotalAcc3Count*0.65)/($row->TotalDistance*$AccK);
-				$da[$n]['total_brk_score'] = 100*($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*.025+ $row->TotalBrake3Count*0.65)/($row->TotalDistance*$BrakeK);
-				$da[$n]['total_crn_score'] = 100*($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*.025+ $row->TotalTurn3Count*0.65)/($row->TotalDistance*$TurnK);
-				$da[$n]['total_spd_score'] =100*($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*.025+ $row->TotalSpeed3Count*0.65)/($row->TotalDistance*$AccK);
-				$da[$n]['total_all_score'] =$row->TotalDistance*($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*.025+ $row->TotalAcc3Count*0.65)*0.15+($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*.025+ $row->TotalBrake3Count*0.65)*0.35+($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*.025+ $row->TotalTurn3Count*0.65)*0.25+($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*.025+ $row->TotalSpeed3Count*0.65)*0.35;
-				$da['tscore'] +=$row->TotalDistance*($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*.025+ $row->TotalAcc3Count*0.65)*0.15+($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*.025+ $row->TotalBrake3Count*0.65)*0.35+($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*.025+ $row->TotalTurn3Count*0.65)*0.25+($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*.025+ $row->TotalSpeed3Count*0.65)*0.35;
+				$da[$n]['total_acc_score'] =  $row->AccScore;
+				$da[$n]['total_brk_score'] = $row->BrakeScore;
+				$da[$n]['total_crn_score'] =$row->TurnScore;
+				$da[$n]['total_spd_score'] =$row->SpeedScore;
+				$da[$n]['SpeedK'] =  $row->SpeedK;
+				$da[$n]['TurnK'] = $row->TurnK;
+				$da[$n]['AccK'] =$row->AccK;
+				$da[$n]['BrakeK'] =$row->BrakeK;
+				$da[$n]['total_all_score'] =$da[$n]['total_acc_score']+$da[$n]['total_brk_score']+$da[$n]['total_crn_score']+$da[$n]['total_spd_score'];
+				$da['tscore'] +=$row->TotalDistance*($da[$n]['total_acc_score']+$da[$n]['total_brk_score']+$da[$n]['total_crn_score']+$da[$n]['total_spd_score']);
 				$da['tdst']=+$row->TotalDistance;
 				$n++;
 			}
@@ -152,17 +156,7 @@ class lays_model extends CI_Model {
 	
 	public function getUserTravelStats($userid) {
 		$usr=mysql_real_escape_string($userid);
-		
-
-
-		$q = $this->db->query("SELECT sum((`TotalBrake1Count`*0.1+`TotalBrake2Count`*0.25+`TotalBrake3Count`*0.65)/`TotalDistance`)/count(*) as BrakeK,sum((`TotalAcc1Count`*0.1+`TotalAcc2Count`*0.25+`TotalAcc3Count`*0.65)/`TotalDistance`)/count(*) as AccK,sum((`TotalSpeed1Count`*0.1+`TotalSpeed2Count`*0.25+`TotalSpeed3Count`*0.65)/`TotalDistance`)/count(*) as SpeedK,sum((`TotalTurn1Count`*0.1+`TotalTurn2Count`*0.25+`TotalTurn3Count`*0.65)/`TotalDistance`)/count(*) as TurnK  FROM `NTIUserDrivingTrack` ");
-			foreach($q->result() as $row) {
-				$BrakeK = $row->BrakeK;
-			    $AccK = $row->AccK;
-				$SpeedK = $row->SpeedK;
-				$TurnK = $row->TurnK;
-			}
-
+	
 		$q = $this->db->query("SELECT * FROM NTIUserDrivingTrack where UID=$userid order by Id DESC");
 		$n=0;
 				$da['total_time']=0;
@@ -214,11 +208,11 @@ $n=0;
 				$da['total_excesses'] += $row->TotalSpeed1Count+$row->TotalSpeed2Count+$row->TotalSpeed3Count;
 				$da['total_turns'] += $row->TotalTurn1Count+$row->TotalTurn2Count+$row->TotalTurn3Count;
 				$da['total_dist']+=$row->TotalDistance;
-				$da['total_acc_score'] +=  100*($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*0.25+ $row->TotalAcc3Count*0.65)/($row->TotalDistance*$AccK);
-				$da['total_brk_score'] += 100*($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*0.25+ $row->TotalBrake3Count*0.65)/($row->TotalDistance*$BrakeK);
-				$da['total_crn_score'] += 100*($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*0.25+ $row->TotalTurn3Count*0.65)/($row->TotalDistance*$TurnK);
-				$da['total_spd_score'] +=100*($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*0.25+ $row->TotalSpeed3Count*0.65)/($row->TotalDistance*$AccK);
-				$da['total_all_score'] +=$row->TotalDistance*($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*.025+ $row->TotalAcc3Count*0.65)*0.15+($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*.025+ $row->TotalBrake3Count*0.65)*0.35+($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*.025+ $row->TotalTurn3Count*0.65)*0.25+($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*.025+ $row->TotalSpeed3Count*0.65)*0.35;
+				$da['total_acc_score'] +=  $row->AccScore;
+				$da['total_brk_score'] += $row->BrakeScore;
+				$da['total_crn_score'] +=$row->TurnScore;
+				$da['total_spd_score'] +=$row->SpeedScore;
+				$da['total_all_score'] +=$row->TotalDistance*($da['total_acc_score']+$da['total_brk_score']+$da['total_crn_score']+$da['total_spd_score']);
 				$da['is_set']=1;
 				$n++;
 			}
@@ -244,16 +238,8 @@ $da['is_set']=-1;
 
 	public function getTotalStatsByTime($userid,$time1,$time2) {
 		$usr=mysql_real_escape_string($userid);		
-		$q = $this->db->query("SELECT sum((`TotalBrake1Count`*0.1+`TotalBrake2Count`*0.25+`TotalBrake3Count`*0.65)/`TotalDistance`)/count(*) as BrakeK,sum((`TotalAcc1Count`*0.1+`TotalAcc2Count`*0.25+`TotalAcc3Count`*0.65)/`TotalDistance`)/count(*) as AccK,sum((`TotalSpeed1Count`*0.1+`TotalSpeed2Count`*0.25+`TotalSpeed3Count`*0.65)/`TotalDistance`)/count(*) as SpeedK,sum((`TotalTurn1Count`*0.1+`TotalTurn2Count`*0.25+`TotalTurn3Count`*0.65)/`TotalDistance`)/count(*) as TurnK  FROM `NTIUserDrivingTrack` ");
-			foreach($q->result() as $row) {
-				$BrakeK = $row->BrakeK;
-			    $AccK = $row->AccK;
-				$SpeedK = $row->SpeedK;
-				$TurnK = $row->TurnK;
-			}
-			
-			
-					$time1 = strtotime($time1);
+	
+		$time1 = strtotime($time1);
 		$time2 = strtotime($time2);	
 
 		$q = $this->db->query("SELECT * FROM NTIUserDrivingTrack where UID=$userid and ((TimeStart>=$time1 and TimeStart<=$time2) or (TimeStart<$time1 and TimeEnd>=$time1))");
@@ -278,13 +264,18 @@ $da['is_set']=-1;
 				$da[$n]['TotalTurn2Count'] = $row->TotalTurn2Count;
 				$da[$n]['TotalTurn3Count'] = $row->TotalTurn3Count;
 				$da[$n]['total_dist']=$row->TotalDistance;
-				$da[$n]['total_acc_score'] =  100*($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*0.25+ $row->TotalAcc3Count*0.65)/($row->TotalDistance*$AccK);
-				$da[$n]['total_brk_score'] = 100*($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*0.25+ $row->TotalBrake3Count*0.65)/($row->TotalDistance*$BrakeK);
-				$da[$n]['total_crn_score'] = 100*($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*0.25+ $row->TotalTurn3Count*0.65)/($row->TotalDistance*$TurnK);
-				$da[$n]['total_spd_score'] =100*($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*0.25+ $row->TotalSpeed3Count*0.65)/($row->TotalDistance*$AccK);
-				$da[$n]['total_all_score'] =($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*.025+ $row->TotalAcc3Count*0.65)*0.15+($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*.025+ $row->TotalBrake3Count*0.65)*0.35+($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*.025+ $row->TotalTurn3Count*0.65)*0.25+($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*.025+ $row->TotalSpeed3Count*0.65)*0.35;
-				$da['tscore'] +=($row->TotalAcc1Count*0.1+ $row->TotalAcc2Count*.025+ $row->TotalAcc3Count*0.65)*0.15+($row->TotalBrake1Count*0.1+ $row->TotalBrake2Count*.025+ $row->TotalBrake3Count*0.65)*0.35+($row->TotalTurn1Count*0.1+ $row->TotalTurn2Count*.025+ $row->TotalTurn3Count*0.65)*0.25+($row->TotalSpeed1Count*0.1+ $row->TotalSpeed2Count*.025+ $row->TotalSpeed3Count*0.65)*0.35;
-	$da['tdst']=+$row->TotalDistance;
+						$da[$n]['total_acc_score'] =  $row->AccScore;
+				$da[$n]['total_brk_score'] = $row->BrakeScore;
+				$da[$n]['total_crn_score'] =$row->TurnScore;
+				$da[$n]['total_spd_score'] =$row->SpeedScore;
+				$da[$n]['SpeedK'] =  $row->SpeedK;
+				$da[$n]['TurnK'] = $row->TurnK;
+				$da[$n]['AccK'] =$row->AccK;
+				$da[$n]['BrakeK'] =$row->BrakeK;
+		
+						$da[$n]['total_all_score'] =($da[$n]['total_acc_score']+$da[$n]['total_brk_score']+$da[$n]['total_crn_score']+$da[$n]['total_spd_score']);
+				$da['tscore'] +=($da[$n]['total_acc_score']+$da[$n]['total_brk_score']+$da[$n]['total_crn_score']+$da[$n]['total_spd_score'])*$row->TotalDistance;
+		$da['tdst']=+$row->TotalDistance;
 				$n++;
 			}
 			$da['tscore'] =$da['tscore']/$da['tdst'];

@@ -11,11 +11,12 @@
 <script src="../../js/libs/jquery.ui.core.js"></script>
 <script src="../../js/libs/jquery.ui.widget.js"></script>
 <script src="../../js/libs/jquery.ui.datepicker.js"></script>
+<?if(isset($map_type))if($map_type==3){?>
         <link rel="stylesheet" href="http://openlayers.org/dev/theme/default/style.css" type="text/css">
         <link rel="stylesheet" href="http://openlayers.org/dev/theme/default/google.css" type="text/css">
         <script src="http://maps.google.com/maps/api/js?v=3.5&amp;sensor=false"></script>
         <script src="http://openlayers.org/dev/OpenLayers.js"></script>
-
+<?}?>
 
 
 

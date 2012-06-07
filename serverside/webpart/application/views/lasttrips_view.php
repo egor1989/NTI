@@ -32,37 +32,47 @@
 					<a href="/user/raw/<?echo $trr[$c]['Id'];?>">Просмотреть данные</a><br/>
 					<?if(isset($rights) && $rights==1){?>
 					<a href="/map/viewdata/<?echo $trr[$c]['Id'];?>">Карта данных</a><br/>
+										<table border=0>
+						<tr>
+					<td><span style="font-size:12px">K<sub>скор.</sub>=<?echo $trr[$c]['SpeedK'];?></span></td>
+					<td><span style="font-size:12px">K<sub>пов.</sub>=<?echo $trr[$c]['TurnK'];?></span></td>
+					
+					</tr><tr>
+					<td><span style="font-size:12px">K<sub>уск.</sub>=<?echo $trr[$c]['AccK'];?></span></td>
+					<td><span style="font-size:12px">K<sub>торм.</sub>=<?echo $trr[$c]['BrakeK'];?>	</span></td>
+					</tr>				
+					</table>
 					<?}?>
 					
 					
 				</td>
 				<td>	
-				    <span style="color:red">Легких поворотов: <?echo $trr[$c]['TotalTurn1Count'];?></span><br>
-					<span style="color:red">Средних поворотов: <?echo $trr[$c]['TotalTurn2Count'];?></span><br>
-					<span style="color:red">Крутых поворотов: <?echo $trr[$c]['TotalTurn3Count'];?></span><br>
+				    <span style="color:green">Легких поворотов:</span> <?echo $trr[$c]['TotalTurn1Count'];?><br>
+					<span style="color:orange">Средних поворотов:</span> <?echo $trr[$c]['TotalTurn2Count'];?><br>
+					<span style="color:red">Крутых поворотов: </span><?echo $trr[$c]['TotalTurn3Count'];?><br>
 				</td>
 				<td>		
-					<span style="color:red">Легких ускорений: <?echo $trr[$c]['TotalAcc1Count'];?></span><br>
-					<span style="color:red">Средних ускорений: <?echo $trr[$c]['TotalAcc2Count'];?></span><br>
-					<span style="color:red">Резких ускорений: <?echo $trr[$c]['TotalAcc3Count'];?></span><br>
+					<span style="color:green">Легких ускорений:</span> <?echo $trr[$c]['TotalAcc1Count'];?><br>
+					<span style="color:orange">Средних ускорений:</span> <?echo $trr[$c]['TotalAcc2Count'];?><br>
+					<span style="color:red">Резких ускорений: </span><?echo $trr[$c]['TotalAcc3Count'];?><br>
 				</td>
 				<td>
-				    <span style="color:red">Легких торможений: <?echo $trr[$c]['TotalBrake1Count'];?></span><br>
-					<span style="color:red">Средних торможений: <?echo $trr[$c]['TotalBrake2Count'];?></span><br>
-					<span style="color:red">Крутых торможений: <?echo $trr[$c]['TotalBrake3Count'];?></span><br>
+				    <span style="color:green">Легких торможений: </span><?echo $trr[$c]['TotalBrake1Count'];?><br>
+					<span style="color:orange">Средних торможений:</span> <?echo $trr[$c]['TotalBrake2Count'];?><br>
+					<span style="color:red">Крутых торможений:</span> <?echo $trr[$c]['TotalBrake3Count'];?><br>
 				</td>
 				<td>
-					<span style="color:red">Слабых превышений: <?echo $trr[$c]['TotalSpeed1Count'];?></span><br>
-					<span style="color:red">Средних превышений: <?echo $trr[$c]['TotalSpeed2Count'];?></span><br>
-					<span style="color:red">Жестких превышений: <?echo $trr[$c]['TotalSpeed3Count'];?></span><br>
+					<span style="color:green">Слабых превышений: </span><?echo $trr[$c]['TotalSpeed1Count'];?><br>
+					<span style="color:orange">Средних превышений: </span><?echo $trr[$c]['TotalSpeed2Count'];?><br>
+					<span style="color:red">Жестких превышений:</span> <?echo $trr[$c]['TotalSpeed3Count'];?><br>
 				</td>
 				<td>
-					<span style="color:red">Километраж поездки: <?echo round($trr[$c]['total_dist'],2);?> км.</span><br>
-					<span style="color:red">Очки ускорений: <?echo floor($trr[$c]['total_acc_score']);?> points</span><br>
-					<span style="color:red">Очки торможений: <?echo floor($trr[$c]['total_brk_score']);?> points</span><br>
-					<span style="color:red">Очки поворотов: <?echo floor($trr[$c]['total_crn_score']);?> points</span><br>
-					<span style="color:red">Очки превышений: <?echo floor($trr[$c]['total_spd_score']);?> points</span><br>
-					<span style="color:red">Счет поездки: <?echo floor($trr[$c]['total_all_score']);?> points</span><br>
+					<span >Километраж поездки: <?echo round($trr[$c]['total_dist'],2);?> км.</span><br>
+					<span >Очки ускорений: <?echo floor($trr[$c]['total_acc_score']);?></span><br>
+					<span >Очки торможений: <?echo floor($trr[$c]['total_brk_score']);?></span><br>
+					<span>Очки поворотов: <?echo floor($trr[$c]['total_crn_score']);?></span><br>
+					<span >Очки превышений: <?echo floor($trr[$c]['total_spd_score']);?></span><br>
+					<span>Счет поездки: <?echo floor($trr[$c]['total_all_score']);?></span><br>
 				</td>
 			</tr>
 		<?}?>
