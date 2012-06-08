@@ -13,6 +13,8 @@
 #define CC_RADIANS_TO_DEGREES(__ANGLE__) ((__ANGLE__) / (float)M_PI * 180.0f)
 #define radianConst M_PI/180.0
 #define SPEED 1.5
+#define STARTTIME 300
+#define STOPTIME 900
 
 @implementation AppDelegate
 
@@ -39,11 +41,17 @@
     lastLoc = [[CLLocation alloc] init];
     allDistance = 0;
     canWriteToFile = NO;//?
+    slowMonitoring = NO;
     [recordAction startOfRecord];
     needCheck = YES;
-
+    
+    startCheck = YES;
+    firstTimer = [NSTimer scheduledTimerWithTimeInterval:STARTTIME target:self selector:@selector(finishFirstTimer:) userInfo:nil repeats:NO];
+    
     [self checkSendRight];
-    [self startGPSDetect];       
+    [self startGPSDetect];
+    //пока motion отключен
+    [self stopMotionDetect];
     motionManager = [[CMMotionManager alloc] init];
     if ([motionManager isGyroAvailable]) {
         motionManager.deviceMotionUpdateInterval = 1.0/accelUpdateFrequency;
@@ -96,6 +104,12 @@
     [self checkSendRight];
 }
 
+- (void) finishFirstTimer{
+    [self stopGPSDetect];
+    
+    slowMonitoring = YES;
+    startCheck = NO;
+}
 
 
 //gps
@@ -104,7 +118,7 @@
     [locationManager stopUpdatingLocation];
     [locationManager stopUpdatingHeading];
     [locationManager startMonitoringSignificantLocationChanges];
-    gpsState=NO;
+
 }
 
 -(void)startGPSDetect{
@@ -112,7 +126,7 @@
     [locationManager stopMonitoringSignificantLocationChanges];
     [locationManager startUpdatingLocation];
     [locationManager startUpdatingHeading];
-    gpsState=YES;
+
 }
 
 -(double) getTime {
@@ -122,33 +136,74 @@
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation{
     
-    
     CLLocationDistance meters = [newLocation distanceFromLocation:oldLocation];
     if (meters<0) meters = 0;
     allDistance += meters;
     
-    if (needCheck) {
+    //только включили приложение, начальная проверка
+    if (startCheck) {
+        NSLog(@"startCheck");
+         //если в течении 5 минут мы собрали 5 >5км/ч начинаем запись
         if (newLocation.speed > SPEED) {
             m5Km++;
             if (m5Km > 5){
-                NSLog(@"needCheck-location manager: m5km>5, writing");
-                needCheck = NO;
-                moreThanLimit = YES;
+                NSLog(@"startCheck-location manager: m5km>5, writing");
+                startCheck = NO;
+                [firstTimer invalidate];
                 canWriteToFile = YES;
+                m5Km = 0;
                 [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
             }
         } else m5Km = 0;
+       
+        //нет переходим в медленный режим - finishFirstTimer
     }
-    
-    if (newLocation.speed == 0) {
-        stopTimer = [NSTimer scheduledTimerWithTimeInterval:600 target:self selector:@selector(sendTimer:) userInfo:nil repeats:NO];
+    //приложение уже работало - медленный режим
+    else if (slowMonitoring){
+        NSLog(@"slowMonitoring - change location");
+        [self startGPSDetect];
+        canWriteToFile = YES;
+        [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
+        slowMonitoring = NO;
     }
+    //gps
+    else {
+        //работает таймер на стоп
+        if ([stopTimer isValid]) {
+            if (newLocation.speed > SPEED) {
+                m5Km++;
+                if (m5Km > 5){
+                    NSLog(@"stopTimer-location manager: m5km>5, finish stopTimer");
+                    [stopTimer invalidate];
+                }
+            } else m5Km = 0;
+        }
+       else if (newLocation.speed < SPEED){
+            l5Km++;
+            if (l5Km > 5) {
+                stopTimer = [NSTimer scheduledTimerWithTimeInterval:STOPTIME target:self selector:@selector(finishStopTimer:) userInfo:nil repeats:NO];
+                l5Km = 0;
+                NSLog(@"l5Km>5, start stopTimer");
+            }
+        }
+        else l5Km = 0;
+        
 
+        
+    }
     
     
     lastLoc = [[CLLocation alloc] initWithCoordinate:newLocation.coordinate altitude:newLocation.altitude horizontalAccuracy:newLocation.horizontalAccuracy verticalAccuracy:newLocation.verticalAccuracy course:newLocation.course speed:newLocation.speed timestamp:newLocation.timestamp];
         
     [[NSNotificationCenter defaultCenter]	postNotificationName:	@"locateNotification" object:  nil];
+     
+}
+
+- (void)finishStopTimer{
+    NSLog(@"finish stop timer");
+    canWriteToFile = NO;
+    [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
+    [self stopGPSDetect];
 }
 
 //compass

@@ -19,7 +19,7 @@
 @interface AppDelegate : UIResponder <UIApplicationDelegate, CLLocationManagerDelegate, UIAccelerometerDelegate> {
     CLLocationManager *locationManager;
     CLLocation *lastLoc;
-    BOOL gpsState;
+
     
     CMMotionManager *motionManager;
     
@@ -34,18 +34,24 @@
     float newCompassTarget;
     float currentYaw;
     CLLocationDistance allDistance;
+    RecordAction *recordAction;
+    DatabaseActions *databaseAction;
+
     BOOL kmch5;
     NSInteger l5Km;
     NSInteger m5Km;
     BOOL canWriteToFile;
     BOOL moreThanLimit;
-   // NSDictionary *dict;
-    RecordAction *recordAction;
-    DatabaseActions *databaseAction;
-    BOOL needCheck;
+
+
+       BOOL needCheck;
+    
+    BOOL startCheck;
+    BOOL slowMonitoring;
     
     NSTimer *stopTimer;
     NSTimer *sendTimer;
+    NSTimer *firstTimer;
 }
 
 -(void)stopGPSDetect;
@@ -53,6 +59,8 @@
 
 -(void)checkSendRight;
 
+-(void)finishFirstTimer;
+-(void)finishStopTimer;
 //- (void)stopAccelerometerDetect;
 //- (void)startAccelerometerDetect;
 
