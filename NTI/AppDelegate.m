@@ -13,8 +13,8 @@
 #define CC_RADIANS_TO_DEGREES(__ANGLE__) ((__ANGLE__) / (float)M_PI * 180.0f)
 #define radianConst M_PI/180.0
 #define SPEED 1.5
-#define STARTTIME 300
-#define STOPTIME 900
+#define STARTTIME 30
+#define STOPTIME 90
 
 @implementation AppDelegate
 
@@ -30,7 +30,7 @@
     
     [recordAction eventRecord:@"open"]; 
     
-    freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);
+    //freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);
 
     
     locationManager=[[CLLocationManager alloc] init];
@@ -46,7 +46,7 @@
     needCheck = YES;
     
     startCheck = YES;
-    firstTimer = [NSTimer scheduledTimerWithTimeInterval:STARTTIME target:self selector:@selector(finishFirstTimer:) userInfo:nil repeats:NO];
+    firstTimer = [NSTimer scheduledTimerWithTimeInterval:STARTTIME target:self selector:@selector(finishFirstTimer) userInfo:nil repeats:NO];
     
     [self checkSendRight];
     [self startGPSDetect];
@@ -104,9 +104,8 @@
     [self checkSendRight];
 }
 
-- (void) finishFirstTimer{
+- (void)finishFirstTimer{
     [self stopGPSDetect];
-    
     slowMonitoring = YES;
     startCheck = NO;
 }
@@ -175,21 +174,19 @@
                 if (m5Km > 5){
                     NSLog(@"stopTimer-location manager: m5km>5, finish stopTimer");
                     [stopTimer invalidate];
+                    m5Km = 0;
                 }
             } else m5Km = 0;
         }
        else if (newLocation.speed < SPEED){
             l5Km++;
             if (l5Km > 5) {
-                stopTimer = [NSTimer scheduledTimerWithTimeInterval:STOPTIME target:self selector:@selector(finishStopTimer:) userInfo:nil repeats:NO];
+                stopTimer = [NSTimer scheduledTimerWithTimeInterval:STOPTIME target:self selector:@selector(finishStopTimer) userInfo:nil repeats:NO];
                 l5Km = 0;
                 NSLog(@"l5Km>5, start stopTimer");
             }
         }
         else l5Km = 0;
-        
-
-        
     }
     
     
@@ -201,6 +198,7 @@
 
 - (void)finishStopTimer{
     NSLog(@"finish stop timer");
+    slowMonitoring = YES;
     canWriteToFile = NO;
     [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
     [self stopGPSDetect];
