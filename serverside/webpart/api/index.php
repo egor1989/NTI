@@ -40,15 +40,16 @@ private $accy;
  public function setSpeed($speed) {	$this->speed=$speed; }
  public function setAccx($accx) {	$this->accx=$accx; }
  public function setAccy($accy) {	$this->accy=$accy; }
- public function getLat($lat){return($this->lat);}
- public function getLng($lng) {return($this->lng);}
- public function getCompass($compass){	return($this->compass); }
- public function getDirection($direction){	return($this->direction); }
- public function getTimestamp($timestamp) {	return($this->timestamp); }
- public function getDistance($distance) {	return($this->distance); }
- public function getSpeed($speed) {	return($this->speed); }
- public function getAccx($accx) {	return($this->accx); }
- public function getAccy($accy) {	return($this->accy); }
+ 
+ public function getLat(){return($this->lat);}
+ public function getLng() {return($this->lng);}
+ public function getCompass(){	return($this->compass); }
+ public function getDirection(){	return($this->direction); }
+ public function getTimestamp() {	return($this->timestamp); }
+ public function getDistance() {	return($this->distance); }
+ public function getSpeed() {	return($this->speed); }
+ public function getAccx() {	return($this->accx); }
+ public function getAccy() {	return($this->accy); }
 
 }
 
@@ -202,8 +203,6 @@ function NTI_Cookie_check()
 		$cnt=mysql_num_rows($result);
 		if($cnt==0)
 		{
-		
-			mysql_close($dbcnx);
 			return -3;
 		}
 		else
@@ -217,7 +216,6 @@ function NTI_Cookie_check()
 					mysql_query("UPDATE NTIKeys SET Deleted=1 where SID='$cooks'");
 					return -2;
 				}
-				mysql_close($dbcnx);
 				return $row['UID'];
 			} 
 		}
@@ -243,7 +241,7 @@ function NTIregister($param)
 	$surname=mysql_real_escape_string($surname);
 		if(!isset($username) || !isset($password))
 	{
-		mysql_close($dbcnx);
+
 		$errortype=array('info'=>"You dont set mail,password,login",'code'=>  2);
 		$res=array('result'=>0,'error'=>  $errortype);
 		echo json_encode($res);
@@ -253,7 +251,7 @@ function NTIregister($param)
 	$cnt=mysql_num_rows($result);
 	if(!$cnt==0)
 	{
-		mysql_close($dbcnx);
+
 		$errortype=array('info'=>"User name already exists",'code'=>  3);
 		$res=array('result'=>0,'error'=>  $errortype);
 		echo json_encode($res);
@@ -264,7 +262,7 @@ function NTIregister($param)
 	$cnt=mysql_num_rows($result);
 	if(!$cnt==0)
 	{
-		mysql_close($dbcnx);
+
 		$errortype=array('info'=>"User mail already exists",'code'=>  4);
 		$res=array('result'=>0,'error'=>  $errortype);
 		echo json_encode($res);
@@ -272,7 +270,7 @@ function NTIregister($param)
 	}
 	if(strlen($password)<64)
 	{
-		mysql_close($dbcnx);
+		
 		$errortype=array('info'=>"Password check failed, seem to be not sha",'code'=>  5);
 		$res=array('result'=>0,'error'=>  $errortype);
 		echo json_encode($res);
@@ -281,7 +279,7 @@ function NTIregister($param)
 	
 		if(strlen($username)>32 || strlen($email)>32 || strlen($name)>32 || strlen($surname)>32 )
 	{
-		mysql_close($dbcnx);
+		
 		$errortype=array('info'=>"Fields are too long. Must be less than 32 bytes",'code'=>  6);
 		$res=array('result'=>0,'error'=>  $errortype);
 		echo json_encode($res);
@@ -290,7 +288,7 @@ function NTIregister($param)
 
 			if(strlen($email)<3)
 	{
-		mysql_close($dbcnx);
+		
 		$errortype=array('info'=>"Email is too short",'code'=>  7);
 		$res=array('result'=>0,'error'=>  $errortype);
 		echo json_encode($res);
@@ -325,7 +323,7 @@ function NTIauth($param)
 	if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
 		if(!isset($secret) || !isset($username))
 	{
-		mysql_close($dbcnx);
+		
 		$errortype=array('info'=>"Bad secret (it doesnt set)",'code'=>  10);
 		$res=array('result'=>0,'error'=>  $errortype);
 		echo json_encode($res);
@@ -343,7 +341,7 @@ function NTIauth($param)
 	$cnt=mysql_num_rows($result);
 	if($cnt==0)
 	{
-		mysql_close($dbcnx);
+		
 		$errortype=array('info'=>"User doesnt exist",'code'=>  11);
 		$res=array('result'=>0,'error'=>  $errortype);
 		echo json_encode($res);
@@ -355,7 +353,7 @@ function NTIauth($param)
 	$cnt=mysql_num_rows($result);
 	if($cnt==0)
 	{
-		mysql_close($dbcnx);
+		
 		$errortype=array('info'=>"Mismatch",'code'=>  12);
 		$res=array('result'=>0,'error'=>  $errortype);
 		echo json_encode($res);
@@ -814,7 +812,6 @@ function addNTIFile($param)
 						$TurnK = $row['TurnK'];
 						$CoefID=$row['Id'];
 					}
-		
 					if($TotalDistance<=0)$TotalDistance=1;
 					$TypeAcc1Count =$acc1;
 					$TypeAcc2Count =$acc2;       
@@ -832,9 +829,7 @@ function addNTIFile($param)
 					$score_turn =0.25*100*($TypeTurn1Count*0.1+ $TypeTurn2Count*0.25 +$TypeTurn3Count*0.65)/($TotalDistance*$TurnK) ;
 					$score_brake =0.35*100*($TypeBrake1Count*0.1+ $TypeBrake2Count*0.25 +$TypeBrake3Count*0.65)/($TotalDistance*$BrakeK) ;
 					$score_acc = 0.15*100*($TypeAcc1Count*0.1+ $TypeAcc2Count*0.25 +$TypeAcc3Count*0.65)/($TotalDistance*$AccK) ;
-			
 					$sql_insert_str="insert into NTIUserDrivingTrack(UID,TotalAcc1Count,TotalAcc2Count,TotalAcc3Count,TotalBrake1Count,TotalBrake2Count,TotalBrake3Count,TotalSpeed1Count,TotalSpeed2Count,TotalSpeed3Count,TotalTurn1Count,TotalTurn2Count,TotalTurn3Count,TimeStart,TimeEnd,TotalDistance,SpeedScore,	TurnScore,BrakeScore,AccScore,CurrentKCoefID,SpeedK,TurnK,AccK,BrakeK) values ('$UID','$TypeAcc1Count','$TypeAcc2Count','$TypeAcc3Count','$TypeBrake1Count','$TypeBrake2Count','$TypeBrake3Count','$TypeSpeed1Count','$TypeSpeed2Count','$TypeSpeed3Count','$TypeTurn1Count','$TypeTurn2Count','$TypeTurn3Count','$TimeStart','$TimeEnd','$TotalDistance','$score_speed','$score_turn','$score_brake','$score_acc','$CoefID','$SpeedK','$TurnK','$AccK','$BrakeK')";
-					
 					mysql_query($sql_insert_str);
 					$TrackID = mysql_insert_id();
 					//Теперь заносим эти же данные в EntrRide
