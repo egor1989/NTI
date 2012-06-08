@@ -175,6 +175,7 @@
                 if (m5Km > 5){
                     NSLog(@"stopTimer-location manager: m5km>5, finish stopTimer");
                     [stopTimer invalidate];
+                    m5Km = 0;
                 }
             } else m5Km = 0;
         }
@@ -187,9 +188,6 @@
             }
         }
         else l5Km = 0;
-        
-
-        
     }
     
     
@@ -201,6 +199,7 @@
 
 - (void)finishStopTimer{
     NSLog(@"finish stop timer");
+    slowMonitoring = YES;
     canWriteToFile = NO;
     [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
     [self stopGPSDetect];
