@@ -40,10 +40,10 @@
     allDistance = 0;
     canWriteToFile = NO;//?
     [recordAction startOfRecord];
-    
-    [self checkSpeedTimer];
+    needCheck = YES;
+
     [self checkSendRight];
-           
+    [self startGPSDetect];       
     motionManager = [[CMMotionManager alloc] init];
     if ([motionManager isGyroAvailable]) {
         motionManager.deviceMotionUpdateInterval = 1.0/accelUpdateFrequency;
@@ -78,82 +78,6 @@
     
 }
 
-- (void)checkSpeedTimer{
-    NSLog(@"start check speed timer (30s)");
-    moreThanLimit = NO;
-    needCheck = YES;
-    m5Km = 0;
-    l5Km = 0;
-    kmch5 = NO;
-    [self startGPSDetect];
-    timer30sec = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(timerFired:) userInfo:nil repeats:NO];
-}
-
--(void) timerFired: (NSTimer *)timer{
-  
-    NSLog(@"moreThanLimit = %@", moreThanLimit?@"YES":@"NO");
-    NSLog(@"30sec");
-    if (!moreThanLimit) {
-        NSLog(@"start timer (5m)");
-        [self stopGPSDetect];
-        [self stopMotionDetect];
-        canWriteToFile = NO;
-        [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
-        [self fiveMinTimer];
-        
-
-    }
-    else {
-        [self startMotionDetect];
-        needCheck = NO;
-        kmch5 = YES;
-        canWriteToFile = YES;
-        [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
-        m5Km = 0;
-        l5Km = 0;
-        NSLog(@"canWriteToFile = YES");
-    }
-    
-}
-
--(void)fiveMinTimer{
-    NSLog(@"5min");
-    if (kmch5) {
-        NSLog(@"kmch5=YES");
-        moreThanLimit = NO;
-        kmch5 = NO;
-        needCheck = YES;
-        m5Km = 0;
-        l5Km = 0;
-        timer5min = [NSTimer scheduledTimerWithTimeInterval:180 target:self selector:@selector(checkAfterFiveMin) userInfo:nil repeats:NO];
-    }
-    else {
-        NSLog(@"kmch5=NO");
-       //  timerWithTimeInterval:target:selector:userInfo:repeats:
-        
-        timer5min = [NSTimer timerWithTimeInterval:30 target:self selector:@selector(checkSpeedTimer) userInfo:nil repeats:NO];
-        [[NSRunLoop currentRunLoop] addTimer:timer5min forMode:NSRunLoopCommonModes];
-        //(void)addTimer:(NSTimer *)aTimer forMode:(NSString *)mode
-    }
-}
-
--(void)checkAfterFiveMin{
-    
-    NSLog(@"after 5 min moreThanLimit = %@", moreThanLimit?@"YES":@"NO");
-    if (!moreThanLimit) {
-        [self checkSpeedTimer];
-        canWriteToFile = NO;
-        [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
-        NSLog(@"canWriteToFile = NO");
-        [self checkSendRight];
-    }
-    else {
-        needCheck = NO;
-        kmch5 = YES;
-    }
-
-}
-
 -(void)checkSendRight{
     
     if ([[NSUserDefaults standardUserDefaults] integerForKey:@"pk"]>10) {
@@ -179,22 +103,25 @@
     NSLog(@"stopGPSDetect");
     [locationManager stopUpdatingLocation];
     [locationManager stopUpdatingHeading];
+    [locationManager startMonitoringSignificantLocationChanges];
     gpsState=NO;
 }
 
 -(void)startGPSDetect{
     NSLog(@"startGPSDetect");
+    [locationManager stopMonitoringSignificantLocationChanges];
     [locationManager startUpdatingLocation];
     [locationManager startUpdatingHeading];
     gpsState=YES;
 }
 
 -(double) getTime {
-    //[locationManager.location.timestamp timeIntervalSince1970];
+
     return [locationManager.location.timestamp timeIntervalSince1970];;
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation{
+    
     
     CLLocationDistance meters = [newLocation distanceFromLocation:oldLocation];
     if (meters<0) meters = 0;
@@ -210,20 +137,14 @@
                 canWriteToFile = YES;
                 [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
             }
-        }
+        } else m5Km = 0;
     }
     
-    if (kmch5) {
-        if (newLocation.speed < SPEED){
-            l5Km++;
-            if (l5Km > 5) {
-                NSLog(@"kmch5-location manager: l5km>5, 5 min timer");
-                [self fiveMinTimer];                
-                
-            }
-        }
-        else l5Km = 0;
+    if (newLocation.speed == 0) {
+        stopTimer = [NSTimer scheduledTimerWithTimeInterval:600 target:self selector:@selector(sendTimer:) userInfo:nil repeats:NO];
     }
+
+    
     
     lastLoc = [[CLLocation alloc] initWithCoordinate:newLocation.coordinate altitude:newLocation.altitude horizontalAccuracy:newLocation.horizontalAccuracy verticalAccuracy:newLocation.verticalAccuracy course:newLocation.course speed:newLocation.speed timestamp:newLocation.timestamp];
         
@@ -321,7 +242,7 @@
 - (void)startRecord{
     NSLog(@"startRecord");
     [self startMotionDetect];
-    [self checkSpeedTimer];
+    //[self checkSpeedTimer];
 }
 
 
@@ -330,7 +251,7 @@
 //lifecyrcle for programm							
 - (void)applicationWillResignActive:(UIApplication *)application
 {
-    NSLog(@"=====application will resign active (call or sms etc)=====");
+    NSLog(@"=====application will resign active (call or sms or background)=====");
     /*
      Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
      Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
@@ -340,20 +261,7 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
     NSLog(@"=====background=====");
-    NSLog(@"30s = %@, 5 min = %@, send = %@", [timer30sec isValid]?@"YES":@"NO", [timer5min isValid]?@"YES":@"NO", [sendTimer isValid]?@"YES":@"NO");
-    if ([timer30sec isValid]) {
-        [timer30sec invalidate];
-        [self checkSpeedTimer];
-    }
-    if ([timer5min isValid]) {
-        [timer5min invalidate];
-        [self fiveMinTimer];
-    }
-    if ([sendTimer isValid]) {
-        [sendTimer invalidate];
-        [self checkSendRight];
-    }
-    
+        
     
     
     /*
@@ -368,6 +276,7 @@
      Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
      */
     NSLog(@"=====foreground=====");
+    [self checkSendRight];
     [self startRecord];
 }
 

@@ -44,8 +44,7 @@
     DatabaseActions *databaseAction;
     BOOL needCheck;
     
-    NSTimer *timer30sec;
-    NSTimer *timer5min;
+    NSTimer *stopTimer;
     NSTimer *sendTimer;
 }
 
@@ -59,11 +58,7 @@
 
 -(void) startMotionDetect;
 -(void) stopMotionDetect;
--(void) checkSpeedTimer;
 -(double) getTime;
--(void) timerFired: (NSTimer *)timer;
-- (void)fiveMinTimer;
-- (void)checkAfterFiveMin;
 - (void)stopRecord;
 - (void)startRecord;
 - (void)sendTimer;
