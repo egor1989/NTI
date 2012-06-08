@@ -833,7 +833,7 @@ function addNTIFile($param)
 					$score_brake =0.35*100*($TypeBrake1Count*0.1+ $TypeBrake2Count*0.25 +$TypeBrake3Count*0.65)/($TotalDistance*$BrakeK) ;
 					$score_acc = 0.15*100*($TypeAcc1Count*0.1+ $TypeAcc2Count*0.25 +$TypeAcc3Count*0.65)/($TotalDistance*$AccK) ;
 			
-					$sql_insert_str="insert into NTIUserDrivingTrack(UID,TotalAcc1Count,TotalAcc2Count,TotalAcc3Count,TotalBrake1Count,TotalBrake2Count,TotalBrake3Count,TotalSpeed1Count,TotalSpeed2Count,TotalSpeed3Count,TotalTurn1Count,TotalTurn2Count,TotalTurn3Count,TimeStart,TimeEnd,TotalDistance,SpeedScore,	TurnScore,BrakeScore,AccScore,CurrentKCoefID) values ('$UID','$TypeAcc1Count','$TypeAcc2Count','$TypeAcc3Count','$TypeBrake1Count','$TypeBrake2Count','$TypeBrake3Count','$TypeSpeed1Count','$TypeSpeed2Count','$TypeSpeed3Count','$TypeTurn1Count','$TypeTurn2Count','$TypeTurn3Count','$TimeStart','$TimeEnd','$TotalDistance','$score_speed','$score_turn','$score_brake','$score_acc','$CoefID')";
+					$sql_insert_str="insert into NTIUserDrivingTrack(UID,TotalAcc1Count,TotalAcc2Count,TotalAcc3Count,TotalBrake1Count,TotalBrake2Count,TotalBrake3Count,TotalSpeed1Count,TotalSpeed2Count,TotalSpeed3Count,TotalTurn1Count,TotalTurn2Count,TotalTurn3Count,TimeStart,TimeEnd,TotalDistance,SpeedScore,	TurnScore,BrakeScore,AccScore,CurrentKCoefID,SpeedK,TurnK,AccK,BrakeK) values ('$UID','$TypeAcc1Count','$TypeAcc2Count','$TypeAcc3Count','$TypeBrake1Count','$TypeBrake2Count','$TypeBrake3Count','$TypeSpeed1Count','$TypeSpeed2Count','$TypeSpeed3Count','$TypeTurn1Count','$TypeTurn2Count','$TypeTurn3Count','$TimeStart','$TimeEnd','$TotalDistance','$score_speed','$score_turn','$score_brake','$score_acc','$CoefID','$SpeedK','$TurnK','$AccK','$BrakeK')";
 					
 					mysql_query($sql_insert_str);
 					$TrackID = mysql_insert_id();
@@ -905,15 +905,7 @@ function getStatistics($param)
 		if($UID>0)
 		{
 			
-			//Для начала высчитываем общую статистику по поездкам региона	
-			$result=mysql_query("SELECT sum((`TotalBrake1Count`*0.1+`TotalBrake2Count`*0.25+`TotalBrake3Count`*0.65)/`TotalDistance`)/count(*) as BrakeK,sum((`TotalAcc1Count`*0.1+`TotalAcc2Count`*0.25+`TotalAcc3Count`*0.65)/`TotalDistance`)/count(*) as AccK,sum((`TotalSpeed1Count`*0.1+`TotalSpeed2Count`*0.25+`TotalSpeed3Count`*0.65)/`TotalDistance`)/count(*) as SpeedK,sum((`TotalTurn1Count`*0.1+`TotalTurn2Count`*0.25+`TotalTurn3Count`*0.65)/`TotalDistance`)/count(*) as TurnK  FROM `NTIUserDrivingTrack` ");
-			while ($row = mysql_fetch_array($result)) 
-			{
-				$BrakeK = $row['BrakeK'];
-			        $AccK = $row['AccK'];
-				$SpeedK = $row['SpeedK'];
-				$TurnK = $row['TurnK'];
-			}
+			//Для начала высчитываем общую статистику по поездкам региона
 			 $score_speed=0;
 			 $score_turn=0;
 			 $score_brake=0;
@@ -926,10 +918,10 @@ function getStatistics($param)
 				$result=mysql_query("SELECT * FROM `NTIUserDrivingTrack` where UID=$UID order by Id DESC Limit 1");
 				while ($row = mysql_fetch_array($result)) 
 				{
-					$score_speed = 0.35*100*($row['TotalSpeed1Count']*0.1+ $row['TotalSpeed2Count']*0.25 +$row['TotalSpeed3Count']*0.65)/($row['TotalDistance']*$SpeedK) ;
-					$score_turn =0.25*100*($row['TotalTurn1Count']*0.1+ $row['TotalTurn2Count']*0.25 +$row['TotalTurn3Count']*0.65)/($row['TotalDistance']*$TurnK) ;
-					$score_brake =0.35*100*($row['TotalBrake1Count']*0.1+ $row['TotalBrake2Count']*0.25 +$row['TotalBrake3Count']*0.65)/($row['TotalDistance']*$BrakeK) ;
-					$score_acc = 0.15*100*($row['TotalAcc1Count']*0.1+ $row['TotalAcc2Count']*0.25 +$row['TotalAcc3Count']*0.65)/($row['TotalDistance']*$AccK) ;
+					$score_speed = $row['SpeedScore'];
+					$score_turn =$row['TurnScore'];
+					$score_brake =$row['BrakeScore'];
+					$score_acc = $row['AccScore'];
 					$distance= $row['TotalDistance'];
 					$total_score = $score_speed +$score_turn+$score_brake+$score_acc;
 					$time=$row['TimeStart'];
@@ -943,11 +935,11 @@ function getStatistics($param)
 				$n=0;
 				while ($row = mysql_fetch_array($result)) 
 				{
-					$score_speed += 0.35*100*($row['TotalSpeed1Count']*0.1+ $row['TotalSpeed2Count']*0.25 +$row['TotalSpeed3Count']*0.65)/($row['TotalDistance']*$SpeedK) ;
-					$score_turn +=0.25*100*($row['TotalTurn1Count']*0.1+ $row['TotalTurn2Count']*0.25 +$row['TotalTurn3Count']*0.65)/($row['TotalDistance']*$TurnK) ;
-					$score_brake +=0.35*100*($row['TotalBrake1Count']*0.1+ $row['TotalBrake2Count']*0.25 +$row['TotalBrake3Count']*0.65)/($row['TotalDistance']*$BrakeK) ;
-					$score_acc += 0.15*100*($row['TotalAcc1Count']*0.1+ $row['TotalAcc2Count']*0.25 +$row['TotalAcc3Count']*0.65)/($row['TotalDistance']*$AccK) ;
-					$distance+= $row['TotalDistance'];
+					$score_speed += $row['SpeedScore'];
+					$score_turn +=$row['TurnScore'];
+					$score_brake +=$row['BrakeScore'];
+					$score_acc += $row['AccScore'];
+						$distance+= $row['TotalDistance'];
 					$time+=$row['TimeEnd']-$row['TimeStart'];
 					$total_score += ($score_speed+$score_turn+$score_brake+$score_acc)*$distance;
 					$n++;
@@ -1101,11 +1093,13 @@ function getPath($param)
 						$ret_arr[$n]['weight']=0;
 					}
 				}
-		if(		$curDrivingId!=$row['DrivingId'])
+		if(		$curDrivingId!=$row['DrivingID'])
 		{
+
 					$ret_arr[$n]['type']=42;
 					$ret_arr[$n]['weight']=42;
-					$curDrivingId=$row['DrivingId'];
+
+					$curDrivingId=$row['DrivingID'];
 		}
 			$n++;
 			
@@ -1115,7 +1109,7 @@ function getPath($param)
 		if($n!=0)
 		{
 		
-			$errortype=array('info'=>$query,'code'=>  0);
+			$errortype=array('info'=>"",'code'=>  0);
 			$res=array('result'=>$ret_arr,'error'=> $errortype);
 			echo json_encode($res);	
 			exit();
