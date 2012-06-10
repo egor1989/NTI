@@ -30,7 +30,7 @@
     
     [recordAction eventRecord:@"open"]; 
     
-    //freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);
+   // freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);
 
     
     locationManager=[[CLLocationManager alloc] init];
@@ -330,7 +330,7 @@
      */
     NSLog(@"=====foreground=====");
     [self checkSendRight];
-    [self startRecord];
+    //[self startRecord];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
@@ -349,6 +349,7 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     [recordAction eventRecord:@"close"];
+    [locationManager stopMonitoringSignificantLocationChanges];
     NSLog(@"=====close=====");
 }
 

@@ -68,11 +68,11 @@
 				</td>
 				<td>
 					<span >Километраж поездки: <?echo round($trr[$c]['total_dist'],2);?> км.</span><br>
-					<span >Очки ускорений: <?echo floor($trr[$c]['total_acc_score']);?></span><br>
-					<span >Очки торможений: <?echo floor($trr[$c]['total_brk_score']);?></span><br>
-					<span>Очки поворотов: <?echo floor($trr[$c]['total_crn_score']);?></span><br>
-					<span >Очки превышений: <?echo floor($trr[$c]['total_spd_score']);?></span><br>
-					<span>Счет поездки: <?echo floor($trr[$c]['total_all_score']);?></span><br>
+					<span >Очки ускорений: <?echo ($trr[$c]['total_acc_score']);?></span><br>
+					<span >Очки торможений: <?echo ($trr[$c]['total_brk_score']);?></span><br>
+					<span>Очки поворотов: <?echo ($trr[$c]['total_crn_score']);?></span><br>
+					<span >Очки превышений: <?echo ($trr[$c]['total_spd_score']);?></span><br>
+					<span>Счет поездки: <?echo ($trr[$c]['total_all_score']);?></span><br>
 				</td>
 			</tr>
 		<?}?>

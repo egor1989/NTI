@@ -45,13 +45,13 @@
 				<span style="color:red;font-size: 12px;">Всего превышений: <?echo $row['stats']['total_excesses'];?></span><br>
 				
 				<span style="font-size: 12px;">Затрачено времени: <?echo round($row['stats']['total_time']/3600,2);?> ч.</span><br>
-				<span style="font-size: 12px;">Очки ускорений: <?echo floor($row['stats']['total_acc_score']);?></span><br>
-				<span style="font-size: 12px;">Очки торможений: <?echo floor($row['stats']['total_brk_score']);?></span><br>
-				<span style="font-size: 12px;">Очки поворотов: <?echo floor($row['stats']['total_crn_score']);?></span><br>
-				<span style="font-size: 12px;">Очки превышений: <?echo floor($row['stats']['total_spd_score']);?></span><br>
-				<span style="font-size: 12px;">Всего поездок: <?echo floor($row['stats']['total_trips']);?></span><br>
+				<span style="font-size: 12px;">Очки ускорений: <?echo ($row['stats']['total_acc_score']);?></span><br>
+				<span style="font-size: 12px;">Очки торможений: <?echo ($row['stats']['total_brk_score']);?></span><br>
+				<span style="font-size: 12px;">Очки поворотов: <?echo ($row['stats']['total_crn_score']);?></span><br>
+				<span style="font-size: 12px;">Очки превышений: <?echo ($row['stats']['total_spd_score']);?></span><br>
+				<span style="font-size: 12px;">Всего поездок: <?echo ($row['stats']['total_trips']);?></span><br>
 				<span style="font-size: 12px;">Общий километраж: <?echo floor($row['stats']['total_dist']);?> км.</span><br>
-				<span style="font-size: 12px;">Суммарный счет: <?echo floor($row['stats']['total_all_score']);?></span><br>
+				<span style="font-size: 12px;">Суммарный счет: <?echo ($row['stats']['total_all_score']);?></span><br>
 			</td>
 					<?}
 					else{?>
