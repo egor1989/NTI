@@ -79,7 +79,7 @@
     [self.mapView removeOverlays: self.mapView.overlays];
     [self parseRoute:routeArray];
     [self zoomInOnRoute];
-    NSLog(@"tempCount = %d", tempCount);
+//    NSLog(@"tempCount = %d", tempCount);
 }
 
 // Парсит маршрут и вызывает методы отрисовки
@@ -104,16 +104,18 @@
             int type = [[point valueForKey:@"type"]intValue];
             int weight = [[point valueForKey:@"weight"]intValue];
             if (type == 42) {
-                [routeLineArray addObject:[self createRouteLine:allRoutesPointsArray[0][0]]];
-                [allRoutesPointsArray[0][0] removeAllObjects];
+                if ([allRoutesPointsArray[0][0] count] != 0){
+                    [routeLineArray addObject:[self createRouteLine:allRoutesPointsArray[0][0]]];
+                    [allRoutesPointsArray[0][0] removeAllObjects];
+                }
             }
             else{
                 [allRoutesPointsArray[type][weight] addObject:latLngArray];
             }
         }
         [routeLineArray addObject:[self createRouteLine:allRoutesPointsArray[0][0]]];
-        NSLog(@"normalPointsNumber = %d", [allRoutesPointsArray[0][0] count]);
-        //отрисовка маршрута (чёрная линия)
+        
+        //отрисовка маршрута (фиолетовая линия)
         @try {
             for (_routeLine in routeLineArray){
                 [_mapView addOverlay:_routeLine];
@@ -178,12 +180,6 @@
 	free(pointArr);
     
     return self.routeLine;
-    
-//	if (nil != self.routeLine) {
-//		[self.mapView addOverlay:self.routeLine];
-//	}
-//    self.routeLine = nil;
-
 }
 
 // Добавляет на карту слой - точку. В зависимости от типа точки присваивает ей определёный заголовок.
