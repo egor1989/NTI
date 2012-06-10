@@ -71,7 +71,7 @@
     NSArray *routeArray = [[NSArray alloc] init];
     answerArray = [jsonParser objectWithString:[TheNotice object] error:NULL];
     routeArray = [answerArray valueForKey:@"result"];
-    NSLog(@"RouteArray points NUMBER = %d",[routeArray count]);
+//    NSLog(@"RouteArray points NUMBER = %d",[routeArray count]);
     
     [waintingIndicator stopAnimating];
     grayView.hidden = YES;
@@ -118,17 +118,17 @@
             for (_routeLine in routeLineArray){
                 [_mapView addOverlay:_routeLine];
             }
+            //отрисовка специальных точек
+            for (int i=1; i<=4; i++) {
+                for (int j=0; j<=3; j++) {
+                    if (allRoutesPointsArray[i][j] != nil) {
+                        [self specialPointsDraw:allRoutesPointsArray[i][j] withType:i andStrong:j];
+                    }
+                }
+            }
         }
         @catch (NSException *exception) {
             NSLog(@"NSInvalidArgumentException in mapView");
-        }
-        //отрисовка специальных точек
-        for (int i=1; i<=4; i++) {
-            for (int j=0; j<=3; j++) {
-                if (allRoutesPointsArray[i][j] != nil) {
-                    [self specialPointsDraw:allRoutesPointsArray[i][j] withType:i andStrong:j];
-                }
-            }
         }
     }
 }
@@ -188,7 +188,7 @@
 
 // Добавляет на карту слой - точку. В зависимости от типа точки присваивает ей определёный заголовок.
 -(void) specialPointsDraw:(NSArray*) specialPointsArray withType: (int) pointType andStrong: (int) pointStrong{
-    NSLog(@"MV parse answer");
+//    NSLog(@"MV parse answer");
     NSArray *point = [[NSArray alloc] init ];
     tempCount = tempCount + [specialPointsArray count];
 	for(point in specialPointsArray)
@@ -207,7 +207,7 @@
 //масштабирование на маршруте
 -(void) zoomInOnRoute
 {
-    NSLog(@"MV zoom in route");
+//    NSLog(@"MV zoom in route");
 	[self.mapView setVisibleMapRect:_routeRect];
 }
 
