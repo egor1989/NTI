@@ -36,20 +36,14 @@ class lays_model extends CI_Model {
 				$da['total_brk_score'] = $row->BrakeScore;
 				$da['total_crn_score'] =$row->TurnScore;
 				$da['total_spd_score'] =$row->SpeedScore;
-				
-				$da['SpeedK'] =  $row->SpeedK;
+				$da['total_all_score'] =$row->TotalScore;
+				$da['tscore'] =$row->TotalScore;
+				$da['tdst']=$row->TotalDistance;
+							$da['SpeedK'] =  $row->SpeedK;
 				$da['TurnK'] = $row->TurnK;
 				$da['AccK'] =$row->AccK;
 				$da['BrakeK'] =$row->BrakeK;
-				
-				
-				
-				$da['total_all_score'] =($da['total_acc_score']+$da['total_brk_score']+$da['total_crn_score']+$da['total_spd_score']);
-				$da['tscore'] =$row->TotalDistance*($da['total_acc_score']+$da['total_brk_score']+$da['total_crn_score']+$da['total_spd_score']);
-				$da['tdst']=$row->TotalDistance;
-				
 			}
-			$da['tscore']=$da['tscore']/$da['tdst'];
 			return $da;
 		} 
 		else {
@@ -74,12 +68,115 @@ class lays_model extends CI_Model {
 	                         $ret_data[$k]['sevAcc']=$row->sevAcc;
 	                         $ret_data[$k]['sevTurn']=$row->sevTurn;
 	                         $ret_data[$k]['sevSpeed']=$row->sevSpeed;
+	                         
+	                         
+	                         
+	                         
+	                         
+	                         
 	                         $ret_data[$k]['Info']="";
 	                         if($row->sevAcc!=0)$ret_data[$k]['Info'].=$row->TypeAcc."<br/>";
 	                         if($row->sevTurn!=0)$ret_data[$k]['Info'].=$row->TurnType."<br/>";
 	                         if($row->sevSpeed!=0)$ret_data[$k]['Info'].=$row->TypeSpeed."<br/>";
 	                         if($row->sevAcc==0 && $row->sevTurn==0 &&  $row->sevSpeed==0)
 	                         	 	 	$ret_data[$k]['Info']="normal point";
+
+
+
+
+					if($row->sevAcc!=0)
+					{
+						if($row->sevTurn==0)
+						{
+						if($row->sevAcc<0)
+						{
+							$ret_data[$k]['type']=2;
+							$ret_data[$k]['weight']=$row->sevAcc*(-1);
+						}
+						else
+						{
+							$ret_data[$k]['type']=1;
+							$ret_data[$k]['weight']=$row->sevAcc;
+						}
+					}
+					else
+					{
+						if($row->sevAcc<0)
+						{
+							if($row->sevAcc*(-1)>=$row->sevTurn)
+							{
+									$ret_data[$k]['type']=2;
+									$ret_data[$k]['weight']=$row->sevAcc*(-1);
+							}
+							else
+							{
+									$ret_data[$k]['type']=3;
+									$ret_data[$k]['weight']=$row->sevAcc;
+							}
+						}
+						else
+						{
+							if($row->sevAcc>=$row->sevTurn)
+							{
+									$ret_data[$k]['type']=1;
+									$ret_data[$k]['weight']=$row->sevAcc;
+							}
+							else
+							{
+									$ret_data[$k]['type']=3;
+									$ret_data[$k]['weight']=$row->sevTurn;
+							}	
+						}
+					}
+				}
+				else if($row->sevAcc==0 && $row->sevSpeed==0)
+				{
+					
+					if($row->sevTurn>0)
+					{
+						$ret_data[$k]['type']=3;
+						$ret_data[$k]['weight']=$row->sevTurn;
+					}
+					else
+					{
+						$ret_data[$k]['type']=0;
+						$ret_data[$k]['weight']=0;
+					}
+				}
+				else
+				{
+					if($row->sevSpeed>0)
+					{
+						$ret_data[$k]['type']=4;
+						$ret_data[$k]['weight']=$row->sevTurn;
+					}
+					else
+					{
+						$ret_data[$k]['type']=0;
+						$ret_data[$k]['weight']=0;
+					}
+				}
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 							$k++;
 					}
@@ -125,16 +222,15 @@ class lays_model extends CI_Model {
 				$da[$n]['total_brk_score'] = $row->BrakeScore;
 				$da[$n]['total_crn_score'] =$row->TurnScore;
 				$da[$n]['total_spd_score'] =$row->SpeedScore;
-				$da[$n]['SpeedK'] =  $row->SpeedK;
+				$da[$n]['total_all_score'] =$row->TotalScore;
+				$da['tscore'] +=$row->TotalScore;
+				$da['tdst']=+$row->TotalDistance;
+							$da[$n]['SpeedK'] =  $row->SpeedK;
 				$da[$n]['TurnK'] = $row->TurnK;
 				$da[$n]['AccK'] =$row->AccK;
 				$da[$n]['BrakeK'] =$row->BrakeK;
-				$da[$n]['total_all_score'] =$da[$n]['total_acc_score']+$da[$n]['total_brk_score']+$da[$n]['total_crn_score']+$da[$n]['total_spd_score'];
-				$da['tscore'] +=$row->TotalDistance*($da[$n]['total_acc_score']+$da[$n]['total_brk_score']+$da[$n]['total_crn_score']+$da[$n]['total_spd_score']);
-				$da['tdst']=+$row->TotalDistance;
 				$n++;
 			}
-			$da['tscore']=$da['tscore']/$da['tdst'];
 			$da['total_trips']=$n;
 			return $da;
 		} 
@@ -222,20 +318,19 @@ $n=0;
 				$da['total_brk_score'] += $row->BrakeScore;
 				$da['total_crn_score'] +=$row->TurnScore;
 				$da['total_spd_score'] +=$row->SpeedScore;
-				$da['total_all_score'] +=$row->TotalDistance*($da['total_acc_score']+$da['total_brk_score']+$da['total_crn_score']+$da['total_spd_score']);
+				$da['total_all_score'] +=$row->TotalScore;;
+							$da['SpeedK'] =  $row->SpeedK;
+				$da['TurnK'] = $row->TurnK;
+				$da['AccK'] =$row->AccK;
+				$da['BrakeK'] =$row->BrakeK;
 				$da['is_set']=1;
 				$n++;
 			}
-						if($n>0)
-						{
-
-				$da['total_all_score']=$da['total_all_score']/$da['total_dist'];
-}
-						
+					
 			return $da;
 		} 
 		else {
-$da['is_set']=-1;
+				$da['is_set']=-1;
 			return $da;
 		}
 	}
@@ -274,21 +369,19 @@ $da['is_set']=-1;
 				$da[$n]['TotalTurn2Count'] = $row->TotalTurn2Count;
 				$da[$n]['TotalTurn3Count'] = $row->TotalTurn3Count;
 				$da[$n]['total_dist']=$row->TotalDistance;
-						$da[$n]['total_acc_score'] =  $row->AccScore;
+				$da[$n]['total_acc_score'] =  $row->AccScore;
 				$da[$n]['total_brk_score'] = $row->BrakeScore;
 				$da[$n]['total_crn_score'] =$row->TurnScore;
 				$da[$n]['total_spd_score'] =$row->SpeedScore;
-				$da[$n]['SpeedK'] =  $row->SpeedK;
+				$da[$n]['total_all_score'] =$row->TotalScore;;
+							$da[$n]['SpeedK'] =  $row->SpeedK;
 				$da[$n]['TurnK'] = $row->TurnK;
 				$da[$n]['AccK'] =$row->AccK;
 				$da[$n]['BrakeK'] =$row->BrakeK;
-		
-						$da[$n]['total_all_score'] =($da[$n]['total_acc_score']+$da[$n]['total_brk_score']+$da[$n]['total_crn_score']+$da[$n]['total_spd_score']);
-				$da['tscore'] +=($da[$n]['total_acc_score']+$da[$n]['total_brk_score']+$da[$n]['total_crn_score']+$da[$n]['total_spd_score'])*$row->TotalDistance;
-		$da['tdst']=+$row->TotalDistance;
+				$da['tscore'] +=$row->TotalScore;;
+				$da['tdst']=+$row->TotalDistance;
 				$n++;
 			}
-			$da['tscore'] =$da['tscore']/$da['tdst'];
 			return $da;
 		} 
 		else {

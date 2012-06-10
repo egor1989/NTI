@@ -14,7 +14,7 @@ class functions extends CI_Controller {
 				{
 				for($i=0;$i<count($new_data);$i++)
 				{
-					echo $new_data[$i]['lat'].",".$new_data[$i]['lng'].",".$new_data[$i]['compass'].",".$new_data[$i]['speed'].",".$new_data[$i]['distance'].",".$new_data[$i]['utimestamp'].",".$new_data[$i]['sevAcc'].",".$new_data[$i]['sevTurn'].",".$new_data[$i]['sevSpeed'].",".$new_data[$i]['Info'].",\n";
+					echo $new_data[$i]['lat'].",".$new_data[$i]['lng'].",".$new_data[$i]['compass'].",".$new_data[$i]['speed'].",".$new_data[$i]['distance'].",".$new_data[$i]['utimestamp'].",".$new_data[$i]['sevAcc'].",".$new_data[$i]['sevTurn'].",".$new_data[$i]['sevSpeed'].",".$new_data[$i]['Info'].",".$new_data[$i]['type'].",".$new_data[$i]['weight'].",\n";
 				
 				
 				

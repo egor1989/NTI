@@ -1,10 +1,10 @@
 <div id="content" class="pageContent">
        <p id="wait" style="position:absolute; border:2px solid #369; background-color:white; z-index:1000; margin:2em; padding:0.2em 1em; font-size:3em;">Loading...</p>
-       <table>
+       <table width=100%>
        <tr>
-		   <td>
+		   <td width=80%>
         <div id="map" class="smallmap"></div>
-        </td><td>
+        </td><td width=20%>
         <div id="docs">
             <p id=status style="border-top:1px solid #BBB; border-bottom:1px solid #BBB;">
             </p>
