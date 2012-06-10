@@ -43,6 +43,7 @@ class User extends CI_Controller {
 
 					$this->load->view('header',$new_data);
 					$rs['trr']= $this->lays_model->LoadRawData($urls);
+					$rs['Id']=$urls;
 					$this->load->view('raw',$rs);
 					$this->load->view('footer');
 		}
@@ -52,10 +53,480 @@ class User extends CI_Controller {
 			header("Location: http://nti.goodroads.ru/");
 	}
 	
+
+private function array_sort($array, $on, $order=SORT_ASC)
+{
+    $new_array = array();
+    $sortable_array = array();
+
+    if (count($array) > 0) {
+        foreach ($array as $k => $v) {
+            if (is_array($v)) {
+                foreach ($v as $k2 => $v2) {
+                    if ($k2 == $on) {
+                        $sortable_array[$k] = $v2;
+                    }
+                }
+            } else {
+                $sortable_array[$k] = $v;
+            }
+        }
+
+        switch ($order) {
+            case SORT_ASC:
+                asort($sortable_array);
+            break;
+            case SORT_DESC:
+                arsort($sortable_array);
+            break;
+        }
+
+        foreach ($sortable_array as $k => $v) {
+            $new_array[$k] = $array[$k];
+        }
+    }
+
+    return $new_array;
+}
+		public function csv() {
+		if($this->session->userdata('rights')>=2)
+		{
+			$this->load->model('userModel');
+			$this->load->model('lays_model');
+			$new_data['rights']=$this->session->userdata('rights');
+			$this->load->helper('url');
+			$urls=$this->uri->segment(3);
+			$userDataId=$this->userModel->getUIDByDataID($urls);
+			$checker=$this->userModel->checkrealation($this->session->userdata('id'),$userDataId);
+			if(($checker==1 || $this->session->userdata('rights')==3) && $userDataId!=-1)
+				{
+
+					$rs= $this->lays_model->LoadRawData($urls);
+					$k=0;
+					$prespeed=0;
+					$predir=0;
+					$arprt[$k]['maxspeed']=0;
+					$arprt[$k]['minspeed']=10000;
+					$arprt[$k]['duration']=1;
+					for($i=0;$i<count($rs)-1;$i++)
+					{
+						if(($rs[$i+1]['TypeAcc']=="acc1 started" || $rs[$i+1]['TypeAcc']=="acc1 continued") && ($rs[$i]['TypeAcc']=="acc1 started" || $rs[$i]['TypeAcc']=="acc1 continued"))
+						{
+							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
+							$arprt[$k]['type']=1;
+							$arprt[$k]['weight']=1;
+							
+							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
+							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
+							$arprt[$k]['lat']=$rs[$i]['lat'];
+							$arprt[$k]['lng']=$rs[$i]['lng'];$arprt[$k]['tm']=$rs[$i]['utimestamp'];
+						}
+						if(($rs[$i+1]['TypeAcc']!="acc1 started" && $rs[$i+1]['TypeAcc']!="acc1 continued") && ($rs[$i]['TypeAcc']=="acc1 started" || $rs[$i]['TypeAcc']=="acc1 continued"))
+						{
+							
+							$arprt[$k]['type']=1;
+							$arprt[$k]['weight']=1;
+							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
+							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
+							$arprt[$k]['lat']=$rs[$i]['lat'];
+							$arprt[$k]['lng']=$rs[$i]['lng'];
+							$arprt[$k]['prespeed']=$prespeed;
+							$arprt[$k]['predir']=$predir;$arprt[$k]['tm']=$rs[$i]['utimestamp'];
+							$arprt[$k]['time']=date('j/m/y;h:i:s',$rs[$i]['utimestamp']);
+							$k++;				
+							$arprt[$k]['maxspeed']=0;
+							$arprt[$k]['minspeed']=1000;
+								$arprt[$k]['duration']=1;
+						}
+						else
+						{
+							$prespeed=$rs[$i]['speed'];
+							$predir=$rs[$i]['direction'];
+						}
+						
+					}
+					
+					
+										for($i=0;$i<count($rs)-1;$i++)
+					{
+						if(($rs[$i+1]['TypeAcc']=="acc2 started" || $rs[$i+1]['TypeAcc']=="acc2 continued") && ($rs[$i]['TypeAcc']=="acc2 started" || $rs[$i]['TypeAcc']=="acc2 continued"))
+						{
+							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
+							$arprt[$k]['type']=1;
+							$arprt[$k]['weight']=2;
+							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
+							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
+							$arprt[$k]['lat']=$rs[$i]['lat'];$arprt[$k]['tm']=$rs[$i]['utimestamp'];
+							$arprt[$k]['lng']=$rs[$i]['lng'];
+						}
+						if(($rs[$i+1]['TypeAcc']!="acc2 started" && $rs[$i+1]['TypeAcc']!="acc2 continued") && ($rs[$i]['TypeAcc']=="acc2 started" || $rs[$i]['TypeAcc']=="acc2 continued"))
+						{
+							
+							$arprt[$k]['type']=1;
+							$arprt[$k]['weight']=2;
+							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
+							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
+							$arprt[$k]['lat']=$rs[$i]['lat'];
+							$arprt[$k]['lng']=$rs[$i]['lng'];
+							$arprt[$k]['prespeed']=$prespeed;
+							$arprt[$k]['predir']=$predir;$arprt[$k]['tm']=$rs[$i]['utimestamp'];
+							$arprt[$k]['time']=date('j/m/y;h:i:s',$rs[$i]['utimestamp']);
+							$k++;											$arprt[$k]['maxspeed']=0;
+							$arprt[$k]['minspeed']=1000;	$arprt[$k]['duration']=1;
+						}
+						else
+						{
+							$prespeed=$rs[$i]['speed'];
+							$predir=$rs[$i]['direction'];
+						}
+						
+					}
+
+					for($i=0;$i<count($rs)-1;$i++)
+					{
+						if(($rs[$i+1]['TypeAcc']=="acc3 started" || $rs[$i+1]['TypeAcc']=="acc3 continued") && ($rs[$i]['TypeAcc']=="acc3 started" || $rs[$i]['TypeAcc']=="acc3 continued"))
+						{
+							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
+							$arprt[$k]['type']=1;
+							$arprt[$k]['weight']=3;
+							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
+							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
+							$arprt[$k]['lat']=$rs[$i]['lat'];
+							$arprt[$k]['lng']=$rs[$i]['lng'];$arprt[$k]['tm']=$rs[$i]['utimestamp'];
+						}
+						if(($rs[$i+1]['TypeAcc']!="acc3 started" && $rs[$i+1]['TypeAcc']!="acc3 continued") && ($rs[$i]['TypeAcc']=="acc3 started" || $rs[$i]['TypeAcc']=="acc3 continued"))
+						{
+							$arprt[$k]['duration']=1;
+							$arprt[$k]['type']=1;
+							$arprt[$k]['weight']=3;
+							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
+							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
+							$arprt[$k]['lat']=$rs[$i]['lat'];
+							$arprt[$k]['lng']=$rs[$i]['lng'];
+							$arprt[$k]['prespeed']=$prespeed;
+							$arprt[$k]['predir']=$predir;$arprt[$k]['tm']=$rs[$i]['utimestamp'];
+							$arprt[$k]['time']=date('j/m/y;h:i:s',$rs[$i]['utimestamp']);
+							$k++;										$arprt[$k]['maxspeed']=0;
+							$arprt[$k]['minspeed']=1000;		$arprt[$k]['duration']=1;
+						}
+						else
+						{
+							$prespeed=$rs[$i]['speed'];
+							$predir=$rs[$i]['direction'];
+						}
+						
+					}
+
+						for($i=0;$i<count($rs)-1;$i++)
+					{
+						if(($rs[$i+1]['TypeAcc']=="brake1 started" || $rs[$i+1]['TypeAcc']=="brake1 continued") && ($rs[$i]['TypeAcc']=="brake1 started" || $rs[$i]['TypeAcc']=="brake1 continued"))
+						{
+							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
+							$arprt[$k]['type']=2;
+							$arprt[$k]['weight']=1;
+							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
+							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
+							$arprt[$k]['lat']=$rs[$i]['lat'];$arprt[$k]['tm']=$rs[$i]['utimestamp'];
+							$arprt[$k]['lng']=$rs[$i]['lng'];
+						}
+						if(($rs[$i+1]['TypeAcc']!="brake1 started" && $rs[$i+1]['TypeAcc']!="brake1 continued") && ($rs[$i]['TypeAcc']=="brake1 started" || $rs[$i]['TypeAcc']=="brake1 continued"))
+						{
+						
+							$arprt[$k]['type']=2;
+							$arprt[$k]['weight']=1;
+							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
+							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
+							$arprt[$k]['lat']=$rs[$i]['lat'];
+							$arprt[$k]['lng']=$rs[$i]['lng'];
+							$arprt[$k]['prespeed']=$prespeed;
+							$arprt[$k]['predir']=$predir;$arprt[$k]['tm']=$rs[$i]['utimestamp'];
+							$arprt[$k]['time']=date('j/m/y;h:i:s',$rs[$i]['utimestamp']);
+							$k++;										$arprt[$k]['maxspeed']=0;
+							$arprt[$k]['minspeed']=1000;		$arprt[$k]['duration']=1;
+						}
+						else
+						{
+							$prespeed=$rs[$i]['speed'];
+							$predir=$rs[$i]['direction'];
+						}
+						
+					}
+	
+	
+							for($i=0;$i<count($rs)-1;$i++)
+					{
+						if(($rs[$i+1]['TypeAcc']=="brake2 started" || $rs[$i+1]['TypeAcc']=="brake2 continued") && ($rs[$i]['TypeAcc']=="brake2 started" || $rs[$i]['TypeAcc']=="brake2 continued"))
+						{
+							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
+							$arprt[$k]['type']=2;
+							$arprt[$k]['weight']=2;
+							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
+							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
+							$arprt[$k]['lat']=$rs[$i]['lat'];$arprt[$k]['tm']=$rs[$i]['utimestamp'];
+							$arprt[$k]['lng']=$rs[$i]['lng'];
+						}
+						if(($rs[$i+1]['TypeAcc']!="brake2 started" && $rs[$i+1]['TypeAcc']!="brake2 continued") && ($rs[$i]['TypeAcc']=="brake2 started" || $rs[$i]['TypeAcc']=="brake2 continued"))
+						{
+							
+							$arprt[$k]['type']=2;
+							$arprt[$k]['weight']=2;
+							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
+							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
+							$arprt[$k]['lat']=$rs[$i]['lat'];
+							$arprt[$k]['lng']=$rs[$i]['lng'];
+							$arprt[$k]['prespeed']=$prespeed;
+							$arprt[$k]['predir']=$predir;$arprt[$k]['tm']=$rs[$i]['utimestamp'];
+							$arprt[$k]['time']=date('j/m/y;h:i:s',$rs[$i]['utimestamp']);
+							$k++;											$arprt[$k]['maxspeed']=0;
+							$arprt[$k]['minspeed']=1000;	$arprt[$k]['duration']=1;
+						}
+						else
+						{
+							$prespeed=$rs[$i]['speed'];
+							$predir=$rs[$i]['direction'];
+						}
+						
+					}
+	
+					for($i=0;$i<count($rs)-1;$i++)
+					{
+						if(($rs[$i+1]['TypeAcc']=="brake3 started" || $rs[$i+1]['TypeAcc']=="brake3 continued") && ($rs[$i]['TypeAcc']=="brake3 started" || $rs[$i]['TypeAcc']=="brake3 continued"))
+						{
+							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
+							$arprt[$k]['type']=2;
+							$arprt[$k]['weight']=3;
+							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
+							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
+							$arprt[$k]['lat']=$rs[$i]['lat'];
+							$arprt[$k]['lng']=$rs[$i]['lng'];$arprt[$k]['tm']=$rs[$i]['utimestamp'];
+						}
+						if(($rs[$i+1]['TypeAcc']!="brake3 started" && $rs[$i+1]['TypeAcc']!="brake3 continued") && ($rs[$i]['TypeAcc']=="brake3 started" || $rs[$i]['TypeAcc']=="brake3 continued"))
+						{
+							
+							$arprt[$k]['type']=2;
+							$arprt[$k]['weight']=3;
+							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
+							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
+							$arprt[$k]['lat']=$rs[$i]['lat'];
+							$arprt[$k]['lng']=$rs[$i]['lng'];
+							$arprt[$k]['prespeed']=$prespeed;$arprt[$k]['tm']=$rs[$i]['utimestamp'];
+							$arprt[$k]['predir']=$predir;
+							$arprt[$k]['time']=date('j/m/y;h:i:s',$rs[$i]['utimestamp']);
+							$k++;											$arprt[$k]['maxspeed']=0;
+							$arprt[$k]['minspeed']=1000;	$arprt[$k]['duration']=1;
+						}
+						else
+						{
+							$prespeed=$rs[$i]['speed'];
+							$predir=$rs[$i]['direction'];
+						}
+						
+					}
 	
 	
 	
 	
+						for($i=0;$i<count($rs)-1;$i++)
+					{
+						if(($rs[$i+1]['TurnType']=="left turn started" && $rs[$i+1]['TurnType']=="left turn continued"  && $rs[$i+1]['TurnType']=="left turn finished") && ($rs[$i]['TurnType']=="left turn started" && $rs[$i]['TurnType']=="left turn continued"  && $rs[$i]['TurnType']=="left turn finished"))
+						{
+							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
+							$arprt[$k]['type']=3;
+							$arprt[$k]['weight']=0;
+							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
+							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
+							$arprt[$k]['lat']=$rs[$i]['lat'];$arprt[$k]['tm']=$rs[$i]['utimestamp'];
+							$arprt[$k]['lng']=$rs[$i]['lng'];
+						}
+						if(($rs[$i+1]['TurnType']!="left turn started" && $rs[$i+1]['TurnType']!="left turn continued"  && $rs[$i+1]['TurnType']!="left turn finished") && ($rs[$i]['TurnType']=="left turn started" && $rs[$i]['TurnType']=="left turn continued"  && $rs[$i]['TurnType']=="left turn finished"))
+						{
+	
+							$arprt[$k]['type']=3;
+							$arprt[$k]['weight']=0;
+							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
+							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
+							$arprt[$k]['lat']=$rs[$i]['lat'];
+							$arprt[$k]['lng']=$rs[$i]['lng'];
+							$arprt[$k]['prespeed']=$prespeed;
+							$arprt[$k]['predir']=$predir;$arprt[$k]['tm']=$rs[$i]['utimestamp'];
+							$arprt[$k]['time']=date('j/m/y;h:i:s',$rs[$i]['utimestamp']);
+							$k++;											$arprt[$k]['maxspeed']=0;
+							$arprt[$k]['minspeed']=1000;	$arprt[$k]['duration']=1;
+						}
+						else
+						{
+							$prespeed=$rs[$i]['speed'];
+							$predir=$rs[$i]['direction'];
+						}
+						
+					}
+	
+							for($i=0;$i<count($rs)-1;$i++)
+					{
+						if(($rs[$i+1]['TurnType']=="right turn started" && $rs[$i+1]['TurnType']=="right turn continued"  && $rs[$i+1]['TurnType']=="right turn finished") && ($rs[$i]['TurnType']=="right turn started" && $rs[$i]['TurnType']=="right turn continued"  && $rs[$i]['TurnType']=="right turn finished"))
+						{
+							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
+							$arprt[$k]['type']=4;
+							$arprt[$k]['weight']=0;
+							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
+							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
+							$arprt[$k]['lat']=$rs[$i]['lat'];$arprt[$k]['tm']=$rs[$i]['utimestamp'];
+							$arprt[$k]['lng']=$rs[$i]['lng'];
+						}
+						if(($rs[$i+1]['TurnType']!="right turn started" && $rs[$i+1]['TurnType']!="right turn continued"  && $rs[$i+1]['TurnType']!="right turn finished") && ($rs[$i]['TurnType']=="right turn started" && $rs[$i]['TurnType']=="right turn continued"  && $rs[$i]['TurnType']=="right turn finished"))
+						{
+							
+							$arprt[$k]['type']=4;
+							$arprt[$k]['weight']=0;
+							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
+							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
+							$arprt[$k]['lat']=$rs[$i]['lat'];
+							$arprt[$k]['lng']=$rs[$i]['lng'];
+							$arprt[$k]['prespeed']=$prespeed;
+							$arprt[$k]['predir']=$predir;$arprt[$k]['tm']=$rs[$i]['utimestamp'];
+							$arprt[$k]['time']=date('j/m/y;h:i:s',$rs[$i]['utimestamp']);
+							$k++;											$arprt[$k]['maxspeed']=0;
+							$arprt[$k]['minspeed']=1000;	$arprt[$k]['duration']=1;
+						}
+						else
+						{
+							$prespeed=$rs[$i]['speed'];
+							$predir=$rs[$i]['direction'];
+						}
+						
+						
+					}
+
+							for($i=0;$i<count($rs)-1;$i++)
+					{
+						if(($rs[$i+1]['TypeSpeed']=="s1") && ($rs[$i]['TypeSpeed']=="s1"))
+						{
+							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
+							$arprt[$k]['type']=5;
+							$arprt[$k]['weight']=1;
+							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
+							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
+							$arprt[$k]['lat']=$rs[$i]['lat'];
+							$arprt[$k]['lng']=$rs[$i]['lng'];$arprt[$k]['tm']=$rs[$i]['utimestamp'];
+						}
+						if(($rs[$i+1]['TypeSpeed']!="s1") && ($rs[$i]['TypeSpeed']=="s1"))
+						{
+							
+							$arprt[$k]['type']=5;
+							$arprt[$k]['weight']=1;
+							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
+							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
+							$arprt[$k]['lat']=$rs[$i]['lat'];
+							$arprt[$k]['lng']=$rs[$i]['lng'];
+							$arprt[$k]['prespeed']=$prespeed;
+							$arprt[$k]['predir']=$predir;$arprt[$k]['tm']=$rs[$i]['utimestamp'];
+							$arprt[$k]['time']=date('j/m/y;h:i:s',$rs[$i]['utimestamp']);
+							$k++;											$arprt[$k]['maxspeed']=0;
+							$arprt[$k]['minspeed']=1000;	$arprt[$k]['duration']=1;
+						}
+						else
+						{
+							$prespeed=$rs[$i]['speed'];
+							$predir=$rs[$i]['direction'];
+						}
+						
+						
+					}
+
+
+							for($i=0;$i<count($rs)-1;$i++)
+					{
+						if(($rs[$i+1]['TypeSpeed']=="s2") && ($rs[$i]['TypeSpeed']=="s2"))
+						{
+							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
+							$arprt[$k]['type']=5;
+							$arprt[$k]['weight']=2;
+							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
+							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
+							$arprt[$k]['lat']=$rs[$i]['lat'];$arprt[$k]['tm']=$rs[$i]['utimestamp'];
+							$arprt[$k]['lng']=$rs[$i]['lng'];
+						}
+						if(($rs[$i+1]['TypeSpeed']!="s2") && ($rs[$i]['TypeSpeed']=="s2"))
+						{
+							
+							$arprt[$k]['type']=5;
+							$arprt[$k]['weight']=2;
+							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
+							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
+							$arprt[$k]['lat']=$rs[$i]['lat'];
+							$arprt[$k]['lng']=$rs[$i]['lng'];
+							$arprt[$k]['prespeed']=$prespeed;
+							$arprt[$k]['predir']=$predir;$arprt[$k]['tm']=$rs[$i]['utimestamp'];
+							$arprt[$k]['time']=date('j/m/y;h:i:s',$rs[$i]['utimestamp']);
+							$k++;											$arprt[$k]['maxspeed']=0;
+							$arprt[$k]['minspeed']=1000;	$arprt[$k]['duration']=1;
+						}
+						else
+						{
+							$prespeed=$rs[$i]['speed'];
+							$predir=$rs[$i]['direction'];
+						}
+						
+						
+					}
+							for($i=0;$i<count($rs)-1;$i++)
+					{
+						if(($rs[$i+1]['TypeSpeed']=="s3") && ($rs[$i]['TypeSpeed']=="s3"))
+						{
+							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
+							$arprt[$k]['type']=5;
+							$arprt[$k]['weight']=3;
+							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
+							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
+							$arprt[$k]['lat']=$rs[$i]['lat'];
+							$arprt[$k]['lng']=$rs[$i]['lng'];$arprt[$k]['tm']=$rs[$i]['utimestamp'];
+						}
+						if(($rs[$i+1]['TypeSpeed']!="s3") && ($rs[$i]['TypeSpeed']=="s3"))
+						{
+							
+							$arprt[$k]['type']=5;
+							$arprt[$k]['weight']=3;
+							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
+							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
+							$arprt[$k]['lat']=$rs[$i]['lat'];
+							$arprt[$k]['lng']=$rs[$i]['lng'];
+							$arprt[$k]['prespeed']=$prespeed;
+							$arprt[$k]['tm']=$rs[$i]['utimestamp'];
+							$arprt[$k]['predir']=$predir;
+							$arprt[$k]['time']=date('j/m/y;h:i:s',$rs[$i]['utimestamp']);
+							$k++;											$arprt[$k]['maxspeed']=0;
+							$arprt[$k]['minspeed']=1000;	$arprt[$k]['duration']=1;
+						}
+						else
+						{
+							$prespeed=$rs[$i]['speed'];
+							$predir=$rs[$i]['direction'];
+						}
+					}
+				unset($arprt[$k]);
+				$sorted=$this->array_sort($arprt, 'tm', SORT_DESC);
+				header("Content-Type: text/plain charset=UTF-8\r\n");
+				for($i=0;$i<count($sorted);$i++)
+				{
+					echo $sorted[$i]['time'].";".$sorted[$i]['type'].";".$sorted[$i]['weight'].";".$sorted[$i]['minspeed'].";".$sorted[$i]['maxspeed'].";".$sorted[$i]['duration'].";".$sorted[$i]['prespeed'].";".$sorted[$i]['predir'].";".$sorted[$i]['lat'].";".$sorted[$i]['lng'].";-24200000\n";
+				}
+				}
+			else
+			header("Location: http://nti.goodroads.ru/");
+			} else
+			header("Location: http://nti.goodroads.ru/");
+	}
+	
+
+
+
+
+
+
+
+
+
+
 
 	public function index() {
 		if($this->session->userdata('id')!=null && $this->session->userdata('id')>0) {

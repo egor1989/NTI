@@ -1,4 +1,5 @@
 ﻿<div id="content" class="pageContent">
+	<a href="/user/csv/<? echo $Id;?>">Ссылка на файл событий для скачивания</a>
 <table border=1>
 	<tr>
 		<td>AccX</td>
@@ -36,8 +37,7 @@
 		else if( $trr[$i]['TypeAcc']=="brake2 started")$what_to_write.="<span style=\"color:orange\">Начато среднее торможение</span><br/>";
 		else if( $trr[$i]['TypeAcc']=="brake2 continued")$what_to_write.="<span style=\"color:orange\">Продолжается среднее торможение</span><br/>";
 		else if( $trr[$i]['TypeAcc']=="brake3 started")$what_to_write.="<span style=\"color:red\">Начато сильное торможение</span><br/>";
-		else if( $trr[$i]['TypeAcc']=="brake3 continued")$what_to_write.="<span style=\"color:red\">Продолжается сильное торможение</span><br/>";
-		
+		else if( $trr[$i]['TypeAcc']=="brake3 continued")$what_to_write.="<span style=\"color:red\">Продолжается сильное торможение</span><br/>";	
 		if($trr[$i]['TurnType']=="left turn started")$what_to_write.="<i>Начат левый поворот</i><br/>";
 		else if($trr[$i]['TurnType']=="left turn continued")$what_to_write.="<i>Продолжается левый поворот</i><br/>";
 		else if($trr[$i]['TurnType']=="left turn finished")$what_to_write.="<i>Поворот налево закончен</i><br/>";

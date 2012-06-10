@@ -157,25 +157,6 @@ class lays_model extends CI_Model {
 					}
 				}
 
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 							$k++;
