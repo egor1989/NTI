@@ -544,7 +544,7 @@
     }
     else{
         timeString = [NSString stringWithFormat:@"%.0f",timeInterval];
-        timeString=[@"data={\"method\":\"getPath\",\"params\":{\"time\":" stringByAppendingString:timeString];
+        timeString=[@"data={\"method\":\"getPath\",\"params\":{\"day\":1, \"time\":" stringByAppendingString:timeString];
         timeString=[timeString stringByAppendingString:@"}}"];
     }
     

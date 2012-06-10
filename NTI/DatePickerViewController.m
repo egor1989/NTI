@@ -22,7 +22,7 @@
 {
     [super viewDidLoad];
     NSDate *today = [NSDate date];
-    NSDate *minDate = [today dateByAddingTimeInterval: -86400*20];
+    NSDate *minDate = [today dateByAddingTimeInterval: -86400*40];
     NSDate *maxDate = [today dateByAddingTimeInterval: -900];
     datePicker.minimumDate = minDate;
     datePicker.maximumDate = maxDate;
