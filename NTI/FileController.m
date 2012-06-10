@@ -109,7 +109,7 @@
 	NSLog(@"************* deleteFileAction *************");
 	NSError *error = nil;
        
-        NSString *deleteFilePath = [self.documentsDirectory stringByAppendingPathComponent:@"logfile"];
+        NSString *deleteFilePath = [self.documentsDirectory stringByAppendingPathComponent:@"newlogfile"];
         NSLog(@"File : %@", deleteFilePath);
         
         BOOL fileDeleted = [self.fileMgr removeItemAtPath:deleteFilePath error:&error];

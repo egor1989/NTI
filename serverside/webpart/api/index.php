@@ -40,15 +40,16 @@ private $accy;
  public function setSpeed($speed) {	$this->speed=$speed; }
  public function setAccx($accx) {	$this->accx=$accx; }
  public function setAccy($accy) {	$this->accy=$accy; }
- public function getLat($lat){return($this->lat);}
- public function getLng($lng) {return($this->lng);}
- public function getCompass($compass){	return($this->compass); }
- public function getDirection($direction){	return($this->direction); }
- public function getTimestamp($timestamp) {	return($this->timestamp); }
- public function getDistance($distance) {	return($this->distance); }
- public function getSpeed($speed) {	return($this->speed); }
- public function getAccx($accx) {	return($this->accx); }
- public function getAccy($accy) {	return($this->accy); }
+ 
+ public function getLat(){return($this->lat);}
+ public function getLng() {return($this->lng);}
+ public function getCompass(){	return($this->compass); }
+ public function getDirection(){	return($this->direction); }
+ public function getTimestamp() {	return($this->timestamp); }
+ public function getDistance() {	return($this->distance); }
+ public function getSpeed() {	return($this->speed); }
+ public function getAccx() {	return($this->accx); }
+ public function getAccy() {	return($this->accy); }
 
 }
 
@@ -202,8 +203,6 @@ function NTI_Cookie_check()
 		$cnt=mysql_num_rows($result);
 		if($cnt==0)
 		{
-		
-			mysql_close($dbcnx);
 			return -3;
 		}
 		else
@@ -217,7 +216,6 @@ function NTI_Cookie_check()
 					mysql_query("UPDATE NTIKeys SET Deleted=1 where SID='$cooks'");
 					return -2;
 				}
-				mysql_close($dbcnx);
 				return $row['UID'];
 			} 
 		}
@@ -243,7 +241,7 @@ function NTIregister($param)
 	$surname=mysql_real_escape_string($surname);
 		if(!isset($username) || !isset($password))
 	{
-		mysql_close($dbcnx);
+
 		$errortype=array('info'=>"You dont set mail,password,login",'code'=>  2);
 		$res=array('result'=>0,'error'=>  $errortype);
 		echo json_encode($res);
@@ -253,7 +251,7 @@ function NTIregister($param)
 	$cnt=mysql_num_rows($result);
 	if(!$cnt==0)
 	{
-		mysql_close($dbcnx);
+
 		$errortype=array('info'=>"User name already exists",'code'=>  3);
 		$res=array('result'=>0,'error'=>  $errortype);
 		echo json_encode($res);
@@ -264,7 +262,7 @@ function NTIregister($param)
 	$cnt=mysql_num_rows($result);
 	if(!$cnt==0)
 	{
-		mysql_close($dbcnx);
+
 		$errortype=array('info'=>"User mail already exists",'code'=>  4);
 		$res=array('result'=>0,'error'=>  $errortype);
 		echo json_encode($res);
@@ -272,7 +270,7 @@ function NTIregister($param)
 	}
 	if(strlen($password)<64)
 	{
-		mysql_close($dbcnx);
+		
 		$errortype=array('info'=>"Password check failed, seem to be not sha",'code'=>  5);
 		$res=array('result'=>0,'error'=>  $errortype);
 		echo json_encode($res);
@@ -281,7 +279,7 @@ function NTIregister($param)
 	
 		if(strlen($username)>32 || strlen($email)>32 || strlen($name)>32 || strlen($surname)>32 )
 	{
-		mysql_close($dbcnx);
+		
 		$errortype=array('info'=>"Fields are too long. Must be less than 32 bytes",'code'=>  6);
 		$res=array('result'=>0,'error'=>  $errortype);
 		echo json_encode($res);
@@ -290,7 +288,7 @@ function NTIregister($param)
 
 			if(strlen($email)<3)
 	{
-		mysql_close($dbcnx);
+		
 		$errortype=array('info'=>"Email is too short",'code'=>  7);
 		$res=array('result'=>0,'error'=>  $errortype);
 		echo json_encode($res);
@@ -325,7 +323,7 @@ function NTIauth($param)
 	if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
 		if(!isset($secret) || !isset($username))
 	{
-		mysql_close($dbcnx);
+		
 		$errortype=array('info'=>"Bad secret (it doesnt set)",'code'=>  10);
 		$res=array('result'=>0,'error'=>  $errortype);
 		echo json_encode($res);
@@ -343,7 +341,7 @@ function NTIauth($param)
 	$cnt=mysql_num_rows($result);
 	if($cnt==0)
 	{
-		mysql_close($dbcnx);
+		
 		$errortype=array('info'=>"User doesnt exist",'code'=>  11);
 		$res=array('result'=>0,'error'=>  $errortype);
 		echo json_encode($res);
@@ -355,7 +353,7 @@ function NTIauth($param)
 	$cnt=mysql_num_rows($result);
 	if($cnt==0)
 	{
-		mysql_close($dbcnx);
+		
 		$errortype=array('info'=>"Mismatch",'code'=>  12);
 		$res=array('result'=>0,'error'=>  $errortype);
 		echo json_encode($res);
@@ -404,10 +402,13 @@ function addNTIFile($param)
 			$i=0;
 			$n=0;
 			while ($qq[$k]) 
-			{
+			{	
+				if($qq[$k]['gps']['latitude']!=0 && $qq[$k]['gps']['longitude']!=0)
+				{
 				if($i>0)
 				{
-					if($qq[$k]['timestamp']-$ArrayEntry[$n][$i-1]->getTimestamp<600)
+					
+					if($qq[$k]['timestamp']-$ArrayEntry[$n][$i-1]->getTimestamp()<600)
 					{
 						$ArrayEntry[$n][$i]=new UserEntry();
 						$ArrayEntry[$n][$i]->setLat($qq[$k]['gps']['latitude']);
@@ -454,6 +455,7 @@ function addNTIFile($param)
 						$ArrayEntry[$n][$i]->setTimestamp($qq[$k]['timestamp']);
 						$i++;
 				}
+			}
 				$lat=mysql_real_escape_string($qq[$k]['gps']['latitude']);
 				$lng=mysql_real_escape_string($qq[$k]['gps']['longitude']);
 				$accx=mysql_real_escape_string($qq[$k]['acc']['x']);
@@ -467,11 +469,11 @@ function addNTIFile($param)
 				mysql_query($str);
 				$k++;
 			}
+			//print_r($ArrayEntry);
 			//Разбили по времени
 			//Теперь перебирем поездки и высчитываем данные 
-			for($i=1;$i<$n;$i++)
+			for($i=1;$i<=$n;$i++)
 			{
-				
 				
 					$acc1=0;
 					$acc2=0;       
@@ -496,6 +498,8 @@ function addNTIFile($param)
 					
 					for($j=1;$j<count($ArrayEntry[$i]);$j++)
 					{
+
+						
 						$ArrayEntry[$i][$j]->setsevAcc(0);
 						$ArrayEntry[$i][$j]->setsevTurn(0);
 						$ArrayEntry[$i][$j]->setsevSpeed(0);
@@ -503,7 +507,9 @@ function addNTIFile($param)
 						$ArrayEntry[$i][$j]->setTypeSpeed("normal point");
 						$ArrayEntry[$i][$j]->setTypeAcc("normal point");
 						$speed=$ArrayEntry[$i][$j]->getSpeed();
+						
 						$deltaTime=$ArrayEntry[$i][$j]->getTimestamp()-$ArrayEntry[$i][$j-1]->getTimestamp();
+						
 						if($ArrayEntry[$i][$j]->getLng()-$ArrayEntry[$i][$j-1]->getLng()!=0)
 						{
 								$ArrayEntry[$i][$j]->setTurn(atan(($ArrayEntry[$i][$j]->getLat()-$ArrayEntry[$i][$j-1]->getLat())/($ArrayEntry[$i][$j]->getLng()-$ArrayEntry[$i][$j-1]->getLng())));
@@ -770,10 +776,6 @@ function addNTIFile($param)
 									if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "left turn continued"))$ArrayEntry[$i][$j]->setTurnType("left turn finished");
 									if (($ArrayEntry[$i][$j-1]->getTurnType() == "right turn started")||($typeTurn[$i-1] == "right turn continued"))$ArrayEntry[$i][$j]->setTurnType( "right turn finished");
 								}
-								
-								
-								
-								
 								if (($ArrayEntry[$i][$j]->getTurnType() == "left turn finished") || ($ArrayEntry[$i][$j]->getTurnType() == "right turn finished")) 
 								{
 									switch ($ArrayEntry[$i][$j]->getsevTurn()) {
@@ -790,23 +792,28 @@ function addNTIFile($param)
 						
 						
 					}
-					$TimeStart=$ArrayEntry[$i][0];//Подходит под определение ближайшей
-					$TimeEnd=$ArrayEntry[$i][0];//Хз может быть и перемешанно , пусть поищет
-					
+					$TimeStart=$ArrayEntry[$i][0]->getTimestamp();//Подходит под определение ближайшей
+					$TimeEnd=$ArrayEntry[$i][0]->getTimestamp();//Хз может быть и перемешанно , пусть поищет
+					$TotalDistance=0;
 					//Теперь ищем начало и конец поездки 
 					for($j=0;$j<count($ArrayEntry[$i]);$j++)
 					{
-						if($ArrayEntry[$i][$j]<$TimeStart)$TimeStart=$ArrayEntry[$i][$j];
-						if($ArrayEntry[$i][$j]>$TimeEnd)$TimeEnd=$ArrayEntry[$i][$j];
+						if($ArrayEntry[$i][$j]->getTimestamp()<$TimeStart)$TimeStart=$ArrayEntry[$i][$j]->getTimestamp();
+						if($ArrayEntry[$i][$j]->getTimestamp()>$TimeEnd)$TimeEnd=$ArrayEntry[$i][$j]->getTimestamp();
+						if($TotalDistance<$ArrayEntry[$i][$j]->getDistance())$TotalDistance=$ArrayEntry[$i][$j]->getDistance();
 					}
 					//Теперь ищем расстояние, которое проехали в поездке
-					//Для этого не будем полагаться на мобильник и посчитаем всё руками
-					$TotalDistance=0;
-					for($j=0;$j<count($ArrayEntry[$i])-1;$j++)
+					$result=mysql_query("SELECT * FROM `NTICoef` order by ID desc limit 1");
+					while ($row = mysql_fetch_array($result)) 
 					{
-						$TotalDistance+=distance_between_points($ArrayEntry[$i][$j]->getLat(),$ArrayEntry[$i][$j+1]->getLat(),$ArrayEntry[$i][$j]->getLng(),$ArrayEntry[$i][$j+1]->getLng());
+						$BrakeK = $row['BrakeK'];
+						$AccK = $row['AccK'];
+						$SpeedK = $row['SpeedK'];
+						$TurnK = $row['TurnK'];
+						$CoefID=$row['Id'];
 					}
-					$TypeAcc1Count  =$acc1;
+					if($TotalDistance<=0)$TotalDistance=1;
+					$TypeAcc1Count =$acc1;
 					$TypeAcc2Count =$acc2;       
 					$TypeAcc3Count =$acc3;       
 					$TypeTurn1Count=$turn1;       
@@ -818,10 +825,15 @@ function addNTIFile($param)
 					$TypeBrake1Count =$brake1;     
 					$TypeBrake2Count =$brake2;    
 					$TypeBrake3Count =$brake3;
-					$sql_insert_str="insert into NTIUserDrivingTrack(UID,TotalAcc1Count,TotalAcc2Count,TotalAcc3Count,TotalBrake1Count,TotalBrake2Count,TotalBrake3Count,TotalSpeed1Count,TotalSpeed2Count,TotalSpeed3Count,TotalTurn1Count,TotalTurn2Count,TotalTurn3Count,TimeStart,TimeEnd,TotalDistance) values ($UID,$TypeAcc1Count,$TypeAcc2Count,$TypeAcc3Count,$TypeBrake1Count,$TypeBrake2Count,$TypeBrake3Count,$TypeSpeed1Count,$TypeSpeed2Count,$TypeSpeed3Count,$TypeTurn1Count,$TypeTurn2Count,$TypeTurn3Count,$TimeStart,$TimeEnd,$TotalDistance)";
+					$score_speed = 0.35*100*($TypeSpeed1Count*0.1+ $TypeSpeed2Count*0.25 +$TypeSpeed3Count*0.65)/($TotalDistance*$SpeedK) ;
+					$score_turn =0.25*100*($TypeTurn1Count*0.1+ $TypeTurn2Count*0.25 +$TypeTurn3Count*0.65)/($TotalDistance*$TurnK) ;
+					$score_brake =0.35*100*($TypeBrake1Count*0.1+ $TypeBrake2Count*0.25 +$TypeBrake3Count*0.65)/($TotalDistance*$BrakeK) ;
+					$score_acc = 0.15*100*($TypeAcc1Count*0.1+ $TypeAcc2Count*0.25 +$TypeAcc3Count*0.65)/($TotalDistance*$AccK) ;
+					$sql_insert_str="insert into NTIUserDrivingTrack(UID,TotalAcc1Count,TotalAcc2Count,TotalAcc3Count,TotalBrake1Count,TotalBrake2Count,TotalBrake3Count,TotalSpeed1Count,TotalSpeed2Count,TotalSpeed3Count,TotalTurn1Count,TotalTurn2Count,TotalTurn3Count,TimeStart,TimeEnd,TotalDistance,SpeedScore,	TurnScore,BrakeScore,AccScore,CurrentKCoefID,SpeedK,TurnK,AccK,BrakeK) values ('$UID','$TypeAcc1Count','$TypeAcc2Count','$TypeAcc3Count','$TypeBrake1Count','$TypeBrake2Count','$TypeBrake3Count','$TypeSpeed1Count','$TypeSpeed2Count','$TypeSpeed3Count','$TypeTurn1Count','$TypeTurn2Count','$TypeTurn3Count','$TimeStart','$TimeEnd','$TotalDistance','$score_speed','$score_turn','$score_brake','$score_acc','$CoefID','$SpeedK','$TurnK','$AccK','$BrakeK')";
 					mysql_query($sql_insert_str);
 					$TrackID = mysql_insert_id();
 					//Теперь заносим эти же данные в EntrRide
+					
 					for($j=0;$j<count($ArrayEntry[$i]);$j++)
 					{
 						$accx=$ArrayEntry[$i][$j]->getAccx();
@@ -847,48 +859,6 @@ function addNTIFile($param)
 
 					}
 
-					//Перебираем все элементы для поиска конечного
-					//посчитали i ую поездку
-					//Теперь проверим , есть ли уже именно с этим пользователем поездки 
-					//Для этого получаем все временнные метки 
-					//Для того, чтобы поездка соединилась должны выполняться следующие условия
-					//Лучше ебану пример запросом
-					/*
-					SELECT `TimeStart`,`TimeEnd`,`Id` FROM `NTIUserDrivingTrack` WHERE UID=8 and
-					(`TimeStart`>=1334857038 and 1334857238 >=`TimeStart` and 1334857238<=`TimeEnd`)
-					OR
-					(`TimeStart`<=1334857038 and 1334857238<=`TimeEnd`)
-					OR
-					(`TimeStart`<=1334857038 and 1334857038 <=`TimeEnd` and 1334857238>=`TimeEnd`)
-					OR
-					(`TimeStart`>=1334857038 and 1334857238>=`TimeEnd`)
-					 */ 
-					
-					/*TODO:
-					 * Сделать объединение поездок
-					$result = mysql_query("	SELECT * FROM `NTIUserDrivingTrack` WHERE UID=8 and (`TimeStart`>=$TimeStart and $TimeEnd >=`TimeStart` and $TimeEnd<=`TimeEnd`) OR	(`TimeStart`<=$TimeStart and $TimeEnd<=`TimeEnd`)	OR	(`TimeStart`<=$TimeStart and $TimeStart <=`TimeEnd` and $TimeEnd>=`TimeEnd`)OR	(`TimeStart`>=$TimeStart and $TimeEnd>=`TimeEnd`)OR	(`TimeStart`>=$TimeEnd and TimeStart-$TimeEnd<300)	OR	(`TimeEnd`<=$TimeStart and $TimeStart-`TimeEnd`<300)");
-					while($row = mysql_fetch_array($result)) 
-					{	//Для начала получаем все данные этих поездк
-						$TypeAcc1Count  = $row['lat'];
-						$TypeAcc2Count =$row['lat'];       
-						$TypeAcc3Count =$row['lat'];       
-						$TypeTurn1Count=$row['lat'];       
-						$TypeTurn2Count=$row['lat'];       
-						$TypeTurn3Count =$row['lat'];      
-						$TypeSpeed1Count =$row['lat'];      
-						$TypeSpeed2Count =$row['lat'];     
-						$TypeSpeed3Count =$row['lat'];     
-						$TypeBrake1Count =$row['lat'];     
-						$TypeBrake2Count =$row['lat'];    
-						$TypeBrake3Count =$row['lat'];    
-						$TotalDistance=$row['lat'];	
-					}
-					*/
-					
-					
-					
-					
-					
 				}
 				//Если же ментше 50 - нахуй за борт
 			}
@@ -930,15 +900,7 @@ function getStatistics($param)
 		if($UID>0)
 		{
 			
-			//Для начала высчитываем общую статистику по поездкам региона	
-			$result=mysql_query("SELECT sum(`TotalBrake1Count`*0.1+`TotalBrake2Count`*0.25+`TotalBrake3Count`*0.65)/count(*) as BrakeK,sum(`TotalAcc1Count`*0.1+`TotalAcc2Count`*0.25+`TotalAcc3Count`*0.65)/count(*) as AccK,sum(`TotalSpeed1Count`*0.1+`TotalSpeed2Count`*0.25+`TotalSpeed3Count`*0.65)/count(*) as SpeedK,sum(`TotalTurn1Count`*0.1+`TotalTurn2Count`*0.25+`TotalTurn3Count`*0.65)/count(*) as TurnK  FROM `NTIUserDrivingTrack` ");
-			while ($row = mysql_fetch_array($result)) 
-			{
-				$BrakeK = $row['BrakeK'];
-			    $AccK = $row['AccK'];
-				$SpeedK = $row['SpeedK'];
-				$TurnK = $row['TurnK'];
-			}
+			//Для начала высчитываем общую статистику по поездкам региона
 			 $score_speed=0;
 			 $score_turn=0;
 			 $score_brake=0;
@@ -951,10 +913,10 @@ function getStatistics($param)
 				$result=mysql_query("SELECT * FROM `NTIUserDrivingTrack` where UID=$UID order by Id DESC Limit 1");
 				while ($row = mysql_fetch_array($result)) 
 				{
-					$score_speed = 100*($row['TotalSpeed1Count']*0.1+ $row['TotalSpeed2Count']*0.25 +$row['TotalSpeed3Count']*0.65)/$SpeedK ;
-					$score_turn =100*($row['TotalTurn1Count']*0.1+ $row['TotalTurn2Count']*0.25 +$row['TotalTurn3Count']*0.65)/$TurnK ;
-					$score_brake =100*($row['TotalBrake1Count']*0.1+ $row['TotalBrake2Count']*0.25 +$row['TotalBrake3Count']*0.65)/$BrakeK ;
-					$score_acc = 100*($row['TotalAcc1Count']*0.1+ $row['TotalAcc2Count']*0.25 +$row['TotalAcc3Count']*0.65)/$AccK ;
+					$score_speed = $row['SpeedScore'];
+					$score_turn =$row['TurnScore'];
+					$score_brake =$row['BrakeScore'];
+					$score_acc = $row['AccScore'];
 					$distance= $row['TotalDistance'];
 					$total_score = $score_speed +$score_turn+$score_brake+$score_acc;
 					$time=$row['TimeStart'];
@@ -968,21 +930,22 @@ function getStatistics($param)
 				$n=0;
 				while ($row = mysql_fetch_array($result)) 
 				{
-					$score_speed += 100*($row['TotalSpeed1Count']*0.1+ $row['TotalSpeed2Count']*0.25 +$row['TotalSpeed3Count']*0.65)/$SpeedK ;
-					$score_turn +=100*($row['TotalTurn1Count']*0.1+ $row['TotalTurn2Count']*0.25 +$row['TotalTurn3Count']*0.65)/$TurnK ;
-					$score_brake +=100*($row['TotalBrake1Count']*0.1+ $row['TotalBrake2Count']*0.25 +$row['TotalBrake3Count']*0.65)/$BrakeK ;
-					$score_acc += 100*($row['TotalAcc1Count']*0.1+ $row['TotalAcc2Count']*0.25 +$row['TotalAcc3Count']*0.65)/$AccK ;
-					$distance+= $row['TotalDistance'];
+					$score_speed += $row['SpeedScore'];
+					$score_turn +=$row['TurnScore'];
+					$score_brake +=$row['BrakeScore'];
+					$score_acc += $row['AccScore'];
+						$distance+= $row['TotalDistance'];
 					$time+=$row['TimeEnd']-$row['TimeStart'];
+					$total_score += ($score_speed+$score_turn+$score_brake+$score_acc)*$distance;
 					$n++;
 				}
 				if($n>0)
 				{
-					$score_speed=$score_speed/$n;
-					$score_turn=$score_turn/$n;
-					$score_brake=$score_brake/$n;
-					$score_acc=$score_acc/$n;
-					$total_score = ($score_speed +$score_turn+$score_brake+$score_acc);
+					$score_speed=$score_speed;
+					$score_turn=$score_turn;
+					$score_brake=$score_brake;
+					$score_acc=$score_acc;
+					$total_score = ($total_score/$distance)/$n;
 				}
 				
 			}
@@ -1017,22 +980,29 @@ function getPath($param)
 	
 	$time=$param['time'];
 	$till=$param['till'];
+	$day=$param['day'];
 	$UID=NTI_Cookie_check();
 	if($UID>0)
 	{
 		if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
-		if(isset($param['time']) && !isset($param['till']) and $param['time']>0)
+		if(isset($param['time']) && !isset($param['till']) and $param['time']>0 && !isset($param['day']))
 		{
 		
-			$start=strtotime(date("D M j 00:00:00 T Y",$time));
-			$end= strtotime(date("D M j 23:59:59 T Y",$time));
-			$query = "Select NTIUserDrivingEntry.* from (SELECT `Id` FROM `NTIUserDrivingTrack` WHERE UID=$UID and (`TimeStart`>=$start and $end >=`TimeStart` and $end<=`TimeEnd`) OR (`TimeStart`<=$start and $end<=`TimeEnd`) OR 	(`TimeStart`<=$start and $start <=`TimeEnd` and $end>=`TimeEnd`) OR (`TimeStart`>=$start and $end>=`TimeEnd`)) as Driving,NTIUserDrivingEntry where NTIUserDrivingEntry.`DrivingID`=Driving.Id group by `utimestamp`";
+			$start=mysql_real_escape_string($time);
+			$query = "Select NTIUserDrivingEntry.* from (SELECT `Id` FROM `NTIUserDrivingTrack` WHERE UID=$UID and `TimeStart`>=$start) as Driving,NTIUserDrivingEntry where NTIUserDrivingEntry.`DrivingID`=Driving.Id group by `utimestamp`";
 		}
 		else if(isset($param['time']) && isset($param['till'])  and $param['time']>0  and $param['till']>0)
 		{
 				$start=mysql_real_escape_string($time);
 				$end=mysql_real_escape_string($till);
 				$query = "Select NTIUserDrivingEntry.* from (SELECT `Id` FROM `NTIUserDrivingTrack` WHERE UID=$UID and (`TimeStart`>=$start and $end >=`TimeStart` and $end<=`TimeEnd`) OR (`TimeStart`<=$start and $end<=`TimeEnd`) OR 	(`TimeStart`<=$start and $start <=`TimeEnd` and $end>=`TimeEnd`) OR (`TimeStart`>=$start and $end>=`TimeEnd`)) as Driving,NTIUserDrivingEntry where NTIUserDrivingEntry.`DrivingID`=Driving.Id group by `utimestamp`";
+		}
+		else if(isset($param['time']) && !isset($param['till'])  and $param['time']>0  && isset($param['day']) && $param['day']==1)
+		{
+			$start=strtotime(date("D M j 00:00:00 T Y",$time));
+			$end= strtotime(date("D M j 23:59:59 T Y",$time));
+			$query = "Select NTIUserDrivingEntry.* from (SELECT `Id` FROM `NTIUserDrivingTrack` WHERE UID=$UID and (`TimeStart`>=$start and $end >=`TimeStart` and $end<=`TimeEnd`) OR (`TimeStart`<=$start and $end<=`TimeEnd`) OR 	(`TimeStart`<=$start and $start <=`TimeEnd` and $end>=`TimeEnd`) OR (`TimeStart`>=$start and $end>=`TimeEnd`)) as Driving,NTIUserDrivingEntry where NTIUserDrivingEntry.`DrivingID`=Driving.Id group by `utimestamp`";
+
 		}
 		else
 		{
@@ -1118,11 +1088,13 @@ function getPath($param)
 						$ret_arr[$n]['weight']=0;
 					}
 				}
-		if(		$curDrivingId!=$row['DrivingId'])
+		if(		$curDrivingId!=$row['DrivingID'])
 		{
+
 					$ret_arr[$n]['type']=42;
 					$ret_arr[$n]['weight']=42;
-					$curDrivingId=$row['DrivingId'];
+
+					$curDrivingId=$row['DrivingID'];
 		}
 			$n++;
 			

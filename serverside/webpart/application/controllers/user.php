@@ -14,10 +14,9 @@ class User extends CI_Controller {
 			$checker=$this->userModel->checkrealation($this->session->userdata('id'),$urls);
 				if($checker==1 || $this->session->userdata('rights')==3)
 				{
-
+					$rs['rights']=1;
 					$this->load->view('header',$new_data);
 					$rs['trr'] = $this->lays_model->getTotalStats($urls);//Получеие статистики по пользователю
-					$rs['total_trips']=count($rs['trr'])-1;
 					$this->load->view('lasttrips_view',$rs);
 					$this->load->view('footer');
 		}

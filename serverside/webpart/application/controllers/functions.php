@@ -3,23 +3,33 @@
 class functions extends CI_Controller {
 	public function get()
 	{	
-			$this->load->model('entry');
+		if($this->session->userdata('rights')==3)
+		{
+			$this->load->model('lays_model');
 			$this->load->library('session');
 				$admin_data= $this->session->userdata('page');
 				
-			$new_data=$this->entry->getbyid($admin_data);	
+			$new_data=$this->lays_model->getByRide($admin_data);	
 			if(!isset($new_data[0][2]))
-			{
-			for($i=0;$i<count($new_data);$i++)
-			{
-				echo $new_data[$i]['lat'].",".$new_data[$i]['lng'].",".$new_data[$i]['compass'].",".$new_data[$i]['speed'].",".$new_data[$i]['distance'].",".$new_data[$i]['utimestamp'].",\n";
+				{
+				for($i=0;$i<count($new_data);$i++)
+				{
+					echo $new_data[$i]['lat'].",".$new_data[$i]['lng'].",".$new_data[$i]['compass'].",".$new_data[$i]['speed'].",".$new_data[$i]['distance'].",".$new_data[$i]['utimestamp'].",".$new_data[$i]['sevAcc'].",".$new_data[$i]['sevTurn'].",".$new_data[$i]['sevSpeed'].",".$new_data[$i]['Info'].",\n";
+				
+				
+				
+				}
 			}
-		 }
-		 else
+			else
 		 {
 			 echo $new_data[0][1];
 		 }
-		}
+	 }
+	 else
+	 {
+		 header("Location: http://nti.goodroads.ru/");
+	 }
+}
 	
 	
 

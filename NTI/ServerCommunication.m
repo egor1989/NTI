@@ -26,18 +26,11 @@
                                   timeoutInterval:60.0];
 
     requestData = [NSData dataWithBytes:[requestContent UTF8String] length:[requestContent length]];
-//    NSLog(@"requestData = %@", requestData);
-   // NSData *compressData = [GzipCompress compressData:requestData error:nil];
     NSData *compressData = [GzipCompress gzipDeflate:requestData];
- //   NSData *uncompressData = [GzipCompress gzipInflate:compressData];
-  //   NSLog(@"requestData = %@", uncompressData);
-    
-    
+
  //   NSLog(@"cData = %@", compressData);
-    
-    NSString* content = [compressData description];
-    
-    NSString* requestDataFull = [NSString stringWithFormat:@"data=%@%@",content,@"&zip=1"];
+        
+    NSString* requestDataFull = [NSString stringWithFormat:@"data=%@%@",[compressData description],@"&zip=1"];
    // NSLog(@"%@", requestDataFull);
     
     [request setHTTPMethod:@"POST"];

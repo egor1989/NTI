@@ -6,9 +6,9 @@
 		<?if($retdata!=false)
 		foreach ($retdata as $row){?>
 				<?
-				if($row['Rights']==1)$type="Данные подтверждены";
-				if($row['Rights']==0)$type="Не подтверждено";
-				if($row['Rights']==2)$type="Эксперт системы";
+				if($row['Rights']==1)$type="<span style='font-size:10px'>Данные подтверждены</span>";
+				if($row['Rights']==0)$type="<span style='font-size:10px'>Не подтверждено</span>";
+				if($row['Rights']==2)$type="<span style='font-size:10px'>Эксперт системы</span>";
 				?>
 				<tr><td><a href="/user/viewuser/<?echo $row['Id'];?>"><?echo $row['Login'];?></a></td><td><?echo $row['FName'];?></td><td><?echo $row['SName'];?></td> <td><?echo $type;?></td>
 				
@@ -54,17 +54,7 @@
 				}
 				?>	
 				</td>
-				<td>
-				<?
-				if($row['Deleted']==0) {
-					echo form_open('/map');
-					//echo form_hidden('userid', $row['Id']);
-					$attr = array('name'=>'map', 'value'=>'Карта');
-					echo form_submit($attr);
-					echo form_close();
-				}
-				?>	
-				</td>
+
 				
 				
 				
