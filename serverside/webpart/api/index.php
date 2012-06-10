@@ -864,35 +864,47 @@ function addNTIFile($param)
 					$score_turn = $Kut;
 					$score_brake =$Kub ;
 					$score_acc = $Kua ;
-					$sql_insert_str="insert into NTIUserDrivingTrack(UID,TotalAcc1Count,TotalAcc2Count,TotalAcc3Count,TotalBrake1Count,TotalBrake2Count,TotalBrake3Count,TotalSpeed1Count,TotalSpeed2Count,TotalSpeed3Count,TotalTurn1Count,TotalTurn2Count,TotalTurn3Count,TimeStart,TimeEnd,TotalDistance,SpeedScore,	TurnScore,BrakeScore,AccScore,TotalScore,SpeedK,AccK,BrakeK,TurnK) values ('$UID','$TypeAcc1Count','$TypeAcc2Count','$TypeAcc3Count','$TypeBrake1Count','$TypeBrake2Count','$TypeBrake3Count','$TypeSpeed1Count','$TypeSpeed2Count','$TypeSpeed3Count','$TypeTurn1Count','$TypeTurn2Count','$TypeTurn3Count','$TimeStart','$TimeEnd','$TotalDistance','$score_speed','$score_turn','$score_brake','$score_acc','$score','$KvnS','$KvnA','$KvnB','$KvnT')";
-
-					mysql_query($sql_insert_str);
-					$TrackID = mysql_insert_id();
-					for($j=0;$j<count($ArrayEntry[$i]);$j++)
+					$rt=mysql_query("SELECT * FROM `NTIUserDrivingTrack` where UID=$UID and TimeStart=$TimeStart and TimeEnd=$TimeEnd");
+					//Убираем этим запрос дубляж
+					$cnt=mysql_num_rows($rt);
+					if($cnt>0)
 					{
-						$accx=$ArrayEntry[$i][$j]->getAccx();
-						$accy=$ArrayEntry[$i][$j]->getAccy();					
-						$distance=$ArrayEntry[$i][$j]->getDistance();
-						$lat=$ArrayEntry[$i][$j]->getLat();
-						$lng=$ArrayEntry[$i][$j]->getLng();
-						$direction=$ArrayEntry[$i][$j]->getDirection();
-						$compass=$ArrayEntry[$i][$j]->getCompass();
-						$speed=$ArrayEntry[$i][$j]->getSpeed();
-						$utimestamp=$ArrayEntry[$i][$j]->getTimestamp();
-						$DrivingID=$TrackID;
-						$Blat=0;
-						$Blng=0;
-						$sevAcc=$ArrayEntry[$i][$j]->getsevAcc();
-						$TypeAcc=$ArrayEntry[$i][$j]->getTypeAcc();
-						$sevTurn=$ArrayEntry[$i][$j]->getsevTurn();
-						$TurnType=$ArrayEntry[$i][$j]->getTurnType();
-						$TypeSpeed=$ArrayEntry[$i][$j]->getTypeSpeed();
-						$sevSpeed=$ArrayEntry[$i][$j]->getsevSpeed();				
-						$sql_insert_str="insert into NTIUserDrivingEntry(UID,accx,accy,distance,lat,lng,direction,compass,speed,utimestamp,DrivingID,Blat,Blng,sevAcc,TypeAcc,sevTurn,TurnType,TypeSpeed,sevSpeed) values ('$UID','$accx','$accy','$distance','$lat','$lng','$direction','$compass','$speed','$utimestamp','$DrivingID','$Blat','$Blng','$sevAcc','$TypeAcc','$sevTurn','$TurnType','$TypeSpeed','$sevSpeed')";
-						mysql_query($sql_insert_str);
-
+							$errortype=array('info'=>"Already exist",'code'=>  0);
+							$res=array('result'=>1,'error'=> $errortype);
+							echo json_encode($res);	
+	
+							exit();
 					}
-
+			
+					if($KvnA>0 && $KvnS>0 && $KvnT>0 && $KvnB>0)
+					{
+						$sql_insert_str="insert into NTIUserDrivingTrack(UID,TotalAcc1Count,TotalAcc2Count,TotalAcc3Count,TotalBrake1Count,TotalBrake2Count,TotalBrake3Count,TotalSpeed1Count,TotalSpeed2Count,TotalSpeed3Count,TotalTurn1Count,TotalTurn2Count,TotalTurn3Count,TimeStart,TimeEnd,TotalDistance,SpeedScore,	TurnScore,BrakeScore,AccScore,TotalScore,SpeedK,AccK,BrakeK,TurnK) values ('$UID','$TypeAcc1Count','$TypeAcc2Count','$TypeAcc3Count','$TypeBrake1Count','$TypeBrake2Count','$TypeBrake3Count','$TypeSpeed1Count','$TypeSpeed2Count','$TypeSpeed3Count','$TypeTurn1Count','$TypeTurn2Count','$TypeTurn3Count','$TimeStart','$TimeEnd','$TotalDistance','$score_speed','$score_turn','$score_brake','$score_acc','$score','$KvnS','$KvnA','$KvnB','$KvnT')";
+						mysql_query($sql_insert_str);
+						$TrackID = mysql_insert_id();
+						for($j=0;$j<count($ArrayEntry[$i]);$j++)
+						{
+							$accx=$ArrayEntry[$i][$j]->getAccx();
+							$accy=$ArrayEntry[$i][$j]->getAccy();					
+							$distance=$ArrayEntry[$i][$j]->getDistance();
+							$lat=$ArrayEntry[$i][$j]->getLat();
+							$lng=$ArrayEntry[$i][$j]->getLng();
+							$direction=$ArrayEntry[$i][$j]->getDirection();
+							$compass=$ArrayEntry[$i][$j]->getCompass();
+							$speed=$ArrayEntry[$i][$j]->getSpeed();
+							$utimestamp=$ArrayEntry[$i][$j]->getTimestamp();
+							$DrivingID=$TrackID;
+							$Blat=0;
+							$Blng=0;
+							$sevAcc=$ArrayEntry[$i][$j]->getsevAcc();
+							$TypeAcc=$ArrayEntry[$i][$j]->getTypeAcc();
+							$sevTurn=$ArrayEntry[$i][$j]->getsevTurn();
+							$TurnType=$ArrayEntry[$i][$j]->getTurnType();
+							$TypeSpeed=$ArrayEntry[$i][$j]->getTypeSpeed();
+							$sevSpeed=$ArrayEntry[$i][$j]->getsevSpeed();				
+							$sql_insert_str="insert into NTIUserDrivingEntry(UID,accx,accy,distance,lat,lng,direction,compass,speed,utimestamp,DrivingID,Blat,Blng,sevAcc,TypeAcc,sevTurn,TurnType,TypeSpeed,sevSpeed) values ('$UID','$accx','$accy','$distance','$lat','$lng','$direction','$compass','$speed','$utimestamp','$DrivingID','$Blat','$Blng','$sevAcc','$TypeAcc','$sevTurn','$TurnType','$TypeSpeed','$sevSpeed')";
+							mysql_query($sql_insert_str);
+						}
+					}
 				}
 				//Если же ментше 50 - нахуй за борт
 			}
