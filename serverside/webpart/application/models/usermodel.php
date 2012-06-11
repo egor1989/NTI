@@ -62,7 +62,7 @@
 			$from=mysql_real_escape_string($from);
 			$offset= mysql_real_escape_string($offset);
 			
-			$query = $this->db->query("SELECT* from NTIUsers Where (Rights=1 or Rights=0) order by id limit '$from' offset '$offset' ");
+			$query = $this->db->query("SELECT* from NTIUsers Where (Rights=1 or Rights=0) order by id limit $from offset $offset ");
 			
 			if($query->num_rows()>0)
 				return $query->result_array();
@@ -73,7 +73,7 @@
 			$from=mysql_real_escape_string($from);
 			$offset= mysql_real_escape_string($offset);
 			
-			$query = $this->db->query("SELECT* from NTIUsers Where Rights=2 order by id limit '$from' offset '$offset' ");
+			$query = $this->db->query("SELECT* from NTIUsers Where Rights=2 order by id limit $from offset $offset ");
 			if($query->num_rows()>0)
 				return $query->result_array();
 			else
@@ -110,7 +110,8 @@
 		
 		function checkrealation($id,$username)
 		{
-		$query = $this->db->query("Select UserID from NTIRelations,(Select * from NTIUsers where Id=".$this->db->escape($username).") as UserRel where UserRel.ID=NTIRelations.UserID and NTIRelations.ExpertID=$id");
+			$id=mysql_real_escape_string($id);
+		$query = $this->db->query("Select UserID from NTIRelations,(Select * from NTIUsers where Id=".$this->db->escape($username).") as UserRel where UserRel.ID=NTIRelations.UserID and NTIRelations.ExpertID='$id'");
 			if($query->num_rows()>0){
 			
 			return 1;
@@ -126,7 +127,7 @@
 		{
 			$count=mysql_real_escape_string($count);
 			
-			$query = $this->db->query("Select * from NTIUsers where Rights=0 order by Id limit '$count'");
+			$query = $this->db->query("Select * from NTIUsers where Rights=0 order by Id limit $count");
 			if($query->num_rows()>0){
 			
 			return $query->result_array();
