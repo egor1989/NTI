@@ -32,8 +32,8 @@
 		}
 		
 			function get_all_users($id){
-			
-			$query = $this->db->query("SELECT NTIUsers.* from NTIUsers,(Select UserID from NTIRelations where ExpertID=$id) as ExpertRel where NTIUsers.Id=ExpertRel.UserID");
+			$id=mysql_real_escape_string($id);
+			$query = $this->db->query("SELECT NTIUsers.* from NTIUsers,(Select UserID from NTIRelations where ExpertID='$id') as ExpertRel where NTIUsers.Id=ExpertRel.UserID");
 			if($query->num_rows()>0){
 			
 				return $query->result_array();
@@ -62,7 +62,7 @@
 			$from=mysql_real_escape_string($from);
 			$offset= mysql_real_escape_string($offset);
 			
-			$query = $this->db->query("SELECT* from NTIUsers Where (Rights=1 or Rights=0) order by id limit $from offset $offset ");
+			$query = $this->db->query("SELECT* from NTIUsers Where (Rights=1 or Rights=0) order by id limit '$from' offset '$offset' ");
 			
 			if($query->num_rows()>0)
 				return $query->result_array();
@@ -73,7 +73,7 @@
 			$from=mysql_real_escape_string($from);
 			$offset= mysql_real_escape_string($offset);
 			
-			$query = $this->db->query("SELECT* from NTIUsers Where Rights=2 order by id limit $from offset $offset ");
+			$query = $this->db->query("SELECT* from NTIUsers Where Rights=2 order by id limit '$from' offset '$offset' ");
 			if($query->num_rows()>0)
 				return $query->result_array();
 			else
@@ -124,7 +124,9 @@
 		//Получение последних count пользователей
 		function load_users_list($count)
 		{
-			$query = $this->db->query("Select * from NTIUsers where Rights=0 order by Id limit $count");
+			$count=mysql_real_escape_string($count);
+			
+			$query = $this->db->query("Select * from NTIUsers where Rights=0 order by Id limit '$count'");
 			if($query->num_rows()>0){
 			
 			return $query->result_array();
@@ -219,13 +221,15 @@
 		
 		function GetUserStatistics($ExpertId,$UserId)
 		{
-			$query = $this->db->query("Select * from NTIRelations where ExpertID=$ExpertId and UserID=$UserId");
+			$ExpertId=mysql_real_escape_string($ExpertId);
+			$UserId=mysql_real_escape_string($UserId);
+			$query = $this->db->query("Select * from NTIRelations where ExpertID='$ExpertId' and UserID='$UserId'");
 				if($query->num_rows()>0)
 				{
 			
 					return 1;//Отношение существует
 				}
-			$query = $this->db->query("Select * from NTIRequests where ExpertId=$ExpertId and UserId=$UserId and Status<3");
+			$query = $this->db->query("Select * from NTIRequests where ExpertId='$ExpertId' and UserId='$UserId' and Status<3");
 				if($query->num_rows()>0)
 				{
 			
@@ -240,7 +244,7 @@
 		{
 		$userId=mysql_real_escape_string($userId);
 				$id=mysql_real_escape_string($id);
-			$query = $this->db->query("Select * from NTIRelations where UserID=$userId and ExpertID=$id");
+			$query = $this->db->query("Select * from NTIRelations where UserID='$userId' and ExpertID='$id'");
 			if($query->num_rows()>0)return -2;
 			$data = array('UserId' => $userId ,	'ExpertId' => $id);
 			$this->db->insert('NTIRelations', $data); 
@@ -255,7 +259,7 @@
 				$userId=mysql_real_escape_string($userId);
 				$id=mysql_real_escape_string($id);
 
-			$query = $this->db->query("Delete from NTIRelations where UserID=$userId and ExpertID=$id");
+			$query = $this->db->query("Delete from NTIRelations where UserID='$userId' and ExpertID='$id'");
 			return 1;
 			
 		}
@@ -265,6 +269,8 @@
 		
 		function AddRelationQuery($id,$userId)
 		{
+			$id=mysql_real_escape_string($id);
+			$userId=mysql_real_escape_string($userId);
 			//Сначала получаем id пользователя относительно его имени
 			$query = $this->db->query("Select * from NTIUsers where Rights<2 and Id=".$this->db->escape($userId));
 			if($query->num_rows()>0){
@@ -279,11 +285,11 @@
 				return -1;
 			}
 			//Теперь проверяем , может уже была создано отношение?
-			$query = $this->db->query("Select * from NTIRelations where UserID=$userid and ExpertID=$id");
+			$query = $this->db->query("Select * from NTIRelations where UserID='$userid' and ExpertID='$id'");
 			if($query->num_rows()>0)return -2;
 			
 			//Теперь проверяем на возможнось создания повторной заявки 
-			$query = $this->db->query("Select * from NTIRequests where UserId=$userid and ExpertId=$id and (Status=1 or Status=2)");
+			$query = $this->db->query("Select * from NTIRequests where UserId='$userid' and ExpertId='$id' and (Status=1 or Status=2)");
 			if($query->num_rows()>0)return -3;
 		
 			//Отлично , значит заявка у нас не создана и отношения нет
@@ -302,7 +308,8 @@
 		
 			
 		function RemoveRelationQuery($id,$userId)
-		{
+		{			$id=mysql_real_escape_string($id);
+			$userId=mysql_real_escape_string($userId);
 			//Сначала получаем id пользователя относительно его имени
 			$query = $this->db->query("Select * from NTIUsers where Login=".$this->db->escape($userId));
 			if($query->num_rows()>0){
@@ -317,11 +324,11 @@
 				return -1;
 			}
 			//Теперь проверяем , может уже была создано отношение?
-			$query = $this->db->query("Select * from NTIRelations where UserID=$userid and ExpertID=$id");
+			$query = $this->db->query("Select * from NTIRelations where UserID='$userid' and ExpertID='$id'");
 			if($query->num_rows()>0)return -2;
 			
 			//Теперь проверяем на возможнось создания повторной заявки 
-			$query = $this->db->query("Select * from NTIRequests where UserId=$userid and ExpertId=$id and Status=1");
+			$query = $this->db->query("Select * from NTIRequests where UserId='$userid' and ExpertId='$id' and Status=1");
 			if($query->num_rows()==0)return -3;
 		
 			//Отлично , значит заявка у нас не создана и отношения нет
@@ -341,6 +348,9 @@
 		
 		function DeleteRelation($id,$username)
 		{
+			
+						$id=mysql_real_escape_string($id);
+			$username=mysql_real_escape_string($username);
 			//Сначала получаем id пользователя относительно его имени
 			$query = $this->db->query("Select * from NTIUsers where Id=".$this->db->escape($username));
 			if($query->num_rows()>0){
@@ -355,11 +365,11 @@
 				return -1;
 			}
 			//Теперь проверяем , есть ли такая 
-			$query = $this->db->query("Select * from NTIRelations where UserID=$userid and ExpertID=$id");
+			$query = $this->db->query("Select * from NTIRelations where UserID='$userid' and ExpertID='$id'");
 			if($query->num_rows()==0)return -2;
 			
 			//Теперь проверяем на возможнось создания повторной заявки 
-			$query = $this->db->query("Select * from NTIRequests where UserId=$userid and ExpertId=$id and (Status=1 or Status=2)");
+			$query = $this->db->query("Select * from NTIRequests where UserId='$userid' and ExpertId='$id' and (Status=1 or Status=2)");
 			if($query->num_rows()>0)return -3;
 		
 			//Отношение есть
@@ -379,7 +389,8 @@
 		//Загружает все активные тикеты пользователя
 		function load_all_tickets($id)
 		{
-			$query = $this->db->query("SELECT * FROM `NTIRequests`  Join NTIUsers on NTIRequests.UserId=NTIUsers.Id where NTIRequests.Status<3 and  NTIRequests.ExpertID=$id order by Insert_time" );
+			$id=mysql_real_escape_string($id);
+			$query = $this->db->query("SELECT * FROM `NTIRequests`  Join NTIUsers on NTIRequests.UserId=NTIUsers.Id where NTIRequests.Status<3 and  NTIRequests.ExpertID='$id' order by Insert_time" );
 			if($query->num_rows()>0)
 			{
 			
@@ -393,8 +404,8 @@
 		}
 		
 		function load_expert_users($id)
-		{
-			$query = $this->db->query("SELECT * FROM `NTIRelations`  Join NTIUsers on NTIRelations.UserId=NTIUsers.Id where NTIRelations.ExpertID=$id order by Login" );
+		{$id=mysql_real_escape_string($id);
+			$query = $this->db->query("SELECT * FROM `NTIRelations`  Join NTIUsers on NTIRelations.UserId=NTIUsers.Id where NTIRelations.ExpertID='$id' order by Login" );
 			if($query->num_rows()>0)
 			{
 			
@@ -567,7 +578,7 @@
 				{
 					//Функция возвращает ID пользователя относительно его поездки
 					$DataId=mysql_real_escape_string($DataId);
-					$q = $this->db->query("SELECT UID FROM `NTIUserDrivingTrack` WHERE `Id`=$DataId Limit 1");
+					$q = $this->db->query("SELECT UID FROM `NTIUserDrivingTrack` WHERE `Id`='$DataId' Limit 1");
 					if ($q->num_rows() > 0) {
 					foreach($q->result() as $row) 
 					{
@@ -652,14 +663,7 @@
 					return -1;
 					
 				}
-				
-			  
-				
 	
-			
-				
-			
-			
 	}
 		
 	}

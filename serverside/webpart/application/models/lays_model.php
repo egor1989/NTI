@@ -6,14 +6,7 @@ class lays_model extends CI_Model {
 		public function getMapData($id) {
 			
 		$id=mysql_real_escape_string($id);
-		$q = $this->db->query("SELECT sum((`TotalBrake1Count`*0.1+`TotalBrake2Count`*0.25+`TotalBrake3Count`*0.65)/`TotalDistance`)/count(*) as BrakeK,sum((`TotalAcc1Count`*0.1+`TotalAcc2Count`*0.25+`TotalAcc3Count`*0.65)/`TotalDistance`)/count(*) as AccK,sum((`TotalSpeed1Count`*0.1+`TotalSpeed2Count`*0.25+`TotalSpeed3Count`*0.65)/`TotalDistance`)/count(*) as SpeedK,sum((`TotalTurn1Count`*0.1+`TotalTurn2Count`*0.25+`TotalTurn3Count`*0.65)/`TotalDistance`)/count(*) as TurnK  FROM `NTIUserDrivingTrack` ");
-			foreach($q->result() as $row) {
-				$BrakeK = $row->BrakeK;
-			    $AccK = $row->AccK;
-				$SpeedK = $row->SpeedK;
-				$TurnK = $row->TurnK;
-			}
-		$q = $this->db->query("SELECT * FROM NTIUserDrivingTrack where Id=$id order by Id DESC");
+		$q = $this->db->query("SELECT * FROM NTIUserDrivingTrack where Id='$id' order by Id DESC");
 		//Если не было поездок за текущий период или не передано ни одной точки.
 		if ($q->num_rows() > 0) {
 			foreach($q->result() as $row) {
@@ -53,7 +46,7 @@ class lays_model extends CI_Model {
 	    function getByRide($uid)
 	{			
 		$k=0;
-		$query = $this->db->query("SELECT * FROM `NTIUserDrivingEntry` where DrivingID=$uid");
+		$query = $this->db->query("SELECT * FROM `NTIUserDrivingEntry` where DrivingID='$uid'");
 		
 			if($query->num_rows()>0){
 			
@@ -176,7 +169,7 @@ class lays_model extends CI_Model {
 		$usr=mysql_real_escape_string($userid);
 
 		
-		$q = $this->db->query("SELECT * FROM NTIUserDrivingTrack where UID=$userid order by Id DESC");
+		$q = $this->db->query("SELECT * FROM NTIUserDrivingTrack where UID='$userid' order by Id DESC");
 		$n=0;
 		$da['tscore']=0;
 		$da['tdst']=0;
@@ -224,7 +217,7 @@ class lays_model extends CI_Model {
 
 		public function LoadRawData($dataId) {
 		$dataId=mysql_real_escape_string($dataId);
-		$q = $this->db->query("SELECT * FROM `NTIUserDrivingEntry` WHERE `DrivingID`=$dataId and (`TypeAcc` NOT LIKE 'normal point' or `TurnType` NOT LIKE 'normal point' or `TypeSpeed`  NOT LIKE  'normal point') order by `utimestamp` ");
+		$q = $this->db->query("SELECT * FROM `NTIUserDrivingEntry` WHERE `DrivingID`='$dataId' and (`TypeAcc` NOT LIKE 'normal point' or `TurnType` NOT LIKE 'normal point' or `TypeSpeed`  NOT LIKE  'normal point') order by `utimestamp` ");
 		if ($q->num_rows() > 0) {
 			return $q->result_array();
 		} 
@@ -244,7 +237,7 @@ class lays_model extends CI_Model {
 	public function getUserTravelStats($userid) {
 		$usr=mysql_real_escape_string($userid);
 	
-		$q = $this->db->query("SELECT * FROM NTIUserDrivingTrack where UID=$userid order by Id DESC");
+		$q = $this->db->query("SELECT * FROM NTIUserDrivingTrack where UID='$userid' order by Id DESC");
 		$n=0;
 				$da['total_time']=0;
 			    $da['total_trips']=0;
@@ -328,7 +321,7 @@ $n=0;
 		$time1 = strtotime($time1);
 		$time2 = strtotime($time2);	
 
-		$q = $this->db->query("SELECT * FROM NTIUserDrivingTrack where UID=$userid and ((TimeStart>=$time1 and TimeStart<=$time2) or (TimeStart<$time1 and TimeEnd>=$time1))");
+		$q = $this->db->query("SELECT * FROM NTIUserDrivingTrack where UID='$userid' and ((TimeStart>='$time1' and TimeStart<='$time2') or (TimeStart<'$time1' and TimeEnd>='$time1'))");
 		$n=0;
 		$da['tscore']=0;
 		$da['tdst']=0;
@@ -373,7 +366,8 @@ $n=0;
 
 
 	public function cksearch($ckid) {
-		$q = $this->db->query("SELECT * FROM (select tablet_user.* ,coalesce(`Status`,0) as Stat from (select allusers.* ,coalesce(`ExpertID`,0) as Bnd from (SELECT Id,Login,FName,SName FROM `NTIUsers` WHERE `Rights`<2 and Deleted=0) as allusers Left OUTER JOIN  (select * from NTIRelations where ExpertID=$ckid) as expert on allusers.Id=expert.UserID) as tablet_user Left OUTER JOIN (Select `Status`,`UserId` from NTIRequests where `ExpertId`=$ckid and Status<=2) as request on tablet_user.Id=request.`UserId`) as prst ORDER BY Login");
+		$ckid=mysql_real_escape_string($ckid);
+		$q = $this->db->query("SELECT * FROM (select tablet_user.* ,coalesce(`Status`,0) as Stat from (select allusers.* ,coalesce(`ExpertID`,0) as Bnd from (SELECT Id,Login,FName,SName FROM `NTIUsers` WHERE `Rights`<2 and Deleted=0) as allusers Left OUTER JOIN  (select * from NTIRelations where ExpertID='$ckid') as expert on allusers.Id=expert.UserID) as tablet_user Left OUTER JOIN (Select `Status`,`UserId` from NTIRequests where `ExpertId`='$ckid' and Status<=2) as request on tablet_user.Id=request.`UserId`) as prst ORDER BY Login");
 		$n = 0;
 		if ($q->num_rows() > 0) {
 			foreach($q->result() as $row) {
@@ -393,7 +387,8 @@ $n=0;
 	}
 	
 	public function vck($i) {
-		$q = $this->db->query("SELECT NTIUsers.Id, NTIUsers.Login, NTIUsers.FName, NTIUsers.SName, NTIRelations.ExpertId FROM NTIUsers INNER JOIN NTIRelations ON NTIUsers.Id=NTIRelations.UserId WHERE NTIRelations.ExpertId=$i AND NTIUsers.Deleted=0 AND NTIUsers.Rights<2 ORDER BY Login");
+		$i=mysql_real_escape_string($i);
+		$q = $this->db->query("SELECT NTIUsers.Id, NTIUsers.Login, NTIUsers.FName, NTIUsers.SName, NTIRelations.ExpertId FROM NTIUsers INNER JOIN NTIRelations ON NTIUsers.Id=NTIRelations.UserId WHERE NTIRelations.ExpertId='$i' AND NTIUsers.Deleted=0 AND NTIUsers.Rights<2 ORDER BY Login");
 		$n = 0;
 		if ($q->num_rows() > 0) {
 			foreach($q->result() as $row) {
@@ -411,6 +406,9 @@ $n=0;
 	}
 	
 	function unbind($i, $c) {
+		$i=mysql_real_escape_string($i);
+		$c=mysql_real_escape_string($c);
+		
 		$q = $this->db->query("DELETE FROM NTIRelations WHERE ExpertId=$c AND UserId=$i");
 		return 1;
 	}
