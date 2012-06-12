@@ -69,18 +69,28 @@ function handler(request)
 		speed = filteredPt[i][3];
 		var deltaTime = (filteredPt[i][5] - filteredPt[i-1][5])/1000;
 	    var color = "#00ff00";
-	   
-		if (Number(filteredPt[i][6])==3 || Number(filteredPt[i][7])==3 || Number(filteredPt[i][6])==-3) color = "#ff0000";
-		else if (Number(filteredPt[i][6])==2 || Number(filteredPt[i][6])==-2) color = "#FFA07A";
-		else if (Number(filteredPt[i][6])==1 || Number(filteredPt[i][6])==-1) color = "#FFE4B5";
-		else if (Number(filteredPt[i][7])==2 && Number(filteredPt[i][6])==0) color = "#FFD700";
-		else if (Number(filteredPt[i][7])==1 && Number(filteredPt[i][6])==0) color = "#ffff00";
+
+
+
+		if(Number(filteredPt[i][10])==1 && Number(filteredPt[i][11])==1)color = "#F0FFFF";
+		else if(Number(filteredPt[i][10])==1 && Number(filteredPt[i][11])==2)color = "#7CFC00";
+		else if(Number(filteredPt[i][10])==1 && Number(filteredPt[i][11])==3)color = "#228B22";
+		
+		else if(Number(filteredPt[i][10])==2 && Number(filteredPt[i][11])==1)color = "#FF6347";
+		else if(Number(filteredPt[i][10])==2 && Number(filteredPt[i][11])==2)color = "#FF4500";
+		else if(Number(filteredPt[i][10])==2 && Number(filteredPt[i][11])==3)color = "#FF0000";
+		
+		else if(Number(filteredPt[i][10])==3 && Number(filteredPt[i][11])==1)color = "#FFFFE0";
+		else if(Number(filteredPt[i][10])==3 && Number(filteredPt[i][11])==2)color = "#EEDD82";
+		else if(Number(filteredPt[i][10])==3 && Number(filteredPt[i][11])==3)color = "#FFFF00";
+		
+		if(Number(filteredPt[i][10])==4 && Number(filteredPt[i][11])==0)color = "#9932CC";
 
 		feature = new OpenLayers.Feature.Vector
 		(	new OpenLayers.Geometry.Point(p.x,p.y), 
 			{	rot : 360-Number(filteredPt[i][2]),
 				speed : Number(filteredPt[i][3]),
-				radius : 3+(Number(filteredPt[i][3])/10),
+				radius : 1+(Number(filteredPt[i][3])/20),
 				dist : Number(filteredPt[i][4]),
 				time : Number(deltaTime),
 				label : filteredPt[i][9],
@@ -89,10 +99,10 @@ function handler(request)
 				severityAcc : Number(filteredPt[i][6])
 			}, { fillColor: color,
 			     rotation: 360-Number(filteredPt[i][2]),			// rotation as attribute
-				 pointRadius: 3+(Number(filteredPt[i][3])/10),	// radius as attribute
+				 pointRadius: 1+(Number(filteredPt[i][3])/20),	// radius as attribute
                  strokeColor: color,
 				 strokeWidth: 1,
-				 graphicName:"triangle",
+				 graphicName:"circle",
                  fillOpacity: 0.5,
                  cursor:"pointer"
                 }
@@ -118,7 +128,7 @@ function init()
                 "default": new OpenLayers.Style({
                     rotation: "${rot}",			// rotation as attribute
 					pointRadius: "${radius}",	// radius as attribute
-					graphicName:"triangle",
+					graphicName:"circle",
                     fillColor: "#fc6",
                     fillOpacity: 0.5,
                     strokeColor: "#fc6",
