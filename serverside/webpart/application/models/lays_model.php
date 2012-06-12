@@ -228,6 +228,17 @@ class lays_model extends CI_Model {
 	}
 
 
+		public function LoadRawDataWithNormal($dataId) {
+		$dataId=mysql_real_escape_string($dataId);
+		$q = $this->db->query("SELECT * FROM `NTIUserDrivingEntry` WHERE `DrivingID`='$dataId' order by `utimestamp` ");
+		if ($q->num_rows() > 0) {
+			return $q->result_array();
+		} 
+		else {
+
+			return -1;
+		}
+	}
 
 
 	
