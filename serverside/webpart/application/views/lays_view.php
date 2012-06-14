@@ -74,11 +74,11 @@
 				</td>
 				<td>
 					<span style="color:red">Километраж поездки: <?echo round($trr[$c]['total_dist'],2);?> км.</span><br>
-					<span style="color:red">Очки ускорений: <?echo floor($trr[$c]['total_acc_score']);?> points</span><br>
-					<span style="color:red">Очки торможений: <?echo floor($trr[$c]['total_brk_score']);?> points</span><br>
-					<span style="color:red">Очки поворотов: <?echo floor($trr[$c]['total_crn_score']);?> points</span><br>
-					<span style="color:red">Очки превышений: <?echo floor($trr[$c]['total_spd_score']);?> points</span><br>
-					<span style="color:red">Счет поездки: <?echo floor($trr[$c]['total_all_score']);?> points</span><br>
+					<span style="color:red">Очки ускорений: <?echo ($trr[$c]['total_acc_score']);?> </span><br>
+					<span style="color:red">Очки торможений: <?echo ($trr[$c]['total_brk_score']);?> </span><br>
+					<span style="color:red">Очки поворотов: <?echo ($trr[$c]['total_crn_score']);?> </span><br>
+					<span style="color:red">Очки превышений: <?echo ($trr[$c]['total_spd_score']);?> </span><br>
+					<span style="color:red">Счет поездки: <?echo ($trr[$c]['total_all_score']);?> </span><br>
 				</td>
 			</tr>
 		<?}?>

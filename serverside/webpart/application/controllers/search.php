@@ -10,7 +10,6 @@ class Search extends CI_Controller {
 			$new_data['rights']=$this->session->userdata('rights');
 			$new_data['map_type'] = 2;	
 			$this->load->model('userModel');
-			$new_data['ept'] = $this->cksearch();
 			if($this->input->post('name'))
 			{
 				$user = $this->input->post('name');

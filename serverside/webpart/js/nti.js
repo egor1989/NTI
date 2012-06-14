@@ -49,10 +49,6 @@ function handler(request)
 	for (i=0; i<t.length; i++) if (t[i]!="")
 	{	// New point 
 		pt[i] = t[i].split(',');
-		if (pt[i].length < 6) 
-		{	
-			return;
-		}
 		// Filter distance on great circle
 		if (dmax>0)
 		{	// Don't filter the first one or when tagged
@@ -62,48 +58,80 @@ function handler(request)
 			j++;
 		}
 	}
+	  var points = [];
 	for (i=1; i<filteredPt.length; i++)
 	{
 		var p = new OpenLayers.Geometry.Point(Number(filteredPt[i][1]), Number(filteredPt[i][0]));
 		p.transform(new OpenLayers.Projection('EPSG:4326'), this.getProjection());
 		speed = filteredPt[i][3];
-		var deltaTime = (filteredPt[i][5] - filteredPt[i-1][5])/1000;
-	    var color = "#00ff00";
-	   
-		if (Number(filteredPt[i][6])==3 || Number(filteredPt[i][7])==3 || Number(filteredPt[i][6])==-3) color = "#ff0000";
-		else if (Number(filteredPt[i][6])==2 || Number(filteredPt[i][6])==-2) color = "#FFA07A";
-		else if (Number(filteredPt[i][6])==1 || Number(filteredPt[i][6])==-1) color = "#FFE4B5";
-		else if (Number(filteredPt[i][7])==2 && Number(filteredPt[i][6])==0) color = "#FFD700";
-		else if (Number(filteredPt[i][7])==1 && Number(filteredPt[i][6])==0) color = "#ffff00";
+		var color = "#00ff00";
+		if((filteredPt[i][4])=="Acc" && Number(filteredPt[i][5])==1)color = "#F0FFFF";
+		else if((filteredPt[i][4])=="Acc" && Number(filteredPt[i][5])==2)color = "#7CFC00";
+		else if((filteredPt[i][4])=="Acc" && Number(filteredPt[i][5])==3)color = "#228B22";
+		
+		else if((filteredPt[i][4])=="Brake" && Number(filteredPt[i][5])==1)color = "#FF6347";
+		else if((filteredPt[i][4])=="Brake" && Number(filteredPt[i][5])==2)color = "#FF4500";
+		else if((filteredPt[i][4])=="Brake" && Number(filteredPt[i][5])==3)color = "#FF0000";
+		
+		
+		else if((filteredPt[i][4])=="LeftTurn" && Number(filteredPt[i][5])==1)color = "#DDA0DD";
+		else if((filteredPt[i][4])=="LeftTurn" && Number(filteredPt[i][5])==2)color = "#DA70D6";
+		else if((filteredPt[i][4])=="LeftTurn" && Number(filteredPt[i][5])==3)color = "#BA55D3";
+		
+		else if((filteredPt[i][4])=="RightTurn" && Number(filteredPt[i][5])==1)color = "#9370DB";
+		else if((filteredPt[i][4])=="RightTurn" && Number(filteredPt[i][5])==2)color = "#8A2BE2";
+		else if((filteredPt[i][4])=="RightTurn" && Number(filteredPt[i][5])==3)color = "#A020F0";
+		
+		
+		else if((filteredPt[i][4])=="Speed" && Number(filteredPt[i][5])==1)color = "#FFFF00";
+		else if((filteredPt[i][4])=="Speed" && Number(filteredPt[i][5])==2)color = "#FFD700";
+		else if((filteredPt[i][4])=="Speed" && Number(filteredPt[i][5])==3)color = "#DAA520";
+
+ 
+  
+    points.push(new OpenLayers.Geometry.Point(p.x,p.y), 
+			{	
+				speed : Number(filteredPt[i][2]),
+				radius : 1+(Number(filteredPt[i][5])),
+				time : filteredPt[i][3],
+				label : filteredPt[i][4],
+				typeTurn : filteredPt[i][5]
+			});
+
 
 		feature = new OpenLayers.Feature.Vector
 		(	new OpenLayers.Geometry.Point(p.x,p.y), 
-			{	rot : 360-Number(filteredPt[i][2]),
-				speed : Number(filteredPt[i][3]),
-				radius : 3+(Number(filteredPt[i][3])/10),
-				dist : Number(filteredPt[i][4]),
-				time : Number(deltaTime),
-				label : filteredPt[i][9],
-				typeTurn : String(filteredPt[i][8]),
-				severityTurn : Number(filteredPt[i][7]),
-				severityAcc : Number(filteredPt[i][6])
+			{	
+				speed : Number(filteredPt[i][2]),
+				radius : 1+(Number(filteredPt[i][5])),
+				time : filteredPt[i][3],
+				label : filteredPt[i][4],
+				typeTurn : filteredPt[i][5]
 			}, { fillColor: color,
-			     rotation: 360-Number(filteredPt[i][2]),			// rotation as attribute
-				 pointRadius: 3+(Number(filteredPt[i][3])/10),	// radius as attribute
+				 pointRadius: 1+(Number(filteredPt[i][5])),
                  strokeColor: color,
 				 strokeWidth: 1,
-				 graphicName:"triangle",
-                 fillOpacity: 0.5,
+				 graphicName:"circle",
+                 fillOpacity: 1,
                  cursor:"pointer"
                 }
 		);
+		if((filteredPt[i][4])!="Normal")
 		features.push(feature);
    }
-    	
+    	 var style_green =
+    {
+        strokeColor: "#00FF00",
+        strokeOpacity: 0.7,
+        strokeWidth: 6
+    };
+ var lineString = new OpenLayers.Geometry.LineString(points);
+    var lineFeature = new OpenLayers.Feature.Vector(lineString, null, style_green);
 
    // Add to the layer
-   this.amLayer.addFeatures(features);
-   
+
+   this.amLayer.addFeatures(lineFeature);
+      this.amLayer.addFeatures(features);
   	// Center
 	var e = this.amLayer.getDataExtent();
 	if (e) this.zoomToExtent(e);
@@ -116,9 +144,8 @@ function init()
 	// Legend
 	var styleMap = new OpenLayers.StyleMap({
                 "default": new OpenLayers.Style({
-                    rotation: "${rot}",			// rotation as attribute
 					pointRadius: "${radius}",	// radius as attribute
-					graphicName:"triangle",
+					graphicName:"circle",
                     fillColor: "#fc6",
                     fillOpacity: 0.5,
                     strokeColor: "#fc6",
@@ -147,14 +174,11 @@ function init()
     layer.events.on
     ({  "featureselected": function(e) {
             document.getElementById("status").innerHTML = 
-				 "Compass : "+e.feature.attributes.rot+"&deg;<br/>"
-				+"Speed : "+e.feature.attributes.speed+" km/h<br/>"
-				+"Distance : "+e.feature.attributes.dist+" km<br/>"
+				"Speed : "+e.feature.attributes.speed+" km/h<br/>"
 				+"Time : "+e.feature.attributes.time+"<br/>"
+				+"Duration : "+e.feature.attributes.duration+" <br/>"
 				+"Label : "+e.feature.attributes.label+" <br/>"
-				+"TypeTurn: "+e.feature.attributes.typeTurn+" <br/>"
-				+"severityTurn: "+e.feature.attributes.severityTurn+" <br/>"
-				+"SeverityAcc: "+e.feature.attributes.severityAcc;
+				+"Weight: "+e.feature.attributes.typeTurn+" <br/>";
         },
         "featureunselected": function(e) { document.getElementById("status").innerHTML = ""; }
     });

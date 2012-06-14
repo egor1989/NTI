@@ -34,7 +34,7 @@ body
     #map {
         border : 0;
         height : 500px;
-        width:500px;
+        width:100%;
     }
     .smallmap {
     width: 1024px;
