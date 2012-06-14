@@ -67,61 +67,6 @@
 }
  
  
-/*
-- (void)uploadData:(NSString *)fileContent{
-
-    
-  //  NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSLog(@"cookie = %@", [self refreshCookie]);
-    NSString *cookie = [self refreshCookie]; 
-    //  NSString * cookie = [self refreshCookie];
-    
-    fileContent=[@"data={\"method\":\"addNTIFile\",\"params\":{\"ntifile\":" stringByAppendingString:fileContent];
-    fileContent=[fileContent stringByAppendingString:@"}}"];
-    
-    NSLog(@"Request: %@", fileContent);
-    
-    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
-                                  timeoutInterval:60.0];
-    
-    requestData = [NSData dataWithBytes:[fileContent UTF8String] length:[fileContent length]];
-    [request setHTTPMethod:@"POST"];
-    [request setHTTPBody: requestData]; 
-    [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
-    [request setValue:@"gzip" forHTTPHeaderField:@"Content-Encoding"];
-    
-    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
-                                @"http://nti.goodroads.ru/api/", NSHTTPCookieDomain,
-                                @"NTIKeys", NSHTTPCookieName,
-                                cookie, NSHTTPCookieValue,
-                                @"/", NSHTTPCookiePath,
-                                nil];
-    
-    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:[NSHTTPCookie cookieWithProperties:properties]];
-    NSHTTPCookie *fcookie = [NSHTTPCookie cookieWithProperties:properties]; //?
-    NSArray* fcookies = [NSArray arrayWithObjects: fcookie, nil];   //?
-    NSDictionary * headers = [NSHTTPCookie requestHeaderFieldsWithCookies:fcookies]; //?
-    
-    [request setAllHTTPHeaderFields:headers];
-    
-    NSError *requestError = nil;
-    NSURLResponse *response = nil;
-    NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: &response error: &requestError ];
-    
-    if (requestError!=nil) {
-
-        NSLog(@"%@", requestError);
-        NSLog(@"ERROR!ERROR!ERROR!");
-    }
-    
-    returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-    NSLog(@"returnData: %@", returnString);
-
-    [self checkErrors:returnString method:@"sendData"];
-    
-    
-}
-*/
 - (BOOL)checkCookieExpires{
     NSLog(@"check cookie expires");
     //текущая дата в нужном формате
@@ -260,6 +205,7 @@
         case 33:{
             info = @"Ошибка авторизации";
             NSLog(@"auth error");
+            [self refreshCookie];
             break;
         }
         case 43: {
@@ -660,10 +606,6 @@
                            }];
     
 }
-
-
-
-
 
 
 @end

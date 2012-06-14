@@ -13,8 +13,8 @@
 #define CC_RADIANS_TO_DEGREES(__ANGLE__) ((__ANGLE__) / (float)M_PI * 180.0f)
 #define radianConst M_PI/180.0
 #define SPEED 1.5
-#define STARTTIME 30
-#define STOPTIME 90
+#define STARTTIME 300
+#define STOPTIME 600
 
 @implementation AppDelegate
 
@@ -51,7 +51,7 @@
     [self checkSendRight];
     [self startGPSDetect];
     //пока motion отключен
-    [self stopMotionDetect];
+    //[self stopMotionDetect];
     motionManager = [[CMMotionManager alloc] init];
     if ([motionManager isGyroAvailable]) {
         motionManager.deviceMotionUpdateInterval = 1.0/accelUpdateFrequency;
@@ -88,7 +88,7 @@
 
 -(void)checkSendRight{
     
-    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"pk"]>10) {
+    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"pk"]>10) {//!!!исправить на 10
         if ([ServerCommunication checkInternetConnection])  {
             NSLog(@"checkSendRight: send");
            [recordAction sendFile];
@@ -105,7 +105,9 @@
 }
 
 - (void)finishFirstTimer{
+    NSLog(@"finishFirstTimer");
     [self stopGPSDetect];
+    
     slowMonitoring = YES;
     startCheck = NO;
 }
@@ -117,12 +119,14 @@
     [locationManager stopUpdatingLocation];
     [locationManager stopUpdatingHeading];
     [locationManager startMonitoringSignificantLocationChanges];
+    NSLog(@"startMonitoringSignificantLocationChanges");
 
 }
 
 -(void)startGPSDetect{
     NSLog(@"startGPSDetect");
     [locationManager stopMonitoringSignificantLocationChanges];
+    NSLog(@"stopMonitoringSignificantLocationChange");
     [locationManager startUpdatingLocation];
     [locationManager startUpdatingHeading];
 
@@ -199,9 +203,11 @@
 - (void)finishStopTimer{
     NSLog(@"finish stop timer");
     slowMonitoring = YES;
+    [self stopGPSDetect];
+    [self checkSendRight];
     canWriteToFile = NO;
     [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
-    [self stopGPSDetect];
+   
 }
 
 //compass
@@ -315,7 +321,9 @@
 {
     NSLog(@"=====background=====");
         
-    
+    if ([firstTimer isValid]){
+        NSLog(@"work first timer");
+    }
     
     /*
      Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
@@ -330,7 +338,7 @@
      */
     NSLog(@"=====foreground=====");
     [self checkSendRight];
-    //[self startRecord];
+    [self startMotionDetect];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
