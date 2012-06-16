@@ -30,7 +30,7 @@
     
     [recordAction eventRecord:@"open"]; 
     
-   // freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);
+    freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr); //!!!!!не забывать убирать логирвоание
 
     
     locationManager=[[CLLocationManager alloc] init];
@@ -320,8 +320,8 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
     NSLog(@"=====background=====");
-        
-    if ([firstTimer isValid]){
+    
+        if ([firstTimer isValid]){
         NSLog(@"work first timer");
     }
     
@@ -337,7 +337,6 @@
      Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
      */
     NSLog(@"=====foreground=====");
-    [self checkSendRight];
     [self startMotionDetect];
 }
 
@@ -345,7 +344,7 @@
 {
     
     if ([[NSUserDefaults standardUserDefaults] stringForKey:@"cookie"] == nil){
-        [self checkSendRight]; 
+        
         
         UIStoryboard *storyboard = self.window.rootViewController.storyboard;
         UIViewController *loginController = [storyboard instantiateViewControllerWithIdentifier:@"AuthViewController"];
