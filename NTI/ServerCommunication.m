@@ -487,15 +487,13 @@
         timeString=[timeString stringByAppendingString:@"}}"];
     }
     
-    NSLog(@"Request: %@", timeString);
     
     request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
                                   timeoutInterval:60.0];
-   // NSLog(@"request = %@", request);
+    NSLog(@"request = %@", request);
     requestData = [NSData dataWithBytes:[timeString UTF8String] length:[timeString length]];
     [request setHTTPMethod:@"POST"];
-    [request setHTTPBody: requestData];    
-    
+    [request setHTTPBody: requestData]; 
     NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
                                 @"http://nti.goodroads.ru/api/", NSHTTPCookieDomain,
                                 @"NTIKeys", NSHTTPCookieName,
@@ -503,16 +501,19 @@
                                 @"/", NSHTTPCookiePath,
                                 nil];    
     [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:[NSHTTPCookie cookieWithProperties:properties]];
-    NSHTTPCookie *fcookie = [NSHTTPCookie cookieWithProperties:properties]; //?
-    NSArray* fcookies = [NSArray arrayWithObjects: fcookie, nil];   //?
-    NSDictionary *headers = [NSHTTPCookie requestHeaderFieldsWithCookies:fcookies]; //?
+    NSHTTPCookie *fcookie = [NSHTTPCookie cookieWithProperties:properties]; 
+    NSArray* fcookies = [NSArray arrayWithObjects: fcookie, nil];   
+    NSDictionary *headers = [NSHTTPCookie requestHeaderFieldsWithCookies:fcookies]; 
     
     [request setAllHTTPHeaderFields:headers];
     
     [NSURLConnection sendAsynchronousRequest:request
                                        queue:[NSOperationQueue mainQueue]
                            completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *error) {
-                               returnString = [[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding];
+                               NSLog(@"compressedDAta= %@", responseData);
+                               NSData *unCompressData = [[NSData alloc] init];
+                               unCompressData = [GzipCompress gzipInflate:responseData];
+                               returnString = [[NSString alloc] initWithData:unCompressData encoding: NSUTF8StringEncoding];
                                NSLog(@"returnData: %@", returnString);
                                if (![self checkErrors:returnString method:@"getRouteFromServer"]) {
                                    [[NSNotificationCenter defaultCenter]	postNotificationName:	@"routePointsReceived" object:  returnString];
