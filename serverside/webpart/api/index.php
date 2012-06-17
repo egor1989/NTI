@@ -30,8 +30,6 @@ private $timeend;
  public function setId($Id){$this->id=$Id;}
  public function setTimeStart($TimeStart) {$this->timestart=$TimeStart;}
  public function setTimeEnd($TimeEnd){	$this->timeend=$TimeEnd; }
-
- 
  public function getId(){return($this->id);}
  public function getTimeStart() {return($this->timestart);}
  public function getTimeEnd(){	return($this->timeend); }
@@ -889,7 +887,7 @@ function addNTIFile($param)
 					$score_turn = $Kut;
 					$score_brake =$Kub ;
 					$score_acc = $Kua ;
-					$rt=mysql_query("SELECT * FROM `NTIUserDrivingTrack` where UID=$UID and TimeStart=$TimeStart and TimeEnd=$TimeEnd");
+					$rt=mysql_query("SELECT * FROM `NTIUserDrivingTrack` where UID=$UID and TimeStart<=$TimeStart and TimeEnd>=$TimeEnd");
 					//Убираем этим запрос дубляж
 					$cnt=mysql_num_rows($rt);
 					if($cnt>0)
@@ -906,114 +904,10 @@ function addNTIFile($param)
 						//Отлично значит поездка нормальна
 						//Попробуем её объеденить с поездками этого же пользователя.
 						//Поездки объединяются , если время между началом и стартом их не более 10 мин, либо одна лежит внутри другой.
-						$sql_select_track=mysql_query("Select Id,TimeStart,TimeEnd from NTIUserDrivingTrack where UID=$UID");
-						$userTrackCount=0;
-						while ($row = mysql_fetch_array($result)) 
-						{
-							$tracking[$userTrackCount]=new UserTrack($row['Id'],$row['TimeStart'],$row['TimeEnd']);
-							$userTrackCount++;
-						}
-						
-						//Теперь проверяем поездку на возможность объединения с какой либо из них
-						$IdCount=0;
-						for($j=0;$j<$userTrackCount;$j++)
-						{
-							if(abs($tracking->getTimeStart())-$TimeStart<600){$IdArray[$IdCount]=$row['Id'];$IdCount++;}
-							if(abs($tracking->getTimeStart())-$TimeEnd<600){$IdArray[$IdCount]=$row['Id'];$IdCount++;}
-							if(abs($tracking->getTimeEnd())-$TimeStart<600){$IdArray[$IdCount]=$row['Id'];$IdCount++;}
-						}
-						//Теперь оставляем только уникальные элементы
-						$InpID = array_unique($IdArray);
-						//Если нет уникальных записей
-						if(count($InpID)<=0)
-						{
-							$sql_insert_str="insert into NTIUserDrivingTrack(UID,TotalAcc1Count,TotalAcc2Count,TotalAcc3Count,TotalBrake1Count,TotalBrake2Count,TotalBrake3Count,TotalSpeed1Count,TotalSpeed2Count,TotalSpeed3Count,TotalTurn1Count,TotalTurn2Count,TotalTurn3Count,TimeStart,TimeEnd,TotalDistance,SpeedScore,	TurnScore,BrakeScore,AccScore,TotalScore,SpeedK,AccK,BrakeK,TurnK) values ('$UID','$TypeAcc1Count','$TypeAcc2Count','$TypeAcc3Count','$TypeBrake1Count','$TypeBrake2Count','$TypeBrake3Count','$TypeSpeed1Count','$TypeSpeed2Count','$TypeSpeed3Count','$TypeTurn1Count','$TypeTurn2Count','$TypeTurn3Count','$TimeStart','$TimeEnd','$TotalDistance','$score_speed','$score_turn','$score_brake','$score_acc','$score','$KvnS','$KvnA','$KvnB','$KvnT')";
-							mysql_query($sql_insert_str);
-							$TrackID = mysql_insert_id();
-						}
-						else
-						{
-						//Иначе создаем новую мега пездку
-						for($j=0;$j<count($InpID);$j++)
-						{
-							$Id=$InpID[$j];
-							//Для начала получаем все данные 
-							$sql_select_track=mysql_query("Select * from NTIUserDrivingTrack where Id=$Id");
-							while ($row = mysql_fetch_array($result)) 
-							{
-								$TypeAcc1Count +=$row['TotalAcc1Count'];
-								$TypeAcc2Count +=$row['TotalAcc2Count'];     
-								$TypeAcc3Count +=$row['TotalAcc3Count']; 
-								$TypeTurn1Count+=$row['TotalTurn1Count'];  
-								$TypeTurn2Count+=$row['TotalTurn2Count']; 
-								$TypeTurn3Count +=$row['TotalTurn3Count'];
-								$TypeSpeed1Count +=$row['TotalSpeed1Count'];
-								$TypeSpeed2Count +=$row['TotalSpeed2Count'];
-								$TypeSpeed3Count +=$row['TotalSpeed3Count'];
-								$TypeBrake1Count +=$row['TotalBrake1Count']; 
-								$TypeBrake2Count +=$row['TotalBrake2Count'];
-								$TypeBrake3Count +=$row['TotalBrake3Count'];
-								$TotalDistance+=$row['TotalDistance'];
-							}
-						}
-							//Теперь формируем DT,для этого выбираем минимальное время поездок
-							for($j=0;$j<count($InpID);$j++)
-							{
-								//Выбираем время поездки
-								for($j1=0;$j1<$userTrackCount;$j1++)
-								{
-									if($InpID[$j]>$tracking[$j1]->getTimeStart())$curTimeStart=$tracking[$j1]->getTimeStart();
-								}
-								for($j1=0;$j1<$userTrackCount;$j1++)
-								{
-									if($InpID[$j]<$tracking[$j1]->getTimeEnd())$curTimeEnd=$tracking[$j1]->getTimeEnd();
-								}
-								
-								if($TimeStart>$curTimeStart)$TimeStart=$curTimeStart;
-								if($TimeEnd<$curTimeEnd)$TimeEnd=$curTimeEnd;
-							}
-							//Отлично , нашли времена старта, считаем DT
-							$DTime=$TimeEnd-$TimeStart;
-							if($DTime==0)$DTime=1;
-							$FAcc1=$TypeAcc1Count/$DTime;
-							$FAcc2=$TypeAcc2Count/$DTime;
-							$FAcc3=$TypeAcc3Count/$DTime;
-							$Fturn1=$TypeTurn1Count/$DTime;
-							$Fturn2=$TypeTurn2Count/$DTime;
-							$Fturn3=$TypeTurn3Count/$DTime;
-							$FSpeed1=$TypeSpeed1Count/$DTime;
-							$FSpeed2=$TypeSpeed2Count/$DTime;
-							$FSpeed3=$TypeSpeed3Count/$DTime;
-							$FBrake1=$TypeBrake1Count/$DTime;
-							$FBrake2=$TypeBrake2Count/$DTime;
-							$FBrake3=$TypeBrake3Count/$DTime;
-							//Kvn
-							$KvnA=($FAcc1*0.1+ $FAcc2*0.25 +$FAcc3*0.65);
-							$KvnS=($FSpeed1*0.1+ $FSpeed2*0.25 +$FSpeed3*0.65);
-							$KvnT=($Fturn1*0.1+ $Fturn2*0.25 +$Fturn3*0.65);
-							$KvnB=($FBrake1*0.1+ $FBrake2*0.25 +$FBrake3*0.65);
-							//Теперь считаем Q польз
-							$Kua=1/sqrt(1+$KvnA/$Qa);
-							$Kub=1/sqrt(1+$KvnB/$Qb);
-							$Kus=1/sqrt(1+$KvnS/$Qs);
-							$Kut=1/sqrt(1+$KvnT/$Qt);					
-							$score=0.15*$Kua+0.35*$Kub+0.35*$Kus+0.25*$Kut;
-							$score_speed = $Kus;
-							$score_turn = $Kut;
-							$score_brake =$Kub ;
-							$score_acc = $Kua ;
-							$sql_insert_str="insert into NTIUserDrivingTrack(UID,TotalAcc1Count,TotalAcc2Count,TotalAcc3Count,TotalBrake1Count,TotalBrake2Count,TotalBrake3Count,TotalSpeed1Count,TotalSpeed2Count,TotalSpeed3Count,TotalTurn1Count,TotalTurn2Count,TotalTurn3Count,TimeStart,TimeEnd,TotalDistance,SpeedScore,	TurnScore,BrakeScore,AccScore,TotalScore,SpeedK,AccK,BrakeK,TurnK) values ('$UID','$TypeAcc1Count','$TypeAcc2Count','$TypeAcc3Count','$TypeBrake1Count','$TypeBrake2Count','$TypeBrake3Count','$TypeSpeed1Count','$TypeSpeed2Count','$TypeSpeed3Count','$TypeTurn1Count','$TypeTurn2Count','$TypeTurn3Count','$TimeStart','$TimeEnd','$TotalDistance','$score_speed','$score_turn','$score_brake','$score_acc','$score','$KvnS','$KvnA','$KvnB','$KvnT')";
-							mysql_query($sql_insert_str);
-							$TrackID = mysql_insert_id();
-							//Все остальные поездки удаляем
-							for($j=0;$j<count($InpID);$j++)
-							{
-								$Id=$InpID[$j];
-								$sql_select_track=mysql_query("Delete from NTIUserDrivingTrack where Id=$Id");
-								//И апдейтим данные этих поездок к новым
-								$sql_select_track=mysql_query("Update NTIUserDrivingEntry set DrivingId=$TrackID where DrivingId=$Id");
-							}
-						}
+						$sql_insert_str="insert into NTIUserDrivingTrack(UID,TotalAcc1Count,TotalAcc2Count,TotalAcc3Count,TotalBrake1Count,TotalBrake2Count,TotalBrake3Count,TotalSpeed1Count,TotalSpeed2Count,TotalSpeed3Count,TotalTurn1Count,TotalTurn2Count,TotalTurn3Count,TimeStart,TimeEnd,TotalDistance,SpeedScore,	TurnScore,BrakeScore,AccScore,TotalScore,SpeedK,AccK,BrakeK,TurnK) values ('$UID','$TypeAcc1Count','$TypeAcc2Count','$TypeAcc3Count','$TypeBrake1Count','$TypeBrake2Count','$TypeBrake3Count','$TypeSpeed1Count','$TypeSpeed2Count','$TypeSpeed3Count','$TypeTurn1Count','$TypeTurn2Count','$TypeTurn3Count','$TimeStart','$TimeEnd','$TotalDistance','$score_speed','$score_turn','$score_brake','$score_acc','$score','$KvnS','$KvnA','$KvnB','$KvnT')";
+						mysql_query($sql_insert_str);
+						$TrackID = mysql_insert_id();
+				
 						for($j=0;$j<count($ArrayEntry[$i]);$j++)
 						{
 							$accx=$ArrayEntry[$i][$j]->getAccx();
@@ -1092,12 +986,12 @@ function getStatistics($param)
 				$result=mysql_query("SELECT * FROM `NTIUserDrivingTrack` where UID=$UID order by Id DESC Limit 1");
 				while ($row = mysql_fetch_array($result)) 
 				{
-					$score_speed = $row['SpeedScore'];
-					$score_turn =$row['TurnScore'];
-					$score_brake =$row['BrakeScore'];
-					$score_acc = $row['AccScore'];
+					$score_speed = 100*$row['SpeedScore'];
+					$score_turn =100*$row['TurnScore'];
+					$score_brake =100*$row['BrakeScore'];
+					$score_acc = 100*$row['AccScore'];
 					$distance= $row['TotalDistance'];
-					$total_score = $score_speed +$score_turn+$score_brake+$score_acc;
+					$total_score = 100*$row['TotalScore'];
 					$time=$row['TimeStart'];
 				}
 				
@@ -1109,32 +1003,26 @@ function getStatistics($param)
 				$n=0;
 				while ($row = mysql_fetch_array($result)) 
 				{
-					$score_speed += $row['SpeedScore'];
-					$score_turn +=$row['TurnScore'];
-					$score_brake +=$row['BrakeScore'];
-					$score_acc += $row['AccScore'];
+					$score_speed += 100*$row['SpeedScore'];
+					$score_turn +=100*$row['TurnScore'];
+					$score_brake +=100*$row['BrakeScore'];
+					$score_acc += 100*$row['AccScore'];
 						$distance+= $row['TotalDistance'];
 					$time+=$row['TimeEnd']-$row['TimeStart'];
-					$total_score += ($score_speed+$score_turn+$score_brake+$score_acc)*$distance;
+					$total_score += 100*$row['TotalScore'];
 					$n++;
 				}
 				if($n>0)
 				{
-					$score_speed=$score_speed;
-					$score_turn=$score_turn;
-					$score_brake=$score_brake;
-					$score_acc=$score_acc;
-					$total_score = ($total_score/$distance)/$n;
+					$score_speed=$score_speed/$n;
+					$score_turn=$score_turn/$n;
+					$score_brake=$score_brake/$n;
+					$score_acc=$score_acc/$n;
+					$total_score = ($total_score)/$n;
 				}
 				
 			}
 			$errortype=array('info'=>"",'code'=>  0);
-			$score_speed=floor($score_speed);
-			$score_turn=floor( $score_turn);
-			$score_brake=floor($score_brake);
-			$score_acc=floor($score_acc);
-			$distance=floor($distance);
-			$total_score=floor( $total_score);
 			$ret=array('total_score'=>$total_score,'score_speed'=> $score_speed,'score_turn'=>$score_turn,'score_acc'=>$score_acc,'score_brake'=>$score_brake,'distance'=>$distance,'time'=>$time);
 			$res=array('result'=>$ret,'error'=> $errortype);
 			echo json_encode($res);	
@@ -1284,8 +1172,9 @@ function getPath($param)
 		{
 		
 			$errortype=array('info'=>"",'code'=>  0);
+			//header('Content-type: application/zip'); 
 			$res=array('result'=>$ret_arr,'error'=> $errortype);
-			echo json_encode($res);	
+			echo (gzcompress(json_encode($res)));	
 			exit();
 		}	
 		else

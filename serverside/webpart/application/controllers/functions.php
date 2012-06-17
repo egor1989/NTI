@@ -22,7 +22,7 @@ class functions extends CI_Controller {
 							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
 							$arprt[$k]['type']="Acc";
 							$arprt[$k]['weight']=1;
-							
+								$arprt[$k]['G']=$rs[$i]['accx'];
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];
@@ -32,7 +32,8 @@ class functions extends CI_Controller {
 						{
 							
 							$arprt[$k]['type']="Acc";
-							$arprt[$k]['weight']=1;
+							$arprt[$k]['weight']=1;	$arprt[$k]['G']=$rs[$i]['accx'];
+
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];
@@ -60,7 +61,8 @@ class functions extends CI_Controller {
 						{
 							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
 							$arprt[$k]['type']="Acc";
-							$arprt[$k]['weight']=2;
+							$arprt[$k]['weight']=2;	$arprt[$k]['G']=$rs[$i]['accx'];
+
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];$arprt[$k]['tm']=$rs[$i]['utimestamp'];
@@ -70,7 +72,8 @@ class functions extends CI_Controller {
 						{
 							
 							$arprt[$k]['type']="Acc";
-							$arprt[$k]['weight']=2;
+							$arprt[$k]['weight']=2;	$arprt[$k]['G']=$rs[$i]['accx'];
+
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];
@@ -95,7 +98,8 @@ class functions extends CI_Controller {
 						{
 							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
 							$arprt[$k]['type']="Acc";
-							$arprt[$k]['weight']=3;
+							$arprt[$k]['weight']=3;	$arprt[$k]['G']=$rs[$i]['accx'];
+
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];
@@ -105,7 +109,8 @@ class functions extends CI_Controller {
 						{
 	
 							$arprt[$k]['type']="Acc";
-							$arprt[$k]['weight']=3;
+							$arprt[$k]['weight']=3;	$arprt[$k]['G']=$rs[$i]['accx'];
+
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];
@@ -130,7 +135,8 @@ class functions extends CI_Controller {
 						{
 							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
 							$arprt[$k]['type']="Brake";
-							$arprt[$k]['weight']=1;
+							$arprt[$k]['weight']=1;	$arprt[$k]['G']=$rs[$i]['accx'];
+
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];$arprt[$k]['tm']=$rs[$i]['utimestamp'];
@@ -140,7 +146,8 @@ class functions extends CI_Controller {
 						{
 						
 							$arprt[$k]['type']="Brake";
-							$arprt[$k]['weight']=1;
+							$arprt[$k]['weight']=1;	$arprt[$k]['G']=$rs[$i]['accx'];
+
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];
@@ -166,7 +173,8 @@ class functions extends CI_Controller {
 						{
 							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
 							$arprt[$k]['type']="Brake";
-							$arprt[$k]['weight']=2;
+							$arprt[$k]['weight']=2;	$arprt[$k]['G']=$rs[$i]['accx'];
+
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];$arprt[$k]['tm']=$rs[$i]['utimestamp'];
@@ -176,7 +184,8 @@ class functions extends CI_Controller {
 						{
 							
 							$arprt[$k]['type']="Brake";
-							$arprt[$k]['weight']=2;
+							$arprt[$k]['weight']=2;	$arprt[$k]['G']=$rs[$i]['accx'];
+
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];
@@ -201,7 +210,8 @@ class functions extends CI_Controller {
 						{
 							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
 							$arprt[$k]['type']="Brake";
-							$arprt[$k]['weight']=3;
+							$arprt[$k]['weight']=3;	$arprt[$k]['G']=$rs[$i]['accx'];
+
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];
@@ -211,7 +221,8 @@ class functions extends CI_Controller {
 						{
 							
 							$arprt[$k]['type']="Brake";
-							$arprt[$k]['weight']=3;
+							$arprt[$k]['weight']=3;	$arprt[$k]['G']=$rs[$i]['accx'];
+
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];
@@ -236,7 +247,8 @@ class functions extends CI_Controller {
 						{
 							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
 							$arprt[$k]['type']="LeftTurn";
-							$arprt[$k]['weight']=3;
+							$arprt[$k]['weight']=3;	$arprt[$k]['G']=$rs[$i]['accx'];
+
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];$arprt[$k]['tm']=$rs[$i]['utimestamp'];
@@ -246,7 +258,8 @@ class functions extends CI_Controller {
 						{
 							
 							$arprt[$k]['type']="LeftTurn";
-							$arprt[$k]['weight']=3;
+							$arprt[$k]['weight']=3;	$arprt[$k]['G']=$rs[$i]['accx'];
+
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];
@@ -272,7 +285,8 @@ class functions extends CI_Controller {
 						{
 							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
 							$arprt[$k]['type']="LeftTurn";
-							$arprt[$k]['weight']=2;
+							$arprt[$k]['weight']=2;	$arprt[$k]['G']=$rs[$i]['accx'];
+
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];$arprt[$k]['tm']=$rs[$i]['utimestamp'];
@@ -282,7 +296,8 @@ class functions extends CI_Controller {
 						{
 							
 							$arprt[$k]['type']="LeftTurn";
-							$arprt[$k]['weight']=2;
+							$arprt[$k]['weight']=2;	$arprt[$k]['G']=$rs[$i]['accx'];
+
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];
@@ -308,7 +323,8 @@ class functions extends CI_Controller {
 						{
 							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
 							$arprt[$k]['type']="LeftTurn";
-							$arprt[$k]['weight']=1;
+							$arprt[$k]['weight']=1;	$arprt[$k]['G']=$rs[$i]['accx'];
+
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];$arprt[$k]['tm']=$rs[$i]['utimestamp'];
@@ -318,7 +334,8 @@ class functions extends CI_Controller {
 						{
 							
 							$arprt[$k]['type']="LeftTurn";
-							$arprt[$k]['weight']=1;
+							$arprt[$k]['weight']=1;	$arprt[$k]['G']=$rs[$i]['accx'];
+
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];
@@ -345,7 +362,8 @@ class functions extends CI_Controller {
 						{
 							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
 							$arprt[$k]['type']="RightTurn";
-							$arprt[$k]['weight']=3;
+							$arprt[$k]['weight']=3;	$arprt[$k]['G']=$rs[$i]['accx'];
+
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];$arprt[$k]['tm']=$rs[$i]['utimestamp'];
@@ -355,7 +373,8 @@ class functions extends CI_Controller {
 						{
 							
 							$arprt[$k]['type']="RightTurn";
-							$arprt[$k]['weight']=3;
+							$arprt[$k]['weight']=3;	$arprt[$k]['G']=$rs[$i]['accx'];
+
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];
@@ -381,7 +400,8 @@ class functions extends CI_Controller {
 						{
 							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
 							$arprt[$k]['type']="RightTurn";
-							$arprt[$k]['weight']=2;
+							$arprt[$k]['weight']=2;	$arprt[$k]['G']=$rs[$i]['accx'];
+
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];$arprt[$k]['tm']=$rs[$i]['utimestamp'];
@@ -391,7 +411,8 @@ class functions extends CI_Controller {
 						{
 							
 							$arprt[$k]['type']="RightTurn";
-							$arprt[$k]['weight']=2;
+							$arprt[$k]['weight']=2;	$arprt[$k]['G']=$rs[$i]['accx'];
+
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];
@@ -417,7 +438,8 @@ class functions extends CI_Controller {
 						{
 							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
 							$arprt[$k]['type']="RightTurn";
-							$arprt[$k]['weight']=1;
+							$arprt[$k]['weight']=1;	$arprt[$k]['G']=$rs[$i]['accx'];
+
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];$arprt[$k]['tm']=$rs[$i]['utimestamp'];
@@ -427,7 +449,8 @@ class functions extends CI_Controller {
 						{
 							
 							$arprt[$k]['type']="RightTurn";
-							$arprt[$k]['weight']=1;
+							$arprt[$k]['weight']=1;	$arprt[$k]['G']=$rs[$i]['accx'];
+
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];
@@ -453,7 +476,8 @@ class functions extends CI_Controller {
 						{
 							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
 							$arprt[$k]['type']="Speed";
-							$arprt[$k]['weight']=1;
+							$arprt[$k]['weight']=1;	$arprt[$k]['G']=$rs[$i]['accx'];
+
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];
@@ -463,7 +487,8 @@ class functions extends CI_Controller {
 						{
 							
 							$arprt[$k]['type']="Speed";
-							$arprt[$k]['weight']=1;
+							$arprt[$k]['weight']=1;	$arprt[$k]['G']=$rs[$i]['accx'];
+
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];
@@ -489,7 +514,8 @@ class functions extends CI_Controller {
 						if(($rs[$i+1]['TypeSpeed']=="s2") && ($rs[$i]['TypeSpeed']=="s2"))
 						{
 							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
-							$arprt[$k]['type']="Speed";
+							$arprt[$k]['type']="Speed";	$arprt[$k]['G']=$rs[$i]['accx'];
+
 							$arprt[$k]['weight']=2;
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
@@ -500,7 +526,8 @@ class functions extends CI_Controller {
 						{
 							
 							$arprt[$k]['type']="Speed";
-							$arprt[$k]['weight']=2;
+							$arprt[$k]['weight']=2;	$arprt[$k]['G']=$rs[$i]['accx'];
+
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];
@@ -524,7 +551,8 @@ class functions extends CI_Controller {
 						if(($rs[$i+1]['TypeSpeed']=="s3") && ($rs[$i]['TypeSpeed']=="s3"))
 						{
 							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
-							$arprt[$k]['type']="Speed";
+							$arprt[$k]['type']="Speed";	$arprt[$k]['G']=$rs[$i]['accx'];
+
 							$arprt[$k]['weight']=3;
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
@@ -535,7 +563,8 @@ class functions extends CI_Controller {
 						{
 							
 							$arprt[$k]['type']="Speed";
-							$arprt[$k]['weight']=3;
+							$arprt[$k]['weight']=3;	$arprt[$k]['G']=$rs[$i]['accx'];
+
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];
@@ -565,6 +594,8 @@ class functions extends CI_Controller {
 							$arprt[$k]['lat']=$rs[$i]['lat'];
 							$arprt[$k]['lng']=$rs[$i]['lng'];
 							$arprt[$k]['tm']=$rs[$i]['utimestamp'];
+								$arprt[$k]['G']=$rs[$i]['accx'];
+$arprt[$k]['duration']=1;
 							$arprt[$k]['time']=date('j/m/y;h:i:s',$rs[$i]['utimestamp']);
 							$k++;											
 					}
@@ -581,7 +612,7 @@ class functions extends CI_Controller {
 					}
 				for($i=0;$i<count($arprt);$i++)
 				{
-						echo $arprt[$i]['lat'].",".$arprt[$i]['lng'].",".(($arprt[$i]['minspeed']+$arprt[$i]['maxspeed'])/2).",".$arprt[$i]['time'].",".$arprt[$i]['type'].",".$arprt[$i]['weight']."\n";
+						echo $arprt[$i]['lat'].",".$arprt[$i]['lng'].",".(($arprt[$i]['minspeed']+$arprt[$i]['maxspeed'])/2).",".$arprt[$i]['time'].",".$arprt[$i]['type'].",".$arprt[$i]['weight'].",".$arprt[$i]['G'].",".$arprt[$i]['duration']."\n";
 				}
 
 	 }

@@ -65,27 +65,22 @@ function handler(request)
 		p.transform(new OpenLayers.Projection('EPSG:4326'), this.getProjection());
 		speed = filteredPt[i][3];
 		var color = "#00ff00";
-		if((filteredPt[i][4])=="Acc" && Number(filteredPt[i][5])==1)color = "#F0FFFF";
-		else if((filteredPt[i][4])=="Acc" && Number(filteredPt[i][5])==2)color = "#7CFC00";
-		else if((filteredPt[i][4])=="Acc" && Number(filteredPt[i][5])==3)color = "#228B22";
-		
-		else if((filteredPt[i][4])=="Brake" && Number(filteredPt[i][5])==1)color = "#FF6347";
-		else if((filteredPt[i][4])=="Brake" && Number(filteredPt[i][5])==2)color = "#FF4500";
-		else if((filteredPt[i][4])=="Brake" && Number(filteredPt[i][5])==3)color = "#FF0000";
-		
-		
-		else if((filteredPt[i][4])=="LeftTurn" && Number(filteredPt[i][5])==1)color = "#DDA0DD";
-		else if((filteredPt[i][4])=="LeftTurn" && Number(filteredPt[i][5])==2)color = "#DA70D6";
-		else if((filteredPt[i][4])=="LeftTurn" && Number(filteredPt[i][5])==3)color = "#BA55D3";
-		
-		else if((filteredPt[i][4])=="RightTurn" && Number(filteredPt[i][5])==1)color = "#9370DB";
-		else if((filteredPt[i][4])=="RightTurn" && Number(filteredPt[i][5])==2)color = "#8A2BE2";
-		else if((filteredPt[i][4])=="RightTurn" && Number(filteredPt[i][5])==3)color = "#A020F0";
-		
-		
-		else if((filteredPt[i][4])=="Speed" && Number(filteredPt[i][5])==1)color = "#FFFF00";
-		else if((filteredPt[i][4])=="Speed" && Number(filteredPt[i][5])==2)color = "#FFD700";
-		else if((filteredPt[i][4])=="Speed" && Number(filteredPt[i][5])==3)color = "#DAA520";
+		var type=0;
+		if((filteredPt[i][4])=="Acc" && Number(filteredPt[i][5])==1){color = "#00FF00";type=0.3;}
+		else if((filteredPt[i][4])=="Acc" && Number(filteredPt[i][5])==2){color = "#00FF00";type=0.5;}
+		else if((filteredPt[i][4])=="Acc" && Number(filteredPt[i][5])==3){color = "#00FF00";type=0.8;}
+		else if((filteredPt[i][4])=="Brake" && Number(filteredPt[i][5])==1){color = "#FF0000";type=0.3;}
+		else if((filteredPt[i][4])=="Brake" && Number(filteredPt[i][5])==2){color = "#FF0000";type=0.5;}
+		else if((filteredPt[i][4])=="Brake" && Number(filteredPt[i][5])==3){color = "#FF0000";type=0.8;}
+			else if((filteredPt[i][4])=="LeftTurn" && Number(filteredPt[i][5])==1){color = "#FFFF00";type=0.3;}
+		else if((filteredPt[i][4])=="LeftTurn" && Number(filteredPt[i][5])==2){color = "#FFFF00";type=0.5;}
+		else if((filteredPt[i][4])=="LeftTurn" && Number(filteredPt[i][5])==3){color = "#FFFF00";type=0.8;}
+		else if((filteredPt[i][4])=="RightTurn" && Number(filteredPt[i][5])==1){color = "#9370DB";type=0.3;}
+		else if((filteredPt[i][4])=="RightTurn" && Number(filteredPt[i][5])==2){color = "#9370DB";type=0.5;}
+		else if((filteredPt[i][4])=="RightTurn" && Number(filteredPt[i][5])==3){color = "#9370DB";type=0.8;}
+		else if((filteredPt[i][4])=="Speed" && Number(filteredPt[i][5])==1){color = "#808080";type=0.3;}
+		else if((filteredPt[i][4])=="Speed" && Number(filteredPt[i][5])==2){color = "#808080";type=0.5;}
+		else if((filteredPt[i][4])=="Speed" && Number(filteredPt[i][5])==3){color = "#808080";type=0.8;}
 
  
   
@@ -95,7 +90,9 @@ function handler(request)
 				radius : 1+(Number(filteredPt[i][5])),
 				time : filteredPt[i][3],
 				label : filteredPt[i][4],
-				typeTurn : filteredPt[i][5]
+				typeTurn : filteredPt[i][5],
+				typeG:filteredPt[i][6],
+				duration:filteredPt[i][7]
 			});
 
 
@@ -103,16 +100,18 @@ function handler(request)
 		(	new OpenLayers.Geometry.Point(p.x,p.y), 
 			{	
 				speed : Number(filteredPt[i][2]),
-				radius : 1+(Number(filteredPt[i][5])),
+				radius : 4,
 				time : filteredPt[i][3],
 				label : filteredPt[i][4],
-				typeTurn : filteredPt[i][5]
+				typeTurn : filteredPt[i][5],
+				typeG:filteredPt[i][6]
 			}, { fillColor: color,
-				 pointRadius: 1+(Number(filteredPt[i][5])),
+				 pointRadius: 4,
                  strokeColor: color,
-				 strokeWidth: 1,
+				 strokeWidth: type,
 				 graphicName:"circle",
-                 fillOpacity: 1,
+                 fillOpacity: type,
+                   strokeOpacity: 0.1,
                  cursor:"pointer"
                 }
 		);
@@ -122,7 +121,7 @@ function handler(request)
     	 var style_green =
     {
         strokeColor: "#00FF00",
-        strokeOpacity: 0.7,
+        strokeOpacity: 0.2,
         strokeWidth: 6
     };
  var lineString = new OpenLayers.Geometry.LineString(points);
@@ -178,6 +177,7 @@ function init()
 				+"Time : "+e.feature.attributes.time+"<br/>"
 				+"Duration : "+e.feature.attributes.duration+" <br/>"
 				+"Label : "+e.feature.attributes.label+" <br/>"
+				+"G : "+e.feature.attributes.typeG+" <br/>"
 				+"Weight: "+e.feature.attributes.typeTurn+" <br/>";
         },
         "featureunselected": function(e) { document.getElementById("status").innerHTML = ""; }

@@ -25,12 +25,12 @@ class lays_model extends CI_Model {
 				$da['TotalTurn2Count'] = $row->TotalTurn2Count;
 				$da['TotalTurn3Count'] = $row->TotalTurn3Count;
 				$da['total_dist']=$row->TotalDistance;
-				$da['total_acc_score'] =  $row->AccScore;
-				$da['total_brk_score'] = $row->BrakeScore;
-				$da['total_crn_score'] =$row->TurnScore;
-				$da['total_spd_score'] =$row->SpeedScore;
-				$da['total_all_score'] =$row->TotalScore;
-				$da['tscore'] =$row->TotalScore;
+				$da['total_acc_score'] =  100*$row->AccScore;
+				$da['total_brk_score'] = 100*$row->BrakeScore;
+				$da['total_crn_score'] =100*$row->TurnScore;
+				$da['total_spd_score'] =100*$row->SpeedScore;
+				$da['total_all_score'] =100*$row->TotalScore;
+				$da['tscore'] =100*$row->TotalScore;
 				$da['tdst']=$row->TotalDistance;
 							$da['SpeedK'] =  $row->SpeedK;
 				$da['TurnK'] = $row->TurnK;
@@ -192,12 +192,12 @@ class lays_model extends CI_Model {
 				$da[$n]['TotalTurn2Count'] = $row->TotalTurn2Count;
 				$da[$n]['TotalTurn3Count'] = $row->TotalTurn3Count;
 				$da[$n]['total_dist']=$row->TotalDistance;
-				$da[$n]['total_acc_score'] =  $row->AccScore;
-				$da[$n]['total_brk_score'] = $row->BrakeScore;
-				$da[$n]['total_crn_score'] =$row->TurnScore;
-				$da[$n]['total_spd_score'] =$row->SpeedScore;
-				$da[$n]['total_all_score'] =$row->TotalScore;
-				$da['tscore'] +=$row->TotalScore;
+				$da[$n]['total_acc_score'] = 100* $row->AccScore;
+				$da[$n]['total_brk_score'] =100* $row->BrakeScore;
+				$da[$n]['total_crn_score'] =100*$row->TurnScore;
+				$da[$n]['total_spd_score'] =100*$row->SpeedScore;
+				$da[$n]['total_all_score'] =100*$row->TotalScore;
+				$da['tscore'] +=100*$row->TotalScore;
 				$da['tdst']=+$row->TotalDistance;
 							$da[$n]['SpeedK'] =  $row->SpeedK;
 				$da[$n]['TurnK'] = $row->TurnK;
@@ -205,6 +205,7 @@ class lays_model extends CI_Model {
 				$da[$n]['BrakeK'] =$row->BrakeK;
 				$n++;
 			}
+			$da['tscore']=$da['tscore']/$n;
 			$da['total_trips']=$n;
 			return $da;
 		} 
@@ -299,11 +300,11 @@ $n=0;
 				$da['total_excesses'] += $row->TotalSpeed1Count+$row->TotalSpeed2Count+$row->TotalSpeed3Count;
 				$da['total_turns'] += $row->TotalTurn1Count+$row->TotalTurn2Count+$row->TotalTurn3Count;
 				$da['total_dist']+=$row->TotalDistance;
-				$da['total_acc_score'] +=  $row->AccScore;
-				$da['total_brk_score'] += $row->BrakeScore;
-				$da['total_crn_score'] +=$row->TurnScore;
-				$da['total_spd_score'] +=$row->SpeedScore;
-				$da['total_all_score'] +=$row->TotalScore;;
+				$da['total_acc_score'] += 100* $row->AccScore;
+				$da['total_brk_score'] += 100* $row->BrakeScore;
+				$da['total_crn_score'] +=100* $row->TurnScore;
+				$da['total_spd_score'] +=100* $row->SpeedScore;
+				$da['total_all_score'] +=100* $row->TotalScore;;
 							$da['SpeedK'] =  $row->SpeedK;
 				$da['TurnK'] = $row->TurnK;
 				$da['AccK'] =$row->AccK;
@@ -311,7 +312,14 @@ $n=0;
 				$da['is_set']=1;
 				$n++;
 			}
-					
+			if($n>0)
+			{
+				$da['total_acc_score'] = 	$da['total_acc_score']/$n;
+				$da['total_brk_score'] = $da['total_brk_score']/$n;
+				$da['total_crn_score'] =$da['total_crn_score']/$n;
+				$da['total_spd_score'] =$da['total_spd_score']/$n;
+				$da['total_all_score'] =$da['total_all_score']/$n;
+			}		
 			return $da;
 		} 
 		else {
@@ -354,19 +362,20 @@ $n=0;
 				$da[$n]['TotalTurn2Count'] = $row->TotalTurn2Count;
 				$da[$n]['TotalTurn3Count'] = $row->TotalTurn3Count;
 				$da[$n]['total_dist']=$row->TotalDistance;
-				$da[$n]['total_acc_score'] =  $row->AccScore;
-				$da[$n]['total_brk_score'] = $row->BrakeScore;
-				$da[$n]['total_crn_score'] =$row->TurnScore;
-				$da[$n]['total_spd_score'] =$row->SpeedScore;
-				$da[$n]['total_all_score'] =$row->TotalScore;;
+				$da[$n]['total_acc_score'] =  100*$row->AccScore;
+				$da[$n]['total_brk_score'] = 100*$row->BrakeScore;
+				$da[$n]['total_crn_score'] =100*$row->TurnScore;
+				$da[$n]['total_spd_score'] =100*$row->SpeedScore;
+				$da[$n]['total_all_score'] =100*$row->TotalScore;;
 							$da[$n]['SpeedK'] =  $row->SpeedK;
 				$da[$n]['TurnK'] = $row->TurnK;
 				$da[$n]['AccK'] =$row->AccK;
 				$da[$n]['BrakeK'] =$row->BrakeK;
-				$da['tscore'] +=$row->TotalScore;;
+				$da['tscore'] +=100*$row->TotalScore;;
 				$da['tdst']=+$row->TotalDistance;
 				$n++;
 			}
+			if($n>0)$da['tscore']=$da['tscore']/$n;
 			return $da;
 		} 
 		else {
