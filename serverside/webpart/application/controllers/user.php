@@ -14,7 +14,7 @@ class User extends CI_Controller {
 			$checker=$this->userModel->checkrealation($this->session->userdata('id'),$urls);
 				if($checker==1 || $this->session->userdata('rights')==3)
 				{
-					$rs['rights']=1;
+					$rs['rights']=1;date_default_timezone_set('Europe/Moscow'); 
 					$this->load->view('header',$new_data);
 					$rs['trr'] = $this->lays_model->getTotalStats($urls);//Получеие статистики по пользователю
 					$this->load->view('lasttrips_view',$rs);
@@ -728,7 +728,7 @@ private function get_raw_csv($urls) {
 			$new_data['rights']= $this->session->userdata('rights');
 			$new_data['map_type'] = 2;
 			//Обработка экспертов
-			
+			date_default_timezone_set('Europe/Moscow'); 
 			if($this->session->userdata('rights')!=3)
 			{
 				if($this->session->userdata('rights')==2)
