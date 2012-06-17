@@ -11,7 +11,7 @@
 #define myAppDelegate (AppDelegate*) [[UIApplication sharedApplication] delegate]
 #define MAX3(a,b,c) ( MAX(a,b)>c ? ((a>b)? 1:2) : 3 )
 #define radianConst M_PI/180.0
-#define maxEntries 10
+#define maxEntries 50
 
 
 @implementation RecordAction
