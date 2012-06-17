@@ -195,10 +195,10 @@ static sqlite3_stmt *readStmt = nil;
 
 
 - (void) sendDatabaseTr{
+    BOOL noerror = YES;
     NSLog(@"sendDB thread");
     NSArray *keys = [NSArray arrayWithObjects:@"timestamp", @"type", @"acc", @"gps", nil];
     dataArray = [[NSMutableArray alloc]init];
-    
     
     if(sqlite3_open([databasePath UTF8String], &database) == SQLITE_OK) {
         
@@ -223,22 +223,32 @@ static sqlite3_stmt *readStmt = nil;
                     
                     
                 }
-            } else NSLog(@"indalid command");
+            }
+            else 
+                {
+                    noerror = NO;
+                    NSLog(@"indalid command");
+                }
             
-            [self convertAndSend];
-            dataArray = [[NSMutableArray alloc]init];
+            if (noerror) {
+                [self convertAndSend];
+                dataArray = [[NSMutableArray alloc]init];
+            }
+            
         }
     }
-    
-    sqlite3_finalize(readStmt);
-    [serverCommunication showResult];
-    if (![serverCommunication errors]){
-        NSLog(@"DBsend - no errors");
-        [DatabaseActions clearDatabase];
-        [userDefaults setValue: [serverCommunication getLastStatistic] forKey:@"lastStat"];
-        [userDefaults setValue: [serverCommunication getAllStatistic] forKey:@"allStat"];
-        //notif refresh
+    if (noerror) {
+        sqlite3_finalize(readStmt);
+        [serverCommunication showResult];
+            if (![serverCommunication errors]){
+                NSLog(@"DBsend - no errors");
+                [DatabaseActions clearDatabase];
+                [userDefaults setValue: [serverCommunication getLastStatistic] forKey:@"lastStat"];
+                [userDefaults setValue: [serverCommunication getAllStatistic] forKey:@"allStat"];
+                //notif refresh
+            }
     }
+    noerror = YES;
     sqlite3_close(database);
     [myAppDelegate startRecord];
 }
