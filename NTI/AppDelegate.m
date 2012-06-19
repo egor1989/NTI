@@ -30,7 +30,7 @@
     
     [recordAction eventRecord:@"open"]; 
     
-    freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr); //!!!!!не забывать убирать логирвоание
+    //freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr); //!!!!!не забывать убирать логирвоание
 
     
     locationManager=[[CLLocationManager alloc] init];
