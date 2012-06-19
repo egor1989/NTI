@@ -595,7 +595,7 @@ class functions extends CI_Controller {
 							$arprt[$k]['lng']=$rs[$i]['lng'];
 							$arprt[$k]['tm']=$rs[$i]['utimestamp'];
 								$arprt[$k]['G']=$rs[$i]['accx'];
-$arprt[$k]['duration']=1;
+							$arprt[$k]['duration']=1;
 							$arprt[$k]['time']=date('j/m/y;h:i:s',$rs[$i]['utimestamp']);
 							$k++;											
 					}
