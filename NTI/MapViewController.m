@@ -104,13 +104,17 @@
             int type = [[point valueForKey:@"type"]intValue];
             int weight = [[point valueForKey:@"weight"]intValue];
             if (type == 42) {
+                //рисуем маршрут
                 if ([allRoutesPointsArray[0][0] count] != 0){
                     [routeLineArray addObject:[self createRouteLine:allRoutesPointsArray[0][0]]];
                     [allRoutesPointsArray[0][0] removeAllObjects];
                 }
             }
             else{
-                [allRoutesPointsArray[type][weight] addObject:latLngArray];
+                [allRoutesPointsArray[0][0] addObject:latLngArray];
+                if (type!=0) {
+                    [allRoutesPointsArray[type][weight] addObject:latLngArray];
+                }
             }
         }
         [routeLineArray addObject:[self createRouteLine:allRoutesPointsArray[0][0]]];
@@ -134,7 +138,6 @@
         }
     }
 }
-
 
 //Создаёт и возвращает линию маршрута. (Просто маршрут - без специальных точек)
 -(MKPolyline*) createRouteLine:(NSArray*) normalPointsArray1{
