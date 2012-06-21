@@ -30,7 +30,7 @@
     
     [recordAction eventRecord:@"open"]; 
     
-   // freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);
+    //freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr); //!!!!!не забывать убирать логирвоание
 
     
     locationManager=[[CLLocationManager alloc] init];
@@ -151,6 +151,7 @@
             m5Km++;
             if (m5Km > 5){
                 NSLog(@"startCheck-location manager: m5km>5, writing");
+                //[recordAction eventRecord:@"start"];
                 startCheck = NO;
                 [firstTimer invalidate];
                 canWriteToFile = YES;
@@ -166,6 +167,7 @@
         NSLog(@"slowMonitoring - change location");
         [self startGPSDetect];
         canWriteToFile = YES;
+        //[recordAction eventRecord:@"start"];
         [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
         slowMonitoring = NO;
     }
@@ -197,6 +199,7 @@
     lastLoc = [[CLLocation alloc] initWithCoordinate:newLocation.coordinate altitude:newLocation.altitude horizontalAccuracy:newLocation.horizontalAccuracy verticalAccuracy:newLocation.verticalAccuracy course:newLocation.course speed:newLocation.speed timestamp:newLocation.timestamp];
         
     [[NSNotificationCenter defaultCenter]	postNotificationName:	@"locateNotification" object:  nil];
+   // NSLog(@"locateNotification");
      
 }
 
@@ -207,7 +210,8 @@
     [self checkSendRight];
     canWriteToFile = NO;
     [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
-   
+    
+    
 }
 
 //compass
@@ -283,6 +287,7 @@
                                            }
                                           dict = [NSDictionary dictionaryWithObject: motion forKey: @"motion"];
                                            [[NSNotificationCenter defaultCenter] postNotificationName: @"motionNotification" object:  nil];
+                                          // NSLog(@"motionNotification");
                                        }];
 }
 
@@ -320,8 +325,8 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
     NSLog(@"=====background=====");
-        
-    if ([firstTimer isValid]){
+    
+        if ([firstTimer isValid]){
         NSLog(@"work first timer");
     }
     
@@ -336,8 +341,20 @@
     /*
      Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
      */
+    
+    
     NSLog(@"=====foreground=====");
-    [self checkSendRight];
+    
+    if ([firstTimer isValid]) {
+        NSLog(@"firstTimer working");
+    }
+    else if ([stopTimer isValid]) {
+        NSLog(@"stopTimer working");
+    }
+    else {
+        NSLog(@"timers don't working");
+    }
+    
     [self startMotionDetect];
 }
 
@@ -345,7 +362,7 @@
 {
     
     if ([[NSUserDefaults standardUserDefaults] stringForKey:@"cookie"] == nil){
-        [self checkSendRight]; 
+        
         
         UIStoryboard *storyboard = self.window.rootViewController.storyboard;
         UIViewController *loginController = [storyboard instantiateViewControllerWithIdentifier:@"AuthViewController"];

@@ -179,7 +179,7 @@
 	if (done)
 	{
 		[decompressed setLength: strm.total_out];
-        NSLog(@"decompressed = %@", [NSData dataWithData: decompressed]);
+        //NSLog(@"decompressed = %@", [NSData dataWithData: decompressed]);
 		return [NSData dataWithData: decompressed];
 	}
 	else return nil;
