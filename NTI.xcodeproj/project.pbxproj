@@ -1184,6 +1184,50 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		27DAEBCD159334A6008B37D8 /* Ad-hoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Vladislav Efremov";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Vladislav Efremov";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PROVISIONING_PROFILE = "697FD509-76BA-4A63-9F03-C5AD9E5528F5";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "697FD509-76BA-4A63-9F03-C5AD9E5528F5";
+				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = NO;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "Ad-hoc";
+		};
+		27DAEBCE159334A6008B37D8 /* Ad-hoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer: Vladislav Efremov (MBL7632743)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vladislav Efremov (MBL7632743)";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "NTI/NTI-Prefix.pch";
+				INFOPLIST_FILE = "NTI/NTI-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/CrittercismSDK\"",
+					"\"$(SRCROOT)/TestFlightSDK1.0\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "1955304E-9CA6-4DD7-BE0B-460DF8AE1A98";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1955304E-9CA6-4DD7-BE0B-460DF8AE1A98";
+				WRAPPER_EXTENSION = app;
+			};
+			name = "Ad-hoc";
+		};
 		53E0A78D14DEC75D004E3E1B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1240,7 +1284,8 @@
 		53E0A79014DEC75D004E3E1B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Vladislav Efremov";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Vladislav Efremov (MBL7632743)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vladislav Efremov (MBL7632743)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NTI/NTI-Prefix.pch";
 				INFOPLIST_FILE = "NTI/NTI-Info.plist";
@@ -1250,7 +1295,8 @@
 					"\"$(SRCROOT)/TestFlightSDK1.0\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "4D9E5BD7-2BB3-46C0-AEAB-603F31E445C9";
+				PROVISIONING_PROFILE = "1955304E-9CA6-4DD7-BE0B-460DF8AE1A98";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1955304E-9CA6-4DD7-BE0B-460DF8AE1A98";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1258,8 +1304,8 @@
 		53E0A79114DEC75D004E3E1B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Vladislav Efremov";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Vladislav Efremov";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Vladislav Efremov (MBL7632743)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vladislav Efremov (MBL7632743)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NTI/NTI-Prefix.pch";
 				INFOPLIST_FILE = "NTI/NTI-Info.plist";
@@ -1269,8 +1315,8 @@
 					"\"$(SRCROOT)/TestFlightSDK1.0\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "4D9E5BD7-2BB3-46C0-AEAB-603F31E445C9";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "4D9E5BD7-2BB3-46C0-AEAB-603F31E445C9";
+				PROVISIONING_PROFILE = "1955304E-9CA6-4DD7-BE0B-460DF8AE1A98";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1955304E-9CA6-4DD7-BE0B-460DF8AE1A98";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -1283,6 +1329,7 @@
 			buildConfigurations = (
 				53E0A78D14DEC75D004E3E1B /* Debug */,
 				53E0A78E14DEC75D004E3E1B /* Release */,
+				27DAEBCD159334A6008B37D8 /* Ad-hoc */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1292,6 +1339,7 @@
 			buildConfigurations = (
 				53E0A79014DEC75D004E3E1B /* Debug */,
 				53E0A79114DEC75D004E3E1B /* Release */,
+				27DAEBCE159334A6008B37D8 /* Ad-hoc */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

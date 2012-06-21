@@ -25,10 +25,7 @@
     [picker setShowsSelectionIndicator:YES];
     textField.inputView = picker;
     
-    NSArray *ThemesOptionsUnsorted = [NSArray arrayWithObjects:@"Germany", @"Austria", @"Swiss", @"Luxembourg", 
-                                  @"Spain", @"Netherlands", @"USA", @"Canada", @"Denmark", @"Great Britain",
-                                  @"Finland", @"France", @"Greece", @"Ireland", @"Italy", @"Norway", @"Portugal",
-                                  @"Poland", @"Slovenia", @"Sweden", nil];
+    NSArray *ThemesOptionsUnsorted = [NSArray arrayWithObjects:@"Идея", @"Проблема", @"Ideaaaaaa", nil];
     ThemesOptions = [ThemesOptionsUnsorted sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     
     [[NSNotificationCenter defaultCenter]	

@@ -133,6 +133,13 @@
 
 - (BOOL)checkErrors:(NSString *)answerString method:(NSString *)methodName{
     NSLog(@"SC check errors");
+    if ([answerString isEqual: @""] ) {
+        info = @"Пустой ответ";
+        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:info message:@"Данных по поездке за указанный период не существует." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+        errors = YES;
+        return errors;
+    }
     SBJsonParser *jsonParser = [SBJsonParser new];
     NSArray *answer = [jsonParser objectWithString:answerString error:NULL];
     NSArray *error = [answer valueForKey:@"error"];
@@ -488,9 +495,9 @@
     }
     
     
+    NSLog(@"request = %@", timeString);
     request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
                                   timeoutInterval:60.0];
-    NSLog(@"request = %@", request);
     requestData = [NSData dataWithBytes:[timeString UTF8String] length:[timeString length]];
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody: requestData]; 

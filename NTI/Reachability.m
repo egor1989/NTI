@@ -166,7 +166,7 @@ static void TMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
         self.reachabilityRef = nil;
     }
 #ifdef DEBUG
-    NSLog(@"Reachability: dealloc");
+//    NSLog(@"Reachability: dealloc");
 #endif
     
 #if !(__has_feature(objc_arc))
