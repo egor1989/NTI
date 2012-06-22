@@ -17,11 +17,12 @@ static sqlite3_stmt *deleteStmt = nil;
 static sqlite3_stmt *addStmt = nil;
 static sqlite3_stmt *addEntr = nil;
 static sqlite3_stmt *readStmt = nil;
-
+static BOOL needLastRoute;
 
 
 
 @implementation DatabaseActions
+
 
 -(id) initDataBase{
 	databaseName = @"log.sqlite";
@@ -34,10 +35,15 @@ static sqlite3_stmt *readStmt = nil;
     else NSLog(@"error! base not open");
     userDefaults = [NSUserDefaults standardUserDefaults];
     jsonConvert = [[toJSON alloc]init];
-
+    needLastRoute = NO;
     csvConverter = [[CSVConverter alloc] init];
     serverCommunication = [[ServerCommunication alloc] init];
     return self;
+}
+
++ (BOOL)needLastRoute
+{
+    return needLastRoute;
 }
 
 
@@ -91,7 +97,7 @@ static sqlite3_stmt *readStmt = nil;
         
         
         if(SQLITE_DONE != sqlite3_step(addStmt)){
-            NSLog(@"database error");
+            NSLog(@"database error (insert) = %@", sqlite3_errmsg(database));
             NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
             return NO;
         }
@@ -168,12 +174,15 @@ static sqlite3_stmt *readStmt = nil;
 + (void) clearDatabase{
     NSLog(@"clear DB");
     const char *sql = "delete from log";
-    if(sqlite3_prepare_v2(database, sql, -1, &deleteStmt, NULL) != SQLITE_OK)
+    if(sqlite3_prepare_v2(database, sql, -1, &deleteStmt, NULL) != SQLITE_OK){
+        NSLog(@"error while creating delete statement %@", sqlite3_errmsg(database));
         NSAssert1(0, @"Error while creating delete statement. '%s'", sqlite3_errmsg(database));
+    }
     
-    if (SQLITE_DONE != sqlite3_step(deleteStmt)) 
+    if (SQLITE_DONE != sqlite3_step(deleteStmt)){ 
+        NSLog(@"error while deleting %@", sqlite3_errmsg(database));
         NSAssert1(0, @"Error while deleting. '%s'", sqlite3_errmsg(database));
-    
+    }
     sqlite3_reset(deleteStmt); 
     
     
@@ -243,6 +252,7 @@ static sqlite3_stmt *readStmt = nil;
             if (![serverCommunication errors]){
                 NSLog(@"DBsend - no errors");
                 [DatabaseActions clearDatabase];
+                needLastRoute = YES;
                 [userDefaults setValue: [serverCommunication getLastStatistic] forKey:@"lastStat"];
                 [userDefaults setValue: [serverCommunication getAllStatistic] forKey:@"allStat"];
                 //notif refresh

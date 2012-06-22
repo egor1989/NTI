@@ -13,8 +13,8 @@
 #define CC_RADIANS_TO_DEGREES(__ANGLE__) ((__ANGLE__) / (float)M_PI * 180.0f)
 #define radianConst M_PI/180.0
 #define SPEED 1.5
-#define STARTTIME 300
-#define STOPTIME 600
+#define STARTTIME 30
+#define STOPTIME 60
 
 @implementation AppDelegate
 
@@ -30,8 +30,7 @@
     
     [recordAction eventRecord:@"open"]; 
     
-    //freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr); //!!!!!не забывать убирать логирвоание
-
+   // freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr); //!!!!!не забывать убирать логирвоание
     
     locationManager=[[CLLocationManager alloc] init];
     locationManager.delegate=self;
@@ -63,7 +62,7 @@
         NSLog(@"bad iphone");
     }
     
-    
+    //
     [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(updater:) userInfo:nil repeats:YES];
     
     oldHeading          = 0;
@@ -329,6 +328,7 @@
         if ([firstTimer isValid]){
         NSLog(@"work first timer");
     }
+    if ([shortCheckTimer isValid]) [shortCheckTimer invalidate];
     
     /*
      Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
@@ -351,11 +351,19 @@
     else if ([stopTimer isValid]) {
         NSLog(@"stopTimer working");
     }
-    else {
-        NSLog(@"timers don't working");
+    else 
+        if (!canWriteToFile) {
+        NSLog(@"startShortCheckTimer");
+        startCheck = YES;
+        shortCheckTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(finishShortCheckTimer) userInfo:nil repeats:NO];
     }
     
     [self startMotionDetect];
+}
+
+- (void)finishShortCheckTimer{
+    NSLog(@"StopShortCheckTimer");
+    startCheck = NO;
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
