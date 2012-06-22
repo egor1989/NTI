@@ -23,3 +23,7 @@ CVS
 /serverside/JUNTI/build/
 /serverside/JUNTI/dist/
 NTI/NTI-Info.plist
+NTI.xcodeproj/project.xcworkspace/xcuserdata/mike.xcuserdatad/*
+NTI.xcodeproj/project.xcworkspace/xcuserdata/mike.xcuserdatad/UserInterfaceState.xcuserstate
+NTI.xcodeproj/xcuserdata/mike.xcuserdatad/xcdebugger/Breakpoints.xcbkptlist
+NTI.xcodeproj/project.xcworkspace/xcuserdata/elenka.xcuserdatad/UserInterfaceState.xcuserstate

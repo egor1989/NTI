@@ -465,7 +465,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" id="cum-LJ-WAC">
                                 <rect key="frame" x="20" y="98" width="288" height="249"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <string key="text">Точками на карте отображаются потенциально опасные маневры. Красным цветом - торможения, зелёным - ускорния, жёлтым - повороты. При этом чем опаснее манёвр, тем меньше прозначность точки. Кроме того, фиолетовым цветом отображаются превышения скорости (>80 км/ч).</string>
+                                <string key="text">Точками на карте отображаются потенциально опасные маневры. Красным цветом - торможения, зелёным - ускорния, жёлтым - повороты. При этом чем опаснее манёвр, тем ярче отображается точка. Кроме того, фиолетовым цветом отображаются превышения скорости (>80 км/ч).</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
