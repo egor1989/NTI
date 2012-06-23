@@ -46,6 +46,11 @@ static BOOL needLastRoute;
     return needLastRoute;
 }
 
++ (void)setNeedLastRoute: (BOOL) isNeed
+{
+    needLastRoute = isNeed;
+}
+
 
 -(void) checkAndCreateDatabase{
 	// Check if the SQL database has already been saved to the users phone, if not then copy it over
