@@ -48,6 +48,8 @@
 - (void) convertAndSend;
 - (BOOL) addEntrie: (NSString *)type;
 - (void) sendDatabaseTr;
++ (BOOL) needLastRoute;
++ (void)setNeedLastRoute: (BOOL) isNeed;
 
 
 

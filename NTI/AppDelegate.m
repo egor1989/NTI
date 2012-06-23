@@ -26,11 +26,11 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {  
-//    recordAction = [[RecordAction alloc] init];
-//    
-//    [recordAction eventRecord:@"open"]; 
+    recordAction = [[RecordAction alloc] init];
     
-   // freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr); //!!!!!не забывать убирать логирвоание
+    [recordAction eventRecord:@"open"]; 
+    
+    freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr); //!!!!!не забывать убирать логирвоание
     
     locationManager=[[CLLocationManager alloc] init];
     locationManager.delegate=self;
