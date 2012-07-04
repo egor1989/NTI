@@ -494,15 +494,12 @@
         timeString=[timeString stringByAppendingString:@"}}"];
     }
     NSLog(@"Request: %@", timeString);
-    
-    NSLog(@"request = %@", timeString);
     request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
                                   timeoutInterval:60.0];
     requestData = [NSData dataWithBytes:[timeString UTF8String] length:[timeString length]];
     
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody: requestData]; 
-    NSLog(@"%@",[request description]);
     NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
                                 @"http://nti.goodroads.ru/api/", NSHTTPCookieDomain,
                                 @"NTIKeys", NSHTTPCookieName,

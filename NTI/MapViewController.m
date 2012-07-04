@@ -46,22 +46,25 @@
         NSLog(@"getRoute");
         [serverCommunication getRouteFromServer:0];
     }
+    viewLoaded = NO;
 }
 
--(void)viewDidLoad:(BOOL)animated 
+-(void)viewDidAppear:(BOOL)animated 
 {
 	[super viewWillAppear:animated];
-    if ([ServerCommunication checkInternetConnection]) {
-        if ([DatabaseActions needLastRoute]){
-            waintingIndicator.hidden = NO;
-            [waintingIndicator startAnimating];
-            grayView.hidden = NO;
-            NSLog(@"getRoute");
-            [serverCommunication getRouteFromServer:0];
-            [DatabaseActions setNeedLastRoute:NO];
+    if (viewLoaded) {
+        if ([ServerCommunication checkInternetConnection]) {
+            if ([DatabaseActions needLastRoute]){
+                waintingIndicator.hidden = NO;
+                [waintingIndicator startAnimating];
+                grayView.hidden = NO;
+                NSLog(@"getRoute");
+                [serverCommunication getRouteFromServer:0];
+                [DatabaseActions setNeedLastRoute:NO];
+            }
         }
     }
-    
+    viewLoaded = YES;
 }
 
 //переход карты в состояние ождиание и запрос к серверу на получение маршрута. Метод вызывается из вьюшки выбора даты
