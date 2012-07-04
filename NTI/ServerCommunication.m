@@ -432,7 +432,8 @@
 }
 
 + (BOOL) checkInternetConnection{
-    Reachability* reach = [Reachability reachabilityWithHostname:@"www.goodroads.ru"];
+
+    Reachability* reach = [Reachability reachabilityForInternetConnection];
     
     NetworkStatus hostStatus = [reach currentReachabilityStatus];
     NSLog(@"internetUserPreference = %@", [[NSUserDefaults standardUserDefaults] boolForKey:@"internetUserPreference"]?@"YES":@"NO");

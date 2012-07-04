@@ -111,7 +111,7 @@ private function get_raw_csv($urls) {
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];
-							$arprt[$k]['accx']=$rs[$i]['accx'];
+							$arprt[$k]['accx']=$rs[$i]['Accel'];
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							$arprt[$k]['lng']=$rs[$i]['lng'];$arprt[$k]['tm']=$rs[$i]['utimestamp'];
 						}
@@ -123,7 +123,7 @@ private function get_raw_csv($urls) {
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];
-							$arprt[$k]['lng']=$rs[$i]['lng'];							$arprt[$k]['accx']=$rs[$i]['accx'];
+							$arprt[$k]['lng']=$rs[$i]['lng'];							$arprt[$k]['accx']=$rs[$i]['Accel'];
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							$arprt[$k]['prespeed']=$prespeed;
 							$arprt[$k]['predir']=$predir;$arprt[$k]['tm']=$rs[$i]['utimestamp'];
@@ -152,7 +152,7 @@ private function get_raw_csv($urls) {
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];$arprt[$k]['tm']=$rs[$i]['utimestamp'];
-							$arprt[$k]['lng']=$rs[$i]['lng'];							$arprt[$k]['accx']=$rs[$i]['accx'];
+							$arprt[$k]['lng']=$rs[$i]['lng'];							$arprt[$k]['accx']=$rs[$i]['Accel'];
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 						}
 						if(($rs[$i+1]['TypeAcc']!="acc2 started" && $rs[$i+1]['TypeAcc']!="acc2 continued") && ($rs[$i]['TypeAcc']=="acc2 started" || $rs[$i]['TypeAcc']=="acc2 continued"))
@@ -163,7 +163,7 @@ private function get_raw_csv($urls) {
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];
-							$arprt[$k]['lng']=$rs[$i]['lng'];							$arprt[$k]['accx']=$rs[$i]['accx'];
+							$arprt[$k]['lng']=$rs[$i]['lng'];							$arprt[$k]['accx']=$rs[$i]['Accel'];
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							$arprt[$k]['prespeed']=$prespeed;
 							$arprt[$k]['predir']=$predir;$arprt[$k]['tm']=$rs[$i]['utimestamp'];
@@ -185,7 +185,9 @@ private function get_raw_csv($urls) {
 						{
 							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
 							$arprt[$k]['type']="Acc";
-							$arprt[$k]['weight']=3;		$arprt[$k]['compass']=$rs[$i]['compass'];						$arprt[$k]['accx']=$rs[$i]['accx'];
+							$arprt[$k]['weight']=3;		$arprt[$k]['compass']=$rs[$i]['compass'];
+							$arprt[$k]['accx']=$rs[$i]['Accel'];
+
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
@@ -200,9 +202,10 @@ private function get_raw_csv($urls) {
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];
-							$arprt[$k]['lng']=$rs[$i]['lng'];							$arprt[$k]['accx']=$rs[$i]['accx'];
+							$arprt[$k]['lng']=$rs[$i]['lng'];							$arprt[$k]['accx']=$rs[$i]['Accel'];
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							$arprt[$k]['prespeed']=$prespeed;
+
 							$arprt[$k]['predir']=$predir;$arprt[$k]['tm']=$rs[$i]['utimestamp'];
 							$arprt[$k]['time']=gmdate('j/m/y;h:i:s',$rs[$i]['utimestamp']);
 							$k++;										$arprt[$k]['maxspeed']=0;
@@ -222,7 +225,8 @@ private function get_raw_csv($urls) {
 						{
 							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
 							$arprt[$k]['type']="Brake";
-							$arprt[$k]['weight']=1;			$arprt[$k]['compass']=$rs[$i]['compass'];					$arprt[$k]['accx']=$rs[$i]['accx'];
+							$arprt[$k]['weight']=1;			$arprt[$k]['compass']=$rs[$i]['compass'];
+							$arprt[$k]['accx']=$rs[$i]['Accel'];
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
@@ -237,7 +241,7 @@ private function get_raw_csv($urls) {
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];
-							$arprt[$k]['lng']=$rs[$i]['lng'];							$arprt[$k]['accx']=$rs[$i]['accx'];
+							$arprt[$k]['lng']=$rs[$i]['lng'];							$arprt[$k]['accx']=$rs[$i]['Accel'];
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							$arprt[$k]['prespeed']=$prespeed;
 							$arprt[$k]['predir']=$predir;$arprt[$k]['tm']=$rs[$i]['utimestamp'];
@@ -260,7 +264,7 @@ private function get_raw_csv($urls) {
 						{
 							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
 							$arprt[$k]['type']="Brake";	$arprt[$k]['compass']=$rs[$i]['compass'];
-							$arprt[$k]['weight']=2;							$arprt[$k]['accx']=$rs[$i]['accx'];
+							$arprt[$k]['weight']=2;							$arprt[$k]['accx']=$rs[$i]['Accel'];
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
@@ -275,7 +279,7 @@ private function get_raw_csv($urls) {
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];
-							$arprt[$k]['lng']=$rs[$i]['lng'];							$arprt[$k]['accx']=$rs[$i]['accx'];
+							$arprt[$k]['lng']=$rs[$i]['lng'];							$arprt[$k]['accx']=$rs[$i]['Accel'];
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							$arprt[$k]['prespeed']=$prespeed;
 							$arprt[$k]['predir']=$predir;$arprt[$k]['tm']=$rs[$i]['utimestamp'];
@@ -296,8 +300,10 @@ private function get_raw_csv($urls) {
 						if(($rs[$i+1]['TypeAcc']=="brake3 started" || $rs[$i+1]['TypeAcc']=="brake3 continued") && ($rs[$i]['TypeAcc']=="brake3 started" || $rs[$i]['TypeAcc']=="brake3 continued"))
 						{
 							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
-							$arprt[$k]['type']="Brake";	$arprt[$k]['compass']=$rs[$i]['compass'];
-							$arprt[$k]['weight']=3;							$arprt[$k]['accx']=$rs[$i]['accx'];
+							$arprt[$k]['type']="Brake";
+							$arprt[$k]['compass']=$rs[$i]['compass'];
+							$arprt[$k]['weight']=3;				
+							$arprt[$k]['accx']=$rs[$i]['Accel'];
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
@@ -311,7 +317,8 @@ private function get_raw_csv($urls) {
 							$arprt[$k]['weight']=3;	$arprt[$k]['compass']=$rs[$i]['compass'];
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
-							$arprt[$k]['lat']=$rs[$i]['lat'];							$arprt[$k]['accx']=$rs[$i]['accx'];
+							$arprt[$k]['lat']=$rs[$i]['lat'];							
+							$arprt[$k]['accx']=$rs[$i]['Accel'];
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							$arprt[$k]['lng']=$rs[$i]['lng'];
 							$arprt[$k]['prespeed']=$prespeed;$arprt[$k]['tm']=$rs[$i]['utimestamp'];
@@ -334,7 +341,7 @@ private function get_raw_csv($urls) {
 						{
 							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
 							$arprt[$k]['type']="LeftTurn";	$arprt[$k]['compass']=$rs[$i]['compass'];
-							$arprt[$k]['weight']=3;							$arprt[$k]['accx']=$rs[$i]['accx'];
+							$arprt[$k]['weight']=3;							$arprt[$k]['accx']=$rs[$i]['Accel'];
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
@@ -345,7 +352,7 @@ private function get_raw_csv($urls) {
 						{
 							
 							$arprt[$k]['type']="LeftTurn";	$arprt[$k]['compass']=$rs[$i]['compass'];
-							$arprt[$k]['weight']=3;							$arprt[$k]['accx']=$rs[$i]['accx'];
+							$arprt[$k]['weight']=3;							$arprt[$k]['accx']=$rs[$i]['Accel'];
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
@@ -372,7 +379,7 @@ private function get_raw_csv($urls) {
 						{
 							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
 							$arprt[$k]['type']="LeftTurn";	$arprt[$k]['compass']=$rs[$i]['compass'];
-							$arprt[$k]['weight']=2;							$arprt[$k]['accx']=$rs[$i]['accx'];
+							$arprt[$k]['weight']=2;							$arprt[$k]['accx']=$rs[$i]['Accel'];
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
@@ -386,7 +393,7 @@ private function get_raw_csv($urls) {
 							$arprt[$k]['weight']=2;	$arprt[$k]['compass']=$rs[$i]['compass'];
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
-							$arprt[$k]['lat']=$rs[$i]['lat'];							$arprt[$k]['accx']=$rs[$i]['accx'];
+							$arprt[$k]['lat']=$rs[$i]['lat'];							$arprt[$k]['accx']=$rs[$i]['Accel'];
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							$arprt[$k]['lng']=$rs[$i]['lng'];
 							$arprt[$k]['prespeed']=$prespeed;
@@ -410,7 +417,9 @@ private function get_raw_csv($urls) {
 						{
 							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
 							$arprt[$k]['type']="LeftTurn";
-							$arprt[$k]['weight']=1;		$arprt[$k]['compass']=$rs[$i]['compass'];						$arprt[$k]['accx']=$rs[$i]['accx'];
+							$arprt[$k]['weight']=1;		$arprt[$k]['compass']=$rs[$i]['compass'];	
+							
+							$arprt[$k]['accx']=$rs[$i]['Accel'];
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
@@ -421,7 +430,8 @@ private function get_raw_csv($urls) {
 						{
 							
 							$arprt[$k]['type']="LeftTurn";
-							$arprt[$k]['weight']=1;		$arprt[$k]['compass']=$rs[$i]['compass'];						$arprt[$k]['accx']=$rs[$i]['accx'];
+							$arprt[$k]['weight']=1;		$arprt[$k]['compass']=$rs[$i]['compass'];					
+								$arprt[$k]['accx']=$rs[$i]['Accel'];
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
@@ -449,7 +459,8 @@ private function get_raw_csv($urls) {
 						{
 							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
 							$arprt[$k]['type']="RightTurn";
-							$arprt[$k]['weight']=3;		$arprt[$k]['compass']=$rs[$i]['compass'];						$arprt[$k]['accx']=$rs[$i]['accx'];
+							$arprt[$k]['weight']=3;		$arprt[$k]['compass']=$rs[$i]['compass'];					
+								$arprt[$k]['accx']=$rs[$i]['Accel'];
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
@@ -463,7 +474,8 @@ private function get_raw_csv($urls) {
 							$arprt[$k]['weight']=3;	$arprt[$k]['compass']=$rs[$i]['compass'];
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
-							$arprt[$k]['lat']=$rs[$i]['lat'];							$arprt[$k]['accx']=$rs[$i]['accx'];
+							$arprt[$k]['lat']=$rs[$i]['lat'];							
+							$arprt[$k]['accx']=$rs[$i]['Accel'];
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							$arprt[$k]['lng']=$rs[$i]['lng'];
 							$arprt[$k]['prespeed']=$prespeed;
@@ -487,7 +499,8 @@ private function get_raw_csv($urls) {
 						{
 							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
 							$arprt[$k]['type']="RightTurn";
-							$arprt[$k]['weight']=2;		$arprt[$k]['compass']=$rs[$i]['compass'];						$arprt[$k]['accx']=$rs[$i]['accx'];
+							$arprt[$k]['weight']=2;		$arprt[$k]['compass']=$rs[$i]['compass'];						
+							$arprt[$k]['accx']=$rs[$i]['Accel'];
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
@@ -501,7 +514,8 @@ private function get_raw_csv($urls) {
 							$arprt[$k]['weight']=2;	$arprt[$k]['compass']=$rs[$i]['compass'];
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
-							$arprt[$k]['lat']=$rs[$i]['lat'];							$arprt[$k]['accx']=$rs[$i]['accx'];
+							$arprt[$k]['lat']=$rs[$i]['lat'];							
+							$arprt[$k]['accx']=$rs[$i]['Accel'];
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							$arprt[$k]['lng']=$rs[$i]['lng'];
 							$arprt[$k]['prespeed']=$prespeed;
@@ -525,7 +539,8 @@ private function get_raw_csv($urls) {
 						{
 							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
 							$arprt[$k]['type']="RightTurn";
-							$arprt[$k]['weight']=1;		$arprt[$k]['compass']=$rs[$i]['compass'];						$arprt[$k]['accx']=$rs[$i]['accx'];
+							$arprt[$k]['weight']=1;		$arprt[$k]['compass']=$rs[$i]['compass'];						
+							$arprt[$k]['accx']=$rs[$i]['Accel'];
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
@@ -539,7 +554,8 @@ private function get_raw_csv($urls) {
 							$arprt[$k]['weight']=1;	$arprt[$k]['compass']=$rs[$i]['compass'];
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
-							$arprt[$k]['lat']=$rs[$i]['lat'];							$arprt[$k]['accx']=$rs[$i]['accx'];
+							$arprt[$k]['lat']=$rs[$i]['lat'];							
+							$arprt[$k]['accx']=$rs[$i]['Accel'];
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							$arprt[$k]['lng']=$rs[$i]['lng'];
 							$arprt[$k]['prespeed']=$prespeed;
@@ -563,7 +579,7 @@ private function get_raw_csv($urls) {
 						{
 							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
 							$arprt[$k]['type']="Speed";	$arprt[$k]['compass']=$rs[$i]['compass'];
-							$arprt[$k]['weight']=1;							$arprt[$k]['accx']=$rs[$i]['accx'];
+							$arprt[$k]['weight']=1;							$arprt[$k]['accx']=$rs[$i]['Accel'];
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
@@ -577,7 +593,7 @@ private function get_raw_csv($urls) {
 							$arprt[$k]['weight']=1;	$arprt[$k]['compass']=$rs[$i]['compass'];
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
-							$arprt[$k]['lat']=$rs[$i]['lat'];							$arprt[$k]['accx']=$rs[$i]['accx'];
+							$arprt[$k]['lat']=$rs[$i]['lat'];							$arprt[$k]['accx']=$rs[$i]['Accel'];
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							$arprt[$k]['lng']=$rs[$i]['lng'];
 							$arprt[$k]['prespeed']=$prespeed;
@@ -602,7 +618,7 @@ private function get_raw_csv($urls) {
 						{
 							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
 							$arprt[$k]['type']="Speed";	$arprt[$k]['compass']=$rs[$i]['compass'];
-							$arprt[$k]['weight']=2;							$arprt[$k]['accx']=$rs[$i]['accx'];
+							$arprt[$k]['weight']=2;							$arprt[$k]['accx']=$rs[$i]['Accel'];
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
@@ -617,7 +633,7 @@ private function get_raw_csv($urls) {
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
 							$arprt[$k]['lat']=$rs[$i]['lat'];
-							$arprt[$k]['lng']=$rs[$i]['lng'];							$arprt[$k]['accx']=$rs[$i]['accx'];
+							$arprt[$k]['lng']=$rs[$i]['lng'];							$arprt[$k]['accx']=$rs[$i]['Accel'];
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							$arprt[$k]['prespeed']=$prespeed;
 							$arprt[$k]['predir']=$predir;$arprt[$k]['tm']=$rs[$i]['utimestamp'];
@@ -639,7 +655,7 @@ private function get_raw_csv($urls) {
 						{
 							$arprt[$k]['duration']+=$rs[$i+1]['utimestamp']-$rs[$i]['utimestamp'];
 							$arprt[$k]['type']="Speed";	$arprt[$k]['compass']=$rs[$i]['compass'];
-							$arprt[$k]['weight']=3;							$arprt[$k]['accx']=$rs[$i]['accx'];
+							$arprt[$k]['weight']=3;							$arprt[$k]['accx']=$rs[$i]['Accel'];
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
@@ -653,7 +669,8 @@ private function get_raw_csv($urls) {
 							$arprt[$k]['weight']=3;	$arprt[$k]['compass']=$rs[$i]['compass'];
 							if($arprt[$k]['maxspeed']<$rs[$i]['speed'])$arprt[$k]['maxspeed']=$rs[$i]['speed'];
 							if($arprt[$k]['minspeed']>$rs[$i]['speed'])$arprt[$k]['minspeed']=$rs[$i]['speed'];
-							$arprt[$k]['lat']=$rs[$i]['lat'];							$arprt[$k]['accx']=$rs[$i]['accx'];
+							$arprt[$k]['lat']=$rs[$i]['lat'];
+							$arprt[$k]['accx']=$rs[$i]['Accel'];
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							$arprt[$k]['lng']=$rs[$i]['lng'];
 							$arprt[$k]['prespeed']=$prespeed;
@@ -669,7 +686,10 @@ private function get_raw_csv($urls) {
 							$predir=$rs[$i]['direction'];
 						}
 					}
+									for($i=0;$i<$k;$i++)
+					$arprt[$i]['accx']=round($arprt[$i]['accx']/9.8,3);
 				unset($arprt[$k]);
+
 								for($i=0;$i<count($arprt);$i++)
 					for($j=0;$j<count($arprt)-1;$j++)
 					{
@@ -725,7 +745,11 @@ private function get_raw_csv($urls) {
 			$new_data['id'] = $this->session->userdata('id');
 			$new_data['name'] = $this->session->userdata('name');
 			$new_data['sname'] = $this->session->userdata('sname');
+			if($this->session->userdata('rights')>1)
 			$new_data['rights']= $this->session->userdata('rights');
+			else
+			$new_data['rights']= 0;
+			
 			$new_data['map_type'] = 2;
 			//Обработка экспертов
 			date_default_timezone_set('Europe/Moscow'); 

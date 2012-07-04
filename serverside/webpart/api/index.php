@@ -113,11 +113,15 @@ private $Accel;
 }
 
 
-function distance_between_points($lat1,$lat2,$lng1,$lng2)
-{
-	//Функция возвращает расстояние между 2-мя точками в километрах
-	return acos(sin($lat1)*sin($lat2)+cos($lat1)*cos($lat2)*cos($lng2-$lng1))*111.2;
-	
+function distance($lat1, $lon1, $lat2, $lon2) { 
+
+  $theta = $lon1 - $lon2; 
+  $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)); 
+  $dist = acos($dist); 
+  $dist = rad2deg($dist); 
+  $miles = $dist * 60 * 1.1515;
+  $unit = strtoupper($unit);
+    return ($miles * 1.609344); 
 }
 
 
@@ -176,6 +180,9 @@ if(!isset($_POST))
 	}
 
 }
+$data= iconv('cp1251', 'utf-8', $data);
+
+
 $json = json_decode($data,true);
 switch(json_last_error())
     {
@@ -543,6 +550,7 @@ function addNTIFile($param)
 								else if ($wAcc >= 0.75) {$ArrayEntry[$i][$j]->setsevTurn(3);}
 								$deltaSpeed = $speed - $ArrayEntry[$i][$j-1]->getSpeed();
 								$accel = $deltaSpeed/$deltaTime;
+								$ArrayEntry[$i][$j]->setAccel($accel);
 								//Высчитываем тип неравномерного движения (ускорение-торможение) через ускорение.
 								if ($accel<-7.5) $ArrayEntry[$i][$j]->setsevAcc(-3);
 								else if (($accel>=-7.5)&&($accel<-6))$ArrayEntry[$i][$j]->setsevAcc(-2);
@@ -817,11 +825,12 @@ function addNTIFile($param)
 					$TimeEnd=$ArrayEntry[$i][0]->getTimestamp();//Хз может быть и перемешанно , пусть поищет
 					$TotalDistance=0;
 					//Теперь ищем начало и конец поездки 
-					for($j=0;$j<count($ArrayEntry[$i]);$j++)
+					for($j=0;$j<count($ArrayEntry[$i])-1;$j++)
 					{
 						if($ArrayEntry[$i][$j]->getTimestamp()<$TimeStart)$TimeStart=$ArrayEntry[$i][$j]->getTimestamp();
 						if($ArrayEntry[$i][$j]->getTimestamp()>$TimeEnd)$TimeEnd=$ArrayEntry[$i][$j]->getTimestamp();
 						if($TotalDistance<$ArrayEntry[$i][$j]->getDistance())$TotalDistance=$ArrayEntry[$i][$j]->getDistance();
+						$TotalDistance+=distance($ArrayEntry[$i][$j]->getLat(),$ArrayEntry[$i][$j]->getLng(),$ArrayEntry[$i][$j+1]->getLat(),$ArrayEntry[$i][$j+1]->getLng());
 					}
 
 					if($TotalDistance<=0)$TotalDistance=1;
@@ -882,8 +891,8 @@ function addNTIFile($param)
 					$Kub=1/sqrt(1+$KvnB/$Qb);
 					$Kus=1/sqrt(1+$KvnS/$Qs);
 					$Kut=1/sqrt(1+$KvnT/$Qt);					
-					$score=0.15*$Kua+0.35*$Kub+0.35*$Kus+0.25*$Kut;
-					$score_speed = $Kus;
+					$score=0.10*$Kua+0.35*$Kub+0.30*$Kus+0.25*$Kut;
+					$score_speed =$Kus;
 					$score_turn = $Kut;
 					$score_brake =$Kub ;
 					$score_acc = $Kua ;
@@ -927,8 +936,9 @@ function addNTIFile($param)
 							$sevTurn=$ArrayEntry[$i][$j]->getsevTurn();
 							$TurnType=$ArrayEntry[$i][$j]->getTurnType();
 							$TypeSpeed=$ArrayEntry[$i][$j]->getTypeSpeed();
-							$sevSpeed=$ArrayEntry[$i][$j]->getsevSpeed();				
-							$sql_insert_str="insert into NTIUserDrivingEntry(UID,accx,accy,distance,lat,lng,direction,compass,speed,utimestamp,DrivingID,Blat,Blng,sevAcc,TypeAcc,sevTurn,TurnType,TypeSpeed,sevSpeed) values ('$UID','$accx','$accy','$distance','$lat','$lng','$direction','$compass','$speed','$utimestamp','$DrivingID','$Blat','$Blng','$sevAcc','$TypeAcc','$sevTurn','$TurnType','$TypeSpeed','$sevSpeed')";
+							$sevSpeed=$ArrayEntry[$i][$j]->getsevSpeed();	
+							$accl=$ArrayEntry[$i][$j]->getAccel();			
+							$sql_insert_str="insert into NTIUserDrivingEntry(Accel,UID,accx,accy,distance,lat,lng,direction,compass,speed,utimestamp,DrivingID,Blat,Blng,sevAcc,TypeAcc,sevTurn,TurnType,TypeSpeed,sevSpeed) values ('$accl','$UID','$accx','$accy','$distance','$lat','$lng','$direction','$compass','$speed','$utimestamp','$DrivingID','$Blat','$Blng','$sevAcc','$TypeAcc','$sevTurn','$TurnType','$TypeSpeed','$sevSpeed')";
 							mysql_query($sql_insert_str);
 						}
 					}
@@ -1062,13 +1072,13 @@ function getPath($param)
 		{
 				$start=mysql_real_escape_string($time);
 				$end=mysql_real_escape_string($till);
-				$query = "Select NTIUserDrivingEntry.* from (SELECT `Id` FROM `NTIUserDrivingTrack` WHERE UID=$UID and (`TimeStart`>=$start and $end >=`TimeStart` and $end<=`TimeEnd`) OR (`TimeStart`<=$start and $end<=`TimeEnd`) OR 	(`TimeStart`<=$start and $start <=`TimeEnd` and $end>=`TimeEnd`) OR (`TimeStart`>=$start and $end>=`TimeEnd`)) as Driving,NTIUserDrivingEntry where NTIUserDrivingEntry.`DrivingID`=Driving.Id group by `utimestamp`";
+				$query = "Select NTIUserDrivingEntry.* from (SELECT `Id` FROM `NTIUserDrivingTrack` WHERE UID=$UID and ((`TimeStart`>=$start and $end >=`TimeStart` and $end<=`TimeEnd`) OR (`TimeStart`<=$start and $end<=`TimeEnd`) OR 	(`TimeStart`<=$start and $start <=`TimeEnd` and $end>=`TimeEnd`) OR (`TimeStart`>=$start and $end>=`TimeEnd`))) as Driving,NTIUserDrivingEntry where NTIUserDrivingEntry.`DrivingID`=Driving.Id group by `utimestamp`";
 		}
 		else if(isset($param['time']) && !isset($param['till'])  and $param['time']>0  && isset($param['day']) && $param['day']>0)
 		{
 			$start=strtotime(date("D M j 00:00:00 T Y",$time));
 			$end= strtotime(date("D M j 23:59:59 T Y",$time));
-			$query = "Select NTIUserDrivingEntry.* from (SELECT `Id` FROM `NTIUserDrivingTrack` WHERE UID=$UID and (`TimeStart`>=$start and $end >=`TimeStart` and $end<=`TimeEnd`) OR (`TimeStart`<=$start and $end<=`TimeEnd`) OR 	(`TimeStart`<=$start and $start <=`TimeEnd` and $end>=`TimeEnd`) OR (`TimeStart`>=$start and $end>=`TimeEnd`)) as Driving,NTIUserDrivingEntry where NTIUserDrivingEntry.`DrivingID`=Driving.Id group by `utimestamp`";
+			$query = "Select NTIUserDrivingEntry.* from (SELECT `Id` FROM `NTIUserDrivingTrack` WHERE UID=$UID and ((`TimeStart`>=$start and $end >=`TimeStart` and $end<=`TimeEnd`) OR (`TimeStart`<=$start and $end<=`TimeEnd`) OR 	(`TimeStart`<=$start and $start <=`TimeEnd` and $end>=`TimeEnd`) OR (`TimeStart`>=$start and $end>=`TimeEnd`))) as Driving,NTIUserDrivingEntry where NTIUserDrivingEntry.`DrivingID`=Driving.Id group by `utimestamp`";
 
 		}
 		else
