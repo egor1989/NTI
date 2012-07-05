@@ -13,8 +13,8 @@
 #define CC_RADIANS_TO_DEGREES(__ANGLE__) ((__ANGLE__) / (float)M_PI * 180.0f)
 #define radianConst M_PI/180.0
 #define SPEED 1.5
-#define STARTTIME 30
-#define STOPTIME 60
+#define STARTTIME 300
+#define STOPTIME 600
 
 @implementation AppDelegate
 
@@ -49,8 +49,7 @@
     
     [self checkSendRight];
     [self startGPSDetect];
-    //пока motion отключен
-    //[self stopMotionDetect];
+
     motionManager = [[CMMotionManager alloc] init];
     if ([motionManager isGyroAvailable]) {
         motionManager.deviceMotionUpdateInterval = 1.0/accelUpdateFrequency;
@@ -123,12 +122,14 @@
 }
 
 -(void)startGPSDetect{
-    NSLog(@"startGPSDetect");
+  
     [locationManager stopMonitoringSignificantLocationChanges];
     NSLog(@"stopMonitoringSignificantLocationChange");
     [locationManager startUpdatingLocation];
+    NSLog(@"startGPSDetect");
     [locationManager startUpdatingHeading];
-
+    
+    
 }
 
 -(double) getTime {
@@ -161,15 +162,17 @@
        
         //нет переходим в медленный режим - finishFirstTimer
     }
+    
     //приложение уже работало - медленный режим
     else if (slowMonitoring){
         NSLog(@"slowMonitoring - change location");
         [self startGPSDetect];
+        [self startMotionDetect];
         canWriteToFile = YES;
-        //[recordAction eventRecord:@"start"];
         [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
         slowMonitoring = NO;
     }
+    
     //gps
     else {
         //работает таймер на стоп
@@ -191,7 +194,10 @@
                 NSLog(@"l5Km>5, start stopTimer");
             }
         }
-        else l5Km = 0;
+       else {
+           l5Km = 0;
+           canWriteToFile = YES;
+       }
     }
     
     
@@ -206,6 +212,7 @@
     NSLog(@"finish stop timer");
     slowMonitoring = YES;
     [self stopGPSDetect];
+    [self stopMotionDetect];
     [self checkSendRight];
     canWriteToFile = NO;
     [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];

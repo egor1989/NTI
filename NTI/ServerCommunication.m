@@ -14,7 +14,7 @@
 - (void)uploadData:(NSData *)fileContent{
     NSLog(@"SC -upload data");
     NSString *cookie = [self refreshCookie]; 
-    NSLog(@"cookie = %@",cookie);
+    NSLog(@"current cookie = %@",cookie);
     
     NSString *sJSON = [[NSString alloc] initWithData:fileContent encoding:NSASCIIStringEncoding]; 
 
