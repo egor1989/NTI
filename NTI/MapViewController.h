@@ -37,6 +37,7 @@
     MKMapPoint northEastPoint; 
 	MKMapPoint southWestPoint;
     
+    bool viewLoaded;
     int tempCount;
 }
 
