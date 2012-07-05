@@ -22,6 +22,7 @@
 @interface StatViewController : UITableViewController <UINavigationControllerDelegate, MFMailComposeViewControllerDelegate>{
     UILabel *speedLabel;
     IBOutlet UIButton *loginButton;
+    IBOutlet UIButton *backButton;
     UILabel *qualityDriving;
     UILabel *speedMode;
     UILabel *acceleration;
@@ -45,11 +46,13 @@
 
 - (void) speedUpdate;
 - (IBAction)loginButton:(id)sender;
+- (IBAction)backButton:(id)sender;
 //- (IBAction)sendButton:(id)sender;
 - (IBAction)helpButton:(id)sender;
 - (void) pickOne:(id)sender;
 - (void)changeImage;
 - (void)parse:(NSString *)result method:(NSString *)method;
 - (IBAction) internetUploadSwitch:(id)sender;
+//- (IBAction) backgroundWorkSwitch:(id)sender;
 - (NSArray *)curentEntries:(NSInteger)index;
 @end

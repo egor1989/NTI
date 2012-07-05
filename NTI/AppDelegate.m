@@ -13,8 +13,8 @@
 #define CC_RADIANS_TO_DEGREES(__ANGLE__) ((__ANGLE__) / (float)M_PI * 180.0f)
 #define radianConst M_PI/180.0
 #define SPEED 1.5
-#define STARTTIME 300
-#define STOPTIME 600
+#define STARTTIME 10 //!!
+#define STOPTIME 10 //!!
 
 @implementation AppDelegate
 
@@ -26,11 +26,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {  
+    //freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr); //!!!!!не забывать убирать логирвоание
     recordAction = [[RecordAction alloc] init];
     
     [recordAction eventRecord:@"open"]; 
-    
-    freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr); //!!!!!не забывать убирать логирвоание
     
     locationManager=[[CLLocationManager alloc] init];
     locationManager.delegate=self;
@@ -116,8 +115,11 @@
     NSLog(@"stopGPSDetect");
     [locationManager stopUpdatingLocation];
     [locationManager stopUpdatingHeading];
-    [locationManager startMonitoringSignificantLocationChanges];
-    NSLog(@"startMonitoringSignificantLocationChanges");
+   // if ([[NSUserDefaults standardUserDefaults] boolForKey:@"canWorkInBackground"]) {
+        [locationManager startMonitoringSignificantLocationChanges];
+        NSLog(@"startMonitoringSignificantLocationChanges");
+   // } else NSLog(@"canWorkInBackground=NO");
+    
 
 }
 
@@ -302,6 +304,11 @@
     [motionManager stopDeviceMotionUpdates];
 }
 
+- (void)stopSlowMonitoring{
+    NSLog(@"STOP SLOW MONITORING");
+    [locationManager stopMonitoringSignificantLocationChanges];
+}
+
 - (void)stopRecord{
     NSLog(@"stopRecord");
     canWriteToFile = NO;
@@ -388,8 +395,9 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-    [recordAction eventRecord:@"close"];
+  
     [locationManager stopMonitoringSignificantLocationChanges];
+    [recordAction eventRecord:@"close"];
     NSLog(@"=====close=====");
 }
 

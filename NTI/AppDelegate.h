@@ -71,6 +71,7 @@
 - (void)stopRecord;
 - (void)startRecord;
 - (void)sendTimer;
+- (void)stopSlowMonitoring;
 
 
 @property (strong, nonatomic) UIWindow *window;

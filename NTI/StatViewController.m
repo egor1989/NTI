@@ -103,7 +103,7 @@
     [serverCommunication refreshCookie];
     /************ инициализация элементов *******************/
 
-    NSArray *info = [NSArray arrayWithObjects:@"Имя", @"Запись", @"Скорость", @"Только Wi-Fi", @"Дата посл. поезки",@"Тестовый файл", nil];
+    NSArray *info = [NSArray arrayWithObjects:@"Имя", @"Запись", @"Скорость", @"Только Wi-Fi", @"Дата посл. поезки",@"Тестовый файл",@"Работа в фоне", nil];
     NSArray *statistics = [NSArray arrayWithObjects:@"",@"Общая оценка", @"Километраж", @"Превышение скорости", @"Качество разгонов", @"Качество торможений", @"Качество поворотов", nil];
     self.tables = [NSDictionary dictionaryWithObjectsAndKeys:statistics, firstTitle  , info, secondTitle, nil];
 }
@@ -313,6 +313,32 @@
                 } 
                 return cell;
             }
+            
+            case 6: {
+                static NSString *CellIdentifier = @"Background";
+                UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+                if (cell == nil) {
+                    cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+                    cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
+                    cell.textLabel.text = [curentEntrie objectAtIndex:indexPath.row];
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    
+                    backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+                    [backButton setFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];
+                    backButton.titleLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
+                    cell.accessoryView = backButton;
+                    [backButton setTitle:@"СТОП" forState:UIControlStateNormal];
+                    [backButton addTarget:self action:@selector(backButton:) forControlEvents:UIControlEventTouchDown];
+                    
+             //       UISwitch *backWorkSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
+             //       cell.accessoryView = backWorkSwitch;
+             //       cell.backgroundColor = [UIColor whiteColor];
+             //       [backWorkSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"canWorkInBackground"] animated:NO];
+             //       [backWorkSwitch addTarget:self action:@selector(backgroundWorkSwitch:) forControlEvents:UIControlEventValueChanged];
+                }
+                return cell;
+            }
+
 
             break;
         }
@@ -487,6 +513,10 @@
 
 }
 
+- (IBAction)backButton:(id)sender{
+    [myAppDelegate stopSlowMonitoring];
+}
+
 - (IBAction) internetUploadSwitch:(id)sender{
     if ([sender isOn])
     {
@@ -500,6 +530,22 @@
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"internetUserPreference"]; 
     }
 }
+
+- (IBAction) backgroundWorkSwitch:(id)sender{
+    if ([sender isOn])
+    {
+        //может работать работать в бэке
+        NSLog(@"switch YES BACKGROUND WORK");
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"canWorkInBackground"];
+    }
+    else
+    {
+        NSLog(@"switch NO BACKGROUND WORK");
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"canWorkInBackground"]; 
+    }
+}
+
+
 
 /*
 // Override to support conditional editing of the table view.
