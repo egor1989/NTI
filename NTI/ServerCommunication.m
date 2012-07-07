@@ -146,7 +146,7 @@
     NSInteger code =[[error valueForKey:@"code"] intValue];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     info = nil;
-    forgotPassword = NO;
+
     errors = YES;
     NSLog(@"code = %i", code);
     
@@ -165,7 +165,13 @@
                 NSLog(@"send - OK");
                 
             }
+            
             //для получения данных
+            if ([methodName isEqualToString: @"password"]){
+                info = @"Инструкции высланы на почту, введенную при регистрации";
+                NSLog(@"send - OK");
+                
+            }
             
             errors = NO;
             break;
@@ -199,8 +205,7 @@
             info = @"Пользователя с таким именем не существует";
             break;
         case 12:
-            info = @"Неверный пароль";
-            forgotPassword = YES;
+            info = @"Неверный логин и/или пароль";
             break;
         case 32:{
             info = @"Неверная дата";
@@ -220,11 +225,17 @@
             NSLog(@"haven't data for user");
             break;
         }
+        case 62:{
+            info = @"Невозможно восстановить пароль для пользователя";
+            NSLog(@"can't restore password");
+            break;
+        }
         case 88: {
            NSLog(@"server unrechable");
             info = @"Сервер временно не доступен";
             break;
         }
+            
             
         default:{
             info = @"Ошибка";
@@ -238,16 +249,10 @@
 
 
 - (void)showResult{
-    if (forgotPassword) {
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:info delegate:self cancelButtonTitle:@"Еще раз" otherButtonTitles:@"Забыл пароль",nil];
-        [alert show];
-    }
-    else {
+   
         NSLog(@"alert - server answer");
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ответ сервера" message:info delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
         [alert show];    
-    }
     
 }
 
@@ -614,6 +619,28 @@
                            }];
     
 }
+
+- (void)forgotPassword: (NSString *)login{
+    NSString *data = [NSString stringWithFormat: @"data={\"method\":\"rememberPassword\",\"params\":{\"login\":\"%@\"}}", login];
+    NSLog(@"Request: %@", data);
+    
+    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                  timeoutInterval:60.0];
+    
+    requestData = [NSData dataWithBytes:[data UTF8String] length:[data length]];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody: requestData];    
+    
+    NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil];
+    
+
+    returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
+    NSLog(@"returnData: %@", returnString);
+    [self checkErrors:returnString method:@"password"];
+    
+    
+}
+
 
 
 @end

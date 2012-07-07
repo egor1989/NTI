@@ -17,7 +17,6 @@
     NSString *returnString; 
     NSMutableURLRequest *request;
     NSData *requestData;
-    BOOL forgotPassword;
     BOOL errors;
     NSString *info;
     NSString *deviceName;
@@ -42,6 +41,7 @@
 - (NSString *)getLastStatistic;
 - (void)sendFeedBackToServerWithTitle:(NSString*)title andBody: (NSString*)body;
 - (void)sendInterviewToServerWithData:(NSDictionary*)data;
+- (void)forgotPassword: (NSString *)login;
 
 @property (nonatomic) BOOL errors;
 

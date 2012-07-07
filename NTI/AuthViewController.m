@@ -102,5 +102,20 @@
     
 }
 
+- (IBAction)forgotButton:(id)sender{
+    ServerCommunication *serverCommunication = [[ServerCommunication alloc] init];
+    if ([loginField.text isEqual:@""]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Заполните поле логина" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
+        [alert show];
+    }
+    else if ([ServerCommunication checkInternetConnection]) {
+        [serverCommunication forgotPassword: loginField.text];
+        [serverCommunication showResult];
+    }
+    
+}
+
+
+
 
 @end
