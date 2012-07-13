@@ -8,10 +8,12 @@
 
 #import "RecordAction.h"
 #import "AppDelegate.h"
+#import "toJSON.h"
 #define myAppDelegate (AppDelegate*) [[UIApplication sharedApplication] delegate]
 #define MAX3(a,b,c) ( MAX(a,b)>c ? ((a>b)? 1:2) : 3 )
 #define radianConst M_PI/180.0
-#define maxEntries 50
+#define maxEntries 500
+
 
 
 @implementation RecordAction
@@ -31,6 +33,8 @@
      name: @"canWriteToFile"
      object: nil];
     
+    jsonConvert = [[toJSON alloc] init];
+    serverCommunication = [[ServerCommunication alloc] init];
     Start = NO;
     End = NO;
     First = YES;
@@ -83,23 +87,46 @@
         
         toWrite = dataArray;
         dataArray = [[NSMutableArray alloc] init];
-        //создаем новый тред
-        NSThread* myThread = [[NSThread alloc] initWithTarget:databaseAction
+        //проверяем есть ли интернет
+        if ([ServerCommunication checkInternetConnection]){
+            //есть-отправляем
+                NSLog(@"data array size = %i",[dataArray count]);
+                NSData *JSON = [jsonConvert convert:dataArray];
+                [serverCommunication uploadData: JSON]; 
+            
+        } 
+        else {
+            //нет-записывем в базу
+            //создаем новый тред
+            NSThread* myThread = [[NSThread alloc] initWithTarget:databaseAction
                                                          selector:@selector(addArray:)
                                                            object:toWrite];
-        [myThread start]; 
+            [myThread start]; 
+        }
     }
   //  NSLog(@"countInArray = %i", countInArray);
 }
 
 - (void)endOfRecord{
-    NSLog(@"don't write");
+    NSLog(@"endOfRecord");
     dataArray = [[NSMutableArray alloc] init];
-    //создаем новый тред
-    NSThread* myThread = [[NSThread alloc] initWithTarget:databaseAction
-                                                 selector:@selector(addArray:)
-                                                   object:toWrite];
-    [myThread start]; 
+    
+    
+    //ТОЖЕ САМОЕ
+    
+     if ([ServerCommunication checkInternetConnection]){
+         NSLog(@"data array size = %i",[dataArray count]);
+         NSData *JSON = [jsonConvert convert:dataArray];
+         [serverCommunication uploadData: JSON]; 
+     }
+     else {
+         //создаем новый тред
+         NSThread* myThread = [[NSThread alloc] initWithTarget:databaseAction
+                                                      selector:@selector(addArray:)
+                                                        object:toWrite];
+         [myThread start]; 
+     }
+    
 
 }
 

@@ -20,6 +20,8 @@
     BOOL Start;
     BOOL End;
     BOOL First;
+    toJSON *jsonConvert;
+    ServerCommunication *serverCommunication;
 }
 - (void)addRecord;
 - (void)endOfRecord;

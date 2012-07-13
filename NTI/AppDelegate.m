@@ -26,7 +26,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {  
-    freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr); //!!!!!не забывать убирать логирвоание
+   // freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr); //!!!!!не забывать убирать логирвоание
     recordAction = [[RecordAction alloc] init];
     
     [recordAction eventRecord:@"open"]; 
@@ -295,7 +295,6 @@
                                            }
                                           dict = [NSDictionary dictionaryWithObject: motion forKey: @"motion"];
                                            [[NSNotificationCenter defaultCenter] postNotificationName: @"motionNotification" object:  nil];
-                                          // NSLog(@"motionNotification");
                                        }];
 }
 
