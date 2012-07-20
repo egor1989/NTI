@@ -80,7 +80,7 @@
     NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]], type, [NSString stringWithFormat:@"%f", x], [NSString stringWithFormat:@"%f", y], [NSString stringWithFormat:@"%.0f",[myAppDelegate north]], [NSString stringWithFormat:@"%.1f",[myAppDelegate course]], [NSString stringWithFormat:@"%.2f",distance], [NSString stringWithFormat:@"%.6f",location.coordinate.latitude],[NSString stringWithFormat:@"%.6f",location.coordinate.longitude], [NSString stringWithFormat:@"%.2f",curSpeed], nil];
     NSDictionary *entries = [NSDictionary dictionaryWithObjects: objs forKeys:keys];
     [dataArray addObject:entries];
-        
+     NSLog(@"data array size = %i",[dataArray count]);    
     NSInteger countInArray = dataArray.count;
         
     if (countInArray > maxEntries){ 
@@ -90,8 +90,8 @@
         //проверяем есть ли интернет
         if ([ServerCommunication checkInternetConnection]){
             //есть-отправляем
-                NSLog(@"data array size = %i",[dataArray count]);
-                NSData *JSON = [jsonConvert convert:dataArray];
+                NSLog(@"data array size = %i",[toWrite count]);
+                NSData *JSON = [jsonConvert convert:toWrite];
                 [serverCommunication uploadData: JSON]; 
             
         } 
@@ -109,14 +109,15 @@
 
 - (void)endOfRecord{
     NSLog(@"endOfRecord");
+    toWrite = dataArray;
     dataArray = [[NSMutableArray alloc] init];
     
     
     //ТОЖЕ САМОЕ
     
      if ([ServerCommunication checkInternetConnection]){
-         NSLog(@"data array size = %i",[dataArray count]);
-         NSData *JSON = [jsonConvert convert:dataArray];
+         NSLog(@"data array size = %i",[toWrite count]);
+         NSData *JSON = [jsonConvert convert:toWrite];
          [serverCommunication uploadData: JSON]; 
      }
      else {

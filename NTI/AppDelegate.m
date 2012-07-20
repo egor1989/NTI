@@ -26,7 +26,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {  
-   // freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr); //!!!!!не забывать убирать логирвоание
+    freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr); //!!!!!не забывать убирать логирвоание
     recordAction = [[RecordAction alloc] init];
     
     [recordAction eventRecord:@"open"]; 
@@ -38,7 +38,7 @@
     
     lastLoc = [[CLLocation alloc] init];
     allDistance = 0;
-    canWriteToFile = NO;//?
+    canWriteToFile = NO;//переделать на NO!!
     slowMonitoring = NO;
     [recordAction startOfRecord];
     needCheck = YES;
