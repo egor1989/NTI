@@ -12,7 +12,8 @@
 #define myAppDelegate (AppDelegate*) [[UIApplication sharedApplication] delegate]
 #define MAX3(a,b,c) ( MAX(a,b)>c ? ((a>b)? 1:2) : 3 )
 #define radianConst M_PI/180.0
-#define maxEntries 500
+#define maxEntries 500 
+
 
 
 
@@ -20,7 +21,7 @@
 
 - (id)init{
     databaseAction = [[DatabaseActions alloc] initDataBase];
-    
+
     [[NSNotificationCenter defaultCenter]	
      addObserver: self
      selector: @selector(checkWriteRight)
@@ -72,6 +73,7 @@
     
     float curSpeed = 0;
     if (location.speed > 0) curSpeed = location.speed*3.6;
+
     float distance = [myAppDelegate allDistance]/1000;
     NSString *type = @"-";
 
@@ -90,9 +92,9 @@
         //проверяем есть ли интернет
         if ([ServerCommunication checkInternetConnection]){
             //есть-отправляем
-                NSLog(@"data array size = %i",[toWrite count]);
-                NSData *JSON = [jsonConvert convert:toWrite];
-                [serverCommunication uploadData: JSON]; 
+            
+            NSData *JSON = [jsonConvert convert: [self JSONFormat:toWrite]];
+            [serverCommunication uploadData: JSON]; 
             
         } 
         else {
@@ -117,7 +119,7 @@
     
      if ([ServerCommunication checkInternetConnection]){
          NSLog(@"data array size = %i",[toWrite count]);
-         NSData *JSON = [jsonConvert convert:toWrite];
+         NSData *JSON = [jsonConvert convert: [self JSONFormat:toWrite]];
          [serverCommunication uploadData: JSON]; 
      }
      else {
@@ -161,6 +163,28 @@
 
 - (void)eventRecord: (NSString *)type{
     [databaseAction addEntrie:type];
+}
+
+- (NSMutableArray *)JSONFormat: (NSMutableArray *)sendData{
+    NSArray *keys = [NSArray arrayWithObjects:@"timestamp", @"type", @"acc", @"gps", nil];
+    NSDictionary *rowData;
+    
+    NSMutableArray *sendArray = [[NSMutableArray alloc] init];
+    
+    for (NSInteger i=0;i<= maxEntries;i++) {
+        rowData = [sendData objectAtIndex:i];    
+        NSLog(@"row=%@",rowData);
+            NSDictionary *acc = [NSDictionary dictionaryWithObjectsAndKeys:[rowData objectForKey:@"accX"], @"x",  [rowData objectForKey:@"accY"], @"y", nil];
+                    
+            NSDictionary *gps = [NSDictionary dictionaryWithObjectsAndKeys:[rowData objectForKey:@"direction"], @"direction", [rowData objectForKey:@"speed"], @"speed",  [rowData objectForKey:@"latitude"], @"latitude", [rowData objectForKey:@"longitude"], @"longitude", [rowData objectForKey:@"compass"], @"compass",  [rowData objectForKey:@"distance"], @"distance", nil];
+                    
+            NSArray *objs = [NSArray arrayWithObjects:  [rowData objectForKey:@"timestamp"], [rowData objectForKey:@"type"], 
+                                     acc, gps, nil];
+        [sendArray addObject:[NSDictionary dictionaryWithObjects:objs forKeys:keys]];
+        
+    }
+                    
+    return sendArray;
 }
 
 

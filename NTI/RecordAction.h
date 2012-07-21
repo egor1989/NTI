@@ -30,6 +30,7 @@
 - (void)sendFile;
 - (void)eventRecord: (NSString *)type;
 - (void)checkActivity;
+- (NSMutableArray *)JSONFormat: (NSMutableArray *)sendData;
 
 
 @end
