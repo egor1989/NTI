@@ -140,13 +140,14 @@
     if ([myAppDelegate canWriteToFile] && !Start) {
         Start = YES;
         End = NO;
-        [databaseAction addEntrie:@"start"];
+        
+        if (![ServerCommunication checkInternetConnection]) [databaseAction addEntrie:@"start"];
     }
     if (![myAppDelegate canWriteToFile] && Start){
         Start = NO;
         End = YES;
         [self endOfRecord];
-        [databaseAction addEntrie:@"end"];
+        if (![ServerCommunication checkInternetConnection]) [databaseAction addEntrie:@"end"];
     }
     
 }
