@@ -40,7 +40,11 @@
     Start = NO;
     End = NO;
     First = YES;
-    
+    //*******************
+//    lat = 33.123456;
+//    lon = 60.654321;
+//    speedTest = 0;
+    //*******************
     return self;
 }
 
@@ -50,6 +54,7 @@
 
 - (void)addRecord{
     accelDict = [myAppDelegate dict];
+    
     
     CMAcceleration userAcceleration=((CMDeviceMotion*)[accelDict objectForKey: @"motion"]).userAcceleration;
     CMAcceleration gravity=((CMDeviceMotion*)[accelDict objectForKey: @"motion"]).gravity;
@@ -75,6 +80,11 @@
     float curSpeed = 0;
     if (location.speed > 0) curSpeed = location.speed*3.6;
 
+    //**************
+ //   curSpeed = speedTest++;
+ //   lat = lat + 0.0002;
+ //   lon = lon + 0.0002;
+    //**************
     float distance = [myAppDelegate allDistance]/1000;
     NSString *type = @"-";
 
@@ -174,7 +184,7 @@
     
     for (NSInteger i=0; i<=[sendData count]-1; i++) {
         rowData = [sendData objectAtIndex:i];    
-        NSLog(@"row=%@",rowData);
+        //NSLog(@"row=%@",rowData);
             NSDictionary *acc = [NSDictionary dictionaryWithObjectsAndKeys:[rowData objectForKey:@"accX"], @"x",  [rowData objectForKey:@"accY"], @"y", nil];
                     
             NSDictionary *gps = [NSDictionary dictionaryWithObjectsAndKeys:[rowData objectForKey:@"direction"], @"direction", [rowData objectForKey:@"speed"], @"speed",  [rowData objectForKey:@"latitude"], @"latitude", [rowData objectForKey:@"longitude"], @"longitude", [rowData objectForKey:@"compass"], @"compass",  [rowData objectForKey:@"distance"], @"distance", nil];

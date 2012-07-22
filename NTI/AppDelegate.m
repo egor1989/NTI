@@ -85,7 +85,7 @@
 
 -(void)checkSendRight{
     
-    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"pk"]>10) {//!!!исправить на 10
+    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"pk"]>30) {//!!!исправить на 30
         if ([ServerCommunication checkInternetConnection])  {
             NSLog(@"checkSendRight: send");
            [recordAction sendFile];

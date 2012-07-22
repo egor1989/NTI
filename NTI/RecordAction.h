@@ -22,6 +22,10 @@
     BOOL First;
     toJSON *jsonConvert;
     ServerCommunication *serverCommunication;
+    //*****************
+   // double lat;
+   // double lon;
+   // NSInteger speedTest;
 }
 - (void)addRecord;
 - (void)endOfRecord;
