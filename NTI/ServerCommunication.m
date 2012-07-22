@@ -185,6 +185,8 @@
              }
              else if ([methodName isEqualToString: @"sendData"]){
                   info = @"Файл пуст";
+                 [userDefaults setInteger:0 forKey:@"pk"];
+
                 NSLog(@"empty file");
              }
             break;

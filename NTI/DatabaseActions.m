@@ -258,6 +258,7 @@ static BOOL needLastRoute;
                 NSLog(@"DBsend - no errors");
                 [DatabaseActions clearDatabase];
                 needLastRoute = YES;
+                [userDefaults setInteger:0 forKey:@"pk"];
                 [userDefaults setValue: [serverCommunication getLastStatistic] forKey:@"lastStat"];
                 [userDefaults setValue: [serverCommunication getAllStatistic] forKey:@"allStat"];
                 //notif refresh

@@ -13,6 +13,7 @@
 #define MAX3(a,b,c) ( MAX(a,b)>c ? ((a>b)? 1:2) : 3 )
 #define radianConst M_PI/180.0
 #define maxEntries 500 
+//!!500
 
 
 
@@ -168,10 +169,10 @@
 - (NSMutableArray *)JSONFormat: (NSMutableArray *)sendData{
     NSArray *keys = [NSArray arrayWithObjects:@"timestamp", @"type", @"acc", @"gps", nil];
     NSDictionary *rowData;
-    
+    NSLog(@"size = %i", [sendData count]);
     NSMutableArray *sendArray = [[NSMutableArray alloc] init];
     
-    for (NSInteger i=0;i<= maxEntries;i++) {
+    for (NSInteger i=0; i<=[sendData count]-1; i++) {
         rowData = [sendData objectAtIndex:i];    
         NSLog(@"row=%@",rowData);
             NSDictionary *acc = [NSDictionary dictionaryWithObjectsAndKeys:[rowData objectForKey:@"accX"], @"x",  [rowData objectForKey:@"accY"], @"y", nil];

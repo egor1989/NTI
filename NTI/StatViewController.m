@@ -82,7 +82,7 @@
     lastTrip.textAlignment = UITextAlignmentRight;
     
     recordImage = [[UIImageView alloc] initWithFrame:CGRectMake(280.0f, 7.0f, 27.0f, 27.0f)];
-    
+    textWarning.text = @"";
     /***************************************************************/
     
     if ([myAppDelegate canWriteToFile]) {
@@ -318,10 +318,14 @@
                 static NSString *CellIdentifier = @"Background";
                 UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                 if (cell == nil) {
-                    cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+                    cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
                     cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
                     cell.textLabel.text = [curentEntrie objectAtIndex:indexPath.row];
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    
+                    cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:12];
+                    cell.textLabel.text = [curentEntrie objectAtIndex:indexPath.row];
+                    cell.accessoryView =  textWarning;
                     
                     backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
                     [backButton setFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];
@@ -515,6 +519,8 @@
 
 - (IBAction)backButton:(id)sender{
     [myAppDelegate stopSlowMonitoring];
+    [backButton setHidden:YES];
+    textWarning.text = @"детектирование выключено";
 }
 
 - (IBAction) internetUploadSwitch:(id)sender{

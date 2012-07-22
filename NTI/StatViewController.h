@@ -31,6 +31,7 @@
     UILabel *recordLabel;
     UILabel *countKm;
     UILabel *lastTrip;
+    UILabel *textWarning;
     IBOutlet UIButton *sendButton;
     ServerCommunication *serverCommunication;
     UIImageView *recordImage;
