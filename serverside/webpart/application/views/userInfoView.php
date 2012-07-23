@@ -1,6 +1,10 @@
 ﻿<div id="content" class="pageContent">
 	<center><? echo $name." ". $sname;?>, PeacockTeam приветствует Вас!</center><br/><br/><br/>	
-
+<?if ($users == -1) {
+	?><span style="color:black;font-size: 12px;">На данный момент, у вас 0 (ноль) пользователей.</span><br>
+<?}
+else if ($users == 1) {
+		?>
 Ваши пользователи:<br/>
 	
 	<table border=1 >
@@ -11,6 +15,7 @@
 			<td colspan=5>Статистика</td>
 			<td>Поиск по датам</td>
 		</tr>
+	
 	<?foreach ($retdata as $row){ ?>
 
 		<tr>
@@ -65,8 +70,9 @@
 					</td><td><a href="/user/search/<?echo $row['Id'];?>">Найти</a></td></tr>
 		<?}?>
 	</table>
+<?}?>
 	
-	<?if($tickets){?>
+	<?if(isset($tickets) && $tickets != 0) {?> 
 	Ваши заявки<br/>
 		<table border=1>
 		<?

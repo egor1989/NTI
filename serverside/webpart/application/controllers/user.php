@@ -16,7 +16,7 @@ class User extends CI_Controller {
 				{
 					$rs['rights']=1;date_default_timezone_set('Europe/Moscow'); 
 					$this->load->view('header',$new_data);
-					$rs['trr'] = $this->lays_model->getTotalStats($urls);//Получеие статистики по пользователю
+					$rs['trr'] = $this->lays_model->getTotalStats($urls);//Получение статистики по пользователю
 					$this->load->view('lasttrips_view',$rs);
 					$this->load->view('footer');
 		}
@@ -91,7 +91,8 @@ private function array_sort($array, $on, $order=SORT_ASC)
 
 private function get_raw_csv($urls) {
 			$this->load->model('userModel');
-			$this->load->model('lays_model');date_default_timezone_set('Europe/Moscow'); 
+			$this->load->model('lays_model');
+date_default_timezone_set('Europe/Moscow'); 
 				$rs= $this->lays_model->LoadRawDataWithNormal($urls);
 						$dataStats=$this->lays_model->getMapData($urls);
 					$k=0;
@@ -127,7 +128,7 @@ private function get_raw_csv($urls) {
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							$arprt[$k]['prespeed']=$prespeed;
 							$arprt[$k]['predir']=$predir;$arprt[$k]['tm']=$rs[$i]['utimestamp'];
-							$arprt[$k]['time']=gmdate('j/m/y;h:i:s',$rs[$i]['utimestamp']);
+							$arprt[$k]['time']=date('j/m/y;H:i:s',$rs[$i]['utimestamp']);
 							$k++;				
 							$arprt[$k]['maxspeed']=0;
 							$arprt[$k]['minspeed']=1000;
@@ -167,7 +168,7 @@ private function get_raw_csv($urls) {
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							$arprt[$k]['prespeed']=$prespeed;
 							$arprt[$k]['predir']=$predir;$arprt[$k]['tm']=$rs[$i]['utimestamp'];
-							$arprt[$k]['time']=gmdate('j/m/y;h:i:s',$rs[$i]['utimestamp']);
+							$arprt[$k]['time']=date('j/m/y;H:i:s',$rs[$i]['utimestamp']);
 							$k++;											$arprt[$k]['maxspeed']=0;
 							$arprt[$k]['minspeed']=1000;	$arprt[$k]['duration']=1;
 						}
@@ -207,7 +208,7 @@ private function get_raw_csv($urls) {
 							$arprt[$k]['prespeed']=$prespeed;
 
 							$arprt[$k]['predir']=$predir;$arprt[$k]['tm']=$rs[$i]['utimestamp'];
-							$arprt[$k]['time']=gmdate('j/m/y;h:i:s',$rs[$i]['utimestamp']);
+							$arprt[$k]['time']=date('j/m/y;H:i:s',$rs[$i]['utimestamp']);
 							$k++;										$arprt[$k]['maxspeed']=0;
 							$arprt[$k]['minspeed']=1000;		$arprt[$k]['duration']=1;
 						}
@@ -245,7 +246,7 @@ private function get_raw_csv($urls) {
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							$arprt[$k]['prespeed']=$prespeed;
 							$arprt[$k]['predir']=$predir;$arprt[$k]['tm']=$rs[$i]['utimestamp'];
-							$arprt[$k]['time']=gmdate('j/m/y;h:i:s',$rs[$i]['utimestamp']);
+							$arprt[$k]['time']=date('j/m/y;H:i:s',$rs[$i]['utimestamp']);
 							$k++;										$arprt[$k]['maxspeed']=0;
 							$arprt[$k]['minspeed']=1000;		$arprt[$k]['duration']=1;
 						}
@@ -283,7 +284,7 @@ private function get_raw_csv($urls) {
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							$arprt[$k]['prespeed']=$prespeed;
 							$arprt[$k]['predir']=$predir;$arprt[$k]['tm']=$rs[$i]['utimestamp'];
-							$arprt[$k]['time']=gmdate('j/m/y;h:i:s',$rs[$i]['utimestamp']);
+							$arprt[$k]['time']=date('j/m/y;H:i:s',$rs[$i]['utimestamp']);
 							$k++;											$arprt[$k]['maxspeed']=0;
 							$arprt[$k]['minspeed']=1000;	$arprt[$k]['duration']=1;
 						}
@@ -323,7 +324,7 @@ private function get_raw_csv($urls) {
 							$arprt[$k]['lng']=$rs[$i]['lng'];
 							$arprt[$k]['prespeed']=$prespeed;$arprt[$k]['tm']=$rs[$i]['utimestamp'];
 							$arprt[$k]['predir']=$predir;
-							$arprt[$k]['time']=gmdate('j/m/y;h:i:s',$rs[$i]['utimestamp']);
+							$arprt[$k]['time']=date('j/m/y;H:i:s',$rs[$i]['utimestamp']);
 							$k++;											$arprt[$k]['maxspeed']=0;
 							$arprt[$k]['minspeed']=1000;	$arprt[$k]['duration']=1;
 						}
@@ -360,7 +361,7 @@ private function get_raw_csv($urls) {
 							$arprt[$k]['lng']=$rs[$i]['lng'];
 							$arprt[$k]['prespeed']=$prespeed;
 							$arprt[$k]['predir']=$predir;$arprt[$k]['tm']=$rs[$i]['utimestamp'];
-							$arprt[$k]['time']=gmdate('j/m/y;h:i:s',$rs[$i]['utimestamp']);
+							$arprt[$k]['time']=date('j/m/y;H:i:s',$rs[$i]['utimestamp']);
 							$k++;											$arprt[$k]['maxspeed']=0;
 							$arprt[$k]['minspeed']=1000;	$arprt[$k]['duration']=1;
 						}
@@ -398,7 +399,7 @@ private function get_raw_csv($urls) {
 							$arprt[$k]['lng']=$rs[$i]['lng'];
 							$arprt[$k]['prespeed']=$prespeed;
 							$arprt[$k]['predir']=$predir;$arprt[$k]['tm']=$rs[$i]['utimestamp'];
-							$arprt[$k]['time']=gmdate('j/m/y;h:i:s',$rs[$i]['utimestamp']);
+							$arprt[$k]['time']=date('j/m/y;H:i:s',$rs[$i]['utimestamp']);
 							$k++;											$arprt[$k]['maxspeed']=0;
 							$arprt[$k]['minspeed']=1000;	$arprt[$k]['duration']=1;
 						}
@@ -439,7 +440,7 @@ private function get_raw_csv($urls) {
 							$arprt[$k]['lng']=$rs[$i]['lng'];
 							$arprt[$k]['prespeed']=$prespeed;
 							$arprt[$k]['predir']=$predir;$arprt[$k]['tm']=$rs[$i]['utimestamp'];
-							$arprt[$k]['time']=gmdate('j/m/y;h:i:s',$rs[$i]['utimestamp']);
+							$arprt[$k]['time']=date('j/m/y;H:i:s',$rs[$i]['utimestamp']);
 							$k++;											$arprt[$k]['maxspeed']=0;
 							$arprt[$k]['minspeed']=1000;	$arprt[$k]['duration']=1;
 						}
@@ -480,7 +481,7 @@ private function get_raw_csv($urls) {
 							$arprt[$k]['lng']=$rs[$i]['lng'];
 							$arprt[$k]['prespeed']=$prespeed;
 							$arprt[$k]['predir']=$predir;$arprt[$k]['tm']=$rs[$i]['utimestamp'];
-							$arprt[$k]['time']=gmdate('j/m/y;h:i:s',$rs[$i]['utimestamp']);
+							$arprt[$k]['time']=date('j/m/y;H:i:s',$rs[$i]['utimestamp']);
 							$k++;											$arprt[$k]['maxspeed']=0;
 							$arprt[$k]['minspeed']=1000;	$arprt[$k]['duration']=1;
 						}
@@ -520,7 +521,7 @@ private function get_raw_csv($urls) {
 							$arprt[$k]['lng']=$rs[$i]['lng'];
 							$arprt[$k]['prespeed']=$prespeed;
 							$arprt[$k]['predir']=$predir;$arprt[$k]['tm']=$rs[$i]['utimestamp'];
-							$arprt[$k]['time']=gmdate('j/m/y;h:i:s',$rs[$i]['utimestamp']);
+							$arprt[$k]['time']=date('j/m/y;H:i:s',$rs[$i]['utimestamp']);
 							$k++;											$arprt[$k]['maxspeed']=0;
 							$arprt[$k]['minspeed']=1000;	$arprt[$k]['duration']=1;
 						}
@@ -560,7 +561,7 @@ private function get_raw_csv($urls) {
 							$arprt[$k]['lng']=$rs[$i]['lng'];
 							$arprt[$k]['prespeed']=$prespeed;
 							$arprt[$k]['predir']=$predir;$arprt[$k]['tm']=$rs[$i]['utimestamp'];
-							$arprt[$k]['time']=gmdate('j/m/y;h:i:s',$rs[$i]['utimestamp']);
+							$arprt[$k]['time']=date('j/m/y;H:i:s',$rs[$i]['utimestamp']);
 							$k++;											$arprt[$k]['maxspeed']=0;
 							$arprt[$k]['minspeed']=1000;	$arprt[$k]['duration']=1;
 						}
@@ -598,7 +599,7 @@ private function get_raw_csv($urls) {
 							$arprt[$k]['lng']=$rs[$i]['lng'];
 							$arprt[$k]['prespeed']=$prespeed;
 							$arprt[$k]['predir']=$predir;$arprt[$k]['tm']=$rs[$i]['utimestamp'];
-							$arprt[$k]['time']=gmdate('j/m/y;h:i:s',$rs[$i]['utimestamp']);
+							$arprt[$k]['time']=date('j/m/y;H:i:s',$rs[$i]['utimestamp']);
 							$k++;											$arprt[$k]['maxspeed']=0;
 							$arprt[$k]['minspeed']=1000;	$arprt[$k]['duration']=1;
 						}
@@ -637,7 +638,7 @@ private function get_raw_csv($urls) {
 							$arprt[$k]['accy']=$rs[$i]['accy'];
 							$arprt[$k]['prespeed']=$prespeed;
 							$arprt[$k]['predir']=$predir;$arprt[$k]['tm']=$rs[$i]['utimestamp'];
-							$arprt[$k]['time']=gmdate('j/m/y;h:i:s',$rs[$i]['utimestamp']);
+							$arprt[$k]['time']=date('j/m/y;H:i:s',$rs[$i]['utimestamp']);
 							$k++;											$arprt[$k]['maxspeed']=0;
 							$arprt[$k]['minspeed']=1000;	$arprt[$k]['duration']=1;
 						}
@@ -676,7 +677,7 @@ private function get_raw_csv($urls) {
 							$arprt[$k]['prespeed']=$prespeed;
 							$arprt[$k]['tm']=$rs[$i]['utimestamp'];
 							$arprt[$k]['predir']=$predir;
-							$arprt[$k]['time']=gmdate('j/m/y;h:i:s',$rs[$i]['utimestamp']);
+							$arprt[$k]['time']=date('j/m/y;H:i:s',$rs[$i]['utimestamp']);
 							$k++;											$arprt[$k]['maxspeed']=0;
 							$arprt[$k]['minspeed']=1000;	$arprt[$k]['duration']=1;
 						}
@@ -722,13 +723,13 @@ private function get_raw_csv($urls) {
 				
 				
 				header("Content-Type: text/plain charset=UTF-8\r\n");
-				echo gmdate('j/m/y;h:i:s',$dataStats['TimeStart']).", SessionStart\n";
+				echo date('j/m/y;H:i:s',$dataStats['TimeStart']).", SessionStart\n";
 				$arprt=$this->get_raw_csv($urls);
 				for($i=0;$i<count($arprt);$i++)
 				{
 					echo $arprt[$i]['time'].";".$arprt[$i]['type'].";".$arprt[$i]['weight'].";".$arprt[$i]['accx'].";0;".$arprt[$i]['compass'].";".$arprt[$i]['minspeed'].";".$arprt[$i]['maxspeed'].";".$arprt[$i]['duration'].";".$arprt[$i]['prespeed'].";".$arprt[$i]['predir'].";".$arprt[$i]['lat'].";".$arprt[$i]['lng'].";-24200000\n";
 				}
-				echo gmdate('j/m/y;h:i:s',$dataStats['TimeEnd']).", SessionEnd\n";
+				echo date('j/m/y;H:i:s',$dataStats['TimeEnd']).", SessionEnd\n";
 				}
 			else
 			header("Location: http://nti.goodroads.ru/");
@@ -759,19 +760,25 @@ private function get_raw_csv($urls) {
 				{
 					//Получение всех пользователей системы, которые привязаны к данному пользователю
 					$new_data['retdata']=$this->userModel->get_all_users($this->session->userdata('id'));
-					//Получение всех открытых заявок относительно данного пользователя
-					for($i=0;$i<count($new_data['retdata']);$i++)
-					{//Занесенение общей ствтистики для каждого пользователя.
+					if ($new_data['retdata'] == 0) { //Если у этого эксперта НЕТ пользователей.
+						$new_data['users'] = -1;
+						$this->load->view('header',$new_data);
+						$this->load->view('userInfoView', $new_data);
+						$this->load->view('footer');
+					} else {
+						//Получение всех открытых заявок относительно данного пользователя
+						for($i=0;$i<count($new_data['retdata']);$i++)
+						{//Занесенение общей ствтистики для каждого пользователя.
 
-						$new_data['retdata'][$i]['stats']=$this->lays_model->getUserTravelStats($new_data['retdata'][$i]['Id']);
+							$new_data['retdata'][$i]['stats']=$this->lays_model->getUserTravelStats($new_data['retdata'][$i]['Id']);
 
+						}
+						$new_data['tickets']=$this->userModel->load_all_tickets($this->session->userdata('id'));
+						$new_data['users']=1;
+						$this->load->view('header',$new_data);
+						$this->load->view('userInfoView', $new_data);
+						$this->load->view('footer');
 					}
-					$new_data['tickets']=$this->userModel->load_all_tickets($this->session->userdata('id'));
-					$new_data['users']=1;
-					$this->load->view('header',$new_data);
-					$this->load->view('userInfoView', $new_data);
-					$this->load->view('footer');
-					
 				}
 				else if($this->session->userdata('rights')==1)
 				{
