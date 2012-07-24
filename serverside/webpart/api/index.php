@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 //ErrorCodes
 define(DB_CONNECTION_REFUSE_CODE, 88);
 define(DB_CONNECTION_REFUSE_INFO, "Database connection error");
@@ -218,6 +218,7 @@ else if($json['method']=="getStatistics"){getStatistics($json['params']);}//-
 else if($json['method']=="getPath"){getPath($json['params']);}//-
 else if($json['method']=="feedBack"){feedBack($json['params']);}//-
 else if($json['method']=="addQuest"){feedBack($json['params']);}//-
+else if($json['method']=="rememberPassword"){remember($json['params']);}//-
 else
 {
 	   $errortype=array('info'=>"No action set, or function is incorrect",'code'=>  1);
@@ -394,9 +395,7 @@ function NTIauth($param)
 		$id=mysql_result($result,0);
 	}
 
-	//session_start();
 	$tm=time(); 
-	//$sid=session_id();
 	$sid=rand_str();
 	mysql_query("UPDATE NTIKeys SET Deleted=1 where UID=$id");
 	setcookie("NTIKeys", $sid,time()+6000);
@@ -419,11 +418,11 @@ function addNTIFile($param)
 		$utmstamp=time();
 		//Монго? - не, не слышал
 		//Тк делаем , лучше пусть будет переносима с приемлемыми результатами
-		
+
 		$qq = json_decode($ins,true);	
 		if ($qq != NULL) 
 		{
-			
+
 			if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
 			mysql_query("INSERT into NTIFile (UID,File) values ('$UID','$ins')");
 			$fileid = mysql_insert_id();
@@ -437,7 +436,7 @@ function addNTIFile($param)
 				{
 				if($i>0)
 				{
-					
+
 					if($qq[$k]['timestamp']-$ArrayEntry[$n][$i-1]->getTimestamp()<600)
 					{
 						$ArrayEntry[$n][$i]=new UserEntry();
@@ -504,7 +503,7 @@ function addNTIFile($param)
 			//Теперь перебирем поездки и высчитываем данные 
 			for($i=1;$i<=$n;$i++)
 			{
-				
+
 					$acc1=0;
 					$acc2=0;       
 					$acc3=0;       
@@ -517,7 +516,7 @@ function addNTIFile($param)
 					$brake1=0;     
 					$brake2=0;    
 					$brake3=0;    
-				if(count($ArrayEntry[$i])>50)
+				if(count($ArrayEntry[$i])>30)
 				{
 					$ArrayEntry[$i][0]->setsevAcc(0);
 					$ArrayEntry[$i][0]->setsevTurn(0);
@@ -525,7 +524,7 @@ function addNTIFile($param)
 					$ArrayEntry[$i][0]->setTurnType("normal point");
 					$ArrayEntry[$i][0]->setTypeSpeed("normal point");
 					$ArrayEntry[$i][0]->setTypeAcc("normal point");
-					
+
 					for($j=1;$j<count($ArrayEntry[$i]);$j++)
 					{
 						$ArrayEntry[$i][$j]->setsevAcc(0);
@@ -535,23 +534,32 @@ function addNTIFile($param)
 						$ArrayEntry[$i][$j]->setTypeSpeed("normal point");
 						$ArrayEntry[$i][$j]->setTypeAcc("normal point");
 						$speed=$ArrayEntry[$i][$j]->getSpeed();
-						
+
 						$deltaTime=$ArrayEntry[$i][$j]->getTimestamp()-$ArrayEntry[$i][$j-1]->getTimestamp();
-						
+
 						if($ArrayEntry[$i][$j]->getLng()-$ArrayEntry[$i][$j-1]->getLng()!=0)
 						{
 								$ArrayEntry[$i][$j]->setTurn(atan(($ArrayEntry[$i][$j]->getLat()-$ArrayEntry[$i][$j-1]->getLat())/($ArrayEntry[$i][$j]->getLng()-$ArrayEntry[$i][$j-1]->getLng())));
 								$deltaTurn = 	$ArrayEntry[$i][$j]->getTurn() - $ArrayEntry[$i][$j-1]->getTurn();
 								$wAcc = abs($deltaTurn/($deltaTime));
-														
+
 								if (($wAcc < 0.45) && ($wAcc >= 0)) {$ArrayEntry[$i][$j]->setsevTurn(0);} 
 								else if (($wAcc >= 0.45) && ($wAcc < 0.6))	{$ArrayEntry[$i][$j]->setsevTurn(1);} 
 								else if (($wAcc >= 0.6) && ($wAcc < 0.75)){$ArrayEntry[$i][$j]->setsevTurn(2);} 
 								else if ($wAcc >= 0.75) {$ArrayEntry[$i][$j]->setsevTurn(3);}
 								$deltaSpeed = $speed - $ArrayEntry[$i][$j-1]->getSpeed();
+								
 								$accel = $deltaSpeed/$deltaTime;
+								if($accel==0)
+								{
+									$accel=sqrt($ArrayEntry[$i][$j]->getAccx()*$ArrayEntry[$i][$j]->getAccx()+$ArrayEntry[$i][$j]->getAccy()*$ArrayEntry[$i][$j]->getAccy())*9.8;
+									if($ArrayEntry[$i][$j]->getCompass()>=180)$accel=(-1)*$accel;
+								}
+								
+								
 								$ArrayEntry[$i][$j]->setAccel($accel);
 								//Высчитываем тип неравномерного движения (ускорение-торможение) через ускорение.
+								
 								if ($accel<-7.5) $ArrayEntry[$i][$j]->setsevAcc(-3);
 								else if (($accel>=-7.5)&&($accel<-6))$ArrayEntry[$i][$j]->setsevAcc(-2);
 								else if (($accel>=-6)&&($accel<-4.5))$ArrayEntry[$i][$j]->setsevAcc(-1);
@@ -559,6 +567,7 @@ function addNTIFile($param)
 								else if (($accel>4)&&($accel<=5))$ArrayEntry[$i][$j]->setsevAcc(2);
 								else if (($accel>3.5)&&($accel<=4))$ArrayEntry[$i][$j]->setsevAcc(1);
 								else if (($accel>=-4.5)&&($accel<=3.5))$ArrayEntry[$i][$j]->setsevAcc(0);
+								
 								//Рассчитываем превышения скорости. Превышение (1,2,3 уровня) засчитывается, если движение осуществлялось на соответствующей скорости 5 секунд. 
 								//И далее еще по очку превышения (1,2,3 уровня) за каждые ПОЛНЫЕ ТРИ секунд движения на превышенной скорости.
 								if (($speed >= 0) && ($speed <= 80))$ArrayEntry[$i][$j]->setsevSpeed(0); 
@@ -585,7 +594,7 @@ function addNTIFile($param)
 										$ArrayEntry[$i][$j]->setTypeSpeed("normal point");
 										$speed1 = $speed1 + floor($dss/3);
 										$dss = 0;
-									
+
 									} else if ($ArrayEntry[$i][$j]->getsevSpeed() == 1) {
 										$ArrayEntry[$i][$j]->setTypeSpeed("s1");
 											$dss += $deltaTime;
@@ -635,10 +644,10 @@ function addNTIFile($param)
 								}
 								// Конец выявления превышения скорости.
 								///////////////////////////////////////////////////////////////////////////////////////
-								
+
 								//Большое количество проверок условий соотношения ускорений в текущей и прошлой точках.
-								
-								
+
+
 								if ($ArrayEntry[$i][$j-1]->getTypeAcc() == "normal point") {
 									if ($ArrayEntry[$i][$j]->getsevAcc() == 0) {
 										$ArrayEntry[$i][$j]->setTypeAcc("normal point");
@@ -784,9 +793,9 @@ function addNTIFile($param)
 										$ArrayEntry[$i][$j]->setTypeAcc("brake3 continued");
 									}
 								}
-						
+
 								//После поворота - нормальная точка.
-								
+
 								if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn finished") || ($ArrayEntry[$i][$j-1]->getTurnType() == "right turn finished") || ($speed == 0) ) {
 									$ArrayEntry[$i][$j]->setTurnType("normal point");
 								// Отклонение > 0.5 - после нормальной точки начинаем поворот налево, либо продолжаем поворот налево после уже начатого, либо завершаем, если это был поворот направо.
@@ -815,11 +824,11 @@ function addNTIFile($param)
 										}
 								}	
 						}
-						
-						
-						
-						
-						
+
+
+
+
+
 					}
 					$TimeStart=$ArrayEntry[$i][0]->getTimestamp();//Подходит под определение ближайшей
 					$TimeEnd=$ArrayEntry[$i][0]->getTimestamp();//Хз может быть и перемешанно , пусть поищет
@@ -904,10 +913,10 @@ function addNTIFile($param)
 							$errortype=array('info'=>"Already exist",'code'=>  0);
 							$res=array('result'=>1,'error'=> $errortype);
 							echo json_encode($res);	
-	
+
 							exit();
 					}
-			
+
 					if($KvnA>0 && $KvnS>0 && $KvnT>0 && $KvnB>0)
 					{
 						//Отлично значит поездка нормальна
@@ -916,7 +925,7 @@ function addNTIFile($param)
 						$sql_insert_str="insert into NTIUserDrivingTrack(UID,TotalAcc1Count,TotalAcc2Count,TotalAcc3Count,TotalBrake1Count,TotalBrake2Count,TotalBrake3Count,TotalSpeed1Count,TotalSpeed2Count,TotalSpeed3Count,TotalTurn1Count,TotalTurn2Count,TotalTurn3Count,TimeStart,TimeEnd,TotalDistance,SpeedScore,	TurnScore,BrakeScore,AccScore,TotalScore,SpeedK,AccK,BrakeK,TurnK) values ('$UID','$TypeAcc1Count','$TypeAcc2Count','$TypeAcc3Count','$TypeBrake1Count','$TypeBrake2Count','$TypeBrake3Count','$TypeSpeed1Count','$TypeSpeed2Count','$TypeSpeed3Count','$TypeTurn1Count','$TypeTurn2Count','$TypeTurn3Count','$TimeStart','$TimeEnd','$TotalDistance','$score_speed','$score_turn','$score_brake','$score_acc','$score','$KvnS','$KvnA','$KvnB','$KvnT')";
 						mysql_query($sql_insert_str);
 						$TrackID = mysql_insert_id();
-				
+
 						for($j=0;$j<count($ArrayEntry[$i]);$j++)
 						{
 							$accx=$ArrayEntry[$i][$j]->getAccx();
@@ -946,10 +955,10 @@ function addNTIFile($param)
 				//Если же ментше 50 - нахуй за борт
 			}
 
-			$errortype=array('info'=>"All okey",'code'=>  0);
+			$errortype=array('info'=>"all ok",'code'=>  0);
 			$res=array('result'=>1,'error'=> $errortype);
 			echo json_encode($res);	
-	
+
 			exit();
 		}
 		else
@@ -1267,5 +1276,42 @@ function addQuest($param)
 	}
 }
 
+
+function remember($params)
+{
+	if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
+	$login=mysql_real_escape_string($params['login']);
+	$result = mysql_query("SELECT Email,Id from NTIUsers where Login='$login'");
+	$cnt=mysql_num_rows($result);
+	if($cnt==0)
+	{
+		$errortype=array('info'=>"User doesnt exist",'code'=>  62);
+		$res=array('result'=>0,'error'=>  $errortype);
+		echo json_encode($res);
+		exit();
+	}
+	$row=mysql_fetch_row($result);
+	$email=$row[0];
+	$uid=$row[1];
+	
+	$errortype=array('info'=>"",'code'=>  0);
+	$res=array('result'=>1,'error'=>  $errortype);
+	
+	$result = mysql_query("Update PasswordRecovery set Deleted=1 where UserId=$uid");
+	$key=rand_str();
+	$unixtime=time();
+	$result = mysql_query("INSERT into PasswordRecovery (Key,UserId,Deleted,UnixTimeStamp) VALUES ('$key','$uid',0,'$unixtime')");	
+	$to      = $email;
+	$subject = 'Password recovery';
+	$message = 'Link for password recovery';
+	$message .="<a href=\"http://nti.goodroads.ru/remember/passwordrecovery/$key\">Nti.goodroads.ru</a>";
+	$headers = 'From: pr@goodroads.ru' . "\r\n" .
+    'Reply-To: pr@goodroads.ru' . "\r\n" .
+    'X-Mailer: PHP/' . phpversion();
+	mail($to, $subject, $message, $headers);
+	echo json_encode($res);
+	exit();
+		
+}
 
 ?>

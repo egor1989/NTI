@@ -66,21 +66,21 @@ function handler(request)
 		speed = filteredPt[i][3];
 		var color = "#00ff00";
 		var type=0;
-		if((filteredPt[i][4])=="Acc" && Number(filteredPt[i][5])==1){color = "#00FF00";type=0.3;}
-		else if((filteredPt[i][4])=="Acc" && Number(filteredPt[i][5])==2){color = "#00FF00";type=0.5;}
-		else if((filteredPt[i][4])=="Acc" && Number(filteredPt[i][5])==3){color = "#00FF00";type=0.8;}
-		else if((filteredPt[i][4])=="Brake" && Number(filteredPt[i][5])==1){color = "#FF0000";type=0.3;}
-		else if((filteredPt[i][4])=="Brake" && Number(filteredPt[i][5])==2){color = "#FF0000";type=0.5;}
-		else if((filteredPt[i][4])=="Brake" && Number(filteredPt[i][5])==3){color = "#FF0000";type=0.8;}
-			else if((filteredPt[i][4])=="LeftTurn" && Number(filteredPt[i][5])==1){color = "#FFFF00";type=0.3;}
-		else if((filteredPt[i][4])=="LeftTurn" && Number(filteredPt[i][5])==2){color = "#FFFF00";type=0.5;}
-		else if((filteredPt[i][4])=="LeftTurn" && Number(filteredPt[i][5])==3){color = "#FFFF00";type=0.8;}
-		else if((filteredPt[i][4])=="RightTurn" && Number(filteredPt[i][5])==1){color = "#9370DB";type=0.3;}
-		else if((filteredPt[i][4])=="RightTurn" && Number(filteredPt[i][5])==2){color = "#9370DB";type=0.5;}
-		else if((filteredPt[i][4])=="RightTurn" && Number(filteredPt[i][5])==3){color = "#9370DB";type=0.8;}
-		else if((filteredPt[i][4])=="Speed" && Number(filteredPt[i][5])==1){color = "#808080";type=0.3;}
-		else if((filteredPt[i][4])=="Speed" && Number(filteredPt[i][5])==2){color = "#808080";type=0.5;}
-		else if((filteredPt[i][4])=="Speed" && Number(filteredPt[i][5])==3){color = "#808080";type=0.8;}
+		if((filteredPt[i][4])=="Acc" && Number(filteredPt[i][5])==1){color = "#00FF00";type=0.4;}
+		else if((filteredPt[i][4])=="Acc" && Number(filteredPt[i][5])==2){color = "#00FF00";type=0.7;}
+		else if((filteredPt[i][4])=="Acc" && Number(filteredPt[i][5])==3){color = "#00FF00";type=1;}
+		else if((filteredPt[i][4])=="Brake" && Number(filteredPt[i][5])==1){color = "#FF0000";type=0.4;}
+		else if((filteredPt[i][4])=="Brake" && Number(filteredPt[i][5])==2){color = "#FF0000";type=0.7;}
+		else if((filteredPt[i][4])=="Brake" && Number(filteredPt[i][5])==3){color = "#FF0000";type=1;}
+			else if((filteredPt[i][4])=="LeftTurn" && Number(filteredPt[i][5])==1){color = "#FFFF00";type=0.4;}
+		else if((filteredPt[i][4])=="LeftTurn" && Number(filteredPt[i][5])==2){color = "#FFFF00";type=0.7;}
+		else if((filteredPt[i][4])=="LeftTurn" && Number(filteredPt[i][5])==3){color = "#FFFF00";type=1;}
+		else if((filteredPt[i][4])=="RightTurn" && Number(filteredPt[i][5])==1){color = "#FFFF00";type=0.4;}
+		else if((filteredPt[i][4])=="RightTurn" && Number(filteredPt[i][5])==2){color = "#FFFF00";type=0.7;}
+		else if((filteredPt[i][4])=="RightTurn" && Number(filteredPt[i][5])==3){color = "#FFFF00";type=1;}
+		else if((filteredPt[i][4])=="Speed" && Number(filteredPt[i][5])==1){color = "#808080";type=0.4;}
+		else if((filteredPt[i][4])=="Speed" && Number(filteredPt[i][5])==2){color = "#808080";type=0.7;}
+		else if((filteredPt[i][4])=="Speed" && Number(filteredPt[i][5])==3){color = "#808080";type=1;}
 
  
   
@@ -120,9 +120,9 @@ function handler(request)
    }
     	 var style_green =
     {
-        strokeColor: "#00FF00",
-        strokeOpacity: 0.2,
-        strokeWidth: 6
+        strokeColor: "#800080",
+        strokeOpacity: 0.5,
+        strokeWidth: 2
     };
  var lineString = new OpenLayers.Geometry.LineString(points);
     var lineFeature = new OpenLayers.Feature.Vector(lineString, null, style_green);

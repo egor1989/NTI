@@ -27,8 +27,8 @@
 			<tr>
 				<td>
 					<br>
-					<span style="color:black"> Начало поездки:<br><?echo gmdate('d.m.Y H:i:s',$trr[$c]['TimeStart']); ?></span><br>
-					<span style="color:black"> Конец  поездки:<br><?echo gmdate('d.m.Y H:i:s',$trr[$c]['TimeEnd']);?></span><br/>
+					<span style="color:black"> Начало поездки:<br><?echo date('d.m.Y H:i:s',$trr[$c]['TimeStart']); ?></span><br>
+					<span style="color:black"> Конец  поездки:<br><?echo date('d.m.Y H:i:s',$trr[$c]['TimeEnd']);?></span><br/>
 					<?if(isset($rights) && $rights>=1){?>
 					<a href="/user/raw/<?echo $trr[$c]['Id'];?>">Просмотреть данные</a><br/>
 					<?}?>
