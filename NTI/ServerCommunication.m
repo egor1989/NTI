@@ -238,10 +238,10 @@
             break;
         }
             
-            
         default:{
-            info = @"Ошибка";
-            NSLog(@"unknown error");
+            
+            info = [NSString stringWithFormat:@"Ошибка. Код = %i", code];//@"Ошибка";
+            NSLog(@"ERROR code %i", code);
             break;
         }
     }

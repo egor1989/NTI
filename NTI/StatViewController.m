@@ -41,6 +41,15 @@
     
     
     
+    UIButton *refreshButton  = [UIButton buttonWithType:UIButtonTypeCustom];
+    [refreshButton addTarget:self 
+               action:@selector(refreshButton:) forControlEvents:UIControlEventTouchDown];
+
+    [refreshButton setImage:[UIImage imageNamed:@"refresh.png"] forState:UIControlStateNormal];
+    refreshButton.frame = CGRectMake(140.0, 350.0, 25.0, 25.0);//(x, y, width, height) 
+    
+    [self.view addSubview:refreshButton];
+    
     
     /************инициализация лейблов для таблицы**********************/
     speedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];;
@@ -661,6 +670,9 @@
     
 }
 
+- (IBAction)refreshButton:(id)sender{
+    
+}
 
 
 #pragma mark - Table view delegate
