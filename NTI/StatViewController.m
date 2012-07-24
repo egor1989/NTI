@@ -102,7 +102,7 @@
      name: @"canWriteToFile"
      object: nil];
     serverCommunication = [[ServerCommunication alloc] init];
-    //[serverCommunication refreshCookie];
+    //[serverCommunication refreshCookie]; ?? зачем
     /************ инициализация элементов *******************/
 
     NSArray *info = [NSArray arrayWithObjects:@"Имя", @"Запись", @"Скорость", @"Только Wi-Fi", @"Дата посл. поезки",@"Тестовый файл",@"Работа в фоне", nil];
@@ -668,12 +668,12 @@
 - (IBAction)refreshButton:(id)sender{
     if ([ServerCommunication checkInternetConnection]) {
         [serverCommunication refreshCookie];
-        
-        [[NSUserDefaults standardUserDefaults] setValue: [serverCommunication getLastStatistic] forKey:@"lastStat"];
-        [[NSUserDefaults standardUserDefaults] setValue: [serverCommunication getAllStatistic] forKey:@"allStat"];
-        
-        [self parse: [[NSUserDefaults standardUserDefaults] valueForKey:@"lastStat"] method:@"lastStat"];
-        [self parse: [[NSUserDefaults standardUserDefaults] valueForKey:@"allStat"] method:@"allStat"];
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setValue: [serverCommunication getLastStatistic] forKey:@"lastStat"];
+        [userDefaults setValue: [serverCommunication getAllStatistic] forKey:@"allStat"];
+        [userDefaults synchronize];
+        [self parse: [userDefaults valueForKey:@"lastStat"] method:@"lastStat"];
+        [self parse: [userDefaults valueForKey:@"allStat"] method:@"allStat"];
     }
     
 }
