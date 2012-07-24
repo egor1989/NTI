@@ -41,15 +41,7 @@
     
     
     
-    UIButton *refreshButton  = [UIButton buttonWithType:UIButtonTypeCustom];
-    [refreshButton addTarget:self 
-               action:@selector(refreshButton:) forControlEvents:UIControlEventTouchDown];
-
-    [refreshButton setImage:[UIImage imageNamed:@"refresh.png"] forState:UIControlStateNormal];
-    refreshButton.frame = CGRectMake(140.0, 350.0, 25.0, 25.0);//(x, y, width, height) 
-    
-    [self.view addSubview:refreshButton];
-    
+        
     
     /************инициализация лейблов для таблицы**********************/
     speedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];;
@@ -130,6 +122,8 @@
     }
     
 }
+
+
 
 - (void)viewDidUnload
 {
@@ -674,6 +668,39 @@
     
 }
 
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    
+    if (section == 1) {
+        
+        UIView* customView = [[UIView alloc] initWithFrame:CGRectMake(10.0, 0.0, 300.0, 44.0)];
+        
+        UILabel* label = [[UILabel alloc] initWithFrame: CGRectMake(20.0, 0.0, 140.0, 20.0)];
+        [label setBackgroundColor:[UIColor clearColor]];
+        [label setText: @"Статистика"];
+        label.opaque = NO;
+        label.textColor = [UIColor grayColor];
+        label.highlightedTextColor = [UIColor whiteColor];
+        label.font = [UIFont boldSystemFontOfSize:17];
+       // [label setTextColor:[UIColor grayColor]];
+       // [label setFont:[UIFont fontWithName: @"Trebuchet MS-Bold" size: 16.0f]]; 
+        
+        [customView addSubview: label];
+        
+        // create the button object
+        UIButton *refreshButton  = [UIButton buttonWithType:UIButtonTypeCustom];
+        [refreshButton addTarget:self 
+                          action:@selector(refreshButton:) forControlEvents:UIControlEventTouchDown];
+        
+        [refreshButton setImage:[UIImage imageNamed:@"refresh.png"] forState:UIControlStateNormal];
+        refreshButton.frame = CGRectMake(130.0, 0.0, 20.0, 20.0);//(x, y, width, height) 
+        
+        [customView addSubview:refreshButton];
+        
+        return customView;
+    }
+    return nil;
+}
 
 #pragma mark - Table view delegate
 

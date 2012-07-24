@@ -19,7 +19,7 @@
 
 #define myAppDelegate (AppDelegate*) [[UIApplication sharedApplication] delegate]
 
-@interface StatViewController : UITableViewController <UINavigationControllerDelegate, MFMailComposeViewControllerDelegate>{
+@interface StatViewController : UITableViewController <UINavigationControllerDelegate, MFMailComposeViewControllerDelegate, UITableViewDelegate, UITableViewDataSource>{
     UILabel *speedLabel;
     IBOutlet UIButton *loginButton;
     IBOutlet UIButton *backButton;
