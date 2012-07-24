@@ -101,7 +101,8 @@
      selector: @selector(changeImage)
      name: @"canWriteToFile"
      object: nil];
-    [serverCommunication refreshCookie];
+    serverCommunication = [[ServerCommunication alloc] init];
+    //[serverCommunication refreshCookie];
     /************ инициализация элементов *******************/
 
     NSArray *info = [NSArray arrayWithObjects:@"Имя", @"Запись", @"Скорость", @"Только Wi-Fi", @"Дата посл. поезки",@"Тестовый файл",@"Работа в фоне", nil];
@@ -665,6 +666,15 @@
 }
 
 - (IBAction)refreshButton:(id)sender{
+    if ([ServerCommunication checkInternetConnection]) {
+        [serverCommunication refreshCookie];
+        
+        [[NSUserDefaults standardUserDefaults] setValue: [serverCommunication getLastStatistic] forKey:@"lastStat"];
+        [[NSUserDefaults standardUserDefaults] setValue: [serverCommunication getAllStatistic] forKey:@"allStat"];
+        
+        [self parse: [[NSUserDefaults standardUserDefaults] valueForKey:@"lastStat"] method:@"lastStat"];
+        [self parse: [[NSUserDefaults standardUserDefaults] valueForKey:@"allStat"] method:@"allStat"];
+    }
     
 }
 
@@ -682,8 +692,6 @@
         label.textColor = [UIColor grayColor];
         label.highlightedTextColor = [UIColor whiteColor];
         label.font = [UIFont boldSystemFontOfSize:17];
-       // [label setTextColor:[UIColor grayColor]];
-       // [label setFont:[UIFont fontWithName: @"Trebuchet MS-Bold" size: 16.0f]]; 
         
         [customView addSubview: label];
         
