@@ -266,7 +266,7 @@ static BOOL needLastRoute;
     }
     noerror = YES;
     sqlite3_close(database);
-    [myAppDelegate startRecord];
+   
 }
 
 - (void) convertAndSend{

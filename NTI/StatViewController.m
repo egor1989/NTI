@@ -520,7 +520,7 @@
 }
 
 - (IBAction)backButton:(id)sender{
-    [myAppDelegate stopSlowMonitoring];
+    //[myAppDelegate stopSlowMonitoring];
     [backButton setHidden:YES];
     textWarning = @"выключено";
     [self.statTableView reloadData];

@@ -105,28 +105,15 @@
 
 - (void)finishFirstTimer{
     NSLog(@"finishFirstTimer");
-  //  [self stopGPSDetect];
+
     locationManager.desiredAccuracy=kCLLocationAccuracyThreeKilometers; //точность 3 километра
 }
 
 
 //gps
--(void)stopGPSDetect{
-    NSLog(@"stopGPSDetect");
-    [locationManager stopUpdatingLocation];
-    [locationManager stopUpdatingHeading];
-   // if ([[NSUserDefaults standardUserDefaults] boolForKey:@"canWorkInBackground"]) {
-        [locationManager startMonitoringSignificantLocationChanges];
-        NSLog(@"startMonitoringSignificantLocationChanges");
-   // } else NSLog(@"canWorkInBackground=NO");
-    
-
-}
 
 -(void)startGPSDetect{
   
-    [locationManager stopMonitoringSignificantLocationChanges];
-    NSLog(@"stopMonitoringSignificantLocationChange");
     [locationManager startUpdatingLocation];
     NSLog(@"startGPSDetect");
     [locationManager startUpdatingHeading];
@@ -148,7 +135,9 @@
     
     //еще не было движения
     
+    
     if (checkMotion) {
+        NSLog(@"checkMotion");
          //мы собрали 5 >5км/ч начинаем запись
         if (newLocation.speed > SPEED) {
             m5Km++;
@@ -377,9 +366,7 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-  
-    [locationManager stopMonitoringSignificantLocationChanges];
-    [recordAction eventRecord:@"close"];
+    //[recordAction eventRecord:@"close"];
     NSLog(@"=====close=====");
 }
 
