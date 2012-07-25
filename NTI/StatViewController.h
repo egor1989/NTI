@@ -19,7 +19,7 @@
 
 #define myAppDelegate (AppDelegate*) [[UIApplication sharedApplication] delegate]
 
-@interface StatViewController : UITableViewController <UINavigationControllerDelegate, MFMailComposeViewControllerDelegate>{
+@interface StatViewController : UITableViewController <UINavigationControllerDelegate, MFMailComposeViewControllerDelegate, UITableViewDelegate, UITableViewDataSource>{
     UILabel *speedLabel;
     IBOutlet UIButton *loginButton;
     IBOutlet UIButton *backButton;
@@ -39,7 +39,8 @@
     NSDictionary *tables;
     IBOutlet UITableView *statTableView;
     FileController *fileController;
-}
+    
+    }
 
 @property (nonatomic) BOOL *writeAction;
 @property (nonatomic, retain) NSDictionary *tables;
@@ -47,6 +48,7 @@
 
 - (void) speedUpdate;
 - (IBAction)loginButton:(id)sender;
+- (IBAction)refreshButton:(id)sender;
 - (IBAction)backButton:(id)sender;
 //- (IBAction)sendButton:(id)sender;
 - (IBAction)helpButton:(id)sender;

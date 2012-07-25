@@ -41,6 +41,7 @@
     
     
     
+        
     
     /************инициализация лейблов для таблицы**********************/
     speedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];;
@@ -100,7 +101,8 @@
      selector: @selector(changeImage)
      name: @"canWriteToFile"
      object: nil];
-    [serverCommunication refreshCookie];
+    serverCommunication = [[ServerCommunication alloc] init];
+    //[serverCommunication refreshCookie]; ?? зачем
     /************ инициализация элементов *******************/
 
     NSArray *info = [NSArray arrayWithObjects:@"Имя", @"Запись", @"Скорость", @"Только Wi-Fi", @"Дата посл. поезки",@"Тестовый файл",@"Работа в фоне", nil];
@@ -121,6 +123,8 @@
     }
     
 }
+
+
 
 - (void)viewDidUnload
 {
@@ -661,7 +665,50 @@
     
 }
 
+- (IBAction)refreshButton:(id)sender{
+    if ([ServerCommunication checkInternetConnection]) {
+        [serverCommunication refreshCookie];
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setValue: [serverCommunication getLastStatistic] forKey:@"lastStat"];
+        [userDefaults setValue: [serverCommunication getAllStatistic] forKey:@"allStat"];
+        [userDefaults synchronize];
+        [self parse: [userDefaults valueForKey:@"lastStat"] method:@"lastStat"];
+        [self parse: [userDefaults valueForKey:@"allStat"] method:@"allStat"];
+    }
+    
+}
 
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    
+    if (section == 1) {
+        
+        UIView* customView = [[UIView alloc] initWithFrame:CGRectMake(10.0, 0.0, 300.0, 44.0)];
+        
+        UILabel* label = [[UILabel alloc] initWithFrame: CGRectMake(20.0, 0.0, 140.0, 20.0)];
+        [label setBackgroundColor:[UIColor clearColor]];
+        [label setText: @"Статистика"];
+        label.opaque = NO;
+        label.textColor = [UIColor grayColor];
+        label.highlightedTextColor = [UIColor whiteColor];
+        label.font = [UIFont boldSystemFontOfSize:17];
+        
+        [customView addSubview: label];
+        
+        // create the button object
+        UIButton *refreshButton  = [UIButton buttonWithType:UIButtonTypeCustom];
+        [refreshButton addTarget:self 
+                          action:@selector(refreshButton:) forControlEvents:UIControlEventTouchDown];
+        
+        [refreshButton setImage:[UIImage imageNamed:@"refresh.png"] forState:UIControlStateNormal];
+        refreshButton.frame = CGRectMake(130.0, 0.0, 20.0, 20.0);//(x, y, width, height) 
+        
+        [customView addSubview:refreshButton];
+        
+        return customView;
+    }
+    return nil;
+}
 
 #pragma mark - Table view delegate
 
