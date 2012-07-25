@@ -35,15 +35,18 @@
     locationManager.delegate=self;
     locationManager.desiredAccuracy= kCLLocationAccuracyNearestTenMeters;
     locationManager.distanceFilter = kCLDistanceFilterNone;
+    //!!locationManager.desiredAccuracy=kCLLocationAccuracyNearestTenMeters;
+    
     
     lastLoc = [[CLLocation alloc] init];
     allDistance = 0;
     canWriteToFile = NO;//переделать на NO!!
-    slowMonitoring = NO;
+
     [recordAction startOfRecord];
-    needCheck = YES;
     
-    startCheck = YES;
+
+    checkMotion = YES;
+
     firstTimer = [NSTimer scheduledTimerWithTimeInterval:STARTTIME target:self selector:@selector(finishFirstTimer) userInfo:nil repeats:NO];
     
     [self checkSendRight];
@@ -59,8 +62,7 @@
 //    [self startAccelerometerDetect];
         NSLog(@"bad iphone");
     }
-    
-    //
+
     [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(updater:) userInfo:nil repeats:YES];
     
     oldHeading          = 0;
@@ -103,10 +105,8 @@
 
 - (void)finishFirstTimer{
     NSLog(@"finishFirstTimer");
-    [self stopGPSDetect];
-    
-    slowMonitoring = YES;
-    startCheck = NO;
+  //  [self stopGPSDetect];
+    locationManager.desiredAccuracy=kCLLocationAccuracyThreeKilometers; //точность 3 километра
 }
 
 
@@ -145,37 +145,35 @@
     if (meters<0) meters = 0;
     allDistance += meters;
     //[[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];//!!УБРАТЬ
-    //только включили приложение, начальная проверка
-    if (startCheck) {
-        NSLog(@"startCheck");
-         //если в течении 5 минут мы собрали 5 >5км/ч начинаем запись
+    
+    //еще не было движения
+    
+    if (checkMotion) {
+         //мы собрали 5 >5км/ч начинаем запись
         if (newLocation.speed > SPEED) {
             m5Km++;
             if (m5Km > 5){
                 NSLog(@"startCheck-location manager: m5km>5, writing");
-                //[recordAction eventRecord:@"start"];
-                startCheck = NO;
-                [firstTimer invalidate];
-                canWriteToFile = YES;
+                if ([firstTimer isValid]) [firstTimer invalidate];
+                
+                checkMotion = NO;
                 m5Km = 0;
+                
+                //включаем мошн
+                //нормальное обновление
+                [self startMotionDetect];
+                locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+
+                
+                canWriteToFile = YES;
                 [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
             }
         } else m5Km = 0;
        
-        //нет переходим в медленный режим - finishFirstTimer
+        //нет переходим в режим c низкой точностью - finishFirstTimer
     }
     
-    //приложение уже работало - медленный режим
-    else if (slowMonitoring){
-        NSLog(@"slowMonitoring - change location");
-        [self startGPSDetect];
-        [self startMotionDetect];
-        canWriteToFile = YES;
-        [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
-        slowMonitoring = NO;
-    }
-    
-    //gps
+    //приложение уже было движение
     else {
         //работает таймер на стоп
         if ([stopTimer isValid]) {
@@ -212,14 +210,14 @@
 
 - (void)finishStopTimer{
     NSLog(@"finish stop timer");
-    slowMonitoring = YES;
-    [self stopGPSDetect];
     [self stopMotionDetect];
     [self checkSendRight];
+    
+    checkMotion = YES;
+    
     canWriteToFile = NO;
     [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
-    
-    
+
 }
 
 //compass
@@ -303,23 +301,8 @@
     [motionManager stopDeviceMotionUpdates];
 }
 
-- (void)stopSlowMonitoring{
-    NSLog(@"STOP SLOW MONITORING");
-    [locationManager stopMonitoringSignificantLocationChanges];
-}
 
-- (void)stopRecord{
-    NSLog(@"stopRecord");
-    canWriteToFile = NO;
-    [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
-    [self stopGPSDetect];
-    [self stopMotionDetect];
-}
-- (void)startRecord{
-    NSLog(@"startRecord");
-    [self startMotionDetect];
-    //[self checkSpeedTimer];
-}
+
 
 
 
@@ -367,7 +350,7 @@
     else 
         if (!canWriteToFile) {
         NSLog(@"startShortCheckTimer");
-        startCheck = YES;
+        checkMotion = YES;
         shortCheckTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(finishShortCheckTimer) userInfo:nil repeats:NO];
     }
     
@@ -376,7 +359,7 @@
 
 - (void)finishShortCheckTimer{
     NSLog(@"StopShortCheckTimer");
-    startCheck = NO;
+    checkMotion= NO;
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application

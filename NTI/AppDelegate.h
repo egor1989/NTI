@@ -43,11 +43,12 @@
     BOOL canWriteToFile;
     BOOL moreThanLimit;
 
+ //   BOOL lowAccuracy; //низкая точность
 
-       BOOL needCheck;
-    
-    BOOL startCheck;
-    BOOL slowMonitoring;
+    BOOL checkMotion;
+     
+  //  BOOL startCheck; // только включили приложение
+  //  BOOL slowMonitoring; //детектирование по вышкам
     
     NSTimer *stopTimer;
     NSTimer *sendTimer;
@@ -68,10 +69,9 @@
 -(void) startMotionDetect;
 -(void) stopMotionDetect;
 -(double) getTime;
-- (void)stopRecord;
-- (void)startRecord;
+
 - (void)sendTimer;
-- (void)stopSlowMonitoring;
+
 
 
 @property (strong, nonatomic) UIWindow *window;
