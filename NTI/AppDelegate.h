@@ -11,7 +11,6 @@
 #import <CoreLocation/CoreLocation.h>
 #import <CoreMotion/CoreMotion.h>
 #import "AuthViewController.h"
-#import "DatabaseActions.h"
 #import "RecordAction.h"
 
 
@@ -33,9 +32,11 @@
     float offsetG;
     float newCompassTarget;
     float currentYaw;
+    
+    
+   // float accelUpdateFrequency;
     CLLocationDistance allDistance;
     RecordAction *recordAction;
-    DatabaseActions *databaseAction;
 
     BOOL kmch5;
     NSInteger l5Km;
@@ -68,8 +69,6 @@
 -(void) startMotionDetect;
 -(void) stopMotionDetect;
 -(double) getTime;
-- (void)stopRecord;
-- (void)startRecord;
 - (void)sendTimer;
 - (void)stopSlowMonitoring;
 

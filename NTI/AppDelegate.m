@@ -20,7 +20,7 @@
 
 @synthesize window = _window, lastLoc, course, trueNorth, north, allDistance, canWriteToFile, dict, recordAction;
 
-#define accelUpdateFrequency 1	
+//#define accelUpdateFrequency 0.1	
 
 
 
@@ -35,6 +35,9 @@
     locationManager.delegate=self;
     locationManager.desiredAccuracy= kCLLocationAccuracyNearestTenMeters;
     locationManager.distanceFilter = kCLDistanceFilterNone;
+    
+    //accelUpdateFrequency = 1.0;
+    
     
     lastLoc = [[CLLocation alloc] init];
     allDistance = 0;
@@ -51,7 +54,8 @@
 
     motionManager = [[CMMotionManager alloc] init];
     if ([motionManager isGyroAvailable]) {
-        motionManager.deviceMotionUpdateInterval = 1.0/accelUpdateFrequency;
+        motionManager.deviceMotionUpdateInterval = 1.0 /*/accelUpdateFrequency*/;//регулировка частоты
+        
         [self startMotionDetect];
     }
     else{
@@ -169,7 +173,8 @@
     else if (slowMonitoring){
         NSLog(@"slowMonitoring - change location");
         [self startGPSDetect];
-        [self startMotionDetect];
+        //[self startMotionDetect];
+        motionManager.deviceMotionUpdateInterval = 1.0;
         canWriteToFile = YES;
         [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
         slowMonitoring = NO;
@@ -214,7 +219,8 @@
     NSLog(@"finish stop timer");
     slowMonitoring = YES;
     [self stopGPSDetect];
-    [self stopMotionDetect];
+    //[self stopMotionDetect];
+    motionManager.deviceMotionUpdateInterval = 0.1;
     [self checkSendRight];
     canWriteToFile = NO;
     [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
@@ -308,18 +314,7 @@
     [locationManager stopMonitoringSignificantLocationChanges];
 }
 
-- (void)stopRecord{
-    NSLog(@"stopRecord");
-    canWriteToFile = NO;
-    [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
-    [self stopGPSDetect];
-    [self stopMotionDetect];
-}
-- (void)startRecord{
-    NSLog(@"startRecord");
-    [self startMotionDetect];
-    //[self checkSpeedTimer];
-}
+
 
 
 

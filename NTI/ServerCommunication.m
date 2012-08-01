@@ -525,6 +525,7 @@
                                        queue:[NSOperationQueue mainQueue]
                            completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *error) {
                                NSLog(@"compressedDAta= %@", responseData);
+                               NSLog(@"string = %@", [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding] );
                                NSData *unCompressData = [[NSData alloc] init];
                                unCompressData = [GzipCompress gzipInflate:responseData];
                                returnString = [[NSString alloc] initWithData:unCompressData encoding: NSUTF8StringEncoding];
