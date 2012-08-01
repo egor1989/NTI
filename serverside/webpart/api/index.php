@@ -88,6 +88,7 @@ private $TypeSpeed;
 private $sevSpeed;
 private $Turn;
 private $Accel;
+private $wAcc;
  function UserEntry() {
 	//Constructor
  }
@@ -99,6 +100,7 @@ private $Accel;
  public function setTypeSpeed($TypeSpeed){$this->TypeSpeed=$TypeSpeed;}
  public function setsevSpeed($sevSpeed){$this->sevSpeed=$sevSpeed;}
  public function setTurn($Turn){$this->Turn=$Turn;}
+  public function setwAcc($wAcc){$this->wAcc=$wAcc;}
  public function setAccel($Accel){$this->Accel=$Accel;}
   
  public function getsevAcc(){	return($this->sevAcc);}
@@ -108,6 +110,7 @@ private $Accel;
  public function getTypeSpeed(){	return($this->TypeSpeed);}
  public function getsevSpeed(){	return($this->sevSpeed);}
  public function getTurn(){return($this->Turn);}
+  public function getwAcc(){return($this->wAcc);}
  public function getAccel(){return($this->Accel);}
 
 }
@@ -521,6 +524,8 @@ function addNTIFile($param)
 					$ArrayEntry[$i][0]->setsevAcc(0);
 					$ArrayEntry[$i][0]->setsevTurn(0);
 					$ArrayEntry[$i][0]->setsevSpeed(0);
+					$ArrayEntry[$i][0]->setTurn(0);
+					$ArrayEntry[$i][0]->setwAcc(0);
 					$ArrayEntry[$i][0]->setTurnType("normal point");
 					$ArrayEntry[$i][0]->setTypeSpeed("normal point");
 					$ArrayEntry[$i][0]->setTypeAcc("normal point");
@@ -535,18 +540,23 @@ function addNTIFile($param)
 						$ArrayEntry[$i][$j]->setTypeAcc("normal point");
 						$speed=$ArrayEntry[$i][$j]->getSpeed();
 
-						$deltaTime=$ArrayEntry[$i][$j]->getTimestamp()-$ArrayEntry[$i][$j-1]->getTimestamp();
-
+						$deltaTime=$ArrayEntry[$i][$j]->getTimestamp()-$ArrayEntry[$i][$j-1]->getTimestamp();	
 						if($ArrayEntry[$i][$j]->getLng()-$ArrayEntry[$i][$j-1]->getLng()!=0)
 						{
-								$ArrayEntry[$i][$j]->setTurn(atan(($ArrayEntry[$i][$j]->getLat()-$ArrayEntry[$i][$j-1]->getLat())/($ArrayEntry[$i][$j]->getLng()-$ArrayEntry[$i][$j-1]->getLng())));
-								$deltaTurn = 	$ArrayEntry[$i][$j]->getTurn() - $ArrayEntry[$i][$j-1]->getTurn();
-								$wAcc = abs($deltaTurn/($deltaTime));
-
-								if (($wAcc < 0.45) && ($wAcc >= 0)) {$ArrayEntry[$i][$j]->setsevTurn(0);} 
-								else if (($wAcc >= 0.45) && ($wAcc < 0.6))	{$ArrayEntry[$i][$j]->setsevTurn(1);} 
-								else if (($wAcc >= 0.6) && ($wAcc < 0.75)){$ArrayEntry[$i][$j]->setsevTurn(2);} 
-								else if ($wAcc >= 0.75) {$ArrayEntry[$i][$j]->setsevTurn(3);}
+							$ArrayEntry[$i][$j]->setTurn(atan(($ArrayEntry[$i][$j]->getLat()-$ArrayEntry[$i][$j-1]->getLat())/($ArrayEntry[$i][$j]->getLng()-$ArrayEntry[$i][$j-1]->getLng())));
+							$deltaTurn = 	$ArrayEntry[$i][$j]->getTurn() - $ArrayEntry[$i][$j-1]->getTurn();
+							$wAcc = abs($deltaTurn/($deltaTime));
+							if (($wAcc < 0.45) && ($wAcc >= 0)) {$ArrayEntry[$i][$j]->setsevTurn(0);} 
+							else if (($wAcc >= 0.45) && ($wAcc < 0.6))	{$ArrayEntry[$i][$j]->setsevTurn(1);} 
+							else if (($wAcc >= 0.6) && ($wAcc < 0.75)){$ArrayEntry[$i][$j]->setsevTurn(2);} 
+							else if ($wAcc >= 0.75) {$ArrayEntry[$i][$j]->setsevTurn(3);}
+							$ArrayEntry[$i][$j]->setwAcc($wAcc);
+						}
+						else
+						{
+							$ArrayEntry[$i][$j]->setTurn($ArrayEntry[$i][$j-1]->getTurn());		
+							$ArrayEntry[$i][$j]->setwAcc($ArrayEntry[$i][$j-1]->getwAcc());	
+						}
 								$deltaSpeed = $speed - $ArrayEntry[$i][$j-1]->getSpeed();
 								
 								$accel = $deltaSpeed/$deltaTime;
@@ -823,8 +833,7 @@ function addNTIFile($param)
 											case 0: {break;}
 										}
 								}	
-						}
-
+						
 
 
 
@@ -946,8 +955,9 @@ function addNTIFile($param)
 							$TurnType=$ArrayEntry[$i][$j]->getTurnType();
 							$TypeSpeed=$ArrayEntry[$i][$j]->getTypeSpeed();
 							$sevSpeed=$ArrayEntry[$i][$j]->getsevSpeed();	
-							$accl=$ArrayEntry[$i][$j]->getAccel();			
-							$sql_insert_str="insert into NTIUserDrivingEntry(Accel,UID,accx,accy,distance,lat,lng,direction,compass,speed,utimestamp,DrivingID,Blat,Blng,sevAcc,TypeAcc,sevTurn,TurnType,TypeSpeed,sevSpeed) values ('$accl','$UID','$accx','$accy','$distance','$lat','$lng','$direction','$compass','$speed','$utimestamp','$DrivingID','$Blat','$Blng','$sevAcc','$TypeAcc','$sevTurn','$TurnType','$TypeSpeed','$sevSpeed')";
+							$accl=$ArrayEntry[$i][$j]->getAccel();	
+							$waccl=$ArrayEntry[$i][$j]->getwAcc();
+							$sql_insert_str="insert into NTIUserDrivingEntry(Accel,UID,accx,accy,distance,lat,lng,direction,compass,speed,utimestamp,DrivingID,Blat,Blng,sevAcc,TypeAcc,sevTurn,TurnType,TypeSpeed,sevSpeed,wAcc) values ('$accl','$UID','$accx','$accy','$distance','$lat','$lng','$direction','$compass','$speed','$utimestamp','$DrivingID','$Blat','$Blng','$sevAcc','$TypeAcc','$sevTurn','$TurnType','$TypeSpeed','$sevSpeed','$waccl')";
 							mysql_query($sql_insert_str);
 						}
 					}
@@ -1174,15 +1184,15 @@ function getPath($param)
 						$ret_arr[$n]['weight']=0;
 					}
 				}
-		if(		$curDrivingId!=$row['DrivingID'])
-		{
+				if(	$curDrivingId!=$row['DrivingID'])
+				{
 
 					$ret_arr[$n]['type']=42;
 					$ret_arr[$n]['weight']=42;
 
 					$curDrivingId=$row['DrivingID'];
-		}
-			$n++;
+				}
+				$n++;
 			
 		}
 	
@@ -1191,7 +1201,6 @@ function getPath($param)
 		{
 		
 			$errortype=array('info'=>"",'code'=>  0);
-			//header('Content-type: application/zip'); 
 			$res=array('result'=>$ret_arr,'error'=> $errortype);
 			echo (gzcompress(json_encode($res)));	
 			exit();
