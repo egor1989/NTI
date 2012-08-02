@@ -12,6 +12,7 @@
 #import <CoreMotion/CoreMotion.h>
 #import "AuthViewController.h"
 #import "RecordAction.h"
+#import "DatabaseActions.h"
 
 
 

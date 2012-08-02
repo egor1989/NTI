@@ -265,7 +265,7 @@ static BOOL needLastRoute;
             }
     }
     noerror = YES;
-    sqlite3_close(database);
+    //sqlite3_close(database);
    // [myAppDelegate startRecord];
 }
 

@@ -524,14 +524,10 @@
     [NSURLConnection sendAsynchronousRequest:request
                                        queue:[NSOperationQueue mainQueue]
                            completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *error) {
-                               NSLog(@"compressedDAta= %@", responseData);
-                               
-                               //NSLog(@"compress = %@", [GzipCompress gzipDeflate:responseData]);
+                              
                                NSMutableData *resData = [responseData mutableCopy];
                                [resData replaceBytesInRange:NSMakeRange(0, 3) withBytes:NULL length:0];
                                NSLog(@"compressedDAta= %@", resData);
-                               
-                               NSLog(@"string = %@", [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding] );
                                
                                NSData *unCompressData = [[NSData alloc] init];
                                unCompressData = [GzipCompress gzipInflate:resData];
