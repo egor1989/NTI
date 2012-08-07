@@ -13,33 +13,35 @@
 #define CC_RADIANS_TO_DEGREES(__ANGLE__) ((__ANGLE__) / (float)M_PI * 180.0f)
 #define radianConst M_PI/180.0
 #define SPEED 1.5
-#define STARTTIME 30
-#define STOPTIME 60
+#define STARTTIME 300 //!!
+#define STOPTIME 600 //!!
 
 @implementation AppDelegate
 
 @synthesize window = _window, lastLoc, course, trueNorth, north, allDistance, canWriteToFile, dict, recordAction;
 
-#define accelUpdateFrequency 1	
+//#define accelUpdateFrequency 0.1	
 
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {  
+    freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr); //!!!!!не забывать убирать логирвоание
     recordAction = [[RecordAction alloc] init];
     
-    [recordAction eventRecord:@"open"]; 
-    
-    freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr); //!!!!!не забывать убирать логирвоание
+    //[recordAction eventRecord:@"open"]; 
     
     locationManager=[[CLLocationManager alloc] init];
     locationManager.delegate=self;
     locationManager.desiredAccuracy= kCLLocationAccuracyNearestTenMeters;
     locationManager.distanceFilter = kCLDistanceFilterNone;
     
+    //accelUpdateFrequency = 1.0;
+    
+    
     lastLoc = [[CLLocation alloc] init];
     allDistance = 0;
-    canWriteToFile = NO;//?
+    canWriteToFile = NO;//переделать на NO!!
     slowMonitoring = NO;
     [recordAction startOfRecord];
     needCheck = YES;
@@ -49,11 +51,11 @@
     
     [self checkSendRight];
     [self startGPSDetect];
-    //пока motion отключен
-    //[self stopMotionDetect];
+
     motionManager = [[CMMotionManager alloc] init];
     if ([motionManager isGyroAvailable]) {
-        motionManager.deviceMotionUpdateInterval = 1.0/accelUpdateFrequency;
+        motionManager.deviceMotionUpdateInterval = 1.0 /*/accelUpdateFrequency*/;//регулировка частоты
+        
         [self startMotionDetect];
     }
     else{
@@ -87,7 +89,7 @@
 
 -(void)checkSendRight{
     
-    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"pk"]>10) {//!!!исправить на 10
+    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"pk"]>30) {//!!!исправить на 30
         if ([ServerCommunication checkInternetConnection])  {
             NSLog(@"checkSendRight: send");
            [recordAction sendFile];
@@ -117,18 +119,23 @@
     NSLog(@"stopGPSDetect");
     [locationManager stopUpdatingLocation];
     [locationManager stopUpdatingHeading];
-    [locationManager startMonitoringSignificantLocationChanges];
-    NSLog(@"startMonitoringSignificantLocationChanges");
+   // if ([[NSUserDefaults standardUserDefaults] boolForKey:@"canWorkInBackground"]) {
+        [locationManager startMonitoringSignificantLocationChanges];
+        NSLog(@"startMonitoringSignificantLocationChanges");
+   // } else NSLog(@"canWorkInBackground=NO");
+    
 
 }
 
 -(void)startGPSDetect{
-    NSLog(@"startGPSDetect");
+  
     [locationManager stopMonitoringSignificantLocationChanges];
     NSLog(@"stopMonitoringSignificantLocationChange");
     [locationManager startUpdatingLocation];
+    NSLog(@"startGPSDetect");
     [locationManager startUpdatingHeading];
-
+    
+    
 }
 
 -(double) getTime {
@@ -141,7 +148,7 @@
     CLLocationDistance meters = [newLocation distanceFromLocation:oldLocation];
     if (meters<0) meters = 0;
     allDistance += meters;
-    
+    //[[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];//!!УБРАТЬ
     //только включили приложение, начальная проверка
     if (startCheck) {
         NSLog(@"startCheck");
@@ -161,15 +168,18 @@
        
         //нет переходим в медленный режим - finishFirstTimer
     }
+    
     //приложение уже работало - медленный режим
     else if (slowMonitoring){
         NSLog(@"slowMonitoring - change location");
         [self startGPSDetect];
+        //[self startMotionDetect];
+        motionManager.deviceMotionUpdateInterval = 1.0;
         canWriteToFile = YES;
-        //[recordAction eventRecord:@"start"];
         [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
         slowMonitoring = NO;
     }
+    
     //gps
     else {
         //работает таймер на стоп
@@ -191,7 +201,10 @@
                 NSLog(@"l5Km>5, start stopTimer");
             }
         }
-        else l5Km = 0;
+       else {
+           l5Km = 0;
+           canWriteToFile = YES;
+       }
     }
     
     
@@ -206,6 +219,8 @@
     NSLog(@"finish stop timer");
     slowMonitoring = YES;
     [self stopGPSDetect];
+    //[self stopMotionDetect];
+    motionManager.deviceMotionUpdateInterval = 0.1;
     [self checkSendRight];
     canWriteToFile = NO;
     [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
@@ -286,7 +301,6 @@
                                            }
                                           dict = [NSDictionary dictionaryWithObject: motion forKey: @"motion"];
                                            [[NSNotificationCenter defaultCenter] postNotificationName: @"motionNotification" object:  nil];
-                                          // NSLog(@"motionNotification");
                                        }];
 }
 
@@ -295,18 +309,12 @@
     [motionManager stopDeviceMotionUpdates];
 }
 
-- (void)stopRecord{
-    NSLog(@"stopRecord");
-    canWriteToFile = NO;
-    [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
-    [self stopGPSDetect];
-    [self stopMotionDetect];
+- (void)stopSlowMonitoring{
+    NSLog(@"STOP SLOW MONITORING");
+    [locationManager stopMonitoringSignificantLocationChanges];
 }
-- (void)startRecord{
-    NSLog(@"startRecord");
-    [self startMotionDetect];
-    //[self checkSpeedTimer];
-}
+
+
 
 
 
@@ -381,8 +389,9 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-    [recordAction eventRecord:@"close"];
+    [DatabaseActions finalizeStatements];
     [locationManager stopMonitoringSignificantLocationChanges];
+    [recordAction eventRecord:@"close"];
     NSLog(@"=====close=====");
 }
 

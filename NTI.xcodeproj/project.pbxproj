@@ -114,6 +114,7 @@
 		5381C8F7153046380012E99D /* RecordAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 5381C8F6153046380012E99D /* RecordAction.m */; };
 		539B29BE14F305C3007E6977 /* gps.png in Resources */ = {isa = PBXBuildFile; fileRef = 539B29BC14F305C3007E6977 /* gps.png */; };
 		539B29BF14F305C3007E6977 /* north.png in Resources */ = {isa = PBXBuildFile; fileRef = 539B29BD14F305C3007E6977 /* north.png */; };
+		53A2F1B815BECF6500B948A4 /* refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 53A2F1B715BECF6500B948A4 /* refresh.png */; };
 		53A560DC1535CFCB00520781 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A560DB1535CFCB00520781 /* CoreTelephony.framework */; };
 		53A5AE341527593C0093E552 /* green.png in Resources */ = {isa = PBXBuildFile; fileRef = 53A5AE321527593C0093E552 /* green.png */; };
 		53A5AE351527593C0093E552 /* red.png in Resources */ = {isa = PBXBuildFile; fileRef = 53A5AE331527593C0093E552 /* red.png */; };
@@ -318,6 +319,7 @@
 		5381C8F6153046380012E99D /* RecordAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordAction.m; sourceTree = "<group>"; };
 		539B29BC14F305C3007E6977 /* gps.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gps.png; sourceTree = "<group>"; };
 		539B29BD14F305C3007E6977 /* north.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = north.png; sourceTree = "<group>"; };
+		53A2F1B715BECF6500B948A4 /* refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = refresh.png; path = Images/refresh.png; sourceTree = "<group>"; };
 		53A560DB1535CFCB00520781 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		53A5AE321527593C0093E552 /* green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = green.png; path = Images/green.png; sourceTree = "<group>"; };
 		53A5AE331527593C0093E552 /* red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = red.png; path = Images/red.png; sourceTree = "<group>"; };
@@ -595,6 +597,7 @@
 		276C4C9214DEE6EA00C469A6 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				53A2F1B715BECF6500B948A4 /* refresh.png */,
 				277925AA15349FA90062D871 /* time.png */,
 				2763714C152A4E94003FE70B /* Icons */,
 				53A5AE321527593C0093E552 /* green.png */,
@@ -1083,6 +1086,7 @@
 				2763714A152A4E8E003FE70B /* Icon@2x.png in Resources */,
 				27792597153486800062D871 /* route.csv in Resources */,
 				277925AB15349FA90062D871 /* time.png in Resources */,
+				53A2F1B815BECF6500B948A4 /* refresh.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1307,8 +1311,8 @@
 					"\"$(SRCROOT)/TestFlightSDK1.0\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "1955304E-9CA6-4DD7-BE0B-460DF8AE1A98";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1955304E-9CA6-4DD7-BE0B-460DF8AE1A98";
+				PROVISIONING_PROFILE = "BDB1B2D3-A0CF-446F-BC53-0B7AF870C9EC";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "BDB1B2D3-A0CF-446F-BC53-0B7AF870C9EC";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

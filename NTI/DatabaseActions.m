@@ -10,7 +10,7 @@
 #import "AppDelegate.h"
 
 #define myAppDelegate (AppDelegate*) [[UIApplication sharedApplication] delegate]
-#define maxEntries 1000
+#define maxEntries 500
 
 static sqlite3 *database = nil;
 static sqlite3_stmt *deleteStmt = nil;
@@ -258,19 +258,19 @@ static BOOL needLastRoute;
                 NSLog(@"DBsend - no errors");
                 [DatabaseActions clearDatabase];
                 needLastRoute = YES;
+                [userDefaults setInteger:0 forKey:@"pk"];
                 [userDefaults setValue: [serverCommunication getLastStatistic] forKey:@"lastStat"];
                 [userDefaults setValue: [serverCommunication getAllStatistic] forKey:@"allStat"];
                 //notif refresh
             }
     }
     noerror = YES;
-    sqlite3_close(database);
-    [myAppDelegate startRecord];
+    //sqlite3_close(database);
+   // [myAppDelegate startRecord];
 }
 
 - (void) convertAndSend{
-    NSInteger size = [dataArray count];
-    NSLog(@"%i",size);
+    NSLog(@"data array size = %i",[dataArray count]);
 
   //  NSString *CSV = [csvConverter arrayToCSVString:dataArray];
     NSData *JSON = [jsonConvert convert:dataArray];

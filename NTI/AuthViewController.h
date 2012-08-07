@@ -23,5 +23,5 @@
 - (BOOL)checkData;
 - (IBAction)authButton:(id)sender;
 - (IBAction)regButton:(id)sender;
-
+- (IBAction)forgotButton:(id)sender;
 @end

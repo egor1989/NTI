@@ -41,6 +41,7 @@
     
     
     
+        
     
     /************инициализация лейблов для таблицы**********************/
     speedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];;
@@ -82,7 +83,7 @@
     lastTrip.textAlignment = UITextAlignmentRight;
     
     recordImage = [[UIImageView alloc] initWithFrame:CGRectMake(280.0f, 7.0f, 27.0f, 27.0f)];
-    
+    textWarning = @"";
     /***************************************************************/
     
     if ([myAppDelegate canWriteToFile]) {
@@ -100,10 +101,11 @@
      selector: @selector(changeImage)
      name: @"canWriteToFile"
      object: nil];
-    [serverCommunication refreshCookie];
+    serverCommunication = [[ServerCommunication alloc] init];
+    //[serverCommunication refreshCookie]; ?? зачем
     /************ инициализация элементов *******************/
 
-    NSArray *info = [NSArray arrayWithObjects:@"Имя", @"Запись", @"Скорость", @"Только Wi-Fi", @"Дата посл. поезки",@"Тестовый файл", nil];
+    NSArray *info = [NSArray arrayWithObjects:@"Имя", @"Запись", @"Скорость", @"Только Wi-Fi", @"Дата посл. поезки",@"Тестовый файл",@"Работа в фоне", nil];
     NSArray *statistics = [NSArray arrayWithObjects:@"",@"Общая оценка", @"Километраж", @"Превышение скорости", @"Качество разгонов", @"Качество торможений", @"Качество поворотов", nil];
     self.tables = [NSDictionary dictionaryWithObjectsAndKeys:statistics, firstTitle  , info, secondTitle, nil];
 }
@@ -121,6 +123,8 @@
     }
     
 }
+
+
 
 - (void)viewDidUnload
 {
@@ -313,6 +317,34 @@
                 } 
                 return cell;
             }
+            
+            case 6: {
+                static NSString *CellIdentifier = @"Background";
+                UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+                if (cell == nil) {
+                    cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
+                    cell.textLabel.font = cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
+                    cell.textLabel.text = [curentEntrie objectAtIndex:indexPath.row];
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    cell.detailTextLabel.text = textWarning;     
+                    
+                    backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+                    [backButton setFrame:CGRectMake(0.0f, 0.0f, 79.0f, 27.0f)];
+                    backButton.titleLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16];
+                    cell.accessoryView = backButton;
+                    [backButton setTitle:@"СТОП" forState:UIControlStateNormal];
+                    [backButton addTarget:self action:@selector(backButton:) forControlEvents:UIControlEventTouchDown];
+                    
+             //       UISwitch *backWorkSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
+             //       cell.accessoryView = backWorkSwitch;
+             //       cell.backgroundColor = [UIColor whiteColor];
+             //       [backWorkSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"canWorkInBackground"] animated:NO];
+             //       [backWorkSwitch addTarget:self action:@selector(backgroundWorkSwitch:) forControlEvents:UIControlEventValueChanged];
+                }
+                else  cell.detailTextLabel.text = textWarning;     
+                return cell;
+            }
+
 
             break;
         }
@@ -487,6 +519,13 @@
 
 }
 
+- (IBAction)backButton:(id)sender{
+    [myAppDelegate stopSlowMonitoring];
+    [backButton setHidden:YES];
+    textWarning = @"выключено";
+    [self.statTableView reloadData];
+}
+
 - (IBAction) internetUploadSwitch:(id)sender{
     if ([sender isOn])
     {
@@ -500,6 +539,22 @@
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"internetUserPreference"]; 
     }
 }
+
+- (IBAction) backgroundWorkSwitch:(id)sender{
+    if ([sender isOn])
+    {
+        //может работать работать в бэке
+        NSLog(@"switch YES BACKGROUND WORK");
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"canWorkInBackground"];
+    }
+    else
+    {
+        NSLog(@"switch NO BACKGROUND WORK");
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"canWorkInBackground"]; 
+    }
+}
+
+
 
 /*
 // Override to support conditional editing of the table view.
@@ -610,7 +665,50 @@
     
 }
 
+- (IBAction)refreshButton:(id)sender{
+    if ([ServerCommunication checkInternetConnection]) {
+        [serverCommunication refreshCookie];
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setValue: [serverCommunication getLastStatistic] forKey:@"lastStat"];
+        [userDefaults setValue: [serverCommunication getAllStatistic] forKey:@"allStat"];
+        [userDefaults synchronize];
+        [self parse: [userDefaults valueForKey:@"lastStat"] method:@"lastStat"];
+        [self parse: [userDefaults valueForKey:@"allStat"] method:@"allStat"];
+    }
+    
+}
 
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    
+    if (section == 1) {
+        
+        UIView* customView = [[UIView alloc] initWithFrame:CGRectMake(10.0, 0.0, 300.0, 44.0)];
+        
+        UILabel* label = [[UILabel alloc] initWithFrame: CGRectMake(20.0, 0.0, 140.0, 20.0)];
+        [label setBackgroundColor:[UIColor clearColor]];
+        [label setText: @"Статистика"];
+        label.opaque = NO;
+        label.textColor = [UIColor grayColor];
+        label.highlightedTextColor = [UIColor whiteColor];
+        label.font = [UIFont boldSystemFontOfSize:17];
+        
+        [customView addSubview: label];
+        
+        // create the button object
+        UIButton *refreshButton  = [UIButton buttonWithType:UIButtonTypeCustom];
+        [refreshButton addTarget:self 
+                          action:@selector(refreshButton:) forControlEvents:UIControlEventTouchDown];
+        
+        [refreshButton setImage:[UIImage imageNamed:@"refresh.png"] forState:UIControlStateNormal];
+        refreshButton.frame = CGRectMake(130.0, 0.0, 20.0, 20.0);//(x, y, width, height) 
+        
+        [customView addSubview:refreshButton];
+        
+        return customView;
+    }
+    return nil;
+}
 
 #pragma mark - Table view delegate
 

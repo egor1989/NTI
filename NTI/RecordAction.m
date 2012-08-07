@@ -8,17 +8,21 @@
 
 #import "RecordAction.h"
 #import "AppDelegate.h"
+#import "toJSON.h"
 #define myAppDelegate (AppDelegate*) [[UIApplication sharedApplication] delegate]
 #define MAX3(a,b,c) ( MAX(a,b)>c ? ((a>b)? 1:2) : 3 )
 #define radianConst M_PI/180.0
-#define maxEntries 50
+#define maxEntries 500 
+//!!500
+
+
 
 
 @implementation RecordAction
 
 - (id)init{
     databaseAction = [[DatabaseActions alloc] initDataBase];
-    
+
     [[NSNotificationCenter defaultCenter]	
      addObserver: self
      selector: @selector(checkWriteRight)
@@ -31,10 +35,16 @@
      name: @"canWriteToFile"
      object: nil];
     
+    jsonConvert = [[toJSON alloc] init];
+    serverCommunication = [[ServerCommunication alloc] init];
     Start = NO;
     End = NO;
     First = YES;
-    
+    //*******************
+//    lat = 33.123456;
+//    lon = 60.654321;
+//    speedTest = 0;
+    //*******************
     return self;
 }
 
@@ -44,6 +54,7 @@
 
 - (void)addRecord{
     accelDict = [myAppDelegate dict];
+    
     
     CMAcceleration userAcceleration=((CMDeviceMotion*)[accelDict objectForKey: @"motion"]).userAcceleration;
     CMAcceleration gravity=((CMDeviceMotion*)[accelDict objectForKey: @"motion"]).gravity;
@@ -68,6 +79,12 @@
     
     float curSpeed = 0;
     if (location.speed > 0) curSpeed = location.speed*3.6;
+
+    //**************
+ //   curSpeed = speedTest++;
+ //   lat = lat + 0.0002;
+ //   lon = lon + 0.0002;
+    //**************
     float distance = [myAppDelegate allDistance]/1000;
     NSString *type = @"-";
 
@@ -76,30 +93,54 @@
     NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]], type, [NSString stringWithFormat:@"%f", x], [NSString stringWithFormat:@"%f", y], [NSString stringWithFormat:@"%.0f",[myAppDelegate north]], [NSString stringWithFormat:@"%.1f",[myAppDelegate course]], [NSString stringWithFormat:@"%.2f",distance], [NSString stringWithFormat:@"%.6f",location.coordinate.latitude],[NSString stringWithFormat:@"%.6f",location.coordinate.longitude], [NSString stringWithFormat:@"%.2f",curSpeed], nil];
     NSDictionary *entries = [NSDictionary dictionaryWithObjects: objs forKeys:keys];
     [dataArray addObject:entries];
-        
+     NSLog(@"data array size = %i",[dataArray count]);    
     NSInteger countInArray = dataArray.count;
         
     if (countInArray > maxEntries){ 
         
         toWrite = dataArray;
         dataArray = [[NSMutableArray alloc] init];
-        //создаем новый тред
-        NSThread* myThread = [[NSThread alloc] initWithTarget:databaseAction
+        //проверяем есть ли интернет
+        if ([ServerCommunication checkInternetConnection]){
+            //есть-отправляем
+            
+            NSData *JSON = [jsonConvert convert: [self JSONFormat:toWrite]];
+            [serverCommunication uploadData: JSON]; 
+            
+        } 
+        else {
+            //нет-записывем в базу
+            //создаем новый тред
+            NSThread* myThread = [[NSThread alloc] initWithTarget:databaseAction
                                                          selector:@selector(addArray:)
                                                            object:toWrite];
-        [myThread start]; 
+            [myThread start]; 
+        }
     }
   //  NSLog(@"countInArray = %i", countInArray);
 }
 
 - (void)endOfRecord{
-    NSLog(@"don't write");
+    NSLog(@"endOfRecord");
+    toWrite = dataArray;
     dataArray = [[NSMutableArray alloc] init];
-    //создаем новый тред
-    NSThread* myThread = [[NSThread alloc] initWithTarget:databaseAction
-                                                 selector:@selector(addArray:)
-                                                   object:toWrite];
-    [myThread start]; 
+    
+    
+    //ТОЖЕ САМОЕ
+    
+     if ([ServerCommunication checkInternetConnection]){
+         NSLog(@"data array size = %i",[toWrite count]);
+         NSData *JSON = [jsonConvert convert: [self JSONFormat:toWrite]];
+         [serverCommunication uploadData: JSON]; 
+     }
+     else {
+         //создаем новый тред
+         NSThread* myThread = [[NSThread alloc] initWithTarget:databaseAction
+                                                      selector:@selector(addArray:)
+                                                        object:toWrite];
+         [myThread start]; 
+     }
+    
 
 }
 
@@ -112,13 +153,14 @@
     if ([myAppDelegate canWriteToFile] && !Start) {
         Start = YES;
         End = NO;
-        [databaseAction addEntrie:@"start"];
+        
+        if (![ServerCommunication checkInternetConnection]) [databaseAction addEntrie:@"start"];
     }
     if (![myAppDelegate canWriteToFile] && Start){
         Start = NO;
         End = YES;
         [self endOfRecord];
-        [databaseAction addEntrie:@"end"];
+        if (![ServerCommunication checkInternetConnection]) [databaseAction addEntrie:@"end"];
     }
     
 }
@@ -132,6 +174,28 @@
 
 - (void)eventRecord: (NSString *)type{
     [databaseAction addEntrie:type];
+}
+
+- (NSMutableArray *)JSONFormat: (NSMutableArray *)sendData{
+    NSArray *keys = [NSArray arrayWithObjects:@"timestamp", @"type", @"acc", @"gps", nil];
+    NSDictionary *rowData;
+    NSLog(@"size = %i", [sendData count]);
+    NSMutableArray *sendArray = [[NSMutableArray alloc] init];
+    
+    for (NSInteger i=0; i<=[sendData count]-1; i++) {
+        rowData = [sendData objectAtIndex:i];    
+        //NSLog(@"row=%@",rowData);
+            NSDictionary *acc = [NSDictionary dictionaryWithObjectsAndKeys:[rowData objectForKey:@"accX"], @"x",  [rowData objectForKey:@"accY"], @"y", nil];
+                    
+            NSDictionary *gps = [NSDictionary dictionaryWithObjectsAndKeys:[rowData objectForKey:@"direction"], @"direction", [rowData objectForKey:@"speed"], @"speed",  [rowData objectForKey:@"latitude"], @"latitude", [rowData objectForKey:@"longitude"], @"longitude", [rowData objectForKey:@"compass"], @"compass",  [rowData objectForKey:@"distance"], @"distance", nil];
+                    
+            NSArray *objs = [NSArray arrayWithObjects:  [rowData objectForKey:@"timestamp"], [rowData objectForKey:@"type"], 
+                                     acc, gps, nil];
+        [sendArray addObject:[NSDictionary dictionaryWithObjects:objs forKeys:keys]];
+        
+    }
+                    
+    return sendArray;
 }
 
 

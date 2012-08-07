@@ -19,9 +19,10 @@
 
 #define myAppDelegate (AppDelegate*) [[UIApplication sharedApplication] delegate]
 
-@interface StatViewController : UITableViewController <UINavigationControllerDelegate, MFMailComposeViewControllerDelegate>{
+@interface StatViewController : UITableViewController <UINavigationControllerDelegate, MFMailComposeViewControllerDelegate, UITableViewDelegate, UITableViewDataSource>{
     UILabel *speedLabel;
     IBOutlet UIButton *loginButton;
+    IBOutlet UIButton *backButton;
     UILabel *qualityDriving;
     UILabel *speedMode;
     UILabel *acceleration;
@@ -30,6 +31,7 @@
     UILabel *recordLabel;
     UILabel *countKm;
     UILabel *lastTrip;
+    NSString *textWarning;
     IBOutlet UIButton *sendButton;
     ServerCommunication *serverCommunication;
     UIImageView *recordImage;
@@ -37,7 +39,8 @@
     NSDictionary *tables;
     IBOutlet UITableView *statTableView;
     FileController *fileController;
-}
+    
+    }
 
 @property (nonatomic) BOOL *writeAction;
 @property (nonatomic, retain) NSDictionary *tables;
@@ -45,11 +48,14 @@
 
 - (void) speedUpdate;
 - (IBAction)loginButton:(id)sender;
+- (IBAction)refreshButton:(id)sender;
+- (IBAction)backButton:(id)sender;
 //- (IBAction)sendButton:(id)sender;
 - (IBAction)helpButton:(id)sender;
 - (void) pickOne:(id)sender;
 - (void)changeImage;
 - (void)parse:(NSString *)result method:(NSString *)method;
 - (IBAction) internetUploadSwitch:(id)sender;
+//- (IBAction) backgroundWorkSwitch:(id)sender;
 - (NSArray *)curentEntries:(NSInteger)index;
 @end

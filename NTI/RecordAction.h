@@ -20,6 +20,12 @@
     BOOL Start;
     BOOL End;
     BOOL First;
+    toJSON *jsonConvert;
+    ServerCommunication *serverCommunication;
+    //*****************
+   // double lat;
+   // double lon;
+   // NSInteger speedTest;
 }
 - (void)addRecord;
 - (void)endOfRecord;
@@ -28,6 +34,7 @@
 - (void)sendFile;
 - (void)eventRecord: (NSString *)type;
 - (void)checkActivity;
+- (NSMutableArray *)JSONFormat: (NSMutableArray *)sendData;
 
 
 @end

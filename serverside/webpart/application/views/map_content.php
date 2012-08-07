@@ -24,8 +24,8 @@
 			<tr>
 				<td>
 					<br>
-					<span style="color:black"> Начало поездки:<br><?echo date('d.m.Y H:i:s',$trr['TimeStart']); ?></span><br>
-					<span style="color:black"> Конец  поездки:<br><?echo date('d.m.Y H:i:s',$trr['TimeEnd']);?></span><br/>
+					<span style="color:black"> Начало поездки:<br><?date_default_timezone_set('Europe/Moscow'); echo date('d.m.Y H:i:s',$trr['TimeStart']); ?></span><br>
+					<span style="color:black"> Конец  поездки:<br><?date_default_timezone_set('Europe/Moscow'); echo date('d.m.Y H:i:s',$trr['TimeEnd']);?></span><br/>
 										<table border=0>
 						<tr>
 					<td><span style="font-size:12px">K<sub>скор.</sub>=<?echo $trr['SpeedK'];?></span></td>

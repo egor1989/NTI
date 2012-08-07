@@ -3,8 +3,10 @@
 		<?if(isset($specinfo))echo $specinfo."<br/><br/><br/>";?>
 	
 			<?
+			$this->load->helper('form');
 			 $formAttr = array('id' => 'recoveryForm');
 				echo form_open('remember/recover', $formAttr);
+				
 		?>
 		<table>
 			<tr>
