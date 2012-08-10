@@ -108,7 +108,7 @@
 - (void)finishFirstTimer{
     NSLog(@"finishFirstTimer");
     [self stopGPSDetect];
-    
+    motionManager.deviceMotionUpdateInterval = 0.1;
     slowMonitoring = YES;
     startCheck = NO;
 }
@@ -175,8 +175,11 @@
         [self startGPSDetect];
         //[self startMotionDetect];
         motionManager.deviceMotionUpdateInterval = 1.0;
-        canWriteToFile = YES;
-        [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
+        startCheck = YES;
+        NSLog(@"start timer");
+        firstTimer = [NSTimer scheduledTimerWithTimeInterval:STARTTIME target:self selector:@selector(finishFirstTimer) userInfo:nil repeats:NO];
+        //canWriteToFile = YES;
+        //[[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
         slowMonitoring = NO;
     }
     
