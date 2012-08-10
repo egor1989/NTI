@@ -488,12 +488,57 @@
         SBJsonParser *jsonParser = [SBJsonParser new];
         NSArray *answer = [jsonParser objectWithString:result error:NULL];
         NSArray *statArray = [answer valueForKey:@"result"];
-        qualityDriving.text = [NSString stringWithFormat:@"%@", [statArray valueForKey:@"total_score"]];
-        speedMode.text = [NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_speed"]];
-        acceleration.text = [NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_acc"]];
-        deceleration.text = [NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_brake"]];
-        rotation.text = [NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_turn"]];
-        countKm.text = [NSString stringWithFormat:@"%@", [statArray valueForKey:@"distance"]];
+        //проверка на null
+        //перевести в дабл обрезать до одного знака после запятой
+        if (![[NSString stringWithFormat:@"%@", [statArray valueForKey:@"total_score"]] isEqualToString:@"<null>"]) {
+            qualityDriving.text = [NSString stringWithFormat:@"%.1f", [[statArray valueForKey:@"total_score"] doubleValue]];
+        }
+        else {
+            qualityDriving.text = @"?";
+        }
+        
+        if (![[NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_speed"]] isEqualToString:@"<null>"]) {
+            speedMode.text = [NSString stringWithFormat:@"%.1f", [[statArray valueForKey:@"score_speed"] doubleValue]];
+        }
+        else {
+            speedMode.text = @"?";
+        }
+        
+        if (![[NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_speed"]] isEqualToString:@"<null>"]) {
+            speedMode.text = [NSString stringWithFormat:@"%.1f", [[statArray valueForKey:@"score_speed"] doubleValue]];
+        }
+        else {
+            speedMode.text = @"?";
+        }
+        
+        if (![[NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_acc"]] isEqualToString:@"<null>"]) {
+            acceleration.text = [NSString stringWithFormat:@"%.1f", [[statArray valueForKey:@"score_acc"] doubleValue]];
+        }
+        else {
+            acceleration.text = @"?";
+        }
+        
+        if (![[NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_brake"]] isEqualToString:@"<null>"]) {
+            deceleration.text = [NSString stringWithFormat:@"%.1f", [[statArray valueForKey:@"score_brake"] doubleValue]];
+        }
+        else {
+            deceleration.text = @"?";
+        }
+        
+        if (![[NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_turn"]] isEqualToString:@"<null>"]) {
+            rotation.text = [NSString stringWithFormat:@"%.1f", [[statArray valueForKey:@"score_turn"] doubleValue]];
+        }
+        else {
+            rotation.text = @"?";
+        }
+        
+        if (![[NSString stringWithFormat:@"%@", [statArray valueForKey:@"distance"]] isEqualToString:@"<null>"]) {
+            countKm.text = [NSString stringWithFormat:@"%.1f", [[statArray valueForKey:@"distance"] doubleValue]];
+        }
+        else {
+             countKm.text = @"?";
+        }
+       
         if ([method isEqualToString:@"lastStat"]) {
             NSDateFormatter * date_format = [[NSDateFormatter alloc] init];
             [date_format setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"ru_RU"]];

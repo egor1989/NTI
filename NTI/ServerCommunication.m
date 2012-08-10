@@ -12,6 +12,9 @@
 @synthesize errors;
 
 - (void)uploadData:(NSData *)fileContent{
+    
+    
+    
     NSLog(@"SC -upload data");
     NSString *cookie = [self refreshCookie]; 
     NSLog(@"current cookie = %@",cookie);
