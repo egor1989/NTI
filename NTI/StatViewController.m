@@ -40,7 +40,17 @@
     UIFont *fontForLabel = [UIFont fontWithName:@"Trebuchet MS" size:16]; 
     
     
+    loadStatIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     
+    loadStatIndicator.color = [UIColor blackColor];
+    loadStatIndicator.frame = CGRectMake(0.0, 0.0, 40.0, 40.0);
+    
+    // set the position
+    loadStatIndicator.center = CGPointMake(self.view.bounds.size.width/2,
+                                           self.view.bounds.size.height-20);
+    [statTableView addSubview:loadStatIndicator];
+    //[loadStatIndicator startAnimating];
+    //[self.view addSubview:loadStatIndicator]; // spinner is not visible until started
         
     
     /************инициализация лейблов для таблицы**********************/
@@ -108,6 +118,7 @@
     NSArray *info = [NSArray arrayWithObjects:@"Имя", @"Запись", @"Скорость", @"Только Wi-Fi", @"Дата посл. поезки",@"Тестовый файл",@"Работа в фоне", nil];
     NSArray *statistics = [NSArray arrayWithObjects:@"",@"Общая оценка", @"Километраж", @"Превышение скорости", @"Качество разгонов", @"Качество торможений", @"Качество поворотов", nil];
     self.tables = [NSDictionary dictionaryWithObjectsAndKeys:statistics, firstTitle  , info, secondTitle, nil];
+    
 }
 
 
@@ -481,6 +492,7 @@
     
 
 - (void)parse:(NSString *)result method:(NSString *)method{
+    //
     NSLog(@"result = %@", result);
     
     if (result != nil) {
@@ -561,6 +573,7 @@
         countKm.text = @"?";
         lastTrip.text = @"?";
     }
+    //[loadStatIndicator stopAnimating];
 
 }
 
@@ -712,13 +725,23 @@
 
 - (IBAction)refreshButton:(id)sender{
     if ([ServerCommunication checkInternetConnection]) {
+        
+        [loadStatIndicator startAnimating];
+        [loadStatIndicator performSelector:@selector(stopAnimating) withObject:nil afterDelay:2];
         [serverCommunication refreshCookie];
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setValue: [serverCommunication getLastStatistic] forKey:@"lastStat"];
         [userDefaults setValue: [serverCommunication getAllStatistic] forKey:@"allStat"];
         [userDefaults synchronize];
-        [self parse: [userDefaults valueForKey:@"lastStat"] method:@"lastStat"];
-        [self parse: [userDefaults valueForKey:@"allStat"] method:@"allStat"];
+        if ([userDefaults integerForKey:@"segment"]==0) {
+            [self parse: [userDefaults valueForKey:@"allStat"] method:@"allStat"];
+            [self parse: [userDefaults valueForKey:@"lastStat"] method:@"lastStat"];
+        }
+        else {
+            [self parse: [userDefaults valueForKey:@"lastStat"] method:@"lastStat"];
+            [self parse: [userDefaults valueForKey:@"allStat"] method:@"allStat"];
+        }
+        
     }
     
 }
