@@ -86,8 +86,6 @@
 		27637148152A4E8E003FE70B /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 27637145152A4E8E003FE70B /* Icon.png */; };
 		27637149152A4E8E003FE70B /* icon-original.png in Resources */ = {isa = PBXBuildFile; fileRef = 27637146152A4E8E003FE70B /* icon-original.png */; };
 		2763714A152A4E8E003FE70B /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 27637147152A4E8E003FE70B /* Icon@2x.png */; };
-		2763714E152A4F0F003FE70B /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2763714D152A4F0F003FE70B /* Icon.png */; };
-		27637150152A4F16003FE70B /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2763714F152A4F16003FE70B /* Icon@2x.png */; };
 		276C4C9814DEE94D00C469A6 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 276C4C9714DEE94D00C469A6 /* CoreMotion.framework */; };
 		276C4C9B14DEF4FF00C469A6 /* DatabaseActions.m in Sources */ = {isa = PBXBuildFile; fileRef = 276C4C9A14DEF4FF00C469A6 /* DatabaseActions.m */; };
 		2775F55115068A7900FE08BC /* NTI_GraphMenuIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2775F54B15068A7900FE08BC /* NTI_GraphMenuIcon.png */; };
@@ -280,8 +278,6 @@
 		27637145152A4E8E003FE70B /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Images/icons/Icon.png; sourceTree = "<group>"; };
 		27637146152A4E8E003FE70B /* icon-original.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon-original.png"; path = "Images/icons/icon-original.png"; sourceTree = "<group>"; };
 		27637147152A4E8E003FE70B /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Images/icons/Icon@2x.png"; sourceTree = "<group>"; };
-		2763714D152A4F0F003FE70B /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = ../Icon.png; sourceTree = "<group>"; };
-		2763714F152A4F16003FE70B /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "../Icon@2x.png"; sourceTree = "<group>"; };
 		276C4C9714DEE94D00C469A6 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		276C4C9914DEF4FF00C469A6 /* DatabaseActions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatabaseActions.h; sourceTree = "<group>"; };
 		276C4C9A14DEF4FF00C469A6 /* DatabaseActions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseActions.m; sourceTree = "<group>"; };
@@ -575,8 +571,6 @@
 		2763714C152A4E94003FE70B /* Icons */ = {
 			isa = PBXGroup;
 			children = (
-				2763714F152A4F16003FE70B /* Icon@2x.png */,
-				2763714D152A4F0F003FE70B /* Icon.png */,
 				27637145152A4E8E003FE70B /* Icon.png */,
 				27637146152A4E8E003FE70B /* icon-original.png */,
 				27637147152A4E8E003FE70B /* Icon@2x.png */,
@@ -1090,8 +1084,6 @@
 				27637148152A4E8E003FE70B /* Icon.png in Resources */,
 				27637149152A4E8E003FE70B /* icon-original.png in Resources */,
 				2763714A152A4E8E003FE70B /* Icon@2x.png in Resources */,
-				2763714E152A4F0F003FE70B /* Icon.png in Resources */,
-				27637150152A4F16003FE70B /* Icon@2x.png in Resources */,
 				27792597153486800062D871 /* route.csv in Resources */,
 				277925AB15349FA90062D871 /* time.png in Resources */,
 				53A2F1B815BECF6500B948A4 /* refresh.png in Resources */,
@@ -1215,8 +1207,8 @@
 		27DAEBCE159334A6008B37D8 /* Ad-hoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: Vladislav Efremov (MBL7632743)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vladislav Efremov (MBL7632743)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Vladislav Efremov";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Vladislav Efremov";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NTI/NTI-Prefix.pch";
 				INFOPLIST_FILE = "NTI/NTI-Info.plist";
@@ -1226,8 +1218,13 @@
 					"\"$(SRCROOT)/TestFlightSDK1.0\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+<<<<<<< HEAD
 				PROVISIONING_PROFILE = "466BC197-5A5C-4D9E-899F-DE38A2141CE9";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "466BC197-5A5C-4D9E-899F-DE38A2141CE9";
+=======
+				PROVISIONING_PROFILE = "4D9E5BD7-2BB3-46C0-AEAB-603F31E445C9";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "4D9E5BD7-2BB3-46C0-AEAB-603F31E445C9";
+>>>>>>> f4d40f5c031b00b65938d9ee75d49ba115c9846d
 				WRAPPER_EXTENSION = app;
 			};
 			name = "Ad-hoc";
@@ -1308,8 +1305,8 @@
 		53E0A79114DEC75D004E3E1B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Vladislav Efremov";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Vladislav Efremov";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Vladislav Efremov (MBL7632743)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vladislav Efremov (MBL7632743)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NTI/NTI-Prefix.pch";
 				INFOPLIST_FILE = "NTI/NTI-Info.plist";
