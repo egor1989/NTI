@@ -26,7 +26,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {  
-    //freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr); //!!!!!не забывать убирать логирвоание
+    freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr); //!!!!!не забывать убирать логирвоание
     recordAction = [[RecordAction alloc] init];
     
     //[recordAction eventRecord:@"open"]; 
@@ -148,8 +148,13 @@
     CLLocationDistance meters = [newLocation distanceFromLocation:oldLocation];
     if (meters<0) meters = 0;
     allDistance += meters;
+    
+    //строчка ниже нужна только в случае тестирования, чтобы данные набирались
     //[[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];//!!УБРАТЬ
+    
     //только включили приложение, начальная проверка
+    // также работает когда сработала смена вышки
+    //в этих случаях startCheck = YES
     if (startCheck) {
         NSLog(@"startCheck");
          //если в течении 5 минут мы собрали 5 >5км/ч начинаем запись
@@ -159,22 +164,31 @@
                 NSLog(@"startCheck-location manager: m5km>5, writing");
                 //[recordAction eventRecord:@"start"];
                 startCheck = NO;
+                //все теперь сюда заходить не будет
                 [firstTimer invalidate];
+                //обновили до зеленого значка
                 canWriteToFile = YES;
                 m5Km = 0;
                 [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
             }
-        } else m5Km = 0;
+        } 
+        //если не подряд события то обнуляется
+        else m5Km = 0;
        
-        //нет переходим в медленный режим - finishFirstTimer
+        //не было движения - переходим в медленный режим - finishFirstTimer
     }
     
-    //приложение уже работало - медленный режим
+    //приложение уже работало - медленный режим - ждет смену вышки
     else if (slowMonitoring){
+        //сработала смена локации по вышке
         NSLog(@"slowMonitoring - change location");
+        //включили gps 
+        //увеличили частоту обновление акселерометра - его выключать нельзя так как он в фоне потом не включается - поэтому лучше делать меньше частоту
         [self startGPSDetect];
         //[self startMotionDetect];
         motionManager.deviceMotionUpdateInterval = 1.0;
+        //включили опять опции как в начальной проверке, а не сразу включили запись
+        //если не будет работать, то убрать эти три строчки ниже И раскомментить те две которые сейчас закомменчены canWrite..=YES, notification
         startCheck = YES;
         NSLog(@"start timer");
         firstTimer = [NSTimer scheduledTimerWithTimeInterval:STARTTIME target:self selector:@selector(finishFirstTimer) userInfo:nil repeats:NO];
@@ -189,16 +203,21 @@
         if ([stopTimer isValid]) {
             if (newLocation.speed > SPEED) {
                 m5Km++;
+                //5 событий подряд больше 5 км/ч
                 if (m5Km > 5){
                     NSLog(@"stopTimer-location manager: m5km>5, finish stopTimer");
+                    //так как у нас опять движение выключаем таймер
                     [stopTimer invalidate];
                     m5Km = 0;
                 }
             } else m5Km = 0;
         }
+        //если записывает а скорость 5 раз меньше 5 км/ч
        else if (newLocation.speed < SPEED){
             l5Km++;
+           //5 событий подряд меньше 5 км/ч
             if (l5Km > 5) {
+                //включили таймер который проверяет на стоп
                 stopTimer = [NSTimer scheduledTimerWithTimeInterval:STOPTIME target:self selector:@selector(finishStopTimer) userInfo:nil repeats:NO];
                 l5Km = 0;
                 NSLog(@"l5Km>5, start stopTimer");
