@@ -12,6 +12,9 @@
 @synthesize errors;
 
 - (void)uploadData:(NSData *)fileContent{
+    
+    
+    
     NSLog(@"SC -upload data");
     NSString *cookie = [self refreshCookie]; 
     NSLog(@"current cookie = %@",cookie);
@@ -524,9 +527,13 @@
     [NSURLConnection sendAsynchronousRequest:request
                                        queue:[NSOperationQueue mainQueue]
                            completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *error) {
-                               NSLog(@"compressedDAta= %@", responseData);
+                              
+                               NSMutableData *resData = [responseData mutableCopy];
+                               [resData replaceBytesInRange:NSMakeRange(0, 3) withBytes:NULL length:0];
+                               NSLog(@"compressedDAta= %@", resData);
+                               
                                NSData *unCompressData = [[NSData alloc] init];
-                               unCompressData = [GzipCompress gzipInflate:responseData];
+                               unCompressData = [GzipCompress gzipInflate:resData];
                                returnString = [[NSString alloc] initWithData:unCompressData encoding: NSUTF8StringEncoding];
                                NSLog(@"returnData: %@", returnString);
                                if (![self checkErrors:returnString method:@"getRouteFromServer"]) {

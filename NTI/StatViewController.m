@@ -40,7 +40,17 @@
     UIFont *fontForLabel = [UIFont fontWithName:@"Trebuchet MS" size:16]; 
     
     
+    loadStatIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     
+    loadStatIndicator.color = [UIColor blackColor];
+    loadStatIndicator.frame = CGRectMake(0.0, 0.0, 40.0, 40.0);
+    
+    // set the position
+    loadStatIndicator.center = CGPointMake(self.view.bounds.size.width/2,
+                                           self.view.bounds.size.height-20);
+    [statTableView addSubview:loadStatIndicator];
+    //[loadStatIndicator startAnimating];
+    //[self.view addSubview:loadStatIndicator]; // spinner is not visible until started
         
     
     /************инициализация лейблов для таблицы**********************/
@@ -108,6 +118,7 @@
     NSArray *info = [NSArray arrayWithObjects:@"Имя", @"Запись", @"Скорость", @"Только Wi-Fi", @"Дата посл. поезки",@"Тестовый файл",@"Работа в фоне", nil];
     NSArray *statistics = [NSArray arrayWithObjects:@"",@"Общая оценка", @"Километраж", @"Превышение скорости", @"Качество разгонов", @"Качество торможений", @"Качество поворотов", nil];
     self.tables = [NSDictionary dictionaryWithObjectsAndKeys:statistics, firstTitle  , info, secondTitle, nil];
+    
 }
 
 
@@ -481,6 +492,7 @@
     
 
 - (void)parse:(NSString *)result method:(NSString *)method{
+    //
     NSLog(@"result = %@", result);
     
     if (result != nil) {
@@ -488,12 +500,57 @@
         SBJsonParser *jsonParser = [SBJsonParser new];
         NSArray *answer = [jsonParser objectWithString:result error:NULL];
         NSArray *statArray = [answer valueForKey:@"result"];
-        qualityDriving.text = [NSString stringWithFormat:@"%@", [statArray valueForKey:@"total_score"]];
-        speedMode.text = [NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_speed"]];
-        acceleration.text = [NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_acc"]];
-        deceleration.text = [NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_brake"]];
-        rotation.text = [NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_turn"]];
-        countKm.text = [NSString stringWithFormat:@"%@", [statArray valueForKey:@"distance"]];
+        //проверка на null
+        //перевести в дабл обрезать до одного знака после запятой
+        if (![[NSString stringWithFormat:@"%@", [statArray valueForKey:@"total_score"]] isEqualToString:@"<null>"]) {
+            qualityDriving.text = [NSString stringWithFormat:@"%.1f", [[statArray valueForKey:@"total_score"] doubleValue]];
+        }
+        else {
+            qualityDriving.text = @"?";
+        }
+        
+        if (![[NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_speed"]] isEqualToString:@"<null>"]) {
+            speedMode.text = [NSString stringWithFormat:@"%.1f", [[statArray valueForKey:@"score_speed"] doubleValue]];
+        }
+        else {
+            speedMode.text = @"?";
+        }
+        
+        if (![[NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_speed"]] isEqualToString:@"<null>"]) {
+            speedMode.text = [NSString stringWithFormat:@"%.1f", [[statArray valueForKey:@"score_speed"] doubleValue]];
+        }
+        else {
+            speedMode.text = @"?";
+        }
+        
+        if (![[NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_acc"]] isEqualToString:@"<null>"]) {
+            acceleration.text = [NSString stringWithFormat:@"%.1f", [[statArray valueForKey:@"score_acc"] doubleValue]];
+        }
+        else {
+            acceleration.text = @"?";
+        }
+        
+        if (![[NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_brake"]] isEqualToString:@"<null>"]) {
+            deceleration.text = [NSString stringWithFormat:@"%.1f", [[statArray valueForKey:@"score_brake"] doubleValue]];
+        }
+        else {
+            deceleration.text = @"?";
+        }
+        
+        if (![[NSString stringWithFormat:@"%@", [statArray valueForKey:@"score_turn"]] isEqualToString:@"<null>"]) {
+            rotation.text = [NSString stringWithFormat:@"%.1f", [[statArray valueForKey:@"score_turn"] doubleValue]];
+        }
+        else {
+            rotation.text = @"?";
+        }
+        
+        if (![[NSString stringWithFormat:@"%@", [statArray valueForKey:@"distance"]] isEqualToString:@"<null>"]) {
+            countKm.text = [NSString stringWithFormat:@"%.1f", [[statArray valueForKey:@"distance"] doubleValue]];
+        }
+        else {
+             countKm.text = @"?";
+        }
+       
         if ([method isEqualToString:@"lastStat"]) {
             NSDateFormatter * date_format = [[NSDateFormatter alloc] init];
             [date_format setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"ru_RU"]];
@@ -516,6 +573,7 @@
         countKm.text = @"?";
         lastTrip.text = @"?";
     }
+    //[loadStatIndicator stopAnimating];
 
 }
 
@@ -667,13 +725,23 @@
 
 - (IBAction)refreshButton:(id)sender{
     if ([ServerCommunication checkInternetConnection]) {
+        
+        [loadStatIndicator startAnimating];
+        [loadStatIndicator performSelector:@selector(stopAnimating) withObject:nil afterDelay:2];
         [serverCommunication refreshCookie];
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setValue: [serverCommunication getLastStatistic] forKey:@"lastStat"];
         [userDefaults setValue: [serverCommunication getAllStatistic] forKey:@"allStat"];
         [userDefaults synchronize];
-        [self parse: [userDefaults valueForKey:@"lastStat"] method:@"lastStat"];
-        [self parse: [userDefaults valueForKey:@"allStat"] method:@"allStat"];
+        if ([userDefaults integerForKey:@"segment"]==0) {
+            [self parse: [userDefaults valueForKey:@"allStat"] method:@"allStat"];
+            [self parse: [userDefaults valueForKey:@"lastStat"] method:@"lastStat"];
+        }
+        else {
+            [self parse: [userDefaults valueForKey:@"lastStat"] method:@"lastStat"];
+            [self parse: [userDefaults valueForKey:@"allStat"] method:@"allStat"];
+        }
+        
     }
     
 }

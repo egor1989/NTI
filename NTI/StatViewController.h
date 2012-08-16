@@ -40,6 +40,8 @@
     IBOutlet UITableView *statTableView;
     FileController *fileController;
     
+    IBOutlet UIActivityIndicatorView *loadStatIndicator;
+    
     }
 
 @property (nonatomic) BOOL *writeAction;
@@ -58,4 +60,5 @@
 - (IBAction) internetUploadSwitch:(id)sender;
 //- (IBAction) backgroundWorkSwitch:(id)sender;
 - (NSArray *)curentEntries:(NSInteger)index;
+
 @end
