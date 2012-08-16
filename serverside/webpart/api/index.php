@@ -123,7 +123,6 @@ function distance($lat1, $lon1, $lat2, $lon2) {
   $dist = acos($dist); 
   $dist = rad2deg($dist); 
   $miles = $dist * 60 * 1.1515;
-  $unit = strtoupper($unit);
     return ($miles * 1.609344); 
 }
 
@@ -146,8 +145,8 @@ function connec_to_db()
 {
 	$dblocation = "localhost";  
 	$dbname = "NTI";  
-	$dbuser = "steph";  
-	$dbpasswd = "trinitro"; 
+	$dbuser = "goodroads";  
+	$dbpasswd = "123OLAcomrade"; 
  $dbcnx= mysql_connect($dblocation, $dbuser, $dbpasswd);
 if (!$dbcnx)    {      return 0;  }  
 if (!mysql_select_db($dbname,$dbcnx) )    {      return 0;    }  
@@ -158,7 +157,7 @@ return 1;
 
 $data=$_POST['data'];
 $zip=$_POST['zip'];
-
+if(isset($_POST['zip']))
 if($zip==1)
 {
 	$data=str_replace("<","",$data);
@@ -433,13 +432,14 @@ function addNTIFile($param)
 			//Начинаем обрабатывать и разбивать
 			$i=0;
 			$n=0;
-			while ($qq[$k]) 
-			{	
-				if($qq[$k]['gps']['latitude']!=0 && $qq[$k]['gps']['longitude']!=0)
+			$json_size=count($qq);
+			for($k=0;$k<$json_size;$k++)
+			{
+				if($qq[$k]['gps']['latitude']!=0 && $qq[$k]['gps']['longitude']!=0 && $qq[$k]['gps']['speed']>0)
 				{
 				if($i>0)
 				{
-
+		
 					if($qq[$k]['timestamp']-$ArrayEntry[$n][$i-1]->getTimestamp()<600)
 					{
 						$ArrayEntry[$n][$i]=new UserEntry();
@@ -499,7 +499,6 @@ function addNTIFile($param)
 				$utimestamp=mysql_real_escape_string($qq[$k]['timestamp']);
 				$str = "INSERT INTO NTIEntry (UID, accx, accy, distance, lat, lng, direction, compass, speed, utimestamp, FileId) VALUES ($UID, $accx, $accy, $distance, $lat, $lng, $direction, $compass, $speed, $utimestamp, $fileid)";
 				mysql_query($str);
-				$k++;
 			}
 			//print_r($ArrayEntry);
 			//Разбили по времени
@@ -538,17 +537,19 @@ function addNTIFile($param)
 						$ArrayEntry[$i][$j]->setTurnType("normal point");
 						$ArrayEntry[$i][$j]->setTypeSpeed("normal point");
 						$ArrayEntry[$i][$j]->setTypeAcc("normal point");
-						$speed=$ArrayEntry[$i][$j]->getSpeed();
+						$speed=($ArrayEntry[$i][$j]->getSpeed());
 
-						$deltaTime=$ArrayEntry[$i][$j]->getTimestamp()-$ArrayEntry[$i][$j-1]->getTimestamp();	
+						$deltaTime=$ArrayEntry[$i][$j]->getTimestamp()-$ArrayEntry[$i][$j-1]->getTimestamp();
+						if(	$deltaTime==0)$deltaTime=1;
+						$deltaTurn=0;
 						if($ArrayEntry[$i][$j]->getLng()-$ArrayEntry[$i][$j-1]->getLng()!=0)
 						{
 							$ArrayEntry[$i][$j]->setTurn(atan(($ArrayEntry[$i][$j]->getLat()-$ArrayEntry[$i][$j-1]->getLat())/($ArrayEntry[$i][$j]->getLng()-$ArrayEntry[$i][$j-1]->getLng())));
 							$deltaTurn = 	$ArrayEntry[$i][$j]->getTurn() - $ArrayEntry[$i][$j-1]->getTurn();
 							$wAcc = abs($deltaTurn/($deltaTime));
-							if (($wAcc < 0.45) && ($wAcc >= 0)) {$ArrayEntry[$i][$j]->setsevTurn(0);} 
-							else if (($wAcc >= 0.45) && ($wAcc < 0.6))	{$ArrayEntry[$i][$j]->setsevTurn(1);} 
-							else if (($wAcc >= 0.6) && ($wAcc < 0.75)){$ArrayEntry[$i][$j]->setsevTurn(2);} 
+							if (($wAcc < 0.25) && ($wAcc >= 0)) {$ArrayEntry[$i][$j]->setsevTurn(0);} 
+							else if (($wAcc >= 0.25) && ($wAcc < 0.5))	{$ArrayEntry[$i][$j]->setsevTurn(1);} 
+							else if (($wAcc >= 0.5) && ($wAcc < 0.75)){$ArrayEntry[$i][$j]->setsevTurn(2);} 
 							else if ($wAcc >= 0.75) {$ArrayEntry[$i][$j]->setsevTurn(3);}
 							$ArrayEntry[$i][$j]->setwAcc($wAcc);
 						}
@@ -557,7 +558,7 @@ function addNTIFile($param)
 							$ArrayEntry[$i][$j]->setTurn($ArrayEntry[$i][$j-1]->getTurn());		
 							$ArrayEntry[$i][$j]->setwAcc($ArrayEntry[$i][$j-1]->getwAcc());	
 						}
-								$deltaSpeed = $speed - $ArrayEntry[$i][$j-1]->getSpeed();
+								$deltaSpeed = $speed/3600 - ($ArrayEntry[$i][$j-1]->getSpeed())/3600;
 								
 								$accel = $deltaSpeed/$deltaTime;
 								if($accel==0)
@@ -565,8 +566,6 @@ function addNTIFile($param)
 									$accel=sqrt($ArrayEntry[$i][$j]->getAccx()*$ArrayEntry[$i][$j]->getAccx()+$ArrayEntry[$i][$j]->getAccy()*$ArrayEntry[$i][$j]->getAccy())*9.8;
 									if($ArrayEntry[$i][$j]->getCompass()>=180)$accel=(-1)*$accel;
 								}
-								
-								
 								$ArrayEntry[$i][$j]->setAccel($accel);
 								//Высчитываем тип неравномерного движения (ускорение-торможение) через ускорение.
 								
@@ -809,12 +808,12 @@ function addNTIFile($param)
 								if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn finished") || ($ArrayEntry[$i][$j-1]->getTurnType() == "right turn finished") || ($speed == 0) ) {
 									$ArrayEntry[$i][$j]->setTurnType("normal point");
 								// Отклонение > 0.5 - после нормальной точки начинаем поворот налево, либо продолжаем поворот налево после уже начатого, либо завершаем, если это был поворот направо.
-								} else 	if ($deltaTurn > 0.5)   {
+								} else 	if ($deltaTurn > 0.3)   {
 									if ($ArrayEntry[$i][$j-1]->getTurnType() == "normal point") $ArrayEntry[$i][$j]->setTurnType( "left turn started");
 									if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "left turn continued"))$ArrayEntry[$i][$j]->setTurnType("left turn continued");
 									if (($ArrayEntry[$i][$j-1]->getTurnType() == "right turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "right turn continued"))$ArrayEntry[$i][$j]->setTurnType("right turn finished");
 								// Отклонение > 0.5 - после нормальной точки начинаем поворот направо, либо продолжаем поворот направо после уже начатого, либо завершаем, если это был поворот налево.
-								} else 	if ($deltaTurn < -0.5)	{
+								} else 	if ($deltaTurn < -0.3)	{
 									if ($ArrayEntry[$i][$j-1]->getTurnType() == "normal point")$ArrayEntry[$i][$j]->setTurnType("right turn started");
 									if (($ArrayEntry[$i][$j-1]->getTurnType() == "right turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "right turn continued"))$ArrayEntry[$i][$j]->setTurnType("right turn continued");
 									if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "left turn continued"))$ArrayEntry[$i][$j]->setTurnType("left turn finished");
@@ -822,7 +821,7 @@ function addNTIFile($param)
 								// Отклонение между -0.5 и 0.5 - после нормальной точки идет нормальная, а после начатых поворотов налево или направо - продолженные повороты соответственно налево и направо.
 									if ($ArrayEntry[$i][$j-1]->getTurnType() == "normal point")$ArrayEntry[$i][$j]->setTurnType("normal point");
 									if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "left turn continued"))$ArrayEntry[$i][$j]->setTurnType("left turn finished");
-									if (($ArrayEntry[$i][$j-1]->getTurnType() == "right turn started")||($typeTurn[$i-1] == "right turn continued"))$ArrayEntry[$i][$j]->setTurnType( "right turn finished");
+									if (($ArrayEntry[$i][$j-1]->getTurnType() == "right turn started")||($ArrayEntry[$i][$j-1]->getTurnType()== "right turn continued"))$ArrayEntry[$i][$j]->setTurnType( "right turn finished");
 								}
 								if (($ArrayEntry[$i][$j]->getTurnType() == "left turn finished") || ($ArrayEntry[$i][$j]->getTurnType() == "right turn finished")) 
 								{
@@ -843,14 +842,20 @@ function addNTIFile($param)
 					$TimeEnd=$ArrayEntry[$i][0]->getTimestamp();//Хз может быть и перемешанно , пусть поищет
 					$TotalDistance=0;
 					//Теперь ищем начало и конец поездки 
-					for($j=0;$j<count($ArrayEntry[$i])-1;$j++)
+					$mid_speed=0;
+					$preCount=count($ArrayEntry[$i])-1;
+					for($j=0;$j<$preCount;$j++)
 					{
+						$mid_speed+=$ArrayEntry[$i][$j]->getSpeed();
 						if($ArrayEntry[$i][$j]->getTimestamp()<$TimeStart)$TimeStart=$ArrayEntry[$i][$j]->getTimestamp();
 						if($ArrayEntry[$i][$j]->getTimestamp()>$TimeEnd)$TimeEnd=$ArrayEntry[$i][$j]->getTimestamp();
 						if($TotalDistance<$ArrayEntry[$i][$j]->getDistance())$TotalDistance=$ArrayEntry[$i][$j]->getDistance();
 						$TotalDistance+=distance($ArrayEntry[$i][$j]->getLat(),$ArrayEntry[$i][$j]->getLng(),$ArrayEntry[$i][$j+1]->getLat(),$ArrayEntry[$i][$j+1]->getLng());
 					}
-
+					if(count($ArrayEntry[$i])>0)
+					{
+						$mid_speed=$mid_speed/count($ArrayEntry[$i]);
+					}
 					if($TotalDistance<=0)$TotalDistance=1;
 					$DTime=$TimeEnd-$TimeStart;
 					if($DTime==0)$DTime=1;
@@ -886,6 +891,10 @@ function addNTIFile($param)
 					$KvnB=($FBrake1*0.1+ $FBrake2*0.25 +$FBrake3*0.65);
 					//Теперь считаем Q польз
 					//
+					$Qa=0;
+					$Qs=0;
+					$Qt=0;
+					$Qb=0;
 					$result=mysql_query("Select 
 					sum(Fa)/count(UID) as Fau,
 					sum(Fb)/count(UID) as Fbu,
@@ -905,6 +914,11 @@ function addNTIFile($param)
 						$Qt=$row['Ftu'];
 						$Qb=$row['Fbu'];
 					}
+					if($Qa==0)$Qa=1;
+					if($Qs==0)$Qs=1;
+					if($Qt==0)$Qt=1;
+					if($Qb==0)$Qb=1;
+					
 					$Kua=1/sqrt(1+$KvnA/$Qa);
 					$Kub=1/sqrt(1+$KvnB/$Qb);
 					$Kus=1/sqrt(1+$KvnS/$Qs);
@@ -926,7 +940,8 @@ function addNTIFile($param)
 							exit();
 					}
 
-					if($KvnA>0 && $KvnS>0 && $KvnT>0 && $KvnB>0)
+					//if($KvnA>0 && $KvnT>0 && $KvnB>0)
+                     if(($KvnA>0  && $KvnB>0) || ($mid_speed>10))
 					{
 						//Отлично значит поездка нормальна
 						//Попробуем её объеденить с поездками этого же пользователя.
@@ -1069,7 +1084,12 @@ function getStatistics($param)
 
 
 
-
+function trimUTF8BOM($data){
+    if(substr($data, 0, 3) == pack('CCC', 239, 187, 191)) {
+        return substr($data, 3);
+    }
+    return $data;
+}
 
 function getPath($param)
 {
@@ -1077,10 +1097,12 @@ function getPath($param)
 	$time=$param['time'];
 	$till=$param['till'];
 	$day=$param['day'];
+
 	$UID=NTI_Cookie_check();
-	if($UID>0)
+
+        if($UID>0)
 	{
-		if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
+		//if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
 		if(isset($param['time']) && !isset($param['till']) and $param['time']>0 && !isset($param['day']))
 		{
 		
@@ -1199,26 +1221,30 @@ function getPath($param)
 
 		if($n!=0)
 		{
-		
+
+
 			$errortype=array('info'=>"",'code'=>  0);
 			$res=array('result'=>$ret_arr,'error'=> $errortype);
-			echo (gzcompress(json_encode($res)));	
+
+			echo gzencode(json_encode($res));
 			exit();
 		}	
 		else
 		{
+
 			$errortype=array('info'=>"There is no data with such time($end $start)",'code'=>  32);
 			$res=array('result'=>-1,'error'=> $errortype);
-			echo json_encode($res);	
+			echo gzencode(json_encode($res));	
 			exit();
 
 		}
 	}
 	else
 	{
+
 		$errortype=array('info'=>"Connection broken or you are not authorized",'code'=>  33);
 		$res=array('result'=>-1,'error'=> $errortype);
-		echo json_encode($res);	
+		echo gzencode(json_encode($res));		
 		exit();
 	}
 	
