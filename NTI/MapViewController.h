@@ -42,7 +42,6 @@
 }
 
 @property (nonatomic, retain) IBOutlet MKMapView* mapView;
-@property (nonatomic, retain) MKPolyline* routeLine;
 //@property (nonatomic, retain) MKPolylineView* routeLineView;
 
 -(void) parseRoute: (NSArray*) routeArray;

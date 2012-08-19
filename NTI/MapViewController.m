@@ -11,7 +11,6 @@
 
 @implementation MapViewController
 @synthesize mapView = _mapView;
-@synthesize routeLine = _routeLine;
 //@synthesize routeLineView = routeLineView;
 
 - (void)viewDidLoad {
@@ -58,7 +57,6 @@
                 waintingIndicator.hidden = NO;
                 [waintingIndicator startAnimating];
                 grayView.hidden = NO;
-                NSLog(@"getRoute");
                 [serverCommunication getRouteFromServer:0];
                 [DatabaseActions setNeedLastRoute:NO];
             }
@@ -73,7 +71,6 @@
         waintingIndicator.hidden = NO;
         [waintingIndicator startAnimating];
         grayView.hidden = NO;
-        NSLog(@"getRoute");
         [serverCommunication getRouteFromServer:[[TheNotice object] doubleValue]];
     }
 }
@@ -141,8 +138,9 @@
         
         //отрисовка маршрута (фиолетовая линия)
         @try {
-            for (_routeLine in routeLineArray){
-                [_mapView addOverlay:_routeLine];
+            for (MKPolyline *route in routeLineArray){
+                route.title = @"route";
+                [_mapView addOverlay:route];
             }
             //отрисовка специальных точек
             for (int i=1; i<=4; i++) {
@@ -197,12 +195,12 @@
         
 	}
     
-	self.routeLine = [MKPolyline polylineWithPoints:pointArr count:normalPointsArray1.count];
+	MKPolyline *route = [MKPolyline polylineWithPoints:pointArr count:normalPointsArray1.count];
 	_routeRect = MKMapRectMake(southWestPoint.x, southWestPoint.y, northEastPoint.x - southWestPoint.x, northEastPoint.y - southWestPoint.y);
     
 	free(pointArr);
     
-    return self.routeLine;
+    return route;
 }
 
 // Добавляет на карту слой - точку. В зависимости от типа точки присваивает ей определёный заголовок.
@@ -230,21 +228,14 @@
 	[self.mapView setVisibleMapRect:_routeRect];
 }
 
-- (void)dealloc 
-{
-	self.mapView = nil;
-	self.routeLine = nil;
-}
-
-
 
 #pragma mark MKMapViewDelegate
 - (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id <MKOverlay>)overlay
 {
-    if(overlay == self.routeLine)
+    if([overlay.title isEqualToString:@"route"])
 	{
         MKOverlayView* overlayView = nil;
-        MKPolylineView *routeLineView = [[MKPolylineView alloc] initWithPolyline:self.routeLine];
+        MKPolylineView *routeLineView = [[MKPolylineView alloc] initWithOverlay:overlay];
         routeLineView.fillColor = [UIColor blueColor];
         routeLineView.strokeColor = [UIColor blueColor];
         routeLineView.lineWidth = 15;
