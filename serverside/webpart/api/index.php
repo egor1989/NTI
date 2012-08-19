@@ -1,17 +1,17 @@
 ﻿<?php
 //ErrorCodes
-define(DB_CONNECTION_REFUSE_CODE, 88);
-define(DB_CONNECTION_REFUSE_INFO, "Database connection error");
-define(JSON_ERROR_DEPTH_CODE, 1);
-define(JSON_ERROR_DEPTH_INFO, "Maximum stack depth exceeded");
-define(JSON_ERROR_CTRL_CHAR_CODE, 2);
-define(JSON_ERROR_CTRL_CHAR_INFO, "Unexpected control character found");
-define(JSON_ERROR_SYNTAX_CODE, 3);
-define(JSON_ERROR_SYNTAX_INFO, "Syntax error, malformed JSON");
-define(NO_METHOD_SET_CODE, 4);
-define(NO_METHOD_SET_INFO, "No difintion state set, or function is incorrect");
-define(NO_FUNCTION_SET_CODE, 5);
-define(NO_FUNCTION_SET_INFO, "No action set, or function is incorrect");
+define('DB_CONNECTION_REFUSE_CODE', 88);
+define('DB_CONNECTION_REFUSE_INFO', "Database connection error");
+define('JSON_ERROR_DEPTH_CODE', 1);
+define('JSON_ERROR_DEPTH_INFO', "Maximum stack depth exceeded");
+define('JSON_ERROR_CTRL_CHAR_CODE', 2);
+define('JSON_ERROR_CTRL_CHAR_INFO', "Unexpected control character found");
+define('JSON_ERROR_SYNTAX_CODE', 3);
+define('JSON_ERROR_SYNTAX_INFO', "Syntax error, malformed JSON");
+define('NO_METHOD_SET_CODE', 4);
+define('NO_METHOD_SET_INFO', "No difintion state set, or function is incorrect");
+define('NO_FUNCTION_SET_CODE', 5);
+define('NO_FUNCTION_SET_INFO', "No action set, or function is incorrect");
 
 $dbcnx=0;
 
@@ -156,8 +156,10 @@ return 1;
 
 
 $data=$_POST['data'];
-$zip=$_POST['zip'];
+
 if(isset($_POST['zip']))
+{
+	$zip=$_POST['zip'];
 if($zip==1)
 {
 	$data=str_replace("<","",$data);
@@ -165,7 +167,7 @@ if($zip==1)
 	$data=str_replace(" ","",$data);
 	$data=gzdecodes(pack('H*',$data));
 }
-
+}
 function gzdecodes($data) 
 { 
    return gzinflate(substr($data,10,-8)); 
@@ -422,6 +424,8 @@ function addNTIFile($param)
 		//Тк делаем , лучше пусть будет переносима с приемлемыми результатами
 
 		$qq = json_decode($ins,true);	
+		//print_r($qq);
+		//exit();
 		if ($qq != NULL) 
 		{
 
@@ -433,10 +437,12 @@ function addNTIFile($param)
 			$i=0;
 			$n=0;
 			$json_size=count($qq);
+			//echo "jsonsize;".$json_size;
 			for($k=0;$k<$json_size;$k++)
 			{
 				if($qq[$k]['gps']['latitude']!=0 && $qq[$k]['gps']['longitude']!=0 && $qq[$k]['gps']['speed']>0)
 				{
+					//echo $k." ok";
 				if($i>0)
 				{
 		
@@ -503,6 +509,7 @@ function addNTIFile($param)
 			//print_r($ArrayEntry);
 			//Разбили по времени
 			//Теперь перебирем поездки и высчитываем данные 
+			//echo "\n\ncount:".$n."   ".count($ArrayEntry[1]);
 			for($i=1;$i<=$n;$i++)
 			{
 
@@ -558,7 +565,7 @@ function addNTIFile($param)
 							$ArrayEntry[$i][$j]->setTurn($ArrayEntry[$i][$j-1]->getTurn());		
 							$ArrayEntry[$i][$j]->setwAcc($ArrayEntry[$i][$j-1]->getwAcc());	
 						}
-								$deltaSpeed = $speed/3600 - ($ArrayEntry[$i][$j-1]->getSpeed())/3600;
+								$deltaSpeed = $speed/3.6 - ($ArrayEntry[$i][$j-1]->getSpeed())/3.6;
 								
 								$accel = $deltaSpeed/$deltaTime;
 								if($accel==0)
@@ -582,7 +589,8 @@ function addNTIFile($param)
 								if (($speed >= 0) && ($speed <= 80))$ArrayEntry[$i][$j]->setsevSpeed(0); 
 								else if (($speed > 80) && ($speed <= 110))$ArrayEntry[$i][$j]->setsevSpeed(1); 
 								else if (($speed > 110) && ($speed <= 130))	$ArrayEntry[$i][$j]->setsevSpeed(2); 
-								else if ($speed > 130)$ArrayEntry[$i][$j]->setsevSpeed(3); 
+								else if ($speed > 130)$ArrayEntry[$i][$j]->setsevSpeed(3);
+								 
 								if ($ArrayEntry[$i][$j-1]->getTypeSpeed() == "normal point") {
 									if ($ArrayEntry[$i][$j]->getsevSpeed() == 0) {
 										$ArrayEntry[$i][$j]->setTypeSpeed("normal point");
@@ -808,12 +816,12 @@ function addNTIFile($param)
 								if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn finished") || ($ArrayEntry[$i][$j-1]->getTurnType() == "right turn finished") || ($speed == 0) ) {
 									$ArrayEntry[$i][$j]->setTurnType("normal point");
 								// Отклонение > 0.5 - после нормальной точки начинаем поворот налево, либо продолжаем поворот налево после уже начатого, либо завершаем, если это был поворот направо.
-								} else 	if ($deltaTurn > 0.3)   {
+								} else 	if ($deltaTurn > 0.5)   {
 									if ($ArrayEntry[$i][$j-1]->getTurnType() == "normal point") $ArrayEntry[$i][$j]->setTurnType( "left turn started");
 									if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "left turn continued"))$ArrayEntry[$i][$j]->setTurnType("left turn continued");
 									if (($ArrayEntry[$i][$j-1]->getTurnType() == "right turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "right turn continued"))$ArrayEntry[$i][$j]->setTurnType("right turn finished");
 								// Отклонение > 0.5 - после нормальной точки начинаем поворот направо, либо продолжаем поворот направо после уже начатого, либо завершаем, если это был поворот налево.
-								} else 	if ($deltaTurn < -0.3)	{
+								} else 	if ($deltaTurn < -0.5)	{
 									if ($ArrayEntry[$i][$j-1]->getTurnType() == "normal point")$ArrayEntry[$i][$j]->setTurnType("right turn started");
 									if (($ArrayEntry[$i][$j-1]->getTurnType() == "right turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "right turn continued"))$ArrayEntry[$i][$j]->setTurnType("right turn continued");
 									if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "left turn continued"))$ArrayEntry[$i][$j]->setTurnType("left turn finished");
@@ -823,15 +831,15 @@ function addNTIFile($param)
 									if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "left turn continued"))$ArrayEntry[$i][$j]->setTurnType("left turn finished");
 									if (($ArrayEntry[$i][$j-1]->getTurnType() == "right turn started")||($ArrayEntry[$i][$j-1]->getTurnType()== "right turn continued"))$ArrayEntry[$i][$j]->setTurnType( "right turn finished");
 								}
-								if (($ArrayEntry[$i][$j]->getTurnType() == "left turn finished") || ($ArrayEntry[$i][$j]->getTurnType() == "right turn finished")) 
-								{
+								//if (($ArrayEntry[$i][$j]->getTurnType() == "left turn finished") || ($ArrayEntry[$i][$j]->getTurnType() == "right turn finished")) 
+								//{
 									switch ($ArrayEntry[$i][$j]->getsevTurn()) {
 											case 1: {$turn1++;break;}
 											case 2: {$turn2++;break;}
 											case 3: {$turn3++;break;}
 											case 0: {break;}
 										}
-								}	
+								//}	
 						
 
 
@@ -922,7 +930,23 @@ function addNTIFile($param)
 					$Kua=1/sqrt(1+$KvnA/$Qa);
 					$Kub=1/sqrt(1+$KvnB/$Qb);
 					$Kus=1/sqrt(1+$KvnS/$Qs);
-					$Kut=1/sqrt(1+$KvnT/$Qt);					
+					$Kut=1/sqrt(1+$KvnT/$Qt);
+					if(($acc1+$acc2+$acc3)==0)
+					{
+						$Kua=0;
+					}	
+					if(($brake1+$brake2+$brake3)==0)
+					{
+						$Kub=0;
+					}	
+					if(($speed1+$speed2+$speed3)==0)
+					{
+						$Kus=0;
+					}	
+					if(($turn1+$turn2+$turn3)==0)
+					{
+						$Kut=0;
+					}			
 					$score=0.10*$Kua+0.35*$Kub+0.30*$Kus+0.25*$Kut;
 					$score_speed =$Kus;
 					$score_turn = $Kut;
@@ -930,17 +954,17 @@ function addNTIFile($param)
 					$score_acc = $Kua ;
 					$rt=mysql_query("SELECT * FROM `NTIUserDrivingTrack` where UID=$UID and TimeStart<=$TimeStart and TimeEnd>=$TimeEnd");
 					//Убираем этим запрос дубляж
+					
 					$cnt=mysql_num_rows($rt);
 					if($cnt>0)
 					{
-							$errortype=array('info'=>"Already exist",'code'=>  0);
-							$res=array('result'=>1,'error'=> $errortype);
+							$errortype=array('info'=>"Already exist",'code'=>  6);
+							$res=array('result'=>-1,'error'=> $errortype);
 							echo json_encode($res);	
 
 							exit();
 					}
-
-					//if($KvnA>0 && $KvnT>0 && $KvnB>0)
+					
                      if(($KvnA>0  && $KvnB>0) || ($mid_speed>10))
 					{
 						//Отлично значит поездка нормальна
@@ -989,15 +1013,15 @@ function addNTIFile($param)
 		else
 		{
 			$errortype=array('info'=>"Data is not in json",'code'=>  4);
-			$res=array('result'=>1,'error'=> $errortype);
+			$res=array('result'=>-1,'error'=> $errortype);
 			echo json_encode($res);	
 			exit();	
 		}
 	}
 	else
 	{						
-		$errortype=array('info'=>"File is too small or empty",'code'=>  3);
-		$res=array('result'=>1,'error'=> $errortype);
+		$errortype=array('info'=>"File is too small or empty",'code'=>  5);
+		$res=array('result'=>-1,'error'=> $errortype);
 		echo json_encode($res);	
 		exit();
 	}
