@@ -311,6 +311,7 @@
 		531D324E1551A16B00FC4C2B /* GzipCompress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GzipCompress.m; path = ../GzipCompress.m; sourceTree = "<group>"; };
 		532A46971502623A0070340D /* CSVConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSVConverter.h; sourceTree = "<group>"; };
 		532A46981502623A0070340D /* CSVConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSVConverter.m; sourceTree = "<group>"; };
+		5335372715EBC2CE004F4A99 /* CoreTelephony.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreTelephony.h; sourceTree = "<group>"; };
 		5361751B1510FE6A00D290F1 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		5361751C1510FE6A00D290F1 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		536175221511098000D290F1 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -800,6 +801,7 @@
 				53E0A77114DEC75D004E3E1B /* Supporting Files */,
 				5381C8F5153046380012E99D /* RecordAction.h */,
 				5381C8F6153046380012E99D /* RecordAction.m */,
+				5335372715EBC2CE004F4A99 /* CoreTelephony.h */,
 			);
 			path = NTI;
 			sourceTree = "<group>";
@@ -1300,8 +1302,8 @@
 		53E0A79114DEC75D004E3E1B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: Vladislav Efremov (MBL7632743)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vladislav Efremov (MBL7632743)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NTI/NTI-Prefix.pch";
 				INFOPLIST_FILE = "NTI/NTI-Info.plist";
@@ -1311,8 +1313,8 @@
 					"\"$(SRCROOT)/TestFlightSDK1.0\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "466BC197-5A5C-4D9E-899F-DE38A2141CE9";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "466BC197-5A5C-4D9E-899F-DE38A2141CE9";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
