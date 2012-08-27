@@ -54,12 +54,10 @@
     NSTimer *stopTimer;
     NSTimer *sendTimer;
     NSTimer *firstTimer;
-    NSTimer *shortCheckTimer;
 }
 
 - (void)stopGPSDetect;
 - (void)startGPSDetect;
-- (void)finishShortCheckTimer;
 - (void)checkSendRight;
 
 -(void)finishFirstTimer;

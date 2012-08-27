@@ -359,7 +359,7 @@
         if ([firstTimer isValid]){
         NSLog(@"work first timer");
     }
-    if ([shortCheckTimer isValid]) [shortCheckTimer invalidate];
+    
     
     /*
      Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
