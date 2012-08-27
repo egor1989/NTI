@@ -121,6 +121,7 @@
     [locationManager stopUpdatingHeading];
    // if ([[NSUserDefaults standardUserDefaults] boolForKey:@"canWorkInBackground"]) {
         [locationManager startMonitoringSignificantLocationChanges];
+        startCheck = NO;
         NSLog(@"startMonitoringSignificantLocationChanges");
    // } else NSLog(@"canWorkInBackground=NO");
     
@@ -381,20 +382,12 @@
     else if ([stopTimer isValid]) {
         NSLog(@"stopTimer working");
     }
-    else 
-        if (!canWriteToFile) {
-        NSLog(@"startShortCheckTimer");
-        startCheck = YES;
-        shortCheckTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(finishShortCheckTimer) userInfo:nil repeats:NO];
-    }
-    
-    [self startMotionDetect];
+
+    //motionManager.deviceMotionUpdateInterval = 0.1;
+    //[self startMotionDetect];
 }
 
-- (void)finishShortCheckTimer{
-    NSLog(@"StopShortCheckTimer");
-    startCheck = NO;
-}
+
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
