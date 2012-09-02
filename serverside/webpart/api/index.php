@@ -178,8 +178,9 @@ if(!isset($_POST))
 
 	if(!$data)
 	{
-		$res=array('result'=>0,'error'=> "Error while getting data");
-		echo json_encode($res);
+			$errortype=array('info'=>"No data set",'code'=>  1);
+			$res=array('result'=>1,'error'=> $errortype);
+			echo json_encode($res);
 		exit();
 	}
 
@@ -192,19 +193,19 @@ switch(json_last_error())
     {
         case JSON_ERROR_DEPTH:
             
-			$errortype=array('info'=>" - Maximum stack depth exceeded",'code'=>  666);
+			$errortype=array('info'=>" - Maximum stack depth exceeded",'code'=>  2);
 			$res=array('result'=>1,'error'=> $errortype);
 			echo json_encode($res);
 			exit();
         break;
         case JSON_ERROR_CTRL_CHAR:
-		$errortype=array('info'=>"  - Unexpected control character found",'code'=>  666);
+		$errortype=array('info'=>"  - Unexpected control character found",'code'=>  3);
 		$res=array('result'=>1,'error'=> $errortype);
 		echo json_encode($res);
 			exit();
         break;
         case JSON_ERROR_SYNTAX:
-			$errortype=array('info'=>" - Syntax error, malformed JSON",'code'=>  666);
+			$errortype=array('info'=>" - Syntax error, malformed JSON",'code'=>  4);
 			$res=array('result'=>$data,'error'=> $errortype);
 			echo json_encode($res);
 			exit();
@@ -212,7 +213,7 @@ switch(json_last_error())
     }
     
    
-if(!isset($json['method'])){ $errortype=array('info'=>"No difintion state set, or function is incorrect",'code'=>  NO_METHOD_SET_CODE);
+if(!isset($json['method'])){ $errortype=array('info'=>"No difintion state set, or function is incorrect",'code'=> 5);
 $res=array('result'=>-1,'error'=>  $errortype);echo json_encode($res);exit();}
 
 if($json['method']=="NTIauth"){NTIauth($json['params']);}//-
@@ -225,14 +226,14 @@ else if($json['method']=="addQuest"){feedBack($json['params']);}//-
 else if($json['method']=="rememberPassword"){remember($json['params']);}//-
 else
 {
-	   $errortype=array('info'=>"No action set, or function is incorrect",'code'=>  1);
+	   $errortype=array('info'=>"No action set, or function is incorrect",'code'=>  6);
     if(!isset($json['action'])){$res=array('result'=>2,'error'=>  $errortype);echo json_encode($res);exit();}
 }
 
 function NTI_Cookie_check()
 {
 		$cooks=$_COOKIE['NTIKeys'];
-		if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
+		if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  7);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
 		$cooks=mysql_real_escape_string($cooks);
 		$result = mysql_query("SELECT * from NTIKeys where SID='$cooks' and Deleted=0");
 		$cnt=mysql_num_rows($result);
@@ -267,7 +268,7 @@ function NTIregister($param)
 	$name=$param['name'];
 	$surname=$param['surname'];
 	
-	if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
+	if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  7);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
 	
 	$username=mysql_real_escape_string($username);
 	$password=mysql_real_escape_string($password);
@@ -277,7 +278,7 @@ function NTIregister($param)
 		if(!isset($username) || !isset($password))
 	{
 
-		$errortype=array('info'=>"You dont set mail,password,login",'code'=>  2);
+		$errortype=array('info'=>"You dont set mail,password,login",'code'=>  11);
 		$res=array('result'=>0,'error'=>  $errortype);
 		echo json_encode($res);
 		exit();
@@ -287,7 +288,7 @@ function NTIregister($param)
 	if(!$cnt==0)
 	{
 
-		$errortype=array('info'=>"User name already exists",'code'=>  3);
+		$errortype=array('info'=>"User name already exists",'code'=> 12);
 		$res=array('result'=>0,'error'=>  $errortype);
 		echo json_encode($res);
 		
@@ -298,7 +299,7 @@ function NTIregister($param)
 	if(!$cnt==0)
 	{
 
-		$errortype=array('info'=>"User mail already exists",'code'=>  4);
+		$errortype=array('info'=>"User mail already exists",'code'=>  13);
 		$res=array('result'=>0,'error'=>  $errortype);
 		echo json_encode($res);
 		exit();
@@ -306,7 +307,7 @@ function NTIregister($param)
 	if(strlen($password)<64)
 	{
 		
-		$errortype=array('info'=>"Password check failed, seem to be not sha",'code'=>  5);
+		$errortype=array('info'=>"Password check failed, seem to be not sha",'code'=>  14);
 		$res=array('result'=>0,'error'=>  $errortype);
 		echo json_encode($res);
 		exit();
@@ -315,7 +316,7 @@ function NTIregister($param)
 		if(strlen($username)>32 || strlen($email)>32 || strlen($name)>32 || strlen($surname)>32 )
 	{
 		
-		$errortype=array('info'=>"Fields are too long. Must be less than 32 bytes",'code'=>  6);
+		$errortype=array('info'=>"Fields are too long. Must be less than 32 bytes",'code'=>  15);
 		$res=array('result'=>0,'error'=>  $errortype);
 		echo json_encode($res);
 		exit();
@@ -324,7 +325,7 @@ function NTIregister($param)
 			if(strlen($email)<3)
 	{
 		
-		$errortype=array('info'=>"Email is too short",'code'=>  7);
+		$errortype=array('info'=>"Email is too short",'code'=>  16);
 		$res=array('result'=>0,'error'=>  $errortype);
 		echo json_encode($res);
 		exit();
@@ -355,11 +356,11 @@ function NTIauth($param)
 	$model=$param['model'];
 	$version=$param['version'];
 	$carrier=$param['carrier'];
-	if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
+	if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  7);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
 		if(!isset($secret) || !isset($username))
 	{
 		
-		$errortype=array('info'=>"Bad secret (it doesnt set)",'code'=>  10);
+		$errortype=array('info'=>"Bad secret (it doesnt set)",'code'=>  21);
 		$res=array('result'=>0,'error'=>  $errortype);
 		echo json_encode($res);
 		exit();
@@ -377,7 +378,7 @@ function NTIauth($param)
 	if($cnt==0)
 	{
 		
-		$errortype=array('info'=>"User doesnt exist",'code'=>  11);
+		$errortype=array('info'=>"User doesnt exist",'code'=> 22);
 		$res=array('result'=>0,'error'=>  $errortype);
 		echo json_encode($res);
 		exit();
@@ -389,7 +390,7 @@ function NTIauth($param)
 	if($cnt==0)
 	{
 		
-		$errortype=array('info'=>"Mismatch",'code'=>  12);
+		$errortype=array('info'=>"Mismatch",'code'=>  23);
 		$res=array('result'=>0,'error'=>  $errortype);
 		echo json_encode($res);
 		exit();
@@ -429,7 +430,7 @@ function addNTIFile($param)
 		if ($qq != NULL) 
 		{
 
-			if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
+			if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  7);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
 			mysql_query("INSERT into NTIFile (UID,File) values ('$UID','$ins')");
 			$fileid = mysql_insert_id();
 			$k = 0;
@@ -931,22 +932,7 @@ function addNTIFile($param)
 					$Kub=1/sqrt(1+$KvnB/$Qb);
 					$Kus=1/sqrt(1+$KvnS/$Qs);
 					$Kut=1/sqrt(1+$KvnT/$Qt);
-					if(($acc1+$acc2+$acc3)==0)
-					{
-						$Kua=0;
-					}	
-					if(($brake1+$brake2+$brake3)==0)
-					{
-						$Kub=0;
-					}	
-					if(($speed1+$speed2+$speed3)==0)
-					{
-						$Kus=0;
-					}	
-					if(($turn1+$turn2+$turn3)==0)
-					{
-						$Kut=0;
-					}			
+		
 					$score=0.10*$Kua+0.35*$Kub+0.30*$Kus+0.25*$Kut;
 					$score_speed =$Kus;
 					$score_turn = $Kut;
@@ -1003,8 +989,10 @@ function addNTIFile($param)
 				}
 				//Если же ментше 50 - нахуй за борт
 			}
-
-			$errortype=array('info'=>"all ok",'code'=>  0);
+                       if($UID<0)
+                              $errortype=array('info'=>"authfailed",'code'=>  31);
+			else 
+                              $errortype=array('info'=>"all ok",'code'=>  0);
 			$res=array('result'=>1,'error'=> $errortype);
 			echo json_encode($res);	
 
@@ -1012,7 +1000,7 @@ function addNTIFile($param)
 		}
 		else
 		{
-			$errortype=array('info'=>"Data is not in json",'code'=>  4);
+			$errortype=array('info'=>"Data is not in json",'code'=>  32);
 			$res=array('result'=>-1,'error'=> $errortype);
 			echo json_encode($res);	
 			exit();	
@@ -1020,7 +1008,7 @@ function addNTIFile($param)
 	}
 	else
 	{						
-		$errortype=array('info'=>"File is too small or empty",'code'=>  5);
+		$errortype=array('info'=>"File is too small or empty",'code'=>  33);
 		$res=array('result'=>-1,'error'=> $errortype);
 		echo json_encode($res);	
 		exit();
@@ -1036,7 +1024,7 @@ function addNTIFile($param)
 function getStatistics($param)
 {
 	
-		if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
+		if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  7);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
 		$UID=NTI_Cookie_check();
 		if($UID>0)
 		{
@@ -1098,7 +1086,7 @@ function getStatistics($param)
 		}
 		else
 		{
-			$errortype=array('info'=>"Connection broken or you are not authorized",'code'=>  33);
+			$errortype=array('info'=>"Connection broken or you are not authorized",'code'=>  41);
 			$res=array('result'=>-1,'error'=> $errortype);
 			echo json_encode($res);	
 			exit();	
@@ -1256,7 +1244,7 @@ function getPath($param)
 		else
 		{
 
-			$errortype=array('info'=>"There is no data with such time($end $start)",'code'=>  32);
+			$errortype=array('info'=>"There is no data with such time($end $start)",'code'=>  51);
 			$res=array('result'=>-1,'error'=> $errortype);
 			echo gzencode(json_encode($res));	
 			exit();
@@ -1266,7 +1254,7 @@ function getPath($param)
 	else
 	{
 
-		$errortype=array('info'=>"Connection broken or you are not authorized",'code'=>  33);
+		$errortype=array('info'=>"Connection broken or you are not authorized",'code'=>  52);
 		$res=array('result'=>-1,'error'=> $errortype);
 		echo gzencode(json_encode($res));		
 		exit();
@@ -1279,7 +1267,7 @@ function feedBack($param)
 	$title=$param['title'];
 	$body=$param['body'];	
 	$UID=NTI_Cookie_check();			
-	if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
+	if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=> 7);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
 	$title=mysql_real_escape_string($title);
 	$body=mysql_real_escape_string($body);
 	if(strlen($title)>4 && strlen($body)>4)
@@ -1292,7 +1280,7 @@ function feedBack($param)
 	}
 	else
 	{
-		$errortype=array('info'=>"Transfered data is too short",'code'=>  51);
+		$errortype=array('info'=>"Transfered data is too short",'code'=>  61);
 		$res=array('result'=>-1,'error'=> $errortype);
 		echo json_encode($res);	
 		exit();
@@ -1308,7 +1296,7 @@ function addQuest($param)
 	$dtp=$param['dtp'];
 	$autotype=$param['autotype'];
 	$autopower=$param['autopower'];
-	if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
+	if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  7);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
 	$UID=NTI_Cookie_check();		
 	if($UID>0)
 	{
@@ -1328,7 +1316,7 @@ function addQuest($param)
 	}
 	else
 	{
-		$errortype=array('info'=>"Connection broken or you are not authorized",'code'=>  33);
+		$errortype=array('info'=>"Connection broken or you are not authorized",'code'=>  71);
 		$res=array('result'=>-1,'error'=> $errortype);
 		echo json_encode($res);	
 		exit();
@@ -1338,13 +1326,13 @@ function addQuest($param)
 
 function remember($params)
 {
-	if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  4);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
+	if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  7);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
 	$login=mysql_real_escape_string($params['login']);
 	$result = mysql_query("SELECT Email,Id from NTIUsers where Login='$login'");
 	$cnt=mysql_num_rows($result);
 	if($cnt==0)
 	{
-		$errortype=array('info'=>"User doesnt exist",'code'=>  62);
+		$errortype=array('info'=>"User doesnt exist",'code'=>  81);
 		$res=array('result'=>0,'error'=>  $errortype);
 		echo json_encode($res);
 		exit();
