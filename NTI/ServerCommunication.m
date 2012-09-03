@@ -178,63 +178,90 @@
             
             errors = NO;
             break;
+            
+        case 1:
+            info = @"Не удалось получить данные";
+            break;
+            
         case 2:
-        case 10:
+        case 3:
+        case 4:
+        case 32:
+            info = @"Неверный формат данных. Сообщите разработчикам";
+            break;
+            
+        case 5:
+        case 6:
+            info = @"Ошибка в запросе. Сообщите разработчикам";
+            break;
+            
+        case 7:
+            info = @"Ошибка подключения к БД";
+            break;
+            
+        case 11:
             info = @"Не все обязательные поля заполнены";
             break;
-        case 3:
-             if ([methodName isEqualToString: @"reg&auth"]){
-                 info = @"Пользователь с таким именем уже существует";
-             }
-             else if ([methodName isEqualToString: @"sendData"]){
-                  info = @"Файл пуст";
-                 [userDefaults setInteger:0 forKey:@"pk"];
-
-                NSLog(@"empty file");
-             }
-            break;
-        case 4:
+            
+        case 12:
+            info = @"Пользователь с таким именем уже существует";
+            break; 
+            
+        case 13:
             info = @"E-mail уже используется";
-            // info = @"Неверный формат данных";//сообщите разработчикам
-            break;
-        case 5:
+            break;    
+        
+        case 14:
+        case 21:
             info = @"Повторите ввод пароля";
-            break;
-        case 6:
+            break; 
+            
+        case 15:
             info = @"Поле должно быть меньше 32 символов";
             break;
-        case 7:
+        case 16:
             info = @"Поле email слишком короткое";
-            break;
-        case 11:
+            break;  
+            
+        case 22:
             info = @"Пользователя с таким именем не существует";
             break;
-        case 12:
+        case 23:
             info = @"Неверный логин и/или пароль";
             break;
-        case 32:{
-            info = @"Неверная дата";
+            
+        case 31:
+        case 41: 
+        case 52:
+        case 71:{
+            info = @"Ошибка авторизации";
+            NSLog(@"AUTH FAILED!!!");
+            [self refreshCookie];
+            break;
+        }
+        case 33:
+            info = @"Файл пуст";
+            break;
+        
+        case 51:{
+            info = @"Нет данных для пользователя";
             UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:info message:@"Данных по поездке за указанный период не существует. Пожалуйста выберите другую дату" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             NSLog(@"bad data");
             [alertView show];
             break;
         }
-        case 33:{
-            info = @"Ошибка авторизации";
-            NSLog(@"auth error");
-            [self refreshCookie];
+            
+        case 61:
+            info = @"Передаваемые данные слишком короткие";
             break;
-        }
-        case 43: {
-            info = @"Нет данных для пользователя";
-            NSLog(@"haven't data for user");
-            break;
-        }
+        
+            
         case 62:{
             info = @"Невозможно восстановить пароль для пользователя";
             NSLog(@"can't restore password");
             break;
         }
+            
         case 88: {
            NSLog(@"server unrechable");
             info = @"Сервер временно не доступен";

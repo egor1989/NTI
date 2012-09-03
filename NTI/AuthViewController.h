@@ -11,6 +11,8 @@
 #import "ServerCommunication.h"
 #import "HelpViewController.h"
 
+
+
 @interface AuthViewController : UIViewController {
     
     IBOutlet UITextField *passwordField;

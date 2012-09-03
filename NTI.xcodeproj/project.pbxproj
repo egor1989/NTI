@@ -108,6 +108,7 @@
 		531D3228154D641C00FC4C2B /* StatHelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531D3227154D641C00FC4C2B /* StatHelpViewController.m */; };
 		531D324F1551A16C00FC4C2B /* GzipCompress.m in Sources */ = {isa = PBXBuildFile; fileRef = 531D324E1551A16B00FC4C2B /* GzipCompress.m */; };
 		532A46991502623A0070340D /* CSVConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 532A46981502623A0070340D /* CSVConverter.m */; };
+		5335372A15ECE440004F4A99 /* DeviceInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 5335372915ECE43F004F4A99 /* DeviceInfo.m */; };
 		5361751D1510FE6A00D290F1 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 5361751B1510FE6A00D290F1 /* Reachability.m */; };
 		536175231511098000D290F1 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 536175221511098000D290F1 /* SystemConfiguration.framework */; };
 		536E026F14F00625003A2B15 /* compass.png in Resources */ = {isa = PBXBuildFile; fileRef = 536E026E14F00625003A2B15 /* compass.png */; };
@@ -312,6 +313,8 @@
 		532A46971502623A0070340D /* CSVConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSVConverter.h; sourceTree = "<group>"; };
 		532A46981502623A0070340D /* CSVConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSVConverter.m; sourceTree = "<group>"; };
 		5335372715EBC2CE004F4A99 /* CoreTelephony.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreTelephony.h; sourceTree = "<group>"; };
+		5335372815ECE43F004F4A99 /* DeviceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceInfo.h; sourceTree = "<group>"; };
+		5335372915ECE43F004F4A99 /* DeviceInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceInfo.m; sourceTree = "<group>"; };
 		5361751B1510FE6A00D290F1 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		5361751C1510FE6A00D290F1 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		536175221511098000D290F1 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -802,6 +805,8 @@
 				5381C8F5153046380012E99D /* RecordAction.h */,
 				5381C8F6153046380012E99D /* RecordAction.m */,
 				5335372715EBC2CE004F4A99 /* CoreTelephony.h */,
+				5335372815ECE43F004F4A99 /* DeviceInfo.h */,
+				5335372915ECE43F004F4A99 /* DeviceInfo.m */,
 			);
 			path = NTI;
 			sourceTree = "<group>";
@@ -1157,6 +1162,7 @@
 				531D3228154D641C00FC4C2B /* StatHelpViewController.m in Sources */,
 				531D324F1551A16C00FC4C2B /* GzipCompress.m in Sources */,
 				2789767B155574FF00534E70 /* MapHelpViewController.m in Sources */,
+				5335372A15ECE440004F4A99 /* DeviceInfo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

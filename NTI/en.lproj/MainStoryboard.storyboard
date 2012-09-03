@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="1.1" toolsVersion="2182" systemVersion="11E53" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="4">
     <dependencies>
-        <deployment defaultVersion="1296" identifier="iOS"/>
         <development defaultVersion="4200" identifier="xcode"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1179"/>
     </dependencies>
@@ -1094,7 +1093,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.26659891060000002" green="0.61288265310000001" blue="0.0" alpha="0.34999999999999998" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" keyboardType="emailAddress"/>
                             </textField>
                             <navigationBar contentMode="scaleToFill" id="1mq-bk-FUo">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -1183,6 +1182,143 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <image name="second.png" width="30" height="30"/>
         <image name="time.png" width="128" height="128"/>
     </resources>
+    <classes>
+        <class className="AuthViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/AuthViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="authButton:"/>
+                <relationship kind="action" name="forgotButton:"/>
+                <relationship kind="action" name="regButton:"/>
+                <relationship kind="outlet" name="loginField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="passwordField" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="DatePickerViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/DatePickerViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="doneButton:"/>
+                <relationship kind="outlet" name="datePicker" candidateClass="UIDatePicker"/>
+            </relationships>
+        </class>
+        <class className="DevelopViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/DevelopViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="acceleration:"/>
+                <relationship kind="action" name="actionButton:"/>
+                <relationship kind="action" name="clearDB:"/>
+                <relationship kind="action" name="deceleration:"/>
+                <relationship kind="action" name="feedBackButton:"/>
+                <relationship kind="action" name="leftRot:"/>
+                <relationship kind="action" name="rightRot:"/>
+                <relationship kind="action" name="sendFile:"/>
+                <relationship kind="outlet" name="accX" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="accY" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="accZ" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="accelButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="action" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="course" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="decelButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="feedBackButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="gpsRow" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="leftButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="northRow" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="northValue" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="rightButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="rowCourse" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="rowDegrees" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="speed" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="time" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="timerLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="writeLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="FeedBackViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/FeedBackViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="grayView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="navItem" candidateClass="UINavigationItem"/>
+                <relationship kind="outlet" name="rightItem" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="textField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="textView" candidateClass="UITextView"/>
+                <relationship kind="outlet" name="waintingIndicator" candidateClass="UIActivityIndicatorView"/>
+            </relationships>
+        </class>
+        <class className="HelpViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/HelpViewController.h"/>
+        </class>
+        <class className="IterviewViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/IterviewViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="doneAction"/>
+                <relationship kind="outlet" name="ageField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="autoCategoryField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="autoPowerField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="insuranceCompanyField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="numberOfDtpField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
+                <relationship kind="outlet" name="sexField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="skillField" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="MapHelpViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MapHelpViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="okButton:"/>
+            </relationships>
+        </class>
+        <class className="MapViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MapViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="grayView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="mapView" candidateClass="MKMapView"/>
+                <relationship kind="outlet" name="waintingIndicator" candidateClass="UIActivityIndicatorView"/>
+            </relationships>
+        </class>
+        <class className="MyTextField" superclassName="UITextField">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MyTextField.h"/>
+        </class>
+        <class className="Plot" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/Plot.h"/>
+        </class>
+        <class className="PlotViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/PlotViewController.h"/>
+        </class>
+        <class className="RegistrationViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RegistrationViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="cancelButton:"/>
+                <relationship kind="action" name="goButton:"/>
+                <relationship kind="outlet" name="againPasswordField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="emailField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="nameField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="passwordField" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="StatHelpViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/StatHelpViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="closeHelp:"/>
+                <relationship kind="outlet" name="closeHelp" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
+            </relationships>
+        </class>
+        <class className="StatViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/StatViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="backButton:"/>
+                <relationship kind="action" name="helpButton:"/>
+                <relationship kind="action" name="internetUploadSwitch:"/>
+                <relationship kind="action" name="loginButton:"/>
+                <relationship kind="action" name="refreshButton:"/>
+                <relationship kind="outlet" name="backButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="helpButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="loadStatIndicator" candidateClass="UIActivityIndicatorView"/>
+                <relationship kind="outlet" name="loginButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="sendButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="statTableView" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

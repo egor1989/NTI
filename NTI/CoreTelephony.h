@@ -41,5 +41,8 @@ int *  _CTServerConnectionCopyMobileEquipmentInfo(
 struct CTServerConnection *sc=NULL;
 struct CTResult result;
 
-void callback() { }
+typedef struct CTServerConnection CTServerConnection;
+typedef CTServerConnection* CTServerConnectionRef;
+
+
 

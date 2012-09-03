@@ -129,14 +129,14 @@
 }
 
 -(void)startGPSDetect{
-  
-    [locationManager stopMonitoringSignificantLocationChanges];
-    NSLog(@"stopMonitoringSignificantLocationChange");
+    
     [locationManager startUpdatingLocation];
     NSLog(@"startGPSDetect");
     [locationManager startUpdatingHeading];
     
-    
+    [locationManager stopMonitoringSignificantLocationChanges];
+    NSLog(@"stopMonitoringSignificantLocationChange");
+
 }
 
 -(double) getTime {
