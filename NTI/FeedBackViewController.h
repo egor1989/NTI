@@ -6,7 +6,6 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "Crittercism.h"
 #import <UIKit/UIKit.h>
 #import "ServerCommunication.h"
 #import "SBJsonParser.h"
