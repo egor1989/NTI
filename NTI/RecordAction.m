@@ -132,6 +132,7 @@
          NSLog(@"data array size = %i",[toWrite count]);
          NSData *JSON = [jsonConvert convert: [self JSONFormat:toWrite]];
          [serverCommunication uploadData: JSON]; 
+         [DatabaseActions setNeedLastRoute:YES];
      }
      else {
          //создаем новый тред

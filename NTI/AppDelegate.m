@@ -204,8 +204,8 @@
         if ([stopTimer isValid]) {
             if (newLocation.speed > SPEED) {
                 m5Km++;
-                //5 событий подряд больше 5 км/ч
-                if (m5Km > 5){
+                //3 события подряд больше 5 км/ч
+                if (m5Km > 3){
                     NSLog(@"stopTimer-location manager: m5km>5, finish stopTimer");
                     //так как у нас опять движение выключаем таймер
                     [stopTimer invalidate];

@@ -46,7 +46,7 @@ static BOOL needLastRoute;
     return needLastRoute;
 }
 
-+ (void)setNeedLastRoute: (BOOL) isNeed
++ (void)setNeedLastRoute: (BOOL)isNeed
 {
     needLastRoute = isNeed;
 }
