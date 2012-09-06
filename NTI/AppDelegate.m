@@ -26,7 +26,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {  
-    freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr); //!!!!!не забывать убирать логирвоание
+//    freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr); //!!!!!не забывать убирать логирвоание
     recordAction = [[RecordAction alloc] init];
     
     //[recordAction eventRecord:@"open"]; 
@@ -70,15 +70,6 @@
     oldHeading          = 0;
     offsetG             = 0;
     newCompassTarget    = 0;
-    
-        
-    
-    [Crittercism initWithAppID:@"4f79a143b093154557000355" 
-                        andKey:@"czvj5ewmgoxin8qsxzrjrgnd1y2b" 
-                     andSecret:@"yjqmmg4ztbnoodvph29cldqvx3ialn1p" 
-         andMainViewController:nil ];
-    
-    [Crittercism setUsername:[[NSUserDefaults standardUserDefaults] stringForKey:@"login"]];
     
     [self.window makeKeyAndVisible];
     
@@ -145,6 +136,8 @@
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation{
+    
+    [TestFlight takeOff:@"14f03353d4c19f3233aafaac63a12ea2_NTAzMTgyMDEyLTAxLTAzIDA4OjMxOjUwLjY1ODIxMg"];
     
     CLLocationDistance meters = [newLocation distanceFromLocation:oldLocation];
     if (meters<0) meters = 0;
