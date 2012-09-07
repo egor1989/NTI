@@ -18,7 +18,7 @@
 
 @implementation AppDelegate
 
-@synthesize window = _window, lastLoc, course, trueNorth, north, allDistance, canWriteToFile, dict, recordAction;
+@synthesize window = _window, lastLoc, course, trueNorth, north, allDistance, canWriteToFile, dict, recordAction, locationUpdatedInBackground;
 
 //#define accelUpdateFrequency 0.1	
 
@@ -26,7 +26,25 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {  
-//    freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr); //!!!!!не забывать убирать логирвоание
+    
+    freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);
+    
+    if ([launchOptions objectForKey:UIApplicationLaunchOptionsLocationKey]) {
+         locationManager = [[CLLocationManager alloc] init];;
+        [self setLocationUpdatedInBackground:^(CLLocation *location) {
+        //тестовый блок, будет показывать local notification с координатами
+             NSLog(@"NOTIFICATION");
+             UILocalNotification *notification = [[UILocalNotification alloc] init];
+             notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:15];
+             notification.alertBody = [NSString stringWithFormat:@"New location: %@", location];
+             [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+         }];
+         [locationManager startUpdatingLocation];
+    }
+
+     //!!!!!не забывать убирать логирвоание
+    
+    
     recordAction = [[RecordAction alloc] init];
     
     //[recordAction eventRecord:@"open"]; 

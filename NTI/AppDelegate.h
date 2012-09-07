@@ -13,7 +13,7 @@
 #import "RecordAction.h"
 #import "DatabaseActions.h"
 
-
+typedef void(^locationHandler)(CLLocation *location);
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, CLLocationManagerDelegate, UIAccelerometerDelegate> {
     CLLocationManager *locationManager;
@@ -80,6 +80,7 @@
 @property (nonatomic) BOOL canWriteToFile;
 @property (strong, nonatomic) NSDictionary *dict;
 @property (nonatomic,strong) RecordAction *recordAction;
+@property (nonatomic, copy) locationHandler locationUpdatedInBackground;
 
 
 
