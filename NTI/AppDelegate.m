@@ -27,22 +27,24 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {  
     
-    freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);
+   
     
     if ([launchOptions objectForKey:UIApplicationLaunchOptionsLocationKey]) {
          locationManager = [[CLLocationManager alloc] init];;
-        [self setLocationUpdatedInBackground:^(CLLocation *location) {
+       // [self setLocationUpdatedInBackground:^(CLLocation *location) {
         //тестовый блок, будет показывать local notification с координатами
-             NSLog(@"NOTIFICATION");
+            // NSLog(@"NOTIFICATION");
              UILocalNotification *notification = [[UILocalNotification alloc] init];
              notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:15];
-             notification.alertBody = [NSString stringWithFormat:@"New location: %@", location];
+             notification.alertBody = [NSString stringWithFormat:@"NTI. New location alert"];
              [[UIApplication sharedApplication] scheduleLocalNotification:notification];
-         }];
+       //  }];
          [locationManager startUpdatingLocation];
+        NSLog(@"NOTIFICATION");
     }
+    
+    freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);      //!!!!!не забывать убирать логирвоание
 
-     //!!!!!не забывать убирать логирвоание
     
     
     recordAction = [[RecordAction alloc] init];
