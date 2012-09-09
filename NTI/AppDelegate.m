@@ -264,6 +264,9 @@
     
 }
 
+
+
+
 //compass
 
 - (void)calibrate:(NSTimer *)timer
@@ -421,6 +424,16 @@
     [locationManager stopMonitoringSignificantLocationChanges];
     [recordAction eventRecord:@"close"];
     NSLog(@"=====close=====");
+}
+
+
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+    
+    NSLog(@"LocalNotification - App in background");
+   // UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"LocalNotification" message:@"Приложение было в фоне" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
+   //   [alert show];
+       
+    application.applicationIconBadgeNumber = 0;
 }
 
 
