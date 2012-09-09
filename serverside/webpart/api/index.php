@@ -89,6 +89,7 @@ private $sevSpeed;
 private $Turn;
 private $Accel;
 private $wAcc;
+private $Path;
  function UserEntry() {
 	//Constructor
  }
@@ -102,6 +103,8 @@ private $wAcc;
  public function setTurn($Turn){$this->Turn=$Turn;}
   public function setwAcc($wAcc){$this->wAcc=$wAcc;}
  public function setAccel($Accel){$this->Accel=$Accel;}
+   public function setCurPath($Path){$this->Path=$Path;}
+  public function getCurPath(){return($this->Path);}
   
  public function getsevAcc(){	return($this->sevAcc);}
  public function getTypeAcc(){	return($this->TypeAcc);}
@@ -126,6 +129,10 @@ function distance($lat1, $lon1, $lat2, $lon2) {
     return ($miles * 1.609344); 
 }
 
+function dstBetweenPointsMet($lat1,$lon1,$lat2,$lon2)
+{
+	return 1000*(3958*3.1415926*sqrt(($lat2-$lat1)*($lat2-$lat1) + cos($lat2/57.29578)*cos($lat1/57.29578)*($lon2-$lon1)*($lon2-$lon1))/180);
+}
 
 
 function rand_str($length = 64, $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890')
@@ -247,7 +254,7 @@ function NTI_Cookie_check()
 			$dt=time();
 			while($row = mysql_fetch_array($result))
 			{
-				if($dt-$row['Creation_Date']>60000)
+				if($dt-$row['Creation_Date']>600000)
 				{
 					mysql_query("UPDATE NTIKeys SET Deleted=1 where SID='$cooks'");
 					return -2;
@@ -335,7 +342,7 @@ function NTIregister($param)
 	$id=mysql_insert_id();
 	$tm=time(); 
 	$sid=rand_str();
-	setcookie("NTIKey", $sid,time()+6000);
+	setcookie("NTIKey", $sid,time()+600000);
 	mysql_query("INSERT into NTIKeys (UID,SID,Creation_Date) values ('$id','$sid','$tm')");
 
 	
@@ -834,12 +841,12 @@ function addNTIFile($param)
 								}
 								//if (($ArrayEntry[$i][$j]->getTurnType() == "left turn finished") || ($ArrayEntry[$i][$j]->getTurnType() == "right turn finished")) 
 								//{
-									switch ($ArrayEntry[$i][$j]->getsevTurn()) {
-											case 1: {$turn1++;break;}
-											case 2: {$turn2++;break;}
-											case 3: {$turn3++;break;}
-											case 0: {break;}
-										}
+						//			switch ($ArrayEntry[$i][$j]->getsevTurn()) {
+						//					case 1: {$turn1++;break;}
+						//					case 2: {$turn2++;break;}
+						//					case 3: {$turn3++;break;}
+						//					case 0: {break;}
+						//				}
 								//}	
 						
 
@@ -856,6 +863,15 @@ function addNTIFile($param)
 					for($j=0;$j<$preCount;$j++)
 					{
 						$mid_speed+=$ArrayEntry[$i][$j]->getSpeed();
+						if($ArrayEntry[$i][$j]->getTurnType()=="left turn started" || $ArrayEntry[$i][$j]->getTurnType()=="right turn started")
+						{
+											switch ($ArrayEntry[$i][$j]->getsevTurn()) {
+											case 1: {$turn1++;break;}
+											case 2: {$turn2++;break;}
+											case 3: {$turn3++;break;}
+											case 0: {break;}
+										}
+						}
 						if($ArrayEntry[$i][$j]->getTimestamp()<$TimeStart)$TimeStart=$ArrayEntry[$i][$j]->getTimestamp();
 						if($ArrayEntry[$i][$j]->getTimestamp()>$TimeEnd)$TimeEnd=$ArrayEntry[$i][$j]->getTimestamp();
 						if($TotalDistance<$ArrayEntry[$i][$j]->getDistance())$TotalDistance=$ArrayEntry[$i][$j]->getDistance();
@@ -865,6 +881,79 @@ function addNTIFile($param)
 					{
 						$mid_speed=$mid_speed/count($ArrayEntry[$i]);
 					}
+					//Теперь начинаем исключать телепортацию
+					//Собираем максимальное количество путей
+					$predifinedTrack=0;//Определяет максимальное количество возможных путей
+					$ArrayEntry[$i][0]->setCurPath(0);
+					for($j=1;$j<$preCount;$j++)
+					{
+						$ArrayEntry[$i][$j]->setCurPath(0);
+						if(dstBetweenPointsMet($ArrayEntry[$i][$j]->getLat(),$ArrayEntry[$i][$j]->getLng(),$ArrayEntry[$i][$j-1]->getLat(),$ArrayEntry[$i][$j-1]->getLng())/(1+abs($ArrayEntry[$i][$j]->getTimestamp()-$ArrayEntry[$i][$j-1]->getTimestamp()))>50)
+						{
+							$predifinedTrack++;
+						}
+					}
+					//Предполагается, что правильный путь будет самым долгоим
+					$curLat=$ArrayEntry[$i][0]->getLat();
+					$curLng=$ArrayEntry[$i][0]->getLng();
+					$curtime=$ArrayEntry[$i][0]->getTimestamp();
+					for($k=0;$k<$predifinedTrack;$k++)
+					{
+						for($j=1;$j<$preCount;$j++)
+						{
+							if($ArrayEntry[$i][$j]->getCurPath()==0)
+							{
+								if(dstBetweenPointsMet($curLat,$curLng,$ArrayEntry[$i][$j-1]->getLat(),$ArrayEntry[$i][$j-1]->getLng())/(1+abs($curtime-$ArrayEntry[$i][$j-1]->getTimestamp()))<50)
+								{
+									$ArrayEntry[$i][$j]->setCurPath($k+1);
+								}
+							}
+						}
+						for($j=1;$j<$preCount;$j++)
+						{
+							if($ArrayEntry[$i][$j]->getCurPath()==0)
+							{
+								$curLat=$ArrayEntry[$i][$j]->getLat();
+								$curLng=$ArrayEntry[$i][$j]->getLng();
+								$curtime=$ArrayEntry[$i][$j]->getTimestamp();
+							}
+						}
+					}
+					// В итоге должны были получить пути
+					$curPathID=0;
+					$curPathCount=0;
+					$tmpPathCount=0;
+					for($k=0;$k<$predifinedTrack;$k++)
+					{
+						for($j=1;$j<$preCount;$j++)
+						{
+							if($ArrayEntry[$i][$j]->getCurPath()==$k+1)$curPathCount++;
+						}
+						if($tmpPathCount<$curPathCount){$tmpPathCount=$curPathCount;$curPathID=$k+1;}
+						$curPathCount=0;
+					}
+					$fp=fopen(time().'.txt','w');
+					if($fp)
+					{
+						for($k=0;$k<$predifinedTrack;$k++)
+						{
+							fwrite($fp, "New track\n");
+							fwrite($fp, $k+1);
+							 fwrite($fp, "\n");
+							
+							for($j=1;$j<$preCount;$j++)
+							{
+									if($ArrayEntry[$i][$j]->getCurPath()==$k+1)
+								{
+									fwrite($fp, $ArrayEntry[$i][$j]->getLat()."   ".$ArrayEntry[$i][$j]->getLng()."    ".$ArrayEntry[$i][$j]->getTimestamp());
+								}
+							}
+						}
+					
+					}
+					fclose($fp);
+					//Если 1 значит стоит записать все точки 
+					if($predifinedTrack==0)$curPathID=-1;
 					if($TotalDistance<=0)$TotalDistance=1;
 					$DTime=$TimeEnd-$TimeStart;
 					if($DTime==0)$DTime=1;
@@ -962,28 +1051,36 @@ function addNTIFile($param)
 
 						for($j=0;$j<count($ArrayEntry[$i]);$j++)
 						{
+
 							$accx=$ArrayEntry[$i][$j]->getAccx();
 							$accy=$ArrayEntry[$i][$j]->getAccy();					
-							$distance=$ArrayEntry[$i][$j]->getDistance();
-							$lat=$ArrayEntry[$i][$j]->getLat();
-							$lng=$ArrayEntry[$i][$j]->getLng();
-							$direction=$ArrayEntry[$i][$j]->getDirection();
-							$compass=$ArrayEntry[$i][$j]->getCompass();
-							$speed=$ArrayEntry[$i][$j]->getSpeed();
-							$utimestamp=$ArrayEntry[$i][$j]->getTimestamp();
-							$DrivingID=$TrackID;
-							$Blat=0;
-							$Blng=0;
-							$sevAcc=$ArrayEntry[$i][$j]->getsevAcc();
-							$TypeAcc=$ArrayEntry[$i][$j]->getTypeAcc();
-							$sevTurn=$ArrayEntry[$i][$j]->getsevTurn();
-							$TurnType=$ArrayEntry[$i][$j]->getTurnType();
-							$TypeSpeed=$ArrayEntry[$i][$j]->getTypeSpeed();
-							$sevSpeed=$ArrayEntry[$i][$j]->getsevSpeed();	
-							$accl=$ArrayEntry[$i][$j]->getAccel();	
-							$waccl=$ArrayEntry[$i][$j]->getwAcc();
-							$sql_insert_str="insert into NTIUserDrivingEntry(Accel,UID,accx,accy,distance,lat,lng,direction,compass,speed,utimestamp,DrivingID,Blat,Blng,sevAcc,TypeAcc,sevTurn,TurnType,TypeSpeed,sevSpeed,wAcc) values ('$accl','$UID','$accx','$accy','$distance','$lat','$lng','$direction','$compass','$speed','$utimestamp','$DrivingID','$Blat','$Blng','$sevAcc','$TypeAcc','$sevTurn','$TurnType','$TypeSpeed','$sevSpeed','$waccl')";
+								$distance=$ArrayEntry[$i][$j]->getDistance();
+								$lat=$ArrayEntry[$i][$j]->getLat();
+								$lng=$ArrayEntry[$i][$j]->getLng();
+								$direction=$ArrayEntry[$i][$j]->getDirection();
+								$compass=$ArrayEntry[$i][$j]->getCompass();
+								$speed=$ArrayEntry[$i][$j]->getSpeed();
+								$utimestamp=$ArrayEntry[$i][$j]->getTimestamp();
+								$DrivingID=$TrackID;
+								$Blat=0;
+								$Blng=0;
+								$sevAcc=$ArrayEntry[$i][$j]->getsevAcc();
+								$TypeAcc=$ArrayEntry[$i][$j]->getTypeAcc();
+								$sevTurn=$ArrayEntry[$i][$j]->getsevTurn();
+								$TurnType=$ArrayEntry[$i][$j]->getTurnType();
+								$TypeSpeed=$ArrayEntry[$i][$j]->getTypeSpeed();
+								$sevSpeed=$ArrayEntry[$i][$j]->getsevSpeed();	
+								$accl=$ArrayEntry[$i][$j]->getAccel();	
+								$waccl=$ArrayEntry[$i][$j]->getwAcc();
+								$sql_insert_str="insert into NTIUserDrivingEntry(Accel,UID,accx,accy,distance,lat,lng,direction,compass,speed,utimestamp,DrivingID,Blat,Blng,sevAcc,TypeAcc,sevTurn,TurnType,TypeSpeed,sevSpeed,wAcc) values ('$accl','$UID','$accx','$accy','$distance','$lat','$lng','$direction','$compass','$speed','$utimestamp','$DrivingID','$Blat','$Blng','$sevAcc','$TypeAcc','$sevTurn','$TurnType','$TypeSpeed','$sevSpeed','$waccl')";
+							if($curPathID!=-1)
+							{
+								if($ArrayEntry[$i][$j]->getCurPath()==$curPathID)
+														mysql_query($sql_insert_str);
+							}
+							else
 							mysql_query($sql_insert_str);
+							
 						}
 					}
 				}
