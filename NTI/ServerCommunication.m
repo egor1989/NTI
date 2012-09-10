@@ -328,6 +328,49 @@
 }
 
 
+
++ (void)sendAliveInfo{
+    
+    NSString *cookie = [[NSUserDefaults standardUserDefaults] valueForKey:@"cookie"]; 
+    NSString *data = @"data={\"method\":\"keepAlive\"}";
+    NSLog(@"Request: %@", data);
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                                       timeoutInterval:60.0];
+    
+    NSData *requestData = [NSData dataWithBytes:[data UTF8String] length:[data length]];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody: requestData];    
+    
+    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                @"http://nti.goodroads.ru/api/", NSHTTPCookieDomain,
+                                @"NTIKeys", NSHTTPCookieName,
+                                cookie, NSHTTPCookieValue,
+                                @"/", NSHTTPCookiePath,
+                                nil];
+    
+    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:[NSHTTPCookie cookieWithProperties:properties]];
+    NSHTTPCookie *fcookie = [NSHTTPCookie cookieWithProperties:properties]; //?
+    NSArray* fcookies = [NSArray arrayWithObjects: fcookie, nil];   //?
+    NSDictionary * headers = [NSHTTPCookie requestHeaderFieldsWithCookies:fcookies]; //?
+    
+    [request setAllHTTPHeaderFields:headers];
+    
+    
+    NSError *requestError = nil;
+    NSURLResponse *response = nil;
+    NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: &response error: &requestError ];
+    
+    if (requestError!=nil) {
+        NSLog(@"%@", requestError);
+    }
+    
+    NSString *returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
+    NSLog(@"returnData: %@", returnString);
+    //[self checkErrors:returnString method:@"stat"];
+}
+
+
 - (NSString *)getAllStatistic{
     
     NSString *cookie = [[NSUserDefaults standardUserDefaults] valueForKey:@"cookie"]; 

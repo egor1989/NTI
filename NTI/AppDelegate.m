@@ -42,6 +42,8 @@
              notification.alertBody = [NSString stringWithFormat:@"NTI. New location alert"];
              [[UIApplication sharedApplication] scheduleLocalNotification:notification];
         
+        //проверить инет, если нет записать в файл
+        
         [ServerCommunication sendNotification:[NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]] lng:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.longitude] lat:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.latitude]];
         
        //  }];
