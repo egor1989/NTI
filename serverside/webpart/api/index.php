@@ -231,6 +231,7 @@ else if($json['method']=="getPath"){getPath($json['params']);}//-
 else if($json['method']=="feedBack"){feedBack($json['params']);}//-
 else if($json['method']=="addQuest"){feedBack($json['params']);}//-
 else if($json['method']=="rememberPassword"){remember($json['params']);}//-
+else if($json['method']=="addNotification"){notification($json['params']);}//-
 else
 {
 	   $errortype=array('info'=>"No action set, or function is incorrect",'code'=>  6);
@@ -897,7 +898,7 @@ function addNTIFile($param)
 					$curLat=$ArrayEntry[$i][0]->getLat();
 					$curLng=$ArrayEntry[$i][0]->getLng();
 					$curtime=$ArrayEntry[$i][0]->getTimestamp();
-					for($k=0;$k<$predifinedTrack;$k++)
+					for($k=0;$k<=$predifinedTrack;$k++)
 					{
 						for($j=1;$j<$preCount;$j++)
 						{
@@ -923,7 +924,7 @@ function addNTIFile($param)
 					$curPathID=0;
 					$curPathCount=0;
 					$tmpPathCount=0;
-					for($k=0;$k<$predifinedTrack;$k++)
+					for($k=0;$k<=$predifinedTrack;$k++)
 					{
 						for($j=1;$j<$preCount;$j++)
 						{
@@ -932,26 +933,26 @@ function addNTIFile($param)
 						if($tmpPathCount<$curPathCount){$tmpPathCount=$curPathCount;$curPathID=$k+1;}
 						$curPathCount=0;
 					}
-					$fp=fopen(time().'.txt','w');
-					if($fp)
-					{
-						for($k=0;$k<$predifinedTrack;$k++)
+					$NTIErrorTrackInfo="";
+
+						for($k=0;$k<=$predifinedTrack;$k++)
 						{
-							fwrite($fp, "New track\n");
-							fwrite($fp, $k+1);
-							 fwrite($fp, "\n");
+							$NTIErrorTrackInfo.="\n\n\nNew track\n";
+							$NTIErrorTrackInfo.=$k+1;
+							 $NTIErrorTrackInfo.="\n";
 							
 							for($j=1;$j<$preCount;$j++)
 							{
 									if($ArrayEntry[$i][$j]->getCurPath()==$k+1)
 								{
-									fwrite($fp, $ArrayEntry[$i][$j]->getLat()."   ".$ArrayEntry[$i][$j]->getLng()."    ".$ArrayEntry[$i][$j]->getTimestamp());
+									$NTIErrorTrackInfo.=$ArrayEntry[$i][$j]->getLat()."   ".$ArrayEntry[$i][$j]->getLng()."    ".$ArrayEntry[$i][$j]->getTimestamp()."\n";
 								}
 							}
 						}
-					
-					}
-					fclose($fp);
+
+					$NTIErrorTrackInfo=mysql_real_escape_string($NTIErrorTrackInfo);
+					$sql_insert_str="insert into NTIErrorTrack(Info) values ('$NTIErrorTrackInfo')";
+						mysql_query($sql_insert_str);
 					//Если 1 значит стоит записать все точки 
 					if($predifinedTrack==0)$curPathID=-1;
 					if($TotalDistance<=0)$TotalDistance=1;
@@ -1457,5 +1458,20 @@ function remember($params)
 	exit();
 		
 }
+function notification($param)
+{
+	$lat=$param['lat'];
+	$lng=$param['lng'];
+	$time=$param['time'];
+	if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  7);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
+	$UID=NTI_Cookie_check();		
+	$lat=mysql_real_escape_string($lat);
+	$lng=mysql_real_escape_string($lng);
+	$time=mysql_real_escape_string($time);
+	mysql_query("INSERT into NTINotification (UID,Lat,Lnt,Utime) values ('$UID','$lat','$lng','$time')");
+	$errortype=array('info'=>"Added",'code'=>  0);
+	$res=array('result'=>1,'error'=> $errortype);
+	echo json_encode($res);	
 
+}
 ?>
