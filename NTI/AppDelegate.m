@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "FileController.h"
+#import "ServerCommunication.h"
 
 
 #define CC_RADIANS_TO_DEGREES(__ANGLE__) ((__ANGLE__) / (float)M_PI * 180.0f)
@@ -26,9 +27,13 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {  
+   // locationManager = [[CLLocationManager alloc] init];
+   // [ServerCommunication sendNotification:[NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]] lng:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.longitude] lat:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.latitude]];
+
     
     if ([launchOptions objectForKey:UIApplicationLaunchOptionsLocationKey]) {
-         locationManager = [[CLLocationManager alloc] init];;
+         locationManager = [[CLLocationManager alloc] init];
+        
        // [self setLocationUpdatedInBackground:^(CLLocation *location) {
         //тестовый блок, будет показывать local notification с координатами
             // NSLog(@"NOTIFICATION");
@@ -36,6 +41,9 @@
              notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:15];
              notification.alertBody = [NSString stringWithFormat:@"NTI. New location alert"];
              [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+        
+        [ServerCommunication sendNotification:[NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]] lng:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.longitude] lat:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.latitude]];
+        
        //  }];
          //[locationManager startUpdatingLocation];
          [locationManager startMonitoringSignificantLocationChanges];

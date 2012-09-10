@@ -42,6 +42,7 @@
 - (void)sendFeedBackToServerWithTitle:(NSString*)title andBody: (NSString*)body;
 - (void)sendInterviewToServerWithData:(NSDictionary*)data;
 - (void)forgotPassword: (NSString *)login;
++ (void)sendNotification: (NSString *)time lng:(NSString *)longitude lat:(NSString *)latitude;
 
 @property (nonatomic) BOOL errors;
 
