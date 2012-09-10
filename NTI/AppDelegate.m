@@ -27,8 +27,6 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {  
     
-   
-    
     if ([launchOptions objectForKey:UIApplicationLaunchOptionsLocationKey]) {
          locationManager = [[CLLocationManager alloc] init];;
        // [self setLocationUpdatedInBackground:^(CLLocation *location) {
@@ -39,13 +37,15 @@
              notification.alertBody = [NSString stringWithFormat:@"NTI. New location alert"];
              [[UIApplication sharedApplication] scheduleLocalNotification:notification];
        //  }];
-         [locationManager startUpdatingLocation];
+         //[locationManager startUpdatingLocation];
+         [locationManager startMonitoringSignificantLocationChanges];
         NSLog(@"NOTIFICATION");
     }
     
     freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);      //!!!!!не забывать убирать логирвоание
-
     
+    [locationManager startMonitoringSignificantLocationChanges];
+    NSLog(@"startMonitoringSignificantLocationChanges");
     
     recordAction = [[RecordAction alloc] init];
     
@@ -131,9 +131,9 @@
     [locationManager stopUpdatingLocation];
     [locationManager stopUpdatingHeading];
    // if ([[NSUserDefaults standardUserDefaults] boolForKey:@"canWorkInBackground"]) {
-        [locationManager startMonitoringSignificantLocationChanges];
-        startCheck = NO;
-        NSLog(@"startMonitoringSignificantLocationChanges");
+      //  [locationManager startMonitoringSignificantLocationChanges];
+      //  startCheck = NO;
+      //  NSLog(@"startMonitoringSignificantLocationChanges");
    // } else NSLog(@"canWorkInBackground=NO");
     
 
@@ -145,8 +145,8 @@
     NSLog(@"startGPSDetect");
     [locationManager startUpdatingHeading];
     
-    [locationManager stopMonitoringSignificantLocationChanges];
-    NSLog(@"stopMonitoringSignificantLocationChange");
+   // [locationManager stopMonitoringSignificantLocationChanges];
+   // NSLog(@"stopMonitoringSignificantLocationChange");
 
 }
 
@@ -421,7 +421,6 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     [DatabaseActions finalizeStatements];
-    [locationManager stopMonitoringSignificantLocationChanges];
     [recordAction eventRecord:@"close"];
     NSLog(@"=====close=====");
 }
@@ -434,6 +433,10 @@
    //   [alert show];
        
     application.applicationIconBadgeNumber = 0;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField{
+    return NO;
 }
 
 
