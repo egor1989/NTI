@@ -44,18 +44,15 @@
         
         //проверить инет, если нет записать в файл
         
-        [ServerCommunication sendNotification:[NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]] lng:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.longitude] lat:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.latitude]];
+      //  [ServerCommunication sendNotification:[NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]] lng:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.longitude] lat:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.latitude]];
         
        //  }];
-         //[locationManager startUpdatingLocation];
-         [locationManager startMonitoringSignificantLocationChanges];
+         [locationManager startUpdatingLocation];
+         //[locationManager startMonitoringSignificantLocationChanges];
         NSLog(@"NOTIFICATION");
     }
     
     freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);      //!!!!!не забывать убирать логирвоание
-    
-    [locationManager startMonitoringSignificantLocationChanges];
-    NSLog(@"startMonitoringSignificantLocationChanges");
     
     recordAction = [[RecordAction alloc] init];
     
@@ -141,9 +138,9 @@
     [locationManager stopUpdatingLocation];
     [locationManager stopUpdatingHeading];
    // if ([[NSUserDefaults standardUserDefaults] boolForKey:@"canWorkInBackground"]) {
-      //  [locationManager startMonitoringSignificantLocationChanges];
-      //  startCheck = NO;
-      //  NSLog(@"startMonitoringSignificantLocationChanges");
+        [locationManager startMonitoringSignificantLocationChanges];
+        startCheck = NO;
+        NSLog(@"startMonitoringSignificantLocationChanges");
    // } else NSLog(@"canWorkInBackground=NO");
     
 
@@ -155,8 +152,8 @@
     NSLog(@"startGPSDetect");
     [locationManager startUpdatingHeading];
     
-   // [locationManager stopMonitoringSignificantLocationChanges];
-   // NSLog(@"stopMonitoringSignificantLocationChange");
+    [locationManager stopMonitoringSignificantLocationChanges];
+    NSLog(@"stopMonitoringSignificantLocationChange");
 
 }
 
@@ -209,7 +206,6 @@
         //включили gps 
         //увеличили частоту обновление акселерометра - его выключать нельзя так как он в фоне потом не включается - поэтому лучше делать меньше частоту
         [self startGPSDetect];
-        //[self startMotionDetect];
         motionManager.deviceMotionUpdateInterval = 1.0;
         //включили опять опции как в начальной проверке, а не сразу включили запись
         //если не будет работать, то убрать эти три строчки ниже И раскомментить те две которые сейчас закомменчены canWrite..=YES, notification
@@ -430,6 +426,8 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
+    
+    [locationManager startMonitoringSignificantLocationChanges];
     [DatabaseActions finalizeStatements];
     [recordAction eventRecord:@"close"];
     NSLog(@"=====close=====");
