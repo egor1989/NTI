@@ -61,14 +61,13 @@ typedef void(^locationHandler)(CLLocation *location);
 
 -(void)finishFirstTimer;
 -(void)finishStopTimer;
-//- (void)stopAccelerometerDetect;
-//- (void)startAccelerometerDetect;
 
 -(void) startMotionDetect;
 -(void) stopMotionDetect;
 -(double) getTime;
 - (void)sendTimer;
 - (void)stopSlowMonitoring;
+- (void)endCheckAliveTimer;
 
 
 @property (strong, nonatomic) UIWindow *window;

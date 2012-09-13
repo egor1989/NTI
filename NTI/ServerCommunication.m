@@ -289,7 +289,7 @@
     
     NSString *cookie = [[NSUserDefaults standardUserDefaults] valueForKey:@"cookie"]; 
     
-    NSString *data = [NSString stringWithFormat:(@"data={\"method\":\"addNotification\",\"params\":{\"time\":\"%@\",\"lng\":\"%@\",\"lat\":\"%@\"}}"),time,longitude,latitude];
+    NSString *data = [NSString stringWithFormat:(@"data={\"method\":\"deadMoving\",\"params\":{\"time\":\"%@\",\"lng\":\"%@\",\"lat\":\"%@\"}}"),time,longitude,latitude];
     NSLog(@"Request: %@", data);
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy

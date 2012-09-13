@@ -16,6 +16,7 @@
 #define SPEED 1.5
 #define STARTTIME 300 //!!
 #define STOPTIME 600 //!!
+#define ALIVETIME 60 //3600
 
 @implementation AppDelegate
 
@@ -27,32 +28,40 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {  
-   // locationManager = [[CLLocationManager alloc] init];
-   // [ServerCommunication sendNotification:[NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]] lng:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.longitude] lat:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.latitude]];
-
+    locationManager = [[CLLocationManager alloc] init];
+    [ServerCommunication sendNotification:[NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]] lng:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.longitude] lat:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.latitude]];
     
+    //!!!!
+    [NSTimer scheduledTimerWithTimeInterval:ALIVETIME target:self selector:@selector(endCheckAliveTimer) userInfo:nil repeats:YES];
+    
+ /***********************************************************************************/   
     if ([launchOptions objectForKey:UIApplicationLaunchOptionsLocationKey]) {
          locationManager = [[CLLocationManager alloc] init];
-        
-       // [self setLocationUpdatedInBackground:^(CLLocation *location) {
+
         //тестовый блок, будет показывать local notification с координатами
-            // NSLog(@"NOTIFICATION");
+           
              UILocalNotification *notification = [[UILocalNotification alloc] init];
              notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:15];
              notification.alertBody = [NSString stringWithFormat:@"NTI. New location alert"];
              [[UIApplication sharedApplication] scheduleLocalNotification:notification];
         
-        //проверить инет, если нет записать в файл
-        
-      //  [ServerCommunication sendNotification:[NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]] lng:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.longitude] lat:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.latitude]];
-        
-       //  }];
+        if ([ServerCommunication checkInternetConnection]) {
+            [ServerCommunication sendNotification:[NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]] lng:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.longitude] lat:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.latitude]];
+        }
+        else {
+            //if ([[NSUserDefaults standardUserDefaults] objectForKey:@"nArray"]==nil) {
+            //    
+            //}
+        }
+
          [locationManager startUpdatingLocation];
          //[locationManager startMonitoringSignificantLocationChanges];
         NSLog(@"NOTIFICATION");
     }
     
-    freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);      //!!!!!не забывать убирать логирвоание
+ /***********************************************************************************/   
+    
+  //  freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);      //!!!!!не забывать убирать логирвоание
     
     recordAction = [[RecordAction alloc] init];
     
@@ -452,6 +461,19 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
     return NO;
+}
+
+- (void)endCheckAliveTimer{
+    if ([ServerCommunication checkInternetConnection]) [ServerCommunication sendAliveInfo];
+    else if ([[NSUserDefaults standardUserDefaults] arrayForKey:@"alArray"]==nil) {
+           //сделать новый массив и пометсить туда значение 
+            }
+        else {
+            
+        }
+    
+    
+    
 }
 
 
