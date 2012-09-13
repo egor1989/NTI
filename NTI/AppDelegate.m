@@ -206,6 +206,13 @@
         //включили gps 
         //увеличили частоту обновление акселерометра - его выключать нельзя так как он в фоне потом не включается - поэтому лучше делать меньше частоту
         [self startGPSDetect];
+        
+        UILocalNotification *notification = [[UILocalNotification alloc] init];
+        notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:15];
+        notification.alertBody = [NSString stringWithFormat:@"NTI-BACKGROUND. New location alert"];
+        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+        
+        
         motionManager.deviceMotionUpdateInterval = 1.0;
         //включили опять опции как в начальной проверке, а не сразу включили запись
         //если не будет работать, то убрать эти три строчки ниже И раскомментить те две которые сейчас закомменчены canWrite..=YES, notification
