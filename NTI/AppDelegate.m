@@ -14,9 +14,9 @@
 #define CC_RADIANS_TO_DEGREES(__ANGLE__) ((__ANGLE__) / (float)M_PI * 180.0f)
 #define radianConst M_PI/180.0
 #define SPEED 1.5
-#define STARTTIME 300 //!!
-#define STOPTIME 600 //!!
-#define ALIVETIME 10 //3600
+#define STARTTIME 30 //!!
+#define STOPTIME 60 //!!
+#define ALIVETIME 100 //3600
 
 @implementation AppDelegate
 @synthesize window = _window, lastLoc, course, trueNorth, north, allDistance, canWriteToFile, dict, recordAction, locationUpdatedInBackground;
@@ -452,11 +452,11 @@
 
 - (void)endCheckAliveTimer{
     NSString *time = [NSString stringWithFormat:@"%.0f", [[NSDate date] timeIntervalSince1970]];
-    NSMutableArray *lifeArray = [[NSUserDefaults standardUserDefaults] objectForKey:@"alArray"];
+    NSMutableArray *lifeArray = [NSMutableArray arrayWithArray: [[NSUserDefaults standardUserDefaults] objectForKey:@"alArray"]];
     NSLog(@"%i", [lifeArray count]);
     if ([lifeArray count]==0) {
                 if ([ServerCommunication checkInternetConnection]) [ServerCommunication sendAliveInfo];
-                else [[NSUserDefaults standardUserDefaults] setObject:[NSMutableArray arrayWithObject:time] forKey:@"alArray"];
+                else [[NSUserDefaults standardUserDefaults] setObject:[NSArray arrayWithObject:time] forKey:@"alArray"];
             }
     else {
         if ([ServerCommunication checkInternetConnection]) {
@@ -467,6 +467,7 @@
             }
         //write to end of array
         else { NSLog(@"%@", lifeArray);[lifeArray  addObject:time];}
+        [[NSUserDefaults standardUserDefaults] setObject:lifeArray forKey:@"alArray"];
         NSLog(@"%@", lifeArray);
     }
 }
