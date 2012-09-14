@@ -16,20 +16,16 @@
 #define SPEED 1.5
 #define STARTTIME 300 //!!
 #define STOPTIME 600 //!!
-#define ALIVETIME 60 //3600
+#define ALIVETIME 3600 //3600
 
 @implementation AppDelegate
-
 @synthesize window = _window, lastLoc, course, trueNorth, north, allDistance, canWriteToFile, dict, recordAction, locationUpdatedInBackground;
-
-//#define accelUpdateFrequency 0.1	
-
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {  
-    locationManager = [[CLLocationManager alloc] init];
-    [ServerCommunication sendNotification:[NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]] lng:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.longitude] lat:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.latitude]];
+ //   locationManager = [[CLLocationManager alloc] init];
+ //   [ServerCommunication sendNotification:[NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]] lng:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.longitude] lat:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.latitude]];
     
     //!!!!
     [NSTimer scheduledTimerWithTimeInterval:ALIVETIME target:self selector:@selector(endCheckAliveTimer) userInfo:nil repeats:YES];
@@ -55,24 +51,19 @@
         }
 
          [locationManager startUpdatingLocation];
-         //[locationManager startMonitoringSignificantLocationChanges];
+         [locationManager startMonitoringSignificantLocationChanges];
         NSLog(@"NOTIFICATION");
     }
-    
  /***********************************************************************************/   
     
   //  freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);      //!!!!!не забывать убирать логирвоание
     
     recordAction = [[RecordAction alloc] init];
     
-    //[recordAction eventRecord:@"open"]; 
-    
     locationManager=[[CLLocationManager alloc] init];
     locationManager.delegate=self;
     locationManager.desiredAccuracy= kCLLocationAccuracyNearestTenMeters;
     locationManager.distanceFilter = kCLDistanceFilterNone;
-    
-    //accelUpdateFrequency = 1.0;
     
     
     lastLoc = [[CLLocation alloc] init];
@@ -90,7 +81,7 @@
 
     motionManager = [[CMMotionManager alloc] init];
     if ([motionManager isGyroAvailable]) {
-        motionManager.deviceMotionUpdateInterval = 1.0 /*/accelUpdateFrequency*/;//регулировка частоты
+        motionManager.deviceMotionUpdateInterval = 1.0;//регулировка частоты
         
         [self startMotionDetect];
     }
@@ -143,16 +134,14 @@
 
 //gps
 -(void)stopGPSDetect{
-    NSLog(@"stopGPSDetect");
+   
+    [locationManager startMonitoringSignificantLocationChanges];
+    NSLog(@"startMonitoringSignificantLocationChanges");
+    
     [locationManager stopUpdatingLocation];
     [locationManager stopUpdatingHeading];
-   // if ([[NSUserDefaults standardUserDefaults] boolForKey:@"canWorkInBackground"]) {
-        [locationManager startMonitoringSignificantLocationChanges];
-        startCheck = NO;
-        NSLog(@"startMonitoringSignificantLocationChanges");
-   // } else NSLog(@"canWorkInBackground=NO");
-    
-
+    NSLog(@"stopGPSDetect");
+    startCheck = NO;
 }
 
 -(void)startGPSDetect{
