@@ -550,7 +550,7 @@
     
 }
 
-+ (BOOL) checkInternetConnection{
++ (BOOL)checkInternetConnection{
 
     Reachability* reach = [Reachability reachabilityForInternetConnection];
     

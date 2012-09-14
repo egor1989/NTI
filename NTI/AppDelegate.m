@@ -16,7 +16,7 @@
 #define SPEED 1.5
 #define STARTTIME 300 //!!
 #define STOPTIME 600 //!!
-#define ALIVETIME 3600 //3600
+#define ALIVETIME 10 //3600
 
 @implementation AppDelegate
 @synthesize window = _window, lastLoc, course, trueNorth, north, allDistance, canWriteToFile, dict, recordAction, locationUpdatedInBackground;
@@ -421,7 +421,6 @@
     
     if ([[NSUserDefaults standardUserDefaults] stringForKey:@"cookie"] == nil){
         
-        
         UIStoryboard *storyboard = self.window.rootViewController.storyboard;
         UIViewController *loginController = [storyboard instantiateViewControllerWithIdentifier:@"AuthViewController"];
         NSLog(@"=====didBecomeActive=====");
@@ -431,10 +430,9 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-    
     [locationManager startMonitoringSignificantLocationChanges];
+    //[recordAction eventRecord:@"close"];
     [DatabaseActions finalizeStatements];
-    [recordAction eventRecord:@"close"];
     NSLog(@"=====close=====");
 }
 
@@ -453,16 +451,24 @@
 }
 
 - (void)endCheckAliveTimer{
-    if ([ServerCommunication checkInternetConnection]) [ServerCommunication sendAliveInfo];
-    else if ([[NSUserDefaults standardUserDefaults] arrayForKey:@"alArray"]==nil) {
-           //сделать новый массив и пометсить туда значение 
+    NSString *time = [NSString stringWithFormat:@"%.0f", [[NSDate date] timeIntervalSince1970]];
+    NSMutableArray *lifeArray = [[NSUserDefaults standardUserDefaults] objectForKey:@"alArray"];
+    NSLog(@"%i", [lifeArray count]);
+    if ([lifeArray count]==0) {
+                if ([ServerCommunication checkInternetConnection]) [ServerCommunication sendAliveInfo];
+                else [[NSUserDefaults standardUserDefaults] setObject:[NSMutableArray arrayWithObject:time] forKey:@"alArray"];
             }
-        else {
-            
-        }
-    
-    
-    
+    else {
+        if ([ServerCommunication checkInternetConnection]) {
+          //read all array and send  
+            [ServerCommunication sendAliveInfo];
+            for (NSInteger i = 0; i<[lifeArray count]; i++) [ServerCommunication sendAliveInfo];
+            [lifeArray removeAllObjects];
+            }
+        //write to end of array
+        else { NSLog(@"%@", lifeArray);[lifeArray  addObject:time];}
+        NSLog(@"%@", lifeArray);
+    }
 }
 
 
