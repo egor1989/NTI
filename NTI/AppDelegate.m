@@ -24,12 +24,18 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {  
- //   locationManager = [[CLLocationManager alloc] init];
- //   [ServerCommunication sendNotification:[NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]] lng:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.longitude] lat:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.latitude]];
+   
     
-    //!!!!
-    [NSTimer scheduledTimerWithTimeInterval:ALIVETIME target:self selector:@selector(endCheckAliveTimer) userInfo:nil repeats:YES];
     
+//        UILocalNotification *notification = [launchOptions objectForKey: UIApplicationLaunchOptionsLocalNotificationKey];
+        
+//        if (notification) {
+//            NSLog(@"123");
+//        }
+    
+//    if ([launchOptions objectForKey: UIApplicationLaunchOptionsLocalNotificationKey]) {
+//        NSLog(@"1wwe");
+//    }
  /***********************************************************************************/   
     if ([launchOptions objectForKey:UIApplicationLaunchOptionsLocationKey]) {
          locationManager = [[CLLocationManager alloc] init];
@@ -41,22 +47,32 @@
              notification.alertBody = [NSString stringWithFormat:@"NTI. New location alert"];
              [[UIApplication sharedApplication] scheduleLocalNotification:notification];
         
-        if ([ServerCommunication checkInternetConnection: NO]) {
-            [ServerCommunication sendNotification:[NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]] lng:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.longitude] lat:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.latitude]];
-        }
-        else {
+      //  if ([ServerCommunication checkInternetConnection: NO]) {
+      //      [ServerCommunication sendNotification:[NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]] lng:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.longitude] lat:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.latitude]];
+       // }
+    //    else {
             //if ([[NSUserDefaults standardUserDefaults] objectForKey:@"nArray"]==nil) {
             //    
             //}
-        }
+     //   }
 
          [locationManager startUpdatingLocation];
          [locationManager startMonitoringSignificantLocationChanges];
         NSLog(@"NOTIFICATION");
     }
- /***********************************************************************************/   
+ /***********************************************************************************/  
     
-    freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);      //!!!!!не забывать убирать логирвоание
+   // UILocalNotification *aNotify = [[UILocalNotification alloc] init];
+ //   aNotify.fireDate = [NSDate dateWithTimeIntervalSinceNow:10];
+ //   aNotify.timeZone = [NSTimeZone defaultTimeZone];	
+ //   aNotify.repeatInterval = NSMinuteCalendarUnit;
+ //   aNotify.alertBody = @"local notification";
+ //   [[UIApplication sharedApplication] scheduleLocalNotification:aNotify];
+    
+
+    
+    
+    //freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);      //!!!!!не забывать убирать логирвоание
     
     recordAction = [[RecordAction alloc] init];
     
@@ -314,7 +330,7 @@
     //compassImg.transform = CGAffineTransformMakeRotation((headingFloat + northOffest)*radianConst); 
     //course = (headingFloat + northOffest)*radianConst;
     //NSLog(@"%f north", northOffest);
-    course = (int)((360+trueNorth)+lastLoc.course) % 360; //mod 360;
+    course = (int)((360+trueNorth)+lastLoc.course) % 360; 
     
     
     
@@ -439,10 +455,9 @@
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
     
-    NSLog(@"LocalNotification - App in background");
-   // UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"LocalNotification" message:@"Приложение было в фоне" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
-   //   [alert show];
-       
+    NSLog(@"LocalNotification - App in foreground");
+
+    //[[UIApplication sharedApplication] cancelAllLocalNotifications]; 
     application.applicationIconBadgeNumber = 0;
 }
 
