@@ -14,9 +14,9 @@
 #define CC_RADIANS_TO_DEGREES(__ANGLE__) ((__ANGLE__) / (float)M_PI * 180.0f)
 #define radianConst M_PI/180.0
 #define SPEED 1.5
-#define STARTTIME 30 //!!
-#define STOPTIME 60 //!!
-#define ALIVETIME 100 //3600
+#define STARTTIME 300 //!!
+#define STOPTIME 600 //!!
+#define ALIVETIME 3600 //3600
 
 @implementation AppDelegate
 @synthesize window = _window, lastLoc, course, trueNorth, north, allDistance, canWriteToFile, dict, recordAction, locationUpdatedInBackground;
@@ -41,7 +41,7 @@
              notification.alertBody = [NSString stringWithFormat:@"NTI. New location alert"];
              [[UIApplication sharedApplication] scheduleLocalNotification:notification];
         
-        if ([ServerCommunication checkInternetConnection]) {
+        if ([ServerCommunication checkInternetConnection: NO]) {
             [ServerCommunication sendNotification:[NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]] lng:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.longitude] lat:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.latitude]];
         }
         else {
@@ -56,7 +56,7 @@
     }
  /***********************************************************************************/   
     
-  //  freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);      //!!!!!не забывать убирать логирвоание
+    freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);      //!!!!!не забывать убирать логирвоание
     
     recordAction = [[RecordAction alloc] init];
     
@@ -108,7 +108,7 @@
 -(void)checkSendRight{
     
     if ([[NSUserDefaults standardUserDefaults] integerForKey:@"pk"]>30) {//!!!исправить на 30
-        if ([ServerCommunication checkInternetConnection])  {
+        if ([ServerCommunication checkInternetConnection: YES])  {
             NSLog(@"checkSendRight: send");
            [recordAction sendFile];
         }
@@ -455,11 +455,11 @@
     NSMutableArray *lifeArray = [NSMutableArray arrayWithArray: [[NSUserDefaults standardUserDefaults] objectForKey:@"alArray"]];
     NSLog(@"%i", [lifeArray count]);
     if ([lifeArray count]==0) {
-                if ([ServerCommunication checkInternetConnection]) [ServerCommunication sendAliveInfo];
+        if ([ServerCommunication checkInternetConnection: NO]) [ServerCommunication sendAliveInfo];
                 else [[NSUserDefaults standardUserDefaults] setObject:[NSArray arrayWithObject:time] forKey:@"alArray"];
             }
     else {
-        if ([ServerCommunication checkInternetConnection]) {
+        if ([ServerCommunication checkInternetConnection: NO]) {
           //read all array and send  
             [ServerCommunication sendAliveInfo];
             for (NSInteger i = 0; i<[lifeArray count]; i++) [ServerCommunication sendAliveInfo];

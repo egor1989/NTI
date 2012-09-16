@@ -101,7 +101,7 @@
 }
 
 - (IBAction)rightItem:(id)sender{
-    if ([ServerCommunication checkInternetConnection]){
+    if ([ServerCommunication checkInternetConnection: YES]){
         [serverCommunication sendFeedBackToServerWithTitle:textField.text andBody:textView.text];
         [self feedBackWaitingState];
     }

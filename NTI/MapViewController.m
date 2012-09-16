@@ -38,7 +38,7 @@
     isFirstRect = YES;
     
     //загрузка последнего маршрута
-    if ([ServerCommunication checkInternetConnection]) {
+    if ([ServerCommunication checkInternetConnection: YES]) {
         waintingIndicator.hidden = NO;
         [waintingIndicator startAnimating];
         grayView.hidden = NO;
@@ -52,7 +52,7 @@
 {
 	[super viewWillAppear:animated];
     if (viewLoaded) {
-        if ([ServerCommunication checkInternetConnection]) {
+        if ([ServerCommunication checkInternetConnection: YES]) {
             if ([DatabaseActions needLastRoute]){
                 waintingIndicator.hidden = NO;
                 [waintingIndicator startAnimating];
@@ -67,7 +67,7 @@
 
 //переход карты в состояние ождиание и запрос к серверу на получение маршрута. Метод вызывается из вьюшки выбора даты
 -(void) mapWaitingState: (NSNotification*) TheNotice{
-    if ([ServerCommunication checkInternetConnection]){
+    if ([ServerCommunication checkInternetConnection: YES]){
         waintingIndicator.hidden = NO;
         [waintingIndicator startAnimating];
         grayView.hidden = NO;

@@ -724,7 +724,7 @@
 }
 
 - (IBAction)refreshButton:(id)sender{
-    if ([ServerCommunication checkInternetConnection]) {
+    if ([ServerCommunication checkInternetConnection: YES]) {
         
         [loadStatIndicator startAnimating];
         [loadStatIndicator performSelector:@selector(stopAnimating) withObject:nil afterDelay:2];

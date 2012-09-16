@@ -101,7 +101,7 @@
         toWrite = dataArray;
         dataArray = [[NSMutableArray alloc] init];
         //проверяем есть ли интернет
-        if ([ServerCommunication checkInternetConnection]){
+        if ([ServerCommunication checkInternetConnection: NO]){
             //есть-отправляем
             
             NSData *JSON = [jsonConvert convert: [self JSONFormat:toWrite]];
@@ -128,7 +128,7 @@
     
     //ТОЖЕ САМОЕ
     
-     if ([ServerCommunication checkInternetConnection]){
+    if ([ServerCommunication checkInternetConnection: NO]){
          NSLog(@"data array size = %i",[toWrite count]);
          NSData *JSON = [jsonConvert convert: [self JSONFormat:toWrite]];
          [serverCommunication uploadData: JSON]; 
@@ -157,13 +157,13 @@
         Start = YES;
         End = NO;
         
-        if (![ServerCommunication checkInternetConnection]) [databaseAction addEntrie:@"start"];
+        if (![ServerCommunication checkInternetConnection: NO]) [databaseAction addEntrie:@"start"];
     }
     if (![myAppDelegate canWriteToFile] && Start){
         Start = NO;
         End = YES;
         [self endOfRecord];
-        if (![ServerCommunication checkInternetConnection]) [databaseAction addEntrie:@"end"];
+        if (![ServerCommunication checkInternetConnection: NO]) [databaseAction addEntrie:@"end"];
     }
     
 }

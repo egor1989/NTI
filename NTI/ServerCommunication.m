@@ -550,7 +550,7 @@
     
 }
 
-+ (BOOL)checkInternetConnection{
++ (BOOL)checkInternetConnection: (BOOL)needNotify{
 
     Reachability* reach = [Reachability reachabilityForInternetConnection];
     
@@ -559,8 +559,10 @@
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"internetUserPreference"]) {
         if (hostStatus == NotReachable){
             NSLog(@"internet: -");
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Включите Интернет-соединение и повторите попытку" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
-            [alert show];
+            if (needNotify) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Включите Интернет-соединение и повторите попытку" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
+                [alert show];
+            }
             return NO;
         } 
         else return YES;
@@ -571,8 +573,10 @@
         } 
         else{
             NSLog(@"internet: -");
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Включите Интернет-соединение и повторите попытку" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
-            [alert show];
+            if (needNotify) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Включите Интернет-соединение и повторите попытку" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
+                [alert show];
+            }
             return NO;
 
         }

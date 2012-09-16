@@ -61,7 +61,7 @@
     
     
     ServerCommunication *serverCommunication = [[ServerCommunication alloc] init];
-    if (![ServerCommunication checkInternetConnection]) {
+    if (![ServerCommunication checkInternetConnection: YES]) {
        // UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Отсутствует Интернет-соединение. Включите Интернет и повторите попытку" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
       //  [alert show];
     }
@@ -113,7 +113,7 @@
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message:@"Заполните поле логина" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
         [alert show];
     }
-    else if ([ServerCommunication checkInternetConnection]) {
+    else if ([ServerCommunication checkInternetConnection: YES]) {
         [serverCommunication forgotPassword: loginField.text];
         [serverCommunication showResult];
     }

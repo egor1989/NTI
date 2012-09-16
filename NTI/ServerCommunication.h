@@ -31,7 +31,7 @@
 - (void)authUser:(NSString *)login secret:(NSString *)message;
 - (BOOL)checkErrors:(NSString *)answerString method:(NSString *)methodName;
 - (void)showResult;
-+ (BOOL) checkInternetConnection;
++ (BOOL)checkInternetConnection: (BOOL)needNotify;
 - (NSString *) refreshCookie;
 - (BOOL)checkCookieExpires;
 - (NSString*) getStringBetweenStrings: (NSString *) main first:(NSString *)first second: (NSString*) second;
