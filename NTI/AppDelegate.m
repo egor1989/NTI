@@ -16,7 +16,7 @@
 #define SPEED 1.5
 #define STARTTIME 300 //!!
 #define STOPTIME 600 //!!
-#define ALIVETIME 3600 //3600
+
 
 @implementation AppDelegate
 @synthesize window = _window, lastLoc, course, trueNorth, north, allDistance, canWriteToFile, dict, recordAction, locationUpdatedInBackground;
@@ -24,18 +24,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {  
-   
-    
-    
-//        UILocalNotification *notification = [launchOptions objectForKey: UIApplicationLaunchOptionsLocalNotificationKey];
-        
-//        if (notification) {
-//            NSLog(@"123");
-//        }
-    
-//    if ([launchOptions objectForKey: UIApplicationLaunchOptionsLocalNotificationKey]) {
-//        NSLog(@"1wwe");
-//    }
  /***********************************************************************************/   
     if ([launchOptions objectForKey:UIApplicationLaunchOptionsLocationKey]) {
          locationManager = [[CLLocationManager alloc] init];
@@ -57,11 +45,10 @@
      //   }
 
          [locationManager startUpdatingLocation];
-         [locationManager startMonitoringSignificantLocationChanges];
+         //[locationManager startMonitoringSignificantLocationChanges];
         NSLog(@"NOTIFICATION");
     }
  /***********************************************************************************/  
-    
    // UILocalNotification *aNotify = [[UILocalNotification alloc] init];
  //   aNotify.fireDate = [NSDate dateWithTimeIntervalSinceNow:10];
  //   aNotify.timeZone = [NSTimeZone defaultTimeZone];	
@@ -70,9 +57,7 @@
  //   [[UIApplication sharedApplication] scheduleLocalNotification:aNotify];
     
 
-    
-    
-    //freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);      //!!!!!не забывать убирать логирвоание
+    freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);      //!!!!!не забывать убирать логирвоание
     
     recordAction = [[RecordAction alloc] init];
     

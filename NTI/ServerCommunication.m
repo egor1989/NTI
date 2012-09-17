@@ -24,7 +24,7 @@
     NSLog(@"Request: %@", requestContent);
         
    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
-                                  timeoutInterval:60.0];
+                                  timeoutInterval:90.0];
 
     requestData = [NSData dataWithBytes:[requestContent UTF8String] length:[requestContent length]];
     NSData *compressData = [GzipCompress gzipDeflate:requestData];
@@ -58,11 +58,13 @@
     
     if (requestError!=nil) {
         NSLog(@"%@", requestError);
+        [self uploadData:fileContent];
     }
     
     returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
     NSLog(@"returnData: %@", returnString);
-    [self checkErrors:returnString method:@"sendData"];
+    BOOL error = [self checkErrors:returnString method:@"sendData"];
+    if (error) [self uploadData:fileContent];
 }
  
  
@@ -132,13 +134,7 @@
 
 - (BOOL)checkErrors:(NSString *)answerString method:(NSString *)methodName{
     NSLog(@"SC check errors");
-    if ([answerString isEqual: @""] ) {
-        info = @"Пустой ответ";
-        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:info message:@"Данных по поездке за указанный период не существует." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alertView show];
-        errors = YES;
-        return errors;
-    }
+    
     SBJsonParser *jsonParser = [SBJsonParser new];
     NSArray *answer = [jsonParser objectWithString:answerString error:NULL];
     NSArray *error = [answer valueForKey:@"error"];
