@@ -25,7 +25,7 @@
     [picker setShowsSelectionIndicator:YES];
     textField.inputView = picker;
     
-    NSArray *ThemesOptionsUnsorted = [NSArray arrayWithObjects:@"Идея", @"Проблема", @"Ideaaaaaa", nil];
+    NSArray *ThemesOptionsUnsorted = [NSArray arrayWithObjects:@"Идея", @"Проблема", nil];
     ThemesOptions = [ThemesOptionsUnsorted sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     
     [[NSNotificationCenter defaultCenter]	

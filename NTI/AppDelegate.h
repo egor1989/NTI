@@ -67,7 +67,8 @@ typedef void(^locationHandler)(CLLocation *location);
 -(double) getTime;
 - (void)sendTimer;
 - (void)stopSlowMonitoring;
-- (void)endCheckAliveTimer;
+
+- (void)appLife:(NSString *)action time:(NSString *)time;
 
 
 @property (strong, nonatomic) UIWindow *window;

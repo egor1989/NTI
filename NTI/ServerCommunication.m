@@ -325,10 +325,11 @@
 
 
 
-+ (void)sendAliveInfo{
++ (void)sendAppInfo{
     
     NSString *cookie = [[NSUserDefaults standardUserDefaults] valueForKey:@"cookie"]; 
-    NSString *data = @"data={\"method\":\"keepAlive\"}";
+    NSString *data = [NSString stringWithFormat:(@"data={\"method\":\"switchApp\", \"params\": %@}"), @"jsInfo"];
+    //,\"params\":{\"ntifile\":%@}}
     NSLog(@"Request: %@", data);
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy

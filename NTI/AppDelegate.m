@@ -24,6 +24,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {  
+    
+    [self appLife:@"on" time: [NSString stringWithFormat:@"%.f", [[NSDate date]timeIntervalSince1970]]];
+    
  /***********************************************************************************/   
     if ([launchOptions objectForKey:UIApplicationLaunchOptionsLocationKey]) {
          locationManager = [[CLLocationManager alloc] init];
@@ -57,7 +60,7 @@
  //   [[UIApplication sharedApplication] scheduleLocalNotification:aNotify];
     
 
-    freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);      //!!!!!не забывать убирать логирвоание
+    //freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);      //!!!!!не забывать убирать логирвоание
     
     recordAction = [[RecordAction alloc] init];
     
@@ -434,6 +437,7 @@
     [locationManager startMonitoringSignificantLocationChanges];
     //[recordAction eventRecord:@"close"];
     [DatabaseActions finalizeStatements];
+    [ServerCommunication sendAppInfo];
     NSLog(@"=====close=====");
 }
 
@@ -450,26 +454,21 @@
     return NO;
 }
 
-- (void)endCheckAliveTimer{
-    NSString *time = [NSString stringWithFormat:@"%.0f", [[NSDate date] timeIntervalSince1970]];
+- (void)appLife:(NSString *)action time:(NSString *)time{
+    
+    NSDictionary *appInfo = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:action,time, nil] forKeys:[NSArray arrayWithObjects:@"action", @"time", nil]];
     NSMutableArray *lifeArray = [NSMutableArray arrayWithArray: [[NSUserDefaults standardUserDefaults] objectForKey:@"alArray"]];
-    NSLog(@"%i", [lifeArray count]);
-    if ([lifeArray count]==0) {
-        if ([ServerCommunication checkInternetConnection: NO]) [ServerCommunication sendAliveInfo];
-                else [[NSUserDefaults standardUserDefaults] setObject:[NSArray arrayWithObject:time] forKey:@"alArray"];
-            }
-    else {
-        if ([ServerCommunication checkInternetConnection: NO]) {
-          //read all array and send  
-            [ServerCommunication sendAliveInfo];
-            for (NSInteger i = 0; i<[lifeArray count]; i++) [ServerCommunication sendAliveInfo];
-            [lifeArray removeAllObjects];
-            }
-        //write to end of array
-        else { NSLog(@"%@", lifeArray);[lifeArray  addObject:time];}
-        [[NSUserDefaults standardUserDefaults] setObject:lifeArray forKey:@"alArray"];
-        NSLog(@"%@", lifeArray);
+    
+    [lifeArray addObject: appInfo];
+    NSLog(@"%i  %@", [lifeArray count], lifeArray);
+     
+    if ([ServerCommunication checkInternetConnection: NO]){
+        for (NSInteger i = 0; i<[lifeArray count]; i++) [ServerCommunication sendAppInfo];
+        [lifeArray removeAllObjects];
     }
+    [[NSUserDefaults standardUserDefaults] setObject: lifeArray forKey:@"alArray"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+
 }
 
 
