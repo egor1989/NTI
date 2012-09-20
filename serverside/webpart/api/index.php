@@ -231,7 +231,8 @@ else if($json['method']=="getPath"){getPath($json['params']);}//-
 else if($json['method']=="feedBack"){feedBack($json['params']);}//-
 else if($json['method']=="addQuest"){feedBack($json['params']);}//-
 else if($json['method']=="rememberPassword"){remember($json['params']);}//-
-else if($json['method']=="addNotification"){notification($json['params']);}//-
+else if($json['method']=="deadMoving"){notification($json['params']);}//-
+else if($json['method']=="switchApp"){switchApp($json['params']);}//-
 else
 {
 	   $errortype=array('info'=>"No action set, or function is incorrect",'code'=>  6);
@@ -585,95 +586,24 @@ function addNTIFile($param)
 								$ArrayEntry[$i][$j]->setAccel($accel);
 								//Высчитываем тип неравномерного движения (ускорение-торможение) через ускорение.
 								
-								if ($accel<-7.5) $ArrayEntry[$i][$j]->setsevAcc(-3);
-								else if (($accel>=-7.5)&&($accel<-6))$ArrayEntry[$i][$j]->setsevAcc(-2);
-								else if (($accel>=-6)&&($accel<-4.5))$ArrayEntry[$i][$j]->setsevAcc(-1);
+								if ($accel<-5) $ArrayEntry[$i][$j]->setsevAcc(-3);
+								else if (($accel>=-5)&&($accel<-3))$ArrayEntry[$i][$j]->setsevAcc(-2);
+								else if (($accel>=-3)&&($accel<-2))$ArrayEntry[$i][$j]->setsevAcc(-1);
 								else if ($accel>5)$ArrayEntry[$i][$j]->setsevAcc(3);
-								else if (($accel>4)&&($accel<=5))$ArrayEntry[$i][$j]->setsevAcc(2);
-								else if (($accel>3.5)&&($accel<=4))$ArrayEntry[$i][$j]->setsevAcc(1);
-								else if (($accel>=-4.5)&&($accel<=3.5))$ArrayEntry[$i][$j]->setsevAcc(0);
+								else if (($accel>3)&&($accel<=5))$ArrayEntry[$i][$j]->setsevAcc(2);
+								else if (($accel>2)&&($accel<=3))$ArrayEntry[$i][$j]->setsevAcc(1);
+								else if (($accel>=-2)&&($accel<=2))$ArrayEntry[$i][$j]->setsevAcc(0);
 								
 								//Рассчитываем превышения скорости. Превышение (1,2,3 уровня) засчитывается, если движение осуществлялось на соответствующей скорости 5 секунд. 
 								//И далее еще по очку превышения (1,2,3 уровня) за каждые ПОЛНЫЕ ТРИ секунд движения на превышенной скорости.
-								if (($speed >= 0) && ($speed <= 80))$ArrayEntry[$i][$j]->setsevSpeed(0); 
-								else if (($speed > 80) && ($speed <= 110))$ArrayEntry[$i][$j]->setsevSpeed(1); 
-								else if (($speed > 110) && ($speed <= 130))	$ArrayEntry[$i][$j]->setsevSpeed(2); 
-								else if ($speed > 130)$ArrayEntry[$i][$j]->setsevSpeed(3);
-								 
-								if ($ArrayEntry[$i][$j-1]->getTypeSpeed() == "normal point") {
-									if ($ArrayEntry[$i][$j]->getsevSpeed() == 0) {
-										$ArrayEntry[$i][$j]->setTypeSpeed("normal point");
-									} else if ($ArrayEntry[$i][$j]->getsevSpeed() == 1) {
-										$ArrayEntry[$i][$j]->setTypeSpeed("s1");
-										$dss = $deltaTime;
-									} else if ($ArrayEntry[$i][$j]->getsevSpeed() == 2) {
-										$ArrayEntry[$i][$j]->setTypeSpeed("s2");
-										$dss = $deltaTime;
-									} else if ($ArrayEntry[$i][$j]->getsevSpeed() == 3) {
-										$ArrayEntry[$i][$j]->setTypeSpeed("s3");
-										$dss = $deltaTime;
-									}
-								} else if ($ArrayEntry[$i][$j-1]->getTypeSpeed()  == "s1") {
-
-									if ($ArrayEntry[$i][$j]->getsevSpeed() == 0) {
-
-										$ArrayEntry[$i][$j]->setTypeSpeed("normal point");
-										$speed1 = $speed1 + floor($dss/3);
-										$dss = 0;
-
-									} else if ($ArrayEntry[$i][$j]->getsevSpeed() == 1) {
-										$ArrayEntry[$i][$j]->setTypeSpeed("s1");
-											$dss += $deltaTime;
-									} else if ($ArrayEntry[$i][$j]->getsevSpeed() == 2) {
-										$ArrayEntry[$i][$j]->setTypeSpeed("s2");
-										$speed1 = $speed1 +floor($dss/3);
-										$dss = 0;
-									} else if ($ArrayEntry[$i][$j]->getsevSpeed() == 3) {
-										$ArrayEntry[$i][$j]->setTypeSpeed("s3");
-										$speed1 += floor($dss/3);
-										$dss = 0;
-									}
-								} else if ($ArrayEntry[$i][$j-1]->getTypeSpeed()  == "s2") {
-									if ($ArrayEntry[$i][$j]->getsevSpeed() == 0) {
-										$ArrayEntry[$i][$j]->setTypeSpeed("normal point");
-										$speed2 += floor($dss/3);
-										$dss = 0;
-									} else if ($ArrayEntry[$i][$j]->getsevSpeed() == 1) {
-										$ArrayEntry[$i][$j]->setTypeSpeed("s1");
-										$speed2 = $speed2 +floor($dss/3);
-										$dss = 0;
-									} else if ($ArrayEntry[$i][$j]->getsevSpeed() == 2) {
-										$ArrayEntry[$i][$j]->setTypeSpeed("s2");
-										$dss += $deltaTime;
-									} else if ($ArrayEntry[$i][$j]->getsevSpeed() == 3) {
-										$ArrayEntry[$i][$j]->setTypeSpeed("s3");
-										$speed2 += floor($dss/3);
-										$dss = 0;
-									}
-								} else if ($ArrayEntry[$i][$j-1]->getTypeSpeed()  == "s3") {
-									if ($ArrayEntry[$i][$j]->getsevSpeed() == 0) {
-										$ArrayEntry[$i][$j]->setTypeSpeed("normal point");
-										$speed3 += floor($dss/3);
-										$dss = 0;
-									} else if ($ArrayEntry[$i][$j]->getsevSpeed() == 1) {
-										$ArrayEntry[$i][$j]->setTypeSpeed("s1");
-										$speed3 += floor($dss/3);
-										$dss = 0;
-									} else if ($ArrayEntry[$i][$j]->getsevSpeed() == 2) {
-										$ArrayEntry[$i][$j]->setTypeSpeed("s2");
-										$speed3 += floor($dss/3);
-										$dss = 0;
-									} else if ($ArrayEntry[$i][$j]->getsevSpeed() == 3) {
-										$ArrayEntry[$i][$j]->setTypeSpeed("s3");
-										$dss += $deltaTime;
-									}
-								}
+								if (($speed >= 0) && ($speed <= 80)){$ArrayEntry[$i][$j]->setsevSpeed(0); $ArrayEntry[$i][$j]->setTypeSpeed("normal point");}
+								else if (($speed > 80) && ($speed <= 110)){$ArrayEntry[$i][$j]->setsevSpeed(1); $ArrayEntry[$i][$j]->setTypeSpeed("s1");$speed1++;}
+								else if (($speed > 110) && ($speed <= 130)){	$ArrayEntry[$i][$j]->setsevSpeed(2);	$ArrayEntry[$i][$j]->setTypeSpeed("s2");$speed2++; }
+								else if ($speed > 130){$ArrayEntry[$i][$j]->setsevSpeed(3);$ArrayEntry[$i][$j]->setTypeSpeed("s3");$speed3++;}
 								// Конец выявления превышения скорости.
 								///////////////////////////////////////////////////////////////////////////////////////
 
 								//Большое количество проверок условий соотношения ускорений в текущей и прошлой точках.
-
-
 								if ($ArrayEntry[$i][$j-1]->getTypeAcc() == "normal point") {
 									if ($ArrayEntry[$i][$j]->getsevAcc() == 0) {
 										$ArrayEntry[$i][$j]->setTypeAcc("normal point");
@@ -702,71 +632,53 @@ function addNTIFile($param)
 										$ArrayEntry[$i][$j]->setTypeAcc("acc3 continued");
 									} else if ($ArrayEntry[$i][$j]->getsevAcc() == -1) {
 										$ArrayEntry[$i][$j]->setTypeAcc("brake1 started");
-										$acc1++;
 									} else if ($ArrayEntry[$i][$j]->getsevAcc() == -2) {
 										$ArrayEntry[$i][$j]->setTypeAcc("brake2 started");
-										$acc1++;
 									} else if ($ArrayEntry[$i][$j]->getsevAcc() == -3) {
 										$ArrayEntry[$i][$j]->setTypeAcc("brake3 started");
-										$acc1++;
 									}
 								} else	if (($ArrayEntry[$i][$j-1]->getTypeAcc()== "acc2 started") || ($ArrayEntry[$i][$j-1]->getTypeAcc() == "acc2 continued")) {
 									if ($ArrayEntry[$i][$j]->getsevAcc() == 0) {
 
 										$ArrayEntry[$i][$j]->setTypeAcc("normal point");
-										$acc2++;
 									} else if ($ArrayEntry[$i][$j]->getsevAcc()== 1) {
 										$ArrayEntry[$i][$j]->setTypeAcc("acc1 started");
-										$acc2++;
 									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 2) {
 										$ArrayEntry[$i][$j]->setTypeAcc("acc2 continued");
 									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 3) {
 										$ArrayEntry[$i][$j]->setTypeAcc("acc3 continued");
 									} else if ($ArrayEntry[$i][$j]->getsevAcc() == -1) {
 										$ArrayEntry[$i][$j]->setTypeAcc("brake1 started");
-										$acc2++;
 									} else if ($ArrayEntry[$i][$j]->getsevAcc() == -2) {
 										$ArrayEntry[$i][$j]->setTypeAcc("brake2 started");
-										$acc2++;
 									} else if ($ArrayEntry[$i][$j]->getsevAcc() == -3) {
 										$ArrayEntry[$i][$j]->setTypeAcc("brake3 started");
-										$acc2++;
 									}
 								} else	if (($ArrayEntry[$i][$j-1]->getTypeAcc() == "acc3 started") || ($ArrayEntry[$i][$j-1]->getTypeAcc() == "acc3 continued")) {
 									if ($ArrayEntry[$i][$j]->getsevAcc() == 0) {
 										$ArrayEntry[$i][$j]->setTypeAcc("normal point");
-										$acc3++;
 									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 1) {
 										$ArrayEntry[$i][$j]->setTypeAcc("acc1 started");
-										$acc3++;
 									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 2) {
 										$ArrayEntry[$i][$j]->setTypeAcc("acc2 started");
-										$acc3++;
 									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 3) {
 										$ArrayEntry[$i][$j]->setTypeAcc("acc3 continued");
 									} else if ($ArrayEntry[$i][$j]->getsevAcc() == -1) {
 										$ArrayEntry[$i][$j]->setTypeAcc("brake1 started");
-										$acc3++;
 									} else if ($ArrayEntry[$i][$j]->getsevAcc() == -2) {
 										$ArrayEntry[$i][$j]->setTypeAcc("brake2 started");
-										$acc3++;
 									} else if ($ArrayEntry[$i][$j]->getsevAcc() == -3) {
 										$ArrayEntry[$i][$j]->setTypeAcc("brake3 started");
-										$acc3++;
 									}
 								} else	if (($ArrayEntry[$i][$j-1]->getTypeAcc() == "brake1 started") || ($ArrayEntry[$i][$j-1]->getTypeAcc() == "brake1 continued")) {
 									if ($ArrayEntry[$i][$j]->getsevAcc() == 0) {
 										$ArrayEntry[$i][$j]->setTypeAcc("normal point");
-										$brake1++;
 									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 1) {
 										$ArrayEntry[$i][$j]->setTypeAcc("acc1 started");
-										$brake1++;
 									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 2) {
 										$ArrayEntry[$i][$j]->setTypeAcc("acc2 started");
-										$brake1++;
 									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 3) {
 										$ArrayEntry[$i][$j]->setTypeAcc("acc3 started");
-										$brake1++;
 									} else if ($ArrayEntry[$i][$j]->getsevAcc() == -1) {
 										$ArrayEntry[$i][$j]->setTypeAcc("brake1 continued");
 									} else if ($ArrayEntry[$i][$j]->getsevAcc() == -2) {
@@ -777,19 +689,14 @@ function addNTIFile($param)
 								} else if (($ArrayEntry[$i][$j-1]->getTypeAcc() == "brake2 started") || ($ArrayEntry[$i][$j-1]->getTypeAcc() == "brake2 continued")) {
 									if ($ArrayEntry[$i][$j]->getsevAcc()== 0) {
 										$ArrayEntry[$i][$j]->setTypeAcc("normal point");
-										$brake2++;
 									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 1) {
 										$ArrayEntry[$i][$j]->setTypeAcc("acc1 started");
-										$brake2++;
 									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 2) {
 										$ArrayEntry[$i][$j]->setTypeAcc("acc2 started");
-										$brake2++;
 									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 3) {
 										$ArrayEntry[$i][$j]->setTypeAcc("acc3 started");
-										$brake2++;
 									} else if ($ArrayEntry[$i][$j]->getsevAcc()== -1) {
 										$ArrayEntry[$i][$j]->setTypeAcc("brake1 started");
-										$brake2++;
 									} else if ($ArrayEntry[$i][$j]->getsevAcc() == -2) {
 										$ArrayEntry[$i][$j]->setTypeAcc("brake2 continued");
 									} else if ($ArrayEntry[$i][$j]->getsevAcc() == -3) {
@@ -798,39 +705,33 @@ function addNTIFile($param)
 								} else	if (($ArrayEntry[$i][$j-1]->getTypeAcc() == "brake3 started") || ($ArrayEntry[$i][$j-1]->getTypeAcc() == "brake3 continued")) {
 									if ($ArrayEntry[$i][$j]->getsevAcc() == 0) {
 										$ArrayEntry[$i][$j]->setTypeAcc("normal point");
-										$brake3++;
 									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 1) {
 										$ArrayEntry[$i][$j]->setTypeAcc("acc1 started");
-										$brake3++;
 									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 2) {
 										$ArrayEntry[$i][$j]->setTypeAcc( "acc2 started");
-										$brake3++;
 									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 3) {
 										$ArrayEntry[$i][$j]->setTypeAcc("acc3 started");
-										$brake3++;
 									} else if ($ArrayEntry[$i][$j]->getsevAcc()== -1) {
 										$ArrayEntry[$i][$j]->setTypeAcc("brake1 started");
-										$brake3++;
 									} else if ($ArrayEntry[$i][$j]->getsevAcc() == -2) {
 										$ArrayEntry[$i][$j]->setTypeAcc("brake2 started");
-										$brake3++;
 									} else if ($ArrayEntry[$i][$j]->getsevAcc()== -3) {
-
 										$ArrayEntry[$i][$j]->setTypeAcc("brake3 continued");
 									}
 								}
 
 								//После поворота - нормальная точка.
-
+							if(($ArrayEntry[$n][$i]->getCompass()>=0 && $ArrayEntry[$n][$i]->getCompass()<=90) || ($ArrayEntry[$n][$i]->getCompass()>=270 && $ArrayEntry[$n][$i]->getCompass()<=360))
+							{
 								if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn finished") || ($ArrayEntry[$i][$j-1]->getTurnType() == "right turn finished") || ($speed == 0) ) {
 									$ArrayEntry[$i][$j]->setTurnType("normal point");
 								// Отклонение > 0.5 - после нормальной точки начинаем поворот налево, либо продолжаем поворот налево после уже начатого, либо завершаем, если это был поворот направо.
-								} else 	if ($deltaTurn > 0.5)   {
+								} else 	if ($deltaTurn > 0.2)   {
 									if ($ArrayEntry[$i][$j-1]->getTurnType() == "normal point") $ArrayEntry[$i][$j]->setTurnType( "left turn started");
 									if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "left turn continued"))$ArrayEntry[$i][$j]->setTurnType("left turn continued");
 									if (($ArrayEntry[$i][$j-1]->getTurnType() == "right turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "right turn continued"))$ArrayEntry[$i][$j]->setTurnType("right turn finished");
 								// Отклонение > 0.5 - после нормальной точки начинаем поворот направо, либо продолжаем поворот направо после уже начатого, либо завершаем, если это был поворот налево.
-								} else 	if ($deltaTurn < -0.5)	{
+								} else 	if ($deltaTurn < -0.2)	{
 									if ($ArrayEntry[$i][$j-1]->getTurnType() == "normal point")$ArrayEntry[$i][$j]->setTurnType("right turn started");
 									if (($ArrayEntry[$i][$j-1]->getTurnType() == "right turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "right turn continued"))$ArrayEntry[$i][$j]->setTurnType("right turn continued");
 									if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "left turn continued"))$ArrayEntry[$i][$j]->setTurnType("left turn finished");
@@ -840,19 +741,31 @@ function addNTIFile($param)
 									if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "left turn continued"))$ArrayEntry[$i][$j]->setTurnType("left turn finished");
 									if (($ArrayEntry[$i][$j-1]->getTurnType() == "right turn started")||($ArrayEntry[$i][$j-1]->getTurnType()== "right turn continued"))$ArrayEntry[$i][$j]->setTurnType( "right turn finished");
 								}
-								//if (($ArrayEntry[$i][$j]->getTurnType() == "left turn finished") || ($ArrayEntry[$i][$j]->getTurnType() == "right turn finished")) 
-								//{
-						//			switch ($ArrayEntry[$i][$j]->getsevTurn()) {
-						//					case 1: {$turn1++;break;}
-						//					case 2: {$turn2++;break;}
-						//					case 3: {$turn3++;break;}
-						//					case 0: {break;}
-						//				}
-								//}	
-						
-
-
-
+							}
+							else
+							{
+									if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn finished") || ($ArrayEntry[$i][$j-1]->getTurnType() == "right turn finished") || ($speed == 0) ) {
+									$ArrayEntry[$i][$j]->setTurnType("normal point");
+								// Отклонение > 0.5 - после нормальной точки начинаем поворот налево, либо продолжаем поворот налево после уже начатого, либо завершаем, если это был поворот направо.
+								} else 	if ($deltaTurn > 0.2)   {
+									if ($ArrayEntry[$i][$j-1]->getTurnType() == "normal point") $ArrayEntry[$i][$j]->setTurnType( "right turn started");
+									if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "left turn continued"))$ArrayEntry[$i][$j]->setTurnType("left turn finished");
+									if (($ArrayEntry[$i][$j-1]->getTurnType() == "right turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "right turn continued"))$ArrayEntry[$i][$j]->setTurnType("right turn continued");
+								// Отклонение > 0.5 - после нормальной точки начинаем поворот направо, либо продолжаем поворот направо после уже начатого, либо завершаем, если это был поворот налево.
+								} else 	if ($deltaTurn < -0.2)	{
+									if ($ArrayEntry[$i][$j-1]->getTurnType() == "normal point")$ArrayEntry[$i][$j]->setTurnType("left turn started");
+									if (($ArrayEntry[$i][$j-1]->getTurnType() == "right turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "right turn continued"))$ArrayEntry[$i][$j]->setTurnType("right turn finished");
+									if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "left turn continued"))$ArrayEntry[$i][$j]->setTurnType("left turn continued");
+								} else	{
+								// Отклонение между -0.5 и 0.5 - после нормальной точки идет нормальная, а после начатых поворотов налево или направо - продолженные повороты соответственно налево и направо.
+									if ($ArrayEntry[$i][$j-1]->getTurnType() == "normal point")$ArrayEntry[$i][$j]->setTurnType("normal point");
+									if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "left turn continued"))$ArrayEntry[$i][$j]->setTurnType("left turn finished");
+									if (($ArrayEntry[$i][$j-1]->getTurnType() == "right turn started")||($ArrayEntry[$i][$j-1]->getTurnType()== "right turn continued"))$ArrayEntry[$i][$j]->setTurnType( "right turn finished");
+								}
+								
+								
+								
+							}
 
 					}
 					$TimeStart=$ArrayEntry[$i][0]->getTimestamp();//Подходит под определение ближайшей
@@ -873,6 +786,13 @@ function addNTIFile($param)
 											case 0: {break;}
 										}
 						}
+						
+						if($ArrayEntry[$i][$j]->getTurnType()=="brake3 started")$brake3++;
+						if($ArrayEntry[$i][$j]->getTurnType()=="brake2 started")$brake2++;
+						if($ArrayEntry[$i][$j]->getTurnType()=="brake1 started")$brake1++;
+						if($ArrayEntry[$i][$j]->getTurnType()=="acc1 started")$acc1++;
+						if($ArrayEntry[$i][$j]->getTurnType()=="acc2 started")$acc2++;
+						if($ArrayEntry[$i][$j]->getTurnType()=="acc3 started")$acc3++;
 						if($ArrayEntry[$i][$j]->getTimestamp()<$TimeStart)$TimeStart=$ArrayEntry[$i][$j]->getTimestamp();
 						if($ArrayEntry[$i][$j]->getTimestamp()>$TimeEnd)$TimeEnd=$ArrayEntry[$i][$j]->getTimestamp();
 						if($TotalDistance<$ArrayEntry[$i][$j]->getDistance())$TotalDistance=$ArrayEntry[$i][$j]->getDistance();
@@ -1085,7 +1005,6 @@ function addNTIFile($param)
 						}
 					}
 				}
-				//Если же ментше 50 - нахуй за борт
 			}
                        if($UID<0)
                               $errortype=array('info'=>"authfailed",'code'=>  31);
@@ -1112,12 +1031,6 @@ function addNTIFile($param)
 		exit();
 	}
 }
-
-
-
-
-
-
 
 function getStatistics($param)
 {
@@ -1242,6 +1155,8 @@ function getPath($param)
 		$curDrivingId=0;
 		while ($row = mysql_fetch_array($result)) 
 		{
+
+                        $ret_arr[$n]['time']=$row['utimestamp'];
 			$ret_arr[$n]['lat'] = $row['lat'];
 			$ret_arr[$n]['lng'] = $row['lng'];
 				if($row['sevAcc']!=0)
@@ -1331,8 +1246,50 @@ function getPath($param)
 
 		if($n!=0)
 		{
-
-
+                       $k=0;
+                        for($i=1;$i<$n-1;$i++)
+                       {
+                                if($ret_arr[$i-1]['type']!=$ret_arr[$i]['type'] && $ret_arr[$i]['type']==$ret_arr[$i+1]['type'] && $ret_arr[$i]['type']!=0)
+                                {
+                                                $groupedPointp[$k]=$ret_arr[$i];
+                                                $k++;
+                                }
+                              else  if($ret_arr[$i-1]['type']==$ret_arr[$i]['type'] && $ret_arr[$i]['type']==$ret_arr[$i+1]['type']  && $ret_arr[$i]['type']!=0)
+                               {
+                                   if($ret_arr[$i]['weight']!=$ret_arr[$i+1]['weight'])
+                                  {
+                                    $groupedPointp[$k]=$ret_arr[$i]; 
+                                    $k++;
+                                  }
+                               }
+                               else if($ret_arr[$i-1]['type']!=$ret_arr[$i]['type'] && $ret_arr[$i]['type']!=$ret_arr[$i+1]['type'] && $ret_arr[$i]['type']!=0)
+                               {
+ $groupedPointp[$k]=$ret_arr[$i]; 
+                                    $k++;
+                               }
+                       }
+                       for($i=0;$i<$n;$i++)
+                       {
+                          if($ret_arr[$i]['type']!=42)
+                        {
+                                   $ret_arr[$i]['type']=0;
+                                    $ret_arr[$i]['weight']=0;
+                        }
+                       }
+                         for($i=$n;$i<$n+$k;$i++)
+                       {
+                            $ret_arr[$i]=$groupedPointp[$i-$n];
+                       }
+					for($i=0;$i<count($ret_arr);$i++)
+					for($j=0;$j<count($ret_arr)-1;$j++)
+					{
+						if( $ret_arr[$j]['time']> $ret_arr[$j+1]['time'])
+						{
+							$tp=$ret_arr[$j];
+							$ret_arr[$j]=$ret_arr[$j+1];
+							$ret_arr[$j+1]=$tp;
+						}
+					}
 			$errortype=array('info'=>"",'code'=>  0);
 			$res=array('result'=>$ret_arr,'error'=> $errortype);
 
@@ -1458,6 +1415,27 @@ function remember($params)
 	exit();
 		
 }
+
+
+function switchApp($param)
+{
+	if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  7);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
+	$UID=NTI_Cookie_check();		
+	for($i=0;$i<count($param);$i++)
+	{
+
+		$action=mysql_real_escape_string($param[$i]['action']);
+		$time=mysql_real_escape_string($param[$i]['time']);
+		mysql_query("INSERT into NTINotification (UID,Action,Utime) values ('$UID','$action','$time')");
+	}
+	$errortype=array('info'=>"Added",'code'=>  0);
+	$res=array('result'=>1,'error'=> $errortype);
+	echo json_encode($res);	
+
+}
+
+
+
 function notification($param)
 {
 	$lat=$param['lat'];
@@ -1468,10 +1446,11 @@ function notification($param)
 	$lat=mysql_real_escape_string($lat);
 	$lng=mysql_real_escape_string($lng);
 	$time=mysql_real_escape_string($time);
-	mysql_query("INSERT into NTINotification (UID,Lat,Lnt,Utime) values ('$UID','$lat','$lng','$time')");
+	mysql_query("INSERT into NTINotification (UID,Lat,Lng,Utime,Type) values ('$UID','$lat','$lng','$time','0')");
 	$errortype=array('info'=>"Added",'code'=>  0);
 	$res=array('result'=>1,'error'=> $errortype);
 	echo json_encode($res);	
 
 }
+
 ?>
