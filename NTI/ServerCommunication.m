@@ -325,10 +325,12 @@
 
 
 
-+ (void)sendAppInfo{
++ (void)sendAppInfo: (NSArray *)infoArray{
+    NSData *dInfo = [[[toJSON alloc] init] convert: infoArray];
+    NSString *jsInfo = [[NSString alloc] initWithData:dInfo encoding:NSASCIIStringEncoding]; 
     
     NSString *cookie = [[NSUserDefaults standardUserDefaults] valueForKey:@"cookie"]; 
-    NSString *data = [NSString stringWithFormat:(@"data={\"method\":\"switchApp\", \"params\": %@}"), @"jsInfo"];
+    NSString *data = [NSString stringWithFormat:(@"data={\"method\":\"switchApp\", \"params\": %@}}"), jsInfo];
     //,\"params\":{\"ntifile\":%@}}
     NSLog(@"Request: %@", data);
     

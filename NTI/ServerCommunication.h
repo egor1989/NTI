@@ -12,6 +12,7 @@
 #import <CoreTelephony/CTCarrier.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import "GzipCompress.h"
+#import "toJSON.h"
 
 @interface ServerCommunication : NSObject {
     NSString *returnString; 
@@ -23,6 +24,7 @@
     NSString *systemVersion;
     NSString *model;
     NSString *carrierName;
+    
 
     
 }
@@ -43,7 +45,7 @@
 - (void)sendInterviewToServerWithData:(NSDictionary*)data;
 - (void)forgotPassword: (NSString *)login;
 + (void)sendNotification: (NSString *)time lng:(NSString *)longitude lat:(NSString *)latitude;
-+ (void)sendAppInfo;
++ (void)sendAppInfo: (NSArray *)infoArray;
 
 @property (nonatomic) BOOL errors;
 

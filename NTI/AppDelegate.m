@@ -60,7 +60,7 @@
  //   [[UIApplication sharedApplication] scheduleLocalNotification:aNotify];
     
 
-    //freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);      //!!!!!не забывать убирать логирвоание
+   // freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);      //!!!!!не забывать убирать логирвоание
     
     recordAction = [[RecordAction alloc] init];
     
@@ -437,7 +437,7 @@
     [locationManager startMonitoringSignificantLocationChanges];
     //[recordAction eventRecord:@"close"];
     [DatabaseActions finalizeStatements];
-    [ServerCommunication sendAppInfo];
+    [self appLife:@"off" time: [NSString stringWithFormat:@"%.f", [[NSDate date]timeIntervalSince1970]]];
     NSLog(@"=====close=====");
 }
 
@@ -461,9 +461,11 @@
     
     [lifeArray addObject: appInfo];
     NSLog(@"%i  %@", [lifeArray count], lifeArray);
-     
+    
+
+    
     if ([ServerCommunication checkInternetConnection: NO]){
-        for (NSInteger i = 0; i<[lifeArray count]; i++) [ServerCommunication sendAppInfo];
+        for (NSInteger i = 0; i<[lifeArray count]; i++) [ServerCommunication sendAppInfo: lifeArray];
         [lifeArray removeAllObjects];
     }
     [[NSUserDefaults standardUserDefaults] setObject: lifeArray forKey:@"alArray"];
