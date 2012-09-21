@@ -27,6 +27,8 @@
     
     [self appLife:@"on" time: [NSString stringWithFormat:@"%.f", [[NSDate date]timeIntervalSince1970]]];
     
+    
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes: (UIRemoteNotificationTypeAlert |UIRemoteNotificationTypeBadge |UIRemoteNotificationTypeSound)];
  /***********************************************************************************/   
     if ([launchOptions objectForKey:UIApplicationLaunchOptionsLocationKey]) {
          locationManager = [[CLLocationManager alloc] init];
@@ -471,6 +473,10 @@
     [[NSUserDefaults standardUserDefaults] setObject: lifeArray forKey:@"alArray"];
     [[NSUserDefaults standardUserDefaults] synchronize];
 
+}
+
+- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken {  
+    NSLog(@"%@",deviceToken);
 }
 
 
