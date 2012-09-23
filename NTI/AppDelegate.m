@@ -41,7 +41,7 @@
              [[UIApplication sharedApplication] scheduleLocalNotification:notification];
         
       //  if ([ServerCommunication checkInternetConnection: NO]) {
-      //      [ServerCommunication sendNotification:[NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]] lng:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.longitude] lat:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.latitude]];
+            [ServerCommunication sendNotification:[NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]] lng:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.longitude] lat:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.latitude]];
        // }
     //    else {
             //if ([[NSUserDefaults standardUserDefaults] objectForKey:@"nArray"]==nil) {
@@ -62,7 +62,7 @@
  //   [[UIApplication sharedApplication] scheduleLocalNotification:aNotify];
     
 
-   // freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);      //!!!!!не забывать убирать логирвоание
+    freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);      //!!!!!не забывать убирать логирвоание
     
     recordAction = [[RecordAction alloc] init];
     
