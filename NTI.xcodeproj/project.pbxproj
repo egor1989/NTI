@@ -42,9 +42,9 @@
 		536175231511098000D290F1 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 536175221511098000D290F1 /* SystemConfiguration.framework */; };
 		536E026F14F00625003A2B15 /* compass.png in Resources */ = {isa = PBXBuildFile; fileRef = 536E026E14F00625003A2B15 /* compass.png */; };
 		5381C8F7153046380012E99D /* RecordAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 5381C8F6153046380012E99D /* RecordAction.m */; };
-		5384796F1615F08A00927498 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 5384796E1615F08A00927498 /* Default.png */; };
-		538479711615F09C00927498 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 538479701615F09C00927498 /* Default@2x.png */; };
-		538479731615F0A800927498 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 538479721615F0A800927498 /* Default-568h@2x.png */; };
+		538479751616026100927498 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 538479741616026100927498 /* Default.png */; };
+		538479771616027100927498 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 538479761616027000927498 /* Default@2x.png */; };
+		538479791616027900927498 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 538479781616027900927498 /* Default-568h@2x.png */; };
 		539B29BE14F305C3007E6977 /* gps.png in Resources */ = {isa = PBXBuildFile; fileRef = 539B29BC14F305C3007E6977 /* gps.png */; };
 		539B29BF14F305C3007E6977 /* north.png in Resources */ = {isa = PBXBuildFile; fileRef = 539B29BD14F305C3007E6977 /* north.png */; };
 		53A2F1B815BECF6500B948A4 /* refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 53A2F1B715BECF6500B948A4 /* refresh.png */; };
@@ -154,9 +154,9 @@
 		536E026E14F00625003A2B15 /* compass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = compass.png; sourceTree = "<group>"; };
 		5381C8F5153046380012E99D /* RecordAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordAction.h; sourceTree = "<group>"; };
 		5381C8F6153046380012E99D /* RecordAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordAction.m; sourceTree = "<group>"; };
-		5384796E1615F08A00927498 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
-		538479701615F09C00927498 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
-		538479721615F0A800927498 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		538479741616026100927498 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		538479761616027000927498 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		538479781616027900927498 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		539B29BC14F305C3007E6977 /* gps.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gps.png; sourceTree = "<group>"; };
 		539B29BD14F305C3007E6977 /* north.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = north.png; sourceTree = "<group>"; };
 		53A2F1B715BECF6500B948A4 /* refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = refresh.png; path = Images/refresh.png; sourceTree = "<group>"; };
@@ -460,9 +460,9 @@
 		53E0A75B14DEC75D004E3E1B = {
 			isa = PBXGroup;
 			children = (
-				538479721615F0A800927498 /* Default-568h@2x.png */,
-				538479701615F09C00927498 /* Default@2x.png */,
-				5384796E1615F08A00927498 /* Default.png */,
+				538479781616027900927498 /* Default-568h@2x.png */,
+				538479761616027000927498 /* Default@2x.png */,
+				538479741616026100927498 /* Default.png */,
 				27A3754F15F635D7002B51CB /* TestFlightSDK1.0 */,
 				271AAFC11565467E007D1223 /* libz.dylib */,
 				2779258D15347C110062D871 /* MapKit.framework */,
@@ -737,9 +737,9 @@
 				53A2F1B815BECF6500B948A4 /* refresh.png in Resources */,
 				27A3755515F635D7002B51CB /* README.txt in Resources */,
 				27A3755615F635D7002B51CB /* release_notes.txt in Resources */,
-				5384796F1615F08A00927498 /* Default.png in Resources */,
-				538479711615F09C00927498 /* Default@2x.png in Resources */,
-				538479731615F0A800927498 /* Default-568h@2x.png in Resources */,
+				538479751616026100927498 /* Default.png in Resources */,
+				538479771616027100927498 /* Default@2x.png in Resources */,
+				538479791616027900927498 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
