@@ -253,7 +253,6 @@ static BOOL needLastRoute;
     }
     if (noerror) {
         sqlite3_finalize(readStmt);
-        [serverCommunication showResult];
             if (![serverCommunication errors]){
                 NSLog(@"DBsend - no errors");
                 [DatabaseActions clearDatabase];

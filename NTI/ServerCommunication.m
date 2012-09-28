@@ -184,7 +184,10 @@
             
         case 5:
         case 6:
-            info = @"Ошибка в запросе. Сообщите разработчикам";
+            if ([methodName isEqualToString: @"sendData"]){
+                errors=NO;
+            }
+            else info = @"Ошибка в запросе. Сообщите разработчикам";
             break;
             
         case 7:

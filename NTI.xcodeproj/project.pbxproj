@@ -42,6 +42,9 @@
 		536175231511098000D290F1 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 536175221511098000D290F1 /* SystemConfiguration.framework */; };
 		536E026F14F00625003A2B15 /* compass.png in Resources */ = {isa = PBXBuildFile; fileRef = 536E026E14F00625003A2B15 /* compass.png */; };
 		5381C8F7153046380012E99D /* RecordAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 5381C8F6153046380012E99D /* RecordAction.m */; };
+		5384796F1615F08A00927498 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 5384796E1615F08A00927498 /* Default.png */; };
+		538479711615F09C00927498 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 538479701615F09C00927498 /* Default@2x.png */; };
+		538479731615F0A800927498 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 538479721615F0A800927498 /* Default-568h@2x.png */; };
 		539B29BE14F305C3007E6977 /* gps.png in Resources */ = {isa = PBXBuildFile; fileRef = 539B29BC14F305C3007E6977 /* gps.png */; };
 		539B29BF14F305C3007E6977 /* north.png in Resources */ = {isa = PBXBuildFile; fileRef = 539B29BD14F305C3007E6977 /* north.png */; };
 		53A2F1B815BECF6500B948A4 /* refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 53A2F1B715BECF6500B948A4 /* refresh.png */; };
@@ -82,7 +85,6 @@
 		53F00627150784310074156E /* GoButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F00623150784310074156E /* GoButton.png */; };
 		53F00628150784310074156E /* cButton.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 53F00624150784310074156E /* cButton.jpg */; };
 		53F00629150784310074156E /* Background.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F00625150784310074156E /* Background.png */; };
-		53F006351507A94F0074156E /* first_screen.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 53F006341507A94F0074156E /* first_screen.jpg */; };
 		53F8832D1507E70F000F7FE3 /* EncryptionData.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F883281507E70F000F7FE3 /* EncryptionData.m */; };
 		53F8832E1507E70F000F7FE3 /* NSData+CommonCrypto.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F8832C1507E70F000F7FE3 /* NSData+CommonCrypto.m */; };
 		53F88364150A53D6000F7FE3 /* NSObject+SBJson.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F8834E150A53D6000F7FE3 /* NSObject+SBJson.m */; };
@@ -152,6 +154,9 @@
 		536E026E14F00625003A2B15 /* compass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = compass.png; sourceTree = "<group>"; };
 		5381C8F5153046380012E99D /* RecordAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordAction.h; sourceTree = "<group>"; };
 		5381C8F6153046380012E99D /* RecordAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordAction.m; sourceTree = "<group>"; };
+		5384796E1615F08A00927498 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		538479701615F09C00927498 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		538479721615F0A800927498 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		539B29BC14F305C3007E6977 /* gps.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gps.png; sourceTree = "<group>"; };
 		539B29BD14F305C3007E6977 /* north.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = north.png; sourceTree = "<group>"; };
 		53A2F1B715BECF6500B948A4 /* refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = refresh.png; path = Images/refresh.png; sourceTree = "<group>"; };
@@ -211,7 +216,6 @@
 		53F00623150784310074156E /* GoButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = GoButton.png; path = Images/GoButton.png; sourceTree = "<group>"; };
 		53F00624150784310074156E /* cButton.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = cButton.jpg; path = Images/cButton.jpg; sourceTree = "<group>"; };
 		53F00625150784310074156E /* Background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Background.png; path = Images/Background.png; sourceTree = "<group>"; };
-		53F006341507A94F0074156E /* first_screen.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = first_screen.jpg; path = Images/first_screen.jpg; sourceTree = "<group>"; };
 		53F883281507E70F000F7FE3 /* EncryptionData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EncryptionData.m; path = NTI/EncryptionData.m; sourceTree = "<group>"; };
 		53F883291507E70F000F7FE3 /* EncryptionData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EncryptionData.h; path = NTI/EncryptionData.h; sourceTree = "<group>"; };
 		53F8832B1507E70F000F7FE3 /* NSData+CommonCrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+CommonCrypto.h"; sourceTree = "<group>"; };
@@ -303,7 +307,6 @@
 				2763714C152A4E94003FE70B /* Icons */,
 				53A5AE321527593C0093E552 /* green.png */,
 				53A5AE331527593C0093E552 /* red.png */,
-				53F006341507A94F0074156E /* first_screen.jpg */,
 				53F00622150784310074156E /* GoButton@2x.png */,
 				53F00623150784310074156E /* GoButton.png */,
 				53F00624150784310074156E /* cButton.jpg */,
@@ -457,6 +460,9 @@
 		53E0A75B14DEC75D004E3E1B = {
 			isa = PBXGroup;
 			children = (
+				538479721615F0A800927498 /* Default-568h@2x.png */,
+				538479701615F09C00927498 /* Default@2x.png */,
+				5384796E1615F08A00927498 /* Default.png */,
 				27A3754F15F635D7002B51CB /* TestFlightSDK1.0 */,
 				271AAFC11565467E007D1223 /* libz.dylib */,
 				2779258D15347C110062D871 /* MapKit.framework */,
@@ -719,7 +725,6 @@
 				53F00627150784310074156E /* GoButton.png in Resources */,
 				53F00628150784310074156E /* cButton.jpg in Resources */,
 				53F00629150784310074156E /* Background.png in Resources */,
-				53F006351507A94F0074156E /* first_screen.jpg in Resources */,
 				2775F5601507D01900FE08BC /* MainStoryboard.storyboard in Resources */,
 				53F88371150B9740000F7FE3 /* log.sqlite in Resources */,
 				53A5AE341527593C0093E552 /* green.png in Resources */,
@@ -732,6 +737,9 @@
 				53A2F1B815BECF6500B948A4 /* refresh.png in Resources */,
 				27A3755515F635D7002B51CB /* README.txt in Resources */,
 				27A3755615F635D7002B51CB /* release_notes.txt in Resources */,
+				5384796F1615F08A00927498 /* Default.png in Resources */,
+				538479711615F09C00927498 /* Default@2x.png in Resources */,
+				538479731615F0A800927498 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -860,12 +868,12 @@
 				INFOPLIST_FILE = "NTI/NTI-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/CrittercismSDK\"",
 					"\"$(SRCROOT)/TestFlightSDK1.0\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				VALID_ARCHS = armv7;
 				WRAPPER_EXTENSION = app;
 			};
 			name = "Ad-hoc";
@@ -933,12 +941,12 @@
 				INFOPLIST_FILE = "NTI/NTI-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/CrittercismSDK\"",
 					"\"$(SRCROOT)/TestFlightSDK1.0\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "466BC197-5A5C-4D9E-899F-DE38A2141CE9";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "466BC197-5A5C-4D9E-899F-DE38A2141CE9";
+				VALID_ARCHS = "armv7 ";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -953,12 +961,12 @@
 				INFOPLIST_FILE = "NTI/NTI-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/CrittercismSDK\"",
 					"\"$(SRCROOT)/TestFlightSDK1.0\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				VALID_ARCHS = armv7;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

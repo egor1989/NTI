@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="1.1" toolsVersion="2182" systemVersion="11E53" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="4">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="2840" systemVersion="11E53" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="4">
     <dependencies>
-        <development defaultVersion="4200" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1179"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1926"/>
     </dependencies>
     <scenes>
         <!--Develop View Controller - First-->
         <scene sceneID="11">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="10" sceneMemberID="firstResponder"/>
                 <viewController title="First" id="2" customClass="DevelopViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="16">
                         <rect key="frame" x="0.0" y="20" width="320" height="460"/>
@@ -270,13 +268,13 @@
                         <outlet property="writeLabel" destination="VR7-8s-3Z0" id="xSf-xC-ZXw"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="10" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1809" y="-304"/>
         </scene>
         <!--Feed Back View Controller - Отзыв-->
         <scene sceneID="CbX-tD-odD">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="kcQ-sX-0s3" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="4Kj-j2-HHN" customClass="FeedBackViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Bf3-31-Hpw">
                         <rect key="frame" x="0.0" y="20" width="320" height="411"/>
@@ -348,13 +346,13 @@
                         <outlet property="waintingIndicator" destination="b7j-yn-glF" id="Kra-zg-uWl"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kcQ-sX-0s3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1809" y="1692"/>
         </scene>
         <!--Plot View Controller - Second-->
         <scene sceneID="13">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="12" sceneMemberID="firstResponder"/>
                 <viewController title="Second" id="3" customClass="PlotViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="17" customClass="Plot">
                         <rect key="frame" x="0.0" y="20" width="320" height="460"/>
@@ -363,13 +361,13 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Plot" image="NTI_GraphMenuIcon.png" id="6"/>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="12" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1809" y="284"/>
         </scene>
         <!--Date Picker View Controller - Map-->
         <scene sceneID="Tcr-zr-v4U">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="S3r-Rd-BnD" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="gA8-hi-9SL" customClass="DatePickerViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="zjH-0n-nPY">
                         <rect key="frame" x="0.0" y="20" width="320" height="460"/>
@@ -434,13 +432,13 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                         <outlet property="datePicker" destination="hQS-tE-nYV" id="4WQ-zN-eAx"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="S3r-Rd-BnD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2219" y="752"/>
         </scene>
         <!--Map Help View Controller-->
         <scene sceneID="88e-Ie-WRo">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="lRb-vs-SAS" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="6tn-Z8-yJa" customClass="MapHelpViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Mwp-k6-hrq">
                         <rect key="frame" x="0.0" y="20" width="320" height="460"/>
@@ -480,13 +478,13 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lRb-vs-SAS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2219" y="1326"/>
         </scene>
         <!--Map View Controller - Title-->
         <scene sceneID="1Qp-Kz-5Ox">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ZKL-mj-7Oa" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="WAm-6Q-fDJ" customClass="MapViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="hyj-OC-EMC">
                         <rect key="frame" x="0.0" y="20" width="320" height="411"/>
@@ -547,13 +545,13 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                         <outlet property="waintingIndicator" destination="CsY-99-wCv" id="dGN-WF-MnV"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZKL-mj-7Oa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1545" y="956"/>
         </scene>
         <!--Iterview View Controller-->
         <scene sceneID="YEX-YE-F7z">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="saj-gN-sfG" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="InterviewViewController" id="mAs-ok-QSJ" customClass="IterviewViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="egh-Qi-qcQ">
                         <rect key="frame" x="0.0" y="20" width="320" height="460"/>
@@ -700,13 +698,13 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                         <outlet property="skillField" destination="S0V-tt-TZD" id="S3Z-xU-9d0"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="saj-gN-sfG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="967" y="-939"/>
         </scene>
         <!--Stat View Controller - Статистика-->
         <scene sceneID="aDC-Fh-98B">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="VNG-QV-faK" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController storyboardIdentifier="StatViewController" id="Kdu-qc-vFm" customClass="StatViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="singleLineEtched" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="CIb-ms-zAU">
                         <rect key="frame" x="0.0" y="20" width="320" height="411"/>
@@ -736,13 +734,13 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                         <outlet property="statTableView" destination="CIb-ms-zAU" id="9fZ-dt-q4G"/>
                     </connections>
                 </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VNG-QV-faK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1861" y="-898"/>
         </scene>
         <!--Stat Help View Controller-->
         <scene sceneID="jOn-7G-0OQ">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="cIj-7I-tzH" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="StatHelpViewController" id="y1o-XO-KYV" customClass="StatHelpViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="AW5-O5-VGJ">
                         <rect key="frame" x="0.0" y="20" width="320" height="460"/>
@@ -887,13 +885,13 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                         <outlet property="scrollView" destination="p1e-fa-tJn" id="fId-08-SgJ"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cIj-7I-tzH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2251" y="-901"/>
         </scene>
         <!--Help View Controller-->
         <scene sceneID="zqs-27-2pC">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="DiC-Vp-zsw" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="HelpViewController" modalTransitionStyle="flipHorizontal" id="B5v-hK-Ej2" customClass="HelpViewController" colorLabel="IBBuiltInLabel-Red" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="PNB-Ut-zOm">
                         <rect key="frame" x="0.0" y="20" width="320" height="460"/>
@@ -947,13 +945,13 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                     </view>
                     <navigationItem key="navigationItem" id="Mib-5P-lGK"/>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DiC-Vp-zsw" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="681" y="-22"/>
         </scene>
         <!--Registration View Controller-->
         <scene sceneID="xc9-ib-aDx">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="DRI-69-MY8" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="DwD-2N-Qy3" customClass="RegistrationViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="dh4-ci-5bM">
                         <rect key="frame" x="0.0" y="20" width="320" height="460"/>
@@ -1040,13 +1038,13 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                         <outlet property="passwordField" destination="EXf-uR-Zae" id="udy-pt-mgG"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DRI-69-MY8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="575" y="-939"/>
         </scene>
         <!--Auth View Controller-->
         <scene sceneID="Xpe-hI-8Qz">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="jaw-vu-xTK" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="AuthViewController" id="fQO-OE-dPw" customClass="AuthViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jJ3-Qo-uXE">
                         <rect key="frame" x="0.0" y="20" width="320" height="460"/>
@@ -1102,7 +1100,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                                     <navigationItem id="orD-O6-eRS">
                                         <barButtonItem key="rightBarButtonItem" style="plain" id="sO5-s3-dGu">
                                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="58K-YR-UGl">
-                                                <rect key="frame" x="191" y="3" width="124" height="37"/>
+                                                <rect key="frame" x="191" y="4" width="124" height="37"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                 <state key="normal" title="Регистрация">
@@ -1144,13 +1142,13 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                         <outlet property="passwordField" destination="fnG-O3-DEC" id="Rli-Ms-NxS"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jaw-vu-xTK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="109" y="-939"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="15">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="14" sceneMemberID="firstResponder"/>
                 <tabBarController storyboardIdentifier="TabBarController" id="4" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="pXX-Tg-W3i"/>
                     <nil key="simulatedBottomBarMetrics"/>
@@ -1165,6 +1163,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                         <segue destination="4Kj-j2-HHN" kind="relationship" relationship="viewControllers" id="tgg-xp-TAZ"/>
                     </connections>
                 </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="14" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1180" y="-46"/>
         </scene>
@@ -1182,6 +1181,145 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <image name="second.png" width="30" height="30"/>
         <image name="time.png" width="128" height="128"/>
     </resources>
+    <classes>
+        <class className="AuthViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/AuthViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="authButton:"/>
+                <relationship kind="action" name="forgotButton:"/>
+                <relationship kind="action" name="regButton:"/>
+                <relationship kind="outlet" name="loginField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="passwordField" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="DatePickerViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/DatePickerViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="doneButton:"/>
+                <relationship kind="outlet" name="datePicker" candidateClass="UIDatePicker"/>
+            </relationships>
+        </class>
+        <class className="DevelopViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/DevelopViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="acceleration:"/>
+                <relationship kind="action" name="actionButton:"/>
+                <relationship kind="action" name="clearDB:"/>
+                <relationship kind="action" name="deceleration:"/>
+                <relationship kind="action" name="feedBackButton:"/>
+                <relationship kind="action" name="leftRot:"/>
+                <relationship kind="action" name="rightRot:"/>
+                <relationship kind="action" name="sendFile:"/>
+                <relationship kind="outlet" name="accX" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="accY" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="accZ" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="accelButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="action" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="course" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="decelButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="feedBackButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="gpsRow" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="leftButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="northRow" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="northValue" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="rightButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="rowCourse" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="rowDegrees" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="speed" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="time" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="timerLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="writeLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="FeedBackViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/FeedBackViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="grayView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="navItem" candidateClass="UINavigationItem"/>
+                <relationship kind="outlet" name="rightItem" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="textField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="textView" candidateClass="UITextView"/>
+                <relationship kind="outlet" name="waintingIndicator" candidateClass="UIActivityIndicatorView"/>
+            </relationships>
+        </class>
+        <class className="HelpViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/HelpViewController.h"/>
+        </class>
+        <class className="IterviewViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/IterviewViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="doneAction"/>
+                <relationship kind="outlet" name="ageField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="autoCategoryField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="autoPowerField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="insuranceCompanyField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="numberOfDtpField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
+                <relationship kind="outlet" name="sexField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="skillField" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="MapHelpViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MapHelpViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="okButton:"/>
+            </relationships>
+        </class>
+        <class className="MapViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MapViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="grayView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="mapView" candidateClass="MKMapView"/>
+                <relationship kind="outlet" name="waintingIndicator" candidateClass="UIActivityIndicatorView"/>
+            </relationships>
+        </class>
+        <class className="MyTextField" superclassName="UITextField">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MyTextField.h"/>
+        </class>
+        <class className="Plot" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/Plot.h"/>
+        </class>
+        <class className="PlotViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/PlotViewController.h"/>
+        </class>
+        <class className="RegistrationViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RegistrationViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="cancelButton:"/>
+                <relationship kind="action" name="goButton:"/>
+                <relationship kind="outlet" name="againPasswordField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="emailField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="nameField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="passwordField" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="StatHelpViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/StatHelpViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="closeHelp:"/>
+                <relationship kind="outlet" name="closeHelp" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
+            </relationships>
+        </class>
+        <class className="StatViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/StatViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="backButton:"/>
+                <relationship kind="action" name="backgroundWorkSwitch:"/>
+                <relationship kind="action" name="helpButton:"/>
+                <relationship kind="action" name="internetUploadSwitch:"/>
+                <relationship kind="action" name="loginButton:"/>
+                <relationship kind="action" name="refreshButton:"/>
+                <relationship kind="action" name="sendButton:"/>
+                <relationship kind="outlet" name="backButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="helpButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="loadStatIndicator" candidateClass="UIActivityIndicatorView"/>
+                <relationship kind="outlet" name="loginButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="sendButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="statTableView" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

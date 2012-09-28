@@ -24,14 +24,14 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {  
-    
+    freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);      //!!!!!не забывать убирать логирвоание
     [self appLife:@"on" time: [NSString stringWithFormat:@"%.f", [[NSDate date]timeIntervalSince1970]]];
     
-    
+    locationManager = [[CLLocationManager alloc] init];
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes: (UIRemoteNotificationTypeAlert |UIRemoteNotificationTypeBadge |UIRemoteNotificationTypeSound)];
  /***********************************************************************************/   
     if ([launchOptions objectForKey:UIApplicationLaunchOptionsLocationKey]) {
-         locationManager = [[CLLocationManager alloc] init];
+         
 
         //тестовый блок, будет показывать local notification с координатами
            
@@ -49,7 +49,7 @@
             //}
      //   }
 
-         [locationManager startUpdatingLocation];
+         //[locationManager startUpdatingLocation];
          //[locationManager startMonitoringSignificantLocationChanges];
         NSLog(@"NOTIFICATION");
     }
@@ -62,11 +62,10 @@
  //   [[UIApplication sharedApplication] scheduleLocalNotification:aNotify];
     
 
-    freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);      //!!!!!не забывать убирать логирвоание
+ 
     
     recordAction = [[RecordAction alloc] init];
     
-    locationManager=[[CLLocationManager alloc] init];
     locationManager.delegate=self;
     locationManager.desiredAccuracy= kCLLocationAccuracyNearestTenMeters;
     locationManager.distanceFilter = kCLDistanceFilterNone;
