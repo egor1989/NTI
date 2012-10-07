@@ -31,10 +31,7 @@
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes: (UIRemoteNotificationTypeAlert |UIRemoteNotificationTypeBadge |UIRemoteNotificationTypeSound)];
  /***********************************************************************************/   
     if ([launchOptions objectForKey:UIApplicationLaunchOptionsLocationKey]) {
-         
-
         //тестовый блок, будет показывать local notification с координатами
-           
              UILocalNotification *notification = [[UILocalNotification alloc] init];
              notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:15];
              notification.alertBody = [NSString stringWithFormat:@"NTI. New location alert"];
@@ -54,15 +51,6 @@
         NSLog(@"NOTIFICATION");
     }
  /***********************************************************************************/  
-   // UILocalNotification *aNotify = [[UILocalNotification alloc] init];
- //   aNotify.fireDate = [NSDate dateWithTimeIntervalSinceNow:10];
- //   aNotify.timeZone = [NSTimeZone defaultTimeZone];	
- //   aNotify.repeatInterval = NSMinuteCalendarUnit;
- //   aNotify.alertBody = @"local notification";
- //   [[UIApplication sharedApplication] scheduleLocalNotification:aNotify];
-    
-
- 
     
     recordAction = [[RecordAction alloc] init];
     
@@ -96,7 +84,6 @@
         NSLog(@"bad iphone");
     }
     
-    //
     [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(updater:) userInfo:nil repeats:YES];
     
     oldHeading          = 0;
@@ -276,8 +263,6 @@
     [self checkSendRight];
     canWriteToFile = NO;
     [[NSNotificationCenter defaultCenter]	postNotificationName:	@"canWriteToFile" object:  nil];
-    
-    
 }
 
 
@@ -285,51 +270,18 @@
 
 //compass
 
-- (void)calibrate:(NSTimer *)timer
-{   
-    // Set offset so the compassImg will be calibrated to northOffset
-    northOffest = updatedHeading - 0;
-}
-
-- (void)updater:(NSTimer *)timer 
-{
-   // northOffest = updatedHeading - 0; кнопка калибровки
-
-    // If the compass hasn't moved in a while we can calibrate the gyro 
-    if(updatedHeading == oldHeading) {
-       // NSLog(@"Update gyro");
-        // Populate newCompassTarget with new compass value and the offset we set in calibrate
-        newCompassTarget = (0 - updatedHeading) + northOffest;
-        
-        offsetG = currentYaw;
-    } 
-    
-    oldHeading = updatedHeading;
-}
-
-
-
 - (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading
 {
     // Update variable updateHeading to be used in updater method
     updatedHeading = newHeading.magneticHeading;
     trueNorth = 0 - newHeading.trueHeading;
     north = 360 - newHeading.trueHeading;
-        
-    //compassImg.transform = CGAffineTransformMakeRotation((headingFloat + northOffest)*radianConst); 
-    //course = (headingFloat + northOffest)*radianConst;
-    //NSLog(@"%f north", northOffest);
+
     course = (int)((360+trueNorth)+lastLoc.course) % 360; 
     
     
-    
-    
-    
-    //trueNorth.transform = CGAffineTransformMakeRotation(headingFloat*radianConst);
     [[NSNotificationCenter defaultCenter]	postNotificationName:	@"redrawCourse" object:  nil];
 }
-
-
 
 
 

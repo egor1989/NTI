@@ -36,7 +36,6 @@ static BOOL needLastRoute;
     userDefaults = [NSUserDefaults standardUserDefaults];
     jsonConvert = [[toJSON alloc]init];
     needLastRoute = NO;
-    csvConverter = [[CSVConverter alloc] init];
     serverCommunication = [[ServerCommunication alloc] init];
     return self;
 }
@@ -271,11 +270,8 @@ static BOOL needLastRoute;
 - (void) convertAndSend{
     NSLog(@"data array size = %i",[dataArray count]);
 
-  //  NSString *CSV = [csvConverter arrayToCSVString:dataArray];
     NSData *JSON = [jsonConvert convert:dataArray];
-   
-  //  NSString *cJSON = [[NSString alloc] initWithData:JSON encoding:NSASCIIStringEncoding]; 
-    //NSLog(@"cJSON=%@",cJSON);
+
   // для шифрования  
     [serverCommunication uploadData: JSON]; 
     

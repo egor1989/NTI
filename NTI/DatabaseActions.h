@@ -12,7 +12,6 @@
 #import <sqlite3.h> 
 #import "toJSON.h"
 #import "ServerCommunication.h"
-#import "CSVConverter.h"
 #import "GzipCompress.h"
 
 @interface DatabaseActions : NSObject{
@@ -26,12 +25,8 @@
     double time;
     double speedDiff, currentAcceleration;
     double timeOver, maxOver;
-   // NSMutableDictionary *record;
-   // NSMutableDictionary *acc;
-   // NSMutableDictionary *gps;
     NSMutableArray *dataArray;
     NSUserDefaults *userDefaults;
-    CSVConverter *csvConverter;
     ServerCommunication *serverCommunication;
     toJSON *jsonConvert;
 

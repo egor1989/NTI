@@ -28,11 +28,7 @@
 
     requestData = [NSData dataWithBytes:[requestContent UTF8String] length:[requestContent length]];
     NSData *compressData = [GzipCompress gzipDeflate:requestData];
-
- //   NSLog(@"cData = %@", compressData);
-        
     NSString* requestDataFull = [NSString stringWithFormat:@"data=%@%@",[compressData description],@"&zip=1"];
-   // NSLog(@"%@", requestDataFull);
     
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody: [NSData dataWithBytes:[requestDataFull UTF8String] length:[requestDataFull length]]];    
@@ -334,7 +330,6 @@
     
     NSString *cookie = [[NSUserDefaults standardUserDefaults] valueForKey:@"cookie"]; 
     NSString *data = [NSString stringWithFormat:(@"data={\"method\":\"switchApp\", \"params\":%@}"), jsInfo];
-    //,\"params\":{\"ntifile\":%@}}
     NSLog(@"Request: %@", data);
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy

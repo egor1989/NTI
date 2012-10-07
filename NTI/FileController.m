@@ -213,10 +213,6 @@
 }
 
 
-
-
-
-
 - (BOOL) isFileEmpty {
     if([self.fileMgr fileExistsAtPath:self.filePath]){
         NSLog(@"************* Check isFileIsEmpty *************");
