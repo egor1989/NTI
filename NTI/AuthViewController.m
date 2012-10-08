@@ -78,8 +78,8 @@
         [serverCommunication showResult];
         if (![serverCommunication errors]) {
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            [userDefaults setValue:[serverCommunication getAllStatistic] forKey:@"allStat"];
-            [userDefaults setValue:[serverCommunication getLastStatistic] forKey:@"lastStat"];
+            [userDefaults setValue:[serverCommunication getStatAll:YES] forKey:@"allStat"];
+            [userDefaults setValue:[serverCommunication getStatAll:NO] forKey:@"lastStat"];
             [userDefaults setValue:loginField.text forKey:@"login"];
              [userDefaults synchronize];
             

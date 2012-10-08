@@ -730,8 +730,8 @@
         [loadStatIndicator performSelector:@selector(stopAnimating) withObject:nil afterDelay:2];
         [serverCommunication refreshCookie];
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setValue: [serverCommunication getLastStatistic] forKey:@"lastStat"];
-        [userDefaults setValue: [serverCommunication getAllStatistic] forKey:@"allStat"];
+        [userDefaults setValue: [serverCommunication getStatAll:NO] forKey:@"lastStat"];
+        [userDefaults setValue: [serverCommunication getStatAll:YES] forKey:@"allStat"];
         [userDefaults synchronize];
         if ([userDefaults integerForKey:@"segment"]==0) {
             [self parse: [userDefaults valueForKey:@"allStat"] method:@"allStat"];

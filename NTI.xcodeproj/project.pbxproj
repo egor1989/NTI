@@ -43,8 +43,6 @@
 		538479751616026100927498 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 538479741616026100927498 /* Default.png */; };
 		538479771616027100927498 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 538479761616027000927498 /* Default@2x.png */; };
 		538479791616027900927498 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 538479781616027900927498 /* Default-568h@2x.png */; };
-		5384797B1619C51E00927498 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 5384797A1619C51E00927498 /* logo.png */; };
-		5384797D1619C58A00927498 /* logo2.png in Resources */ = {isa = PBXBuildFile; fileRef = 5384797C1619C58A00927498 /* logo2.png */; };
 		53847995161A00B300927498 /* blogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 53847994161A00B300927498 /* blogo.png */; };
 		53847997161A00F500927498 /* blogo2.png in Resources */ = {isa = PBXBuildFile; fileRef = 53847996161A00F500927498 /* blogo2.png */; };
 		539B29BE14F305C3007E6977 /* gps.png in Resources */ = {isa = PBXBuildFile; fileRef = 539B29BC14F305C3007E6977 /* gps.png */; };
@@ -62,10 +60,6 @@
 		53E0A77514DEC75D004E3E1B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 53E0A77314DEC75D004E3E1B /* InfoPlist.strings */; };
 		53E0A77714DEC75D004E3E1B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0A77614DEC75D004E3E1B /* main.m */; };
 		53E0A77B14DEC75D004E3E1B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E0A77A14DEC75D004E3E1B /* AppDelegate.m */; };
-		53E0A78314DEC75D004E3E1B /* first.png in Resources */ = {isa = PBXBuildFile; fileRef = 53E0A78214DEC75D004E3E1B /* first.png */; };
-		53E0A78514DEC75D004E3E1B /* first@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53E0A78414DEC75D004E3E1B /* first@2x.png */; };
-		53E0A78A14DEC75D004E3E1B /* second.png in Resources */ = {isa = PBXBuildFile; fileRef = 53E0A78914DEC75D004E3E1B /* second.png */; };
-		53E0A78C14DEC75D004E3E1B /* second@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53E0A78B14DEC75D004E3E1B /* second@2x.png */; };
 		53E0A79B14DEDE37004E3E1B /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53E0A79A14DEDE37004E3E1B /* CoreLocation.framework */; };
 		53E0A79E14DEDE6F004E3E1B /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 53E0A79C14DEDE6F004E3E1B /* libsqlite3.0.dylib */; };
 		53E0A79F14DEDE6F004E3E1B /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 53E0A79D14DEDE6F004E3E1B /* libsqlite3.dylib */; };
@@ -153,8 +147,6 @@
 		538479741616026100927498 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		538479761616027000927498 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		538479781616027900927498 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		5384797A1619C51E00927498 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
-		5384797C1619C58A00927498 /* logo2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo2.png; sourceTree = "<group>"; };
 		53847994161A00B300927498 /* blogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blogo.png; sourceTree = "<group>"; };
 		53847996161A00F500927498 /* blogo2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blogo2.png; sourceTree = "<group>"; };
 		539B29BC14F305C3007E6977 /* gps.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gps.png; sourceTree = "<group>"; };
@@ -179,10 +171,6 @@
 		53E0A77814DEC75D004E3E1B /* NTI-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NTI-Prefix.pch"; sourceTree = "<group>"; };
 		53E0A77914DEC75D004E3E1B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		53E0A77A14DEC75D004E3E1B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		53E0A78214DEC75D004E3E1B /* first.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = first.png; sourceTree = "<group>"; };
-		53E0A78414DEC75D004E3E1B /* first@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "first@2x.png"; sourceTree = "<group>"; };
-		53E0A78914DEC75D004E3E1B /* second.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = second.png; sourceTree = "<group>"; };
-		53E0A78B14DEC75D004E3E1B /* second@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "second@2x.png"; sourceTree = "<group>"; };
 		53E0A79A14DEDE37004E3E1B /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		53E0A79C14DEDE6F004E3E1B /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		53E0A79D14DEDE6F004E3E1B /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -309,10 +297,6 @@
 				539B29BC14F305C3007E6977 /* gps.png */,
 				539B29BD14F305C3007E6977 /* north.png */,
 				536E026E14F00625003A2B15 /* compass.png */,
-				53E0A78214DEC75D004E3E1B /* first.png */,
-				53E0A78414DEC75D004E3E1B /* first@2x.png */,
-				53E0A78914DEC75D004E3E1B /* second.png */,
-				53E0A78B14DEC75D004E3E1B /* second@2x.png */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -427,8 +411,6 @@
 			children = (
 				53847996161A00F500927498 /* blogo2.png */,
 				53847994161A00B300927498 /* blogo.png */,
-				5384797C1619C58A00927498 /* logo2.png */,
-				5384797A1619C51E00927498 /* logo.png */,
 				538479781616027900927498 /* Default-568h@2x.png */,
 				538479761616027000927498 /* Default@2x.png */,
 				538479741616026100927498 /* Default.png */,
@@ -676,10 +658,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				53E0A77514DEC75D004E3E1B /* InfoPlist.strings in Resources */,
-				53E0A78314DEC75D004E3E1B /* first.png in Resources */,
-				53E0A78514DEC75D004E3E1B /* first@2x.png in Resources */,
-				53E0A78A14DEC75D004E3E1B /* second.png in Resources */,
-				53E0A78C14DEC75D004E3E1B /* second@2x.png in Resources */,
 				536E026F14F00625003A2B15 /* compass.png in Resources */,
 				539B29BE14F305C3007E6977 /* gps.png in Resources */,
 				539B29BF14F305C3007E6977 /* north.png in Resources */,
@@ -708,8 +686,6 @@
 				538479751616026100927498 /* Default.png in Resources */,
 				538479771616027100927498 /* Default@2x.png in Resources */,
 				538479791616027900927498 /* Default-568h@2x.png in Resources */,
-				5384797B1619C51E00927498 /* logo.png in Resources */,
-				5384797D1619C58A00927498 /* logo2.png in Resources */,
 				53847995161A00B300927498 /* blogo.png in Resources */,
 				53847997161A00F500927498 /* blogo2.png in Resources */,
 			);

@@ -38,6 +38,7 @@
              [[UIApplication sharedApplication] scheduleLocalNotification:notification];
         
       //  if ([ServerCommunication checkInternetConnection: NO]) {
+            locationManager = [[CLLocationManager alloc] init];
             [ServerCommunication sendNotification:[NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]] lng:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.longitude] lat:[NSString stringWithFormat:@"%.6f",locationManager.location.coordinate.latitude]];
        // }
     //    else {
@@ -47,7 +48,8 @@
      //   }
 
          //[locationManager startUpdatingLocation];
-         //[locationManager startMonitoringSignificantLocationChanges];
+         [locationManager startMonitoringSignificantLocationChanges];
+
         NSLog(@"NOTIFICATION");
     }
  /***********************************************************************************/  
@@ -83,8 +85,6 @@
 //    [self startAccelerometerDetect];
         NSLog(@"bad iphone");
     }
-    
-    [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(updater:) userInfo:nil repeats:YES];
     
     oldHeading          = 0;
     offsetG             = 0;

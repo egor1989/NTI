@@ -33,19 +33,20 @@
 - (void)authUser:(NSString *)login secret:(NSString *)message;
 - (BOOL)checkErrors:(NSString *)answerString method:(NSString *)methodName;
 - (void)showResult;
-+ (BOOL)checkInternetConnection: (BOOL)needNotify;
+- (NSString *)getStatAll: (BOOL)value;
 - (NSString *) refreshCookie;
 - (BOOL)checkCookieExpires;
 - (NSString*) getStringBetweenStrings: (NSString *) main first:(NSString *)first second: (NSString*) second;
 - (void)infoAboutDevice;
 - (void)getRouteFromServer:(float)timeInterval;
-- (NSString *)getAllStatistic;
-- (NSString *)getLastStatistic;
 - (void)sendFeedBackToServerWithTitle:(NSString*)title andBody: (NSString*)body;
 - (void)sendInterviewToServerWithData:(NSDictionary*)data;
 - (void)forgotPassword: (NSString *)login;
+
++ (BOOL)checkInternetConnection: (BOOL)needNotify;
 + (void)sendNotification: (NSString *)time lng:(NSString *)longitude lat:(NSString *)latitude;
 + (void)sendAppInfo: (NSArray *)infoArray;
+
 
 @property (nonatomic) BOOL errors;
 

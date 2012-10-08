@@ -133,8 +133,8 @@
          NSData *JSON = [jsonConvert convert: [self JSONFormat:toWrite]];
          [serverCommunication uploadData: JSON]; 
          [DatabaseActions setNeedLastRoute:YES];
-         [[NSUserDefaults standardUserDefaults] setValue:[serverCommunication getAllStatistic] forKey:@"allStat"];
-         [[NSUserDefaults standardUserDefaults] setValue:[serverCommunication getLastStatistic] forKey:@"lastStat"];
+         [[NSUserDefaults standardUserDefaults] setValue:[serverCommunication getStatAll:YES] forKey:@"allStat"];
+         [[NSUserDefaults standardUserDefaults] setValue:[serverCommunication getStatAll:NO] forKey:@"lastStat"];
      }
      else {
          //создаем новый тред

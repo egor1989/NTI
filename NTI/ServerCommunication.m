@@ -368,19 +368,20 @@
 }
 
 
-- (NSString *)getAllStatistic{
-    
-    NSString *cookie = [[NSUserDefaults standardUserDefaults] valueForKey:@"cookie"]; 
-
+- (NSString *)getStatAll: (BOOL)value{
+    NSString *cookie = [[NSUserDefaults standardUserDefaults] valueForKey:@"cookie"];
+    //last or all
     NSString *data = @"data={\"method\":\"getStatistics\"}";
-    NSLog(@"Request: %@", data);
+    if (!value) data = @"data={\"method\":\"getStatistics\",\"params\":{\"last\":\"1\"}}";
     
+    NSLog(@"Request: %@", data);
+
     request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
                                   timeoutInterval:60.0];
     
     requestData = [NSData dataWithBytes:[data UTF8String] length:[data length]];
     [request setHTTPMethod:@"POST"];
-    [request setHTTPBody: requestData];    
+    [request setHTTPBody: requestData];
     
     NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
                                 @"http://nti.goodroads.ru/api/", NSHTTPCookieDomain,
@@ -390,55 +391,9 @@
                                 nil];
     
     [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:[NSHTTPCookie cookieWithProperties:properties]];
-    NSHTTPCookie *fcookie = [NSHTTPCookie cookieWithProperties:properties]; //?
-    NSArray* fcookies = [NSArray arrayWithObjects: fcookie, nil];   //?
-    NSDictionary * headers = [NSHTTPCookie requestHeaderFieldsWithCookies:fcookies]; //?
-    
-    [request setAllHTTPHeaderFields:headers];
-    
-
-    NSError *requestError = nil;
-    NSURLResponse *response = nil;
-    NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: &response error: &requestError ];
-    
-    if (requestError!=nil) {
-        NSLog(@"%@", requestError);
-    }
-    
-    returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-    NSLog(@"returnData: %@", returnString);
-    [self checkErrors:returnString method:@"stat"];
-    if (!errors) return returnString; 
-    else return @"error";
-}
-
-
-- (NSString *)getLastStatistic{
-   NSString *cookie = [[NSUserDefaults standardUserDefaults] valueForKey:@"cookie"]; 
-    NSLog(@"cookie = %@", cookie);
-
-    NSString *data = @"data={\"method\":\"getStatistics\",\"params\":{\"last\":\"1\"}}";
-    NSLog(@"Request: %@", data);
-    
-    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
-                                  timeoutInterval:60.0];
-    
-    requestData = [NSData dataWithBytes:[data UTF8String] length:[data length]];
-    [request setHTTPMethod:@"POST"];
-    [request setHTTPBody: requestData];    
-    
-    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
-                                @"http://nti.goodroads.ru/api/", NSHTTPCookieDomain,
-                                @"NTIKeys", NSHTTPCookieName,
-                                cookie, NSHTTPCookieValue,
-                                @"/", NSHTTPCookiePath,
-                                nil];
-    
-    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:[NSHTTPCookie cookieWithProperties:properties]];
-    NSHTTPCookie *fcookie = [NSHTTPCookie cookieWithProperties:properties]; //?
-    NSArray* fcookies = [NSArray arrayWithObjects: fcookie, nil];   //?
-    NSDictionary * headers = [NSHTTPCookie requestHeaderFieldsWithCookies:fcookies]; //?
-    
+    NSHTTPCookie *fcookie = [NSHTTPCookie cookieWithProperties:properties];
+    NSArray* fcookies = [NSArray arrayWithObjects: fcookie, nil];   
+    NSDictionary * headers = [NSHTTPCookie requestHeaderFieldsWithCookies:fcookies]; 
     [request setAllHTTPHeaderFields:headers];
     
     NSError *requestError = nil;
@@ -447,18 +402,16 @@
     
     if (requestError!=nil) {
         NSLog(@"%@", requestError);
+        return @"error";
     }
     
     returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
     NSLog(@"returnData: %@", returnString);
     [self checkErrors:returnString method:@"stat"];
-    if (!errors) return returnString; 
+    if (!errors) return returnString;
     else return @"error";
 }
 
-
- 
- 
 
 - (void)regUser:(NSString *)login password:(NSString *)password email:(NSString *)email{
     NSLog(@"sendData login = %@ message = %@ email = %@", login, password, email);

@@ -257,8 +257,8 @@ static BOOL needLastRoute;
                 [DatabaseActions clearDatabase];
                 needLastRoute = YES;
                 [userDefaults setInteger:0 forKey:@"pk"];
-                [userDefaults setValue: [serverCommunication getLastStatistic] forKey:@"lastStat"];
-                [userDefaults setValue: [serverCommunication getAllStatistic] forKey:@"allStat"];
+                [userDefaults setValue: [serverCommunication getStatAll:NO] forKey:@"lastStat"];
+                [userDefaults setValue: [serverCommunication getStatAll:YES] forKey:@"allStat"];
                 //notif refresh
             }
     }
