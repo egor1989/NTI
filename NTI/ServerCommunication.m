@@ -465,7 +465,7 @@
     NSLog(@"Request: %@", data);
     
     request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
-                                  timeoutInterval:60.0];
+                                  timeoutInterval:90.0];
     
     requestData = [NSData dataWithBytes:[data UTF8String] length:[data length]];
     [request setHTTPMethod:@"POST"];
@@ -476,6 +476,8 @@
     NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: &response error: &requestError];
     
     if (requestError!=nil) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message: [NSString stringWithFormat:@"%@",requestError] delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
+        [alert show];
         NSLog(@"%@", requestError);
     }
     returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
