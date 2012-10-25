@@ -24,7 +24,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {  
-    freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);      //!!!!!не забывать убирать логирвоание
+   // freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);      //!!!!!не забывать убирать логирвоание
     [self appLife:@"on" time: [NSString stringWithFormat:@"%.f", [[NSDate date]timeIntervalSince1970]]];
     
     locationManager = [[CLLocationManager alloc] init];
@@ -91,6 +91,11 @@
     newCompassTarget    = 0;
     
     [self.window makeKeyAndVisible];
+    
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
+     (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+    
+    NSLog(@"%@",[[UIApplication sharedApplication] enabledRemoteNotificationTypes]);
     
     [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
     return YES;
@@ -426,10 +431,21 @@
 
 }
 
-- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken {  
-    NSLog(@"%@",deviceToken);
+
+
+- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
+{
+	NSLog(@"My token is: %@", deviceToken);
 }
 
+- (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
+{
+	NSLog(@"Failed to get token, error: %@", error);
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo{
+    
+}
 
 
 
