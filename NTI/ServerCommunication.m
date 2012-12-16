@@ -646,11 +646,12 @@
                            completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *error) {
                               
                                NSMutableData *resData = [responseData mutableCopy];
-                               [resData replaceBytesInRange:NSMakeRange(0, 3) withBytes:NULL length:0];
-                               NSLog(@"compressedDAta= %@", resData);
+//                               [resData replaceBytesInRange:NSMakeRange(0, 3) withBytes:NULL length:0];
+                               NSLog(@"compressedData= %@", resData);
                                
                                NSData *unCompressData = [[NSData alloc] init];
                                unCompressData = [GzipCompress gzipInflate:resData];
+                               NSLog(@"UNcompressedData= %@", unCompressData);
                                returnString = [[NSString alloc] initWithData:unCompressData encoding: NSUTF8StringEncoding];
                                NSLog(@"returnData: %@", returnString);
                                if (![self checkErrors:returnString method:@"getRouteFromServer"]) {
