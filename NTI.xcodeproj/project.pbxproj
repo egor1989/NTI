@@ -886,8 +886,8 @@
 					"\"$(SRCROOT)/TestFlightSDK1.0\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "466BC197-5A5C-4D9E-899F-DE38A2141CE9";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "466BC197-5A5C-4D9E-899F-DE38A2141CE9";
+				PROVISIONING_PROFILE = "9AADCF24-6794-4AFC-B82B-36E64303E40E";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9AADCF24-6794-4AFC-B82B-36E64303E40E";
 				VALID_ARCHS = "armv7 ";
 				WRAPPER_EXTENSION = app;
 			};
@@ -896,8 +896,8 @@
 		53E0A79114DEC75D004E3E1B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Vladislav Efremov";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Vladislav Efremov";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NTI/NTI-Prefix.pch";
 				INFOPLIST_FILE = "NTI/NTI-Info.plist";
@@ -906,8 +906,8 @@
 					"\"$(SRCROOT)/TestFlightSDK1.0\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "86056BD0-9AFF-4E1A-893C-1277FB70C0D9";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "86056BD0-9AFF-4E1A-893C-1277FB70C0D9";
 				VALID_ARCHS = armv7;
 				WRAPPER_EXTENSION = app;
 			};
