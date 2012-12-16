@@ -11,10 +11,59 @@
 @implementation ServerCommunication
 @synthesize errors;
 
-- (void)uploadData:(NSData *)fileContent{
+
+- (void)sendSinchRequest: (NSString *)sRequest method: (NSInteger)code{
+    NSString *rData = nil;
+    NSString *methodName = nil;
     
+    //upload data, code = 1
+    //forgot password (2)
+    switch (code) {
+        case 1:{
+            
+        }
+            break;
+        case 2:{
+            rData = sRequest;
+            methodName = @"password";
+            
+     /*       request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                          timeoutInterval:60.0];
+            
+            requestData = [NSData dataWithBytes:[data UTF8String] length:[data length]];
+            [request setHTTPMethod:@"POST"];
+            [request setHTTPBody: requestData];
+            
+            NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil];
+            
+            
+            returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
+            NSLog(@"returnData: %@", returnString);
+            [self checkErrors:returnString method:@"password"];
+      */
+        }
+            break;
+        default:
+            break;
+    }
+    
+    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];
+    
+    requestData = [NSData dataWithBytes:[rData UTF8String] length:[rData length]];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody: requestData];
+    
+    NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil];
+    
+    returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
+    NSLog(@"returnData: %@", returnString);
+    [self checkErrors:returnString method:methodName];
+}
+
+- (void)uploadData:(NSData *)fileContent{
+
     NSLog(@"SC -upload data");
-    NSString *cookie = [self refreshCookie]; 
+    NSString *cookie = [self refreshCookie];
     NSLog(@"current cookie = %@",cookie);
     
     NSString *sJSON = [[NSString alloc] initWithData:fileContent encoding:NSASCIIStringEncoding]; 
@@ -23,11 +72,14 @@
         
     NSLog(@"Request: %@", requestContent);
         
-   request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
-                                  timeoutInterval:90.0];
+  
 
     requestData = [NSData dataWithBytes:[requestContent UTF8String] length:[requestContent length]];
     NSData *compressData = [GzipCompress gzipDeflate:requestData];
+    
+    
+    request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                  timeoutInterval:90.0];
     NSString* requestDataFull = [NSString stringWithFormat:@"data=%@%@",[compressData description],@"&zip=1"];
     
     [request setHTTPMethod:@"POST"];

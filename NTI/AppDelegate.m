@@ -13,7 +13,7 @@
 
 #define CC_RADIANS_TO_DEGREES(__ANGLE__) ((__ANGLE__) / (float)M_PI * 180.0f)
 #define radianConst M_PI/180.0
-#define SPEED 1.5
+#define SPEED 1.9
 #define STARTTIME 300 //!!
 #define STOPTIME 600 //!!
 
