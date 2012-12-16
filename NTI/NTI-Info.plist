@@ -39,11 +39,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-<<<<<<< HEAD
-	<string>433</string>
-=======
-	<string>431</string>
->>>>>>> 30c458ceb1a42d03c1b44144047b9180a6b2c779
+	<string>435</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIBackgroundModes</key>
