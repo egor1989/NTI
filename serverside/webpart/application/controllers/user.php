@@ -53,7 +53,18 @@ class User extends CI_Controller {
 			header("Location: http://nti.goodroads.ru/");
 	}
 	
+		public function rawjson() {
 
+			$this->load->model('userModel');
+			$this->load->model('lays_model');
+			$new_data['rights']=$this->session->userdata('rights');
+			$this->load->helper('url');
+			$urls=$this->uri->segment(3);
+     		$rs['trr']=$this->lays_model->LoadRawDataWithNormal($urls);
+     		$rs['Id']=$urls;
+			echo json_encode($rs['trr']);
+
+	}
 private function array_sort($array, $on, $order=SORT_ASC)
 {
     $new_array = array();

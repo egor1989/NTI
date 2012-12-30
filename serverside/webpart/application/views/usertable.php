@@ -1,4 +1,4 @@
-﻿<div id="content" class="pageContent">
+﻿
 	Пользователи, которых Вы можете просматривать 
 <table border=1>
 		<?
@@ -8,5 +8,3 @@
 			}
 		?>
 </table>
-
-</div>

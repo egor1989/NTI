@@ -66,20 +66,22 @@ function handler(request)
 		speed = filteredPt[i][3];
 		var color = "#00ff00";
 		var type=0;
-		if((filteredPt[i][4])=="Acc" && Number(filteredPt[i][5])==1){color = "#00FF00";type=0.4;}
-		else if((filteredPt[i][4])=="Acc" && Number(filteredPt[i][5])==2){color = "#00FF00";type=0.7;}
+		if((filteredPt[i][4])=="Normal"){color = "#00FF00";type=0.1;}
+		
+		if((filteredPt[i][4])=="Acc" && Number(filteredPt[i][5])==1){color = "#00FF00";type=0.6;}
+		else if((filteredPt[i][4])=="Acc" && Number(filteredPt[i][5])==2){color = "#00FF00";type=0.8;}
 		else if((filteredPt[i][4])=="Acc" && Number(filteredPt[i][5])==3){color = "#00FF00";type=1;}
-		else if((filteredPt[i][4])=="Brake" && Number(filteredPt[i][5])==1){color = "#FF0000";type=0.4;}
-		else if((filteredPt[i][4])=="Brake" && Number(filteredPt[i][5])==2){color = "#FF0000";type=0.7;}
+		else if((filteredPt[i][4])=="Brake" && Number(filteredPt[i][5])==1){color = "#FF0000";type=0.6;}
+		else if((filteredPt[i][4])=="Brake" && Number(filteredPt[i][5])==2){color = "#FF0000";type=0.8;}
 		else if((filteredPt[i][4])=="Brake" && Number(filteredPt[i][5])==3){color = "#FF0000";type=1;}
-			else if((filteredPt[i][4])=="LeftTurn" && Number(filteredPt[i][5])==1){color = "#FFFF00";type=0.4;}
-		else if((filteredPt[i][4])=="LeftTurn" && Number(filteredPt[i][5])==2){color = "#FFFF00";type=0.7;}
+			else if((filteredPt[i][4])=="LeftTurn" && Number(filteredPt[i][5])==1){color = "#FFFF00";type=0.6;}
+		else if((filteredPt[i][4])=="LeftTurn" && Number(filteredPt[i][5])==2){color = "#FFFF00";type=0.8;}
 		else if((filteredPt[i][4])=="LeftTurn" && Number(filteredPt[i][5])==3){color = "#FFFF00";type=1;}
-		else if((filteredPt[i][4])=="RightTurn" && Number(filteredPt[i][5])==1){color = "#FFFF00";type=0.4;}
-		else if((filteredPt[i][4])=="RightTurn" && Number(filteredPt[i][5])==2){color = "#FFFF00";type=0.7;}
+		else if((filteredPt[i][4])=="RightTurn" && Number(filteredPt[i][5])==1){color = "#FFFF00";type=0.6;}
+		else if((filteredPt[i][4])=="RightTurn" && Number(filteredPt[i][5])==2){color = "#FFFF00";type=0.8;}
 		else if((filteredPt[i][4])=="RightTurn" && Number(filteredPt[i][5])==3){color = "#FFFF00";type=1;}
-		else if((filteredPt[i][4])=="Speed" && Number(filteredPt[i][5])==1){color = "#808080";type=0.4;}
-		else if((filteredPt[i][4])=="Speed" && Number(filteredPt[i][5])==2){color = "#808080";type=0.7;}
+		else if((filteredPt[i][4])=="Speed" && Number(filteredPt[i][5])==1){color = "#808080";type=0.6;}
+		else if((filteredPt[i][4])=="Speed" && Number(filteredPt[i][5])==2){color = "#808080";type=0.8;}
 		else if((filteredPt[i][4])=="Speed" && Number(filteredPt[i][5])==3){color = "#808080";type=1;}
 
  
@@ -104,6 +106,7 @@ function handler(request)
 				time : filteredPt[i][3],
 				label : filteredPt[i][4],
 				typeTurn : filteredPt[i][5],
+				duration : filteredPt[i][7],
 				typeG:filteredPt[i][6]
 			}, { fillColor: color,
 				 pointRadius: 4,
@@ -115,7 +118,7 @@ function handler(request)
                  cursor:"pointer"
                 }
 		);
-		if((filteredPt[i][4])!="Normal")
+		//if((filteredPt[i][4])!="Normal")
 		features.push(feature);
    }
     	 var style_green =

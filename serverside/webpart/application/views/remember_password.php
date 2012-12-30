@@ -1,4 +1,4 @@
-<div id="content" class="pageContent">
+
 		<div  id="regform" class="regform">
 		<?if(isset($specinfo))echo $specinfo."<br/><br/><br/>";?>
 	
@@ -20,4 +20,4 @@
 		</table>
 <?echo form_close();?>
 </div>
-</div>
+

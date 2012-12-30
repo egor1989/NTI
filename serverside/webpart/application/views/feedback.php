@@ -1,4 +1,4 @@
-<div id="content" class="pageContent">
+
 	<?echo form_open('fback/send');
 		$nd = array(
               'id'          => 'ndata',
@@ -25,4 +25,4 @@
 	if ($derr == 1) echo "Пожалуйста, введите корректное имя от 4 до 32 символов.";
 	if ($derr == 2) echo "Пожалуйста, введите корректный email-адрес от 6 до 32 символов.";
 	?>
-</div>
+

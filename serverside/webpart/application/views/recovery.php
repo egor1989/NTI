@@ -1,4 +1,4 @@
-<div id="content" class="pageContent">
+
 		<div  id="regform" class="regform">
 		<?if(isset($specinfo))echo $specinfo."<br/><br/><br/>";?>
 			<?php 
@@ -24,4 +24,4 @@
 		
 
 </div>
-</div>
+

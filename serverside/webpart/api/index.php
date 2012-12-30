@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 //ErrorCodes
 define('DB_CONNECTION_REFUSE_CODE', 88);
 define('DB_CONNECTION_REFUSE_INFO', "Database connection error");
@@ -233,6 +233,11 @@ else if($json['method']=="addQuest"){feedBack($json['params']);}//-
 else if($json['method']=="rememberPassword"){remember($json['params']);}//-
 else if($json['method']=="deadMoving"){notification($json['params']);}//-
 else if($json['method']=="switchApp"){switchApp($json['params']);}//-
+else if($json['method']=="getUsersInfo"){getUsersInfo();}//-
+else if($json['method']=="getUserRideInfo"){getUserRideInfo($json['params']);}//-
+else if($json['method']=="getUsersInfoOldForm"){getUsersInfoOldForm($json['params']);}//-
+else if($json['method']=="getUsers"){getUsers();}//-
+
 else
 {
 	   $errortype=array('info'=>"No action set, or function is incorrect",'code'=>  6);
@@ -555,17 +560,18 @@ function addNTIFile($param)
 						$ArrayEntry[$i][$j]->setTypeSpeed("normal point");
 						$ArrayEntry[$i][$j]->setTypeAcc("normal point");
 						$speed=($ArrayEntry[$i][$j]->getSpeed());
-
 						$deltaTime=$ArrayEntry[$i][$j]->getTimestamp()-$ArrayEntry[$i][$j-1]->getTimestamp();
 						if(	$deltaTime==0)$deltaTime=1;
+	
 						$deltaTurn=0;
+						/*
 						if($ArrayEntry[$i][$j]->getLng()-$ArrayEntry[$i][$j-1]->getLng()!=0)
 						{
 							$ArrayEntry[$i][$j]->setTurn(atan(($ArrayEntry[$i][$j]->getLat()-$ArrayEntry[$i][$j-1]->getLat())/($ArrayEntry[$i][$j]->getLng()-$ArrayEntry[$i][$j-1]->getLng())));
 							$deltaTurn = 	$ArrayEntry[$i][$j]->getTurn() - $ArrayEntry[$i][$j-1]->getTurn();
 							$wAcc = abs($deltaTurn/($deltaTime));
-							if (($wAcc < 0.25) && ($wAcc >= 0)) {$ArrayEntry[$i][$j]->setsevTurn(0);} 
-							else if (($wAcc >= 0.25) && ($wAcc < 0.5))	{$ArrayEntry[$i][$j]->setsevTurn(1);} 
+							if (($wAcc < 0.15) && ($wAcc >= 0)) {$ArrayEntry[$i][$j]->setsevTurn(0);} 
+							else if (($wAcc >= 0.15) && ($wAcc < 0.5))	{$ArrayEntry[$i][$j]->setsevTurn(1);} 
 							else if (($wAcc >= 0.5) && ($wAcc < 0.75)){$ArrayEntry[$i][$j]->setsevTurn(2);} 
 							else if ($wAcc >= 0.75) {$ArrayEntry[$i][$j]->setsevTurn(3);}
 							$ArrayEntry[$i][$j]->setwAcc($wAcc);
@@ -574,7 +580,7 @@ function addNTIFile($param)
 						{
 							$ArrayEntry[$i][$j]->setTurn($ArrayEntry[$i][$j-1]->getTurn());		
 							$ArrayEntry[$i][$j]->setwAcc($ArrayEntry[$i][$j-1]->getwAcc());	
-						}
+						}*/
 								$deltaSpeed = $speed/3.6 - ($ArrayEntry[$i][$j-1]->getSpeed())/3.6;
 								
 								$accel = $deltaSpeed/$deltaTime;
@@ -623,7 +629,6 @@ function addNTIFile($param)
 								} else	if (($ArrayEntry[$i][$j-1]->getTypeAcc()== "acc1 started") || ($ArrayEntry[$i][$j-1]->getTypeAcc() == "acc1 continued")) {
 									if ($ArrayEntry[$i][$j]->getsevAcc() == 0) {
 										$ArrayEntry[$i][$j]->setTypeAcc("normal point");
-										$acc1++;
 									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 1) {
 										$ArrayEntry[$i][$j]->setTypeAcc("acc1 continued");
 									} else if ($ArrayEntry[$i][$j]->getsevAcc() == 2) {
@@ -719,54 +724,6 @@ function addNTIFile($param)
 										$ArrayEntry[$i][$j]->setTypeAcc("brake3 continued");
 									}
 								}
-
-								//После поворота - нормальная точка.
-							if(($ArrayEntry[$n][$i]->getCompass()>=0 && $ArrayEntry[$n][$i]->getCompass()<=90) || ($ArrayEntry[$n][$i]->getCompass()>=270 && $ArrayEntry[$n][$i]->getCompass()<=360))
-							{
-								if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn finished") || ($ArrayEntry[$i][$j-1]->getTurnType() == "right turn finished") || ($speed == 0) ) {
-									$ArrayEntry[$i][$j]->setTurnType("normal point");
-								// Отклонение > 0.5 - после нормальной точки начинаем поворот налево, либо продолжаем поворот налево после уже начатого, либо завершаем, если это был поворот направо.
-								} else 	if ($deltaTurn > 0.2)   {
-									if ($ArrayEntry[$i][$j-1]->getTurnType() == "normal point") $ArrayEntry[$i][$j]->setTurnType( "left turn started");
-									if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "left turn continued"))$ArrayEntry[$i][$j]->setTurnType("left turn continued");
-									if (($ArrayEntry[$i][$j-1]->getTurnType() == "right turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "right turn continued"))$ArrayEntry[$i][$j]->setTurnType("right turn finished");
-								// Отклонение > 0.5 - после нормальной точки начинаем поворот направо, либо продолжаем поворот направо после уже начатого, либо завершаем, если это был поворот налево.
-								} else 	if ($deltaTurn < -0.2)	{
-									if ($ArrayEntry[$i][$j-1]->getTurnType() == "normal point")$ArrayEntry[$i][$j]->setTurnType("right turn started");
-									if (($ArrayEntry[$i][$j-1]->getTurnType() == "right turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "right turn continued"))$ArrayEntry[$i][$j]->setTurnType("right turn continued");
-									if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "left turn continued"))$ArrayEntry[$i][$j]->setTurnType("left turn finished");
-								} else	{
-								// Отклонение между -0.5 и 0.5 - после нормальной точки идет нормальная, а после начатых поворотов налево или направо - продолженные повороты соответственно налево и направо.
-									if ($ArrayEntry[$i][$j-1]->getTurnType() == "normal point")$ArrayEntry[$i][$j]->setTurnType("normal point");
-									if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "left turn continued"))$ArrayEntry[$i][$j]->setTurnType("left turn finished");
-									if (($ArrayEntry[$i][$j-1]->getTurnType() == "right turn started")||($ArrayEntry[$i][$j-1]->getTurnType()== "right turn continued"))$ArrayEntry[$i][$j]->setTurnType( "right turn finished");
-								}
-							}
-							else
-							{
-									if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn finished") || ($ArrayEntry[$i][$j-1]->getTurnType() == "right turn finished") || ($speed == 0) ) {
-									$ArrayEntry[$i][$j]->setTurnType("normal point");
-								// Отклонение > 0.5 - после нормальной точки начинаем поворот налево, либо продолжаем поворот налево после уже начатого, либо завершаем, если это был поворот направо.
-								} else 	if ($deltaTurn > 0.2)   {
-									if ($ArrayEntry[$i][$j-1]->getTurnType() == "normal point") $ArrayEntry[$i][$j]->setTurnType( "right turn started");
-									if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "left turn continued"))$ArrayEntry[$i][$j]->setTurnType("left turn finished");
-									if (($ArrayEntry[$i][$j-1]->getTurnType() == "right turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "right turn continued"))$ArrayEntry[$i][$j]->setTurnType("right turn continued");
-								// Отклонение > 0.5 - после нормальной точки начинаем поворот направо, либо продолжаем поворот направо после уже начатого, либо завершаем, если это был поворот налево.
-								} else 	if ($deltaTurn < -0.2)	{
-									if ($ArrayEntry[$i][$j-1]->getTurnType() == "normal point")$ArrayEntry[$i][$j]->setTurnType("left turn started");
-									if (($ArrayEntry[$i][$j-1]->getTurnType() == "right turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "right turn continued"))$ArrayEntry[$i][$j]->setTurnType("right turn finished");
-									if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "left turn continued"))$ArrayEntry[$i][$j]->setTurnType("left turn continued");
-								} else	{
-								// Отклонение между -0.5 и 0.5 - после нормальной точки идет нормальная, а после начатых поворотов налево или направо - продолженные повороты соответственно налево и направо.
-									if ($ArrayEntry[$i][$j-1]->getTurnType() == "normal point")$ArrayEntry[$i][$j]->setTurnType("normal point");
-									if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "left turn continued"))$ArrayEntry[$i][$j]->setTurnType("left turn finished");
-									if (($ArrayEntry[$i][$j-1]->getTurnType() == "right turn started")||($ArrayEntry[$i][$j-1]->getTurnType()== "right turn continued"))$ArrayEntry[$i][$j]->setTurnType( "right turn finished");
-								}
-								
-								
-								
-							}
-
 					}
 					$TimeStart=$ArrayEntry[$i][0]->getTimestamp();//Подходит под определение ближайшей
 					$TimeEnd=$ArrayEntry[$i][0]->getTimestamp();//Хз может быть и перемешанно , пусть поищет
@@ -774,6 +731,68 @@ function addNTIFile($param)
 					//Теперь ищем начало и конец поездки 
 					$mid_speed=0;
 					$preCount=count($ArrayEntry[$i])-1;
+					//Начинаем считать количество поворотов
+					//Для этого есть уравнения кривой
+					/*
+					 * 1)Находим K прямой с координатами (отрезка короч):(x[i-2],y[i-2])(x[i-1],y[i-1])
+					 * 2)1)Находим K прямой с координатами (отрезка короч):(x[i-1],y[i-1])(x[i],y[i])
+					 * 3)Получаем по форму 
+					 * arctan(k2-k1/(1+k1k2))=(A)
+					 * ---- получаем угол - если больше 2-х точек отличаются на 15 градусов , говорим, что там был поворот
+					 */ 
+					 
+					for($j=2;$j<$preCount;$j++)
+					{
+						//Сначала проверяем -  есть ли где-нибудь нули
+						$dX1=$ArrayEntry[$i][$j-1]->getLat()-$ArrayEntry[$i][$j-2]->getLat();
+						$dY1=$ArrayEntry[$i][$j-1]->getLng()-$ArrayEntry[$i][$j-2]->getLng();
+						
+						$dX2=$ArrayEntry[$i][$j]->getLat()-$ArrayEntry[$i][$j-1]->getLat();
+						$dY2=$ArrayEntry[$i][$j]->getLng()-$ArrayEntry[$i][$j-1]->getLng();
+						if($dX1==0)$k1=0;
+						else
+							$k1=$dY1/$dX1;
+							
+						if($dX2==0)$k2=0;
+						else
+							$k2=$dY2/$dX2;
+							//Получили угол
+
+							
+						$Angle=rad2deg(atan(($k2-$k1)/(1+$k1*$k2)));
+						$deltaTime=$ArrayEntry[$i][$j]->getTimestamp()-$ArrayEntry[$i][$j-1]->getTimestamp();
+						if(	$deltaTime==0)$deltaTime=1;
+							if(abs($Angle)>15 && abs($Angle)<20)
+							{$ArrayEntry[$i][$j]->setsevTurn(1);
+							$wAcc=abs($Angle)/$deltaTime;
+							}
+							
+							if(abs($Angle)>20 && abs($Angle)<30)
+							{$ArrayEntry[$i][$j]->setsevTurn(2);
+							$wAcc=abs($Angle)/$deltaTime;}
+								
+							
+							if(abs($Angle)>30)
+							{$ArrayEntry[$i][$j]->setsevTurn(3);
+							$wAcc=abs($Angle)/$deltaTime;}
+							$ArrayEntry[$i][$j]->setwAcc($wAcc);	
+							
+						
+						
+								if (abs($Angle)> 15 && $Angle>0)   {
+									if ($ArrayEntry[$i][$j-1]->getTurnType() == "normal point") $ArrayEntry[$i][$j]->setTurnType( "left turn started");
+									if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "left turn continued"))$ArrayEntry[$i][$j]->setTurnType("left turn continued");
+									if (($ArrayEntry[$i][$j-1]->getTurnType() == "right turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "right turn continued"))$ArrayEntry[$i][$j]->setTurnType("right turn finished");
+								// Отклонение > 0.5 - после нормальной точки начинаем поворот направо, либо продолжаем поворот направо после уже начатого, либо завершаем, если это был поворот налево.
+								} else 	if (abs($Angle)> 15 && $Angle<0)	{
+									if ($ArrayEntry[$i][$j-1]->getTurnType() == "normal point")$ArrayEntry[$i][$j]->setTurnType("right turn started");
+									if (($ArrayEntry[$i][$j-1]->getTurnType() == "right turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "right turn continued"))$ArrayEntry[$i][$j]->setTurnType("right turn continued");
+									if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "left turn continued"))$ArrayEntry[$i][$j]->setTurnType("left turn finished");
+								} 			
+					}
+					
+					
+					
 					for($j=0;$j<$preCount;$j++)
 					{
 						$mid_speed+=$ArrayEntry[$i][$j]->getSpeed();
@@ -787,12 +806,12 @@ function addNTIFile($param)
 										}
 						}
 						
-						if($ArrayEntry[$i][$j]->getTurnType()=="brake3 started")$brake3++;
-						if($ArrayEntry[$i][$j]->getTurnType()=="brake2 started")$brake2++;
-						if($ArrayEntry[$i][$j]->getTurnType()=="brake1 started")$brake1++;
-						if($ArrayEntry[$i][$j]->getTurnType()=="acc1 started")$acc1++;
-						if($ArrayEntry[$i][$j]->getTurnType()=="acc2 started")$acc2++;
-						if($ArrayEntry[$i][$j]->getTurnType()=="acc3 started")$acc3++;
+						if($ArrayEntry[$i][$j]->getTypeAcc()=="brake3 started")$brake3++;
+						if($ArrayEntry[$i][$j]->getTypeAcc()=="brake2 started")$brake2++;
+						if($ArrayEntry[$i][$j]->getTypeAcc()=="brake1 started")$brake1++;
+						if($ArrayEntry[$i][$j]->getTypeAcc()=="acc1 started")$acc1++;
+						if($ArrayEntry[$i][$j]->getTypeAcc()=="acc2 started")$acc2++;
+						if($ArrayEntry[$i][$j]->getTypeAcc()=="acc3 started")$acc3++;
 						if($ArrayEntry[$i][$j]->getTimestamp()<$TimeStart)$TimeStart=$ArrayEntry[$i][$j]->getTimestamp();
 						if($ArrayEntry[$i][$j]->getTimestamp()>$TimeEnd)$TimeEnd=$ArrayEntry[$i][$j]->getTimestamp();
 						if($TotalDistance<$ArrayEntry[$i][$j]->getDistance())$TotalDistance=$ArrayEntry[$i][$j]->getDistance();
@@ -824,7 +843,7 @@ function addNTIFile($param)
 						{
 							if($ArrayEntry[$i][$j]->getCurPath()==0)
 							{
-								if(dstBetweenPointsMet($curLat,$curLng,$ArrayEntry[$i][$j-1]->getLat(),$ArrayEntry[$i][$j-1]->getLng())/(1+abs($curtime-$ArrayEntry[$i][$j-1]->getTimestamp()))<50)
+								if(dstBetweenPointsMet($curLat,$curLng,$ArrayEntry[$i][$j-1]->getLat(),$ArrayEntry[$i][$j-1]->getLng())/(1+abs($curtime-$ArrayEntry[$i][$j-1]->getTimestamp()))<((max($ArrayEntry[$i][$j-1]->getTimestamp(),$ArrayEntry[$i][$j]->getTimestamp())+5)/3.6))
 								{
 									$ArrayEntry[$i][$j]->setCurPath($k+1);
 								}
@@ -853,26 +872,6 @@ function addNTIFile($param)
 						if($tmpPathCount<$curPathCount){$tmpPathCount=$curPathCount;$curPathID=$k+1;}
 						$curPathCount=0;
 					}
-					$NTIErrorTrackInfo="";
-
-						for($k=0;$k<=$predifinedTrack;$k++)
-						{
-							$NTIErrorTrackInfo.="\n\n\nNew track\n";
-							$NTIErrorTrackInfo.=$k+1;
-							 $NTIErrorTrackInfo.="\n";
-							
-							for($j=1;$j<$preCount;$j++)
-							{
-									if($ArrayEntry[$i][$j]->getCurPath()==$k+1)
-								{
-									$NTIErrorTrackInfo.=$ArrayEntry[$i][$j]->getLat()."   ".$ArrayEntry[$i][$j]->getLng()."    ".$ArrayEntry[$i][$j]->getTimestamp()."\n";
-								}
-							}
-						}
-
-					$NTIErrorTrackInfo=mysql_real_escape_string($NTIErrorTrackInfo);
-					$sql_insert_str="insert into NTIErrorTrack(Info) values ('$NTIErrorTrackInfo')";
-						mysql_query($sql_insert_str);
 					//Если 1 значит стоит записать все точки 
 					if($predifinedTrack==0)$curPathID=-1;
 					if($TotalDistance<=0)$TotalDistance=1;
@@ -938,10 +937,10 @@ function addNTIFile($param)
 					if($Qt==0)$Qt=1;
 					if($Qb==0)$Qb=1;
 					
-					$Kua=1/sqrt(1+$KvnA/$Qa);
-					$Kub=1/sqrt(1+$KvnB/$Qb);
-					$Kus=1/sqrt(1+$KvnS/$Qs);
-					$Kut=1/sqrt(1+$KvnT/$Qt);
+					$Kua=1/(1+$KvnA/$Qa);
+					$Kub=1/(1+$KvnB/$Qb);
+					$Kus=1/(1+$KvnS/$Qs);
+					$Kut=1/(1+$KvnT/$Qt);
 		
 					$score=0.10*$Kua+0.35*$Kub+0.30*$Kus+0.25*$Kut;
 					$score_speed =$Kus;
@@ -997,7 +996,7 @@ function addNTIFile($param)
 							if($curPathID!=-1)
 							{
 								if($ArrayEntry[$i][$j]->getCurPath()==$curPathID)
-														mysql_query($sql_insert_str);
+								mysql_query($sql_insert_str);
 							}
 							else
 							mysql_query($sql_insert_str);
@@ -1452,5 +1451,155 @@ function notification($param)
 	echo json_encode($res);	
 
 }
+
+function getUsersInfo()
+{
+		if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  7);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
+		$result = mysql_query("SELECT `Id`,`UID`,
+			coalesce((select Login from NTIUsers where Id=UID),-3) as Nm,
+			`TimeStart`,
+			`TimeEnd`,
+`TotalAcc1Count`,
+`TotalAcc2Count`,
+`TotalAcc3Count`,
+`TotalBrake1Count`,
+`TotalBrake2Count`,
+`TotalBrake3Count`,
+`TotalSpeed1Count`,
+`TotalSpeed2Count`,
+`TotalSpeed3Count`,
+`TotalTurn1Count`,
+`TotalTurn2Count`,
+`TotalTurn3Count`,
+`TurnScore`,`BrakeScore`,`SpeedScore`,`AccScore`,`TotalScore`
+			FROM `NTIUserDrivingTrack`");
+			$i=0;
+			while($row = mysql_fetch_array($result))
+			{
+				$res[$i]['Id']=$row['Id'];
+				$res[$i]['UID']=$row['UID'];
+				$res[$i]['Name']=$row['Nm'];
+				$res[$i]['TimeStart']=$row['TimeStart'];
+				$res[$i]['TimeEnd']=$row['TimeEnd'];
+$res[$i]['TotalAcc1Count']=$row['TotalAcc1Count'];
+$res[$i]['TotalAcc2Count']=$row['TotalAcc2Count'];
+$res[$i]['TotalAcc3Count']=$row['TotalAcc3Count'];
+$res[$i]['TotalBrake1Count']=$row['TotalBrake1Count'];
+$res[$i]['TotalBrake2Count']=$row['TotalBrake2Count'];
+$res[$i]['TotalBrake3Count']=$row['TotalBrake3Count'];
+$res[$i]['TotalSpeed1Count']=$row['TotalSpeed1Count'];
+$res[$i]['TotalSpeed2Count']=$row['TotalSpeed2Count'];
+$res[$i]['TotalSpeed3Count']=$row['TotalSpeed3Count'];
+$res[$i]['TurnScore']=$row['TurnScore'];
+$res[$i]['BrakeScore']=$row['BrakeScore'];
+$res[$i]['SpeedScore']=$row['SpeedScore'];
+$res[$i]['AccScore']=$row['AccScore'];
+$res[$i]['TotalScore']=$row['TotalScore'];
+
+				$i++;
+			} 	$errortype=array('info'=>"",'code'=>  0);
+	$rest=array('result'=>$res,'error'=> $errortype);
+	echo json_encode($rest,JSON_NUMERIC_CHECK );	
+}
+
+function getUserRideInfo($param)
+{
+		if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  7);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
+		$id=mysql_real_escape_string($param['id']);
+		$result = mysql_query("SELECT `Id`,`UID`,`accx`,`accy`,`distance`,`lat`,`lng`,`direction`,`compass`,`speed`,`utimestamp`,`sevAcc`,`sevTurn` ,`sevSpeed`,`Accel`,`wAcc` FROM `NTIUserDrivingEntry` WHERE `DrivingID`='$id'");
+			$i=0;
+			while($row = mysql_fetch_array($result))
+			{
+				$res[$i]['Id']=$row['Id'];
+				$res[$i]['UID']=$row['UID'];
+				$res[$i]['accx']=$row['accx'];
+				$res[$i]['accy']=$row['accy'];
+				$res[$i]['distance']=$row['distance'];
+				$res[$i]['lat']=$row['lat'];
+				$res[$i]['lng']=$row['lng'];
+				$res[$i]['direction']=$row['direction'];
+				$res[$i]['compass']=$row['compass'];
+				$res[$i]['speed']=$row['speed'];
+				$res[$i]['utimestamp']=$row['utimestamp'];
+				$res[$i]['sevAcc']=$row['sevAcc'];
+				$res[$i]['sevSpeed']=$row['sevSpeed'];
+				$res[$i]['Accel']=$row['Accel'];
+				$res[$i]['wAcc']=$row['wAcc'];			
+				$i++;
+			} $errortype=array('info'=>"",'code'=>  0);
+	$rest=array('result'=>$res,'error'=> $errortype);
+	echo json_encode($rest,JSON_NUMERIC_CHECK );	
+}
+
+function getUsers()
+{
+		if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  7);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
+		$result = mysql_query("SELECT Id,Login,(select count(*) from NTIUserDrivingTrack where UID=NTIUsers.Id) as Total FROM `NTIUsers`");
+			$i=0;
+			while($row = mysql_fetch_array($result))
+			{
+				$res[$i]['Id']=$row['Id'];
+				$res[$i]['Name']=$row['Login'];
+                               $res[$i]['Total']=$row['Total'];
+				$i++;
+			} $errortype=array('info'=>"",'code'=>  0);
+	$rest=array('result'=>$res,'error'=> $errortype);
+	echo json_encode($rest,JSON_NUMERIC_CHECK );	
+}
+
+
+
+
+function getUsersInfoOldForm()
+{
+		if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  7);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
+		$result = mysql_query("SELECT `Id`,`UID`,
+			coalesce((select Login from NTIUsers where Id=UID),-3) as Nm,
+			`TimeStart`,
+			`TimeEnd`,
+`TotalAcc1Count`,
+`TotalAcc2Count`,
+`TotalAcc3Count`,
+`TotalBrake1Count`,
+`TotalBrake2Count`,
+`TotalBrake3Count`,
+`TotalSpeed1Count`,
+`TotalSpeed2Count`,
+`TotalSpeed3Count`,
+`TotalTurn1Count`,
+`TotalTurn2Count`,
+`TotalTurn3Count`,
+`OTurnScore`,`OBrakeScore`,`OSpeedScore`,`OAccScore`,`OldStats`
+			FROM `NTIUserDrivingTrack`");
+			$i=0;
+			while($row = mysql_fetch_array($result))
+			{
+				$res[$i]['Id']=$row['Id'];
+				$res[$i]['UID']=$row['UID'];
+				$res[$i]['Name']=$row['Nm'];
+				$res[$i]['TimeStart']=$row['TimeStart'];
+				$res[$i]['TimeEnd']=$row['TimeEnd'];
+$res[$i]['TotalAcc1Count']=$row['TotalAcc1Count'];
+$res[$i]['TotalAcc2Count']=$row['TotalAcc2Count'];
+$res[$i]['TotalAcc3Count']=$row['TotalAcc3Count'];
+$res[$i]['TotalBrake1Count']=$row['TotalBrake1Count'];
+$res[$i]['TotalBrake2Count']=$row['TotalBrake2Count'];
+$res[$i]['TotalBrake3Count']=$row['TotalBrake3Count'];
+$res[$i]['TotalSpeed1Count']=$row['TotalSpeed1Count'];
+$res[$i]['TotalSpeed2Count']=$row['TotalSpeed2Count'];
+$res[$i]['TotalSpeed3Count']=$row['TotalSpeed3Count'];
+$res[$i]['TurnScore']=$row['OTurnScore'];
+$res[$i]['BrakeScore']=$row['OBrakeScore'];
+$res[$i]['SpeedScore']=$row['OSpeedScore'];
+$res[$i]['AccScore']=$row['OAccScore'];
+$res[$i]['TotalScore']=$row['OldStats'];
+
+				$i++;
+			} 	$errortype=array('info'=>"",'code'=>  0);
+	$rest=array('result'=>$res,'error'=> $errortype);
+	echo json_encode($rest,JSON_NUMERIC_CHECK );	
+}
+
+
 
 ?>

@@ -1,4 +1,4 @@
-<div id="content" class="pageContent">
+
 <h3 align="left">Введите границы интервала (в формате MM-DD-YYYY)</h3>
 	<br>
 	<?php echo form_open('user/search/'.$linkid); ?>
@@ -96,4 +96,4 @@
 		if ((isset($is_set)) && ($is_set != 1)) {?><span style="color:red">Данных за указанный период не найдено.</span><br><?}
 	}
 	?>
-</div>
+

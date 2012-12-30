@@ -1,4 +1,4 @@
-﻿<div id="content" class="pageContent">
+﻿
 	<div  id="loginview" class="loginview">
 		<?
 			if(isset($temp_info))echo $temp_info;
@@ -33,4 +33,4 @@
 	?>
 	
 	</div>
-			</div>
+

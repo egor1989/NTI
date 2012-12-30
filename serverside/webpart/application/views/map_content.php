@@ -1,4 +1,4 @@
-<div id="content" class="pageContent">
+
        <p id="wait" style="position:absolute; border:2px solid #369; background-color:white; z-index:1000; margin:2em; padding:0.2em 1em; font-size:3em;">Loading...</p>
        <table width=100%>
        <tr>
@@ -69,6 +69,4 @@
 			</tr>
 		</table>
 		
-		
-		
-</div>
+

@@ -1,4 +1,4 @@
-﻿<div id="content" class="pageContent">
+﻿
 
 		Все заявки<br/>
 		<?$this->load->helper('form');?>
@@ -43,12 +43,4 @@
 		?>
 		</table>
 		<?}?>
-		
 
-		
-		
-	
-		
-
-
-</div>
