@@ -1,6 +1,4 @@
-﻿<div id="content" class="pageContent">
-	<center><? echo $name." ". $sname;?>, PeacockTeam приветствует Вас!</center><br/><br/><br/>	
-<?if ($users == -1) {
+﻿<?if ($users == -1) {
 	?><span style="color:black;font-size: 12px;">На данный момент, у вас 0 (ноль) пользователей.</span><br>
 <?}
 else if ($users == 1) {
@@ -83,9 +81,3 @@ else if ($users == 1) {
 		?>
 		</table>
 		<?}?>
-	
-	
-	
-
-	
-</div>

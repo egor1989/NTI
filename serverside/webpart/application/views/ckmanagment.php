@@ -1,4 +1,4 @@
-﻿<div id="content" class="pageContent">
+﻿
 	<?if(isset($some_info))echo $some_info;?>
 	<table border=1>
 		<tr>
@@ -41,9 +41,6 @@
 		</tr>
 		<?}?>
 	</table>
-</div>
-
-
 
 
 

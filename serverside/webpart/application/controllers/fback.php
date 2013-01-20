@@ -4,7 +4,7 @@ class Fback extends CI_Controller {
 	
 	public function index() {
 		$newdata['rights'] = $this->session->userdata('rights');
-		if (($newdata['rights'] == 0) || ($newdata['rights'] == 1)) {
+		if (($newdata['rights'] == 0) || ($newdata['rights'] != 3)) {
 			$newdata['id'] = $this->session->userdata('id');
 			$newdata['derr'] = 0;
 			$this->load->view('header', $newdata);

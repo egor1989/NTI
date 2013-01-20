@@ -1,4 +1,4 @@
-﻿<div id="content" class="pageContent">
+﻿
 Пользователи системы 
 
 <table border=1>
@@ -63,4 +63,4 @@
 		
 </table>
 <? echo $pager;?>
-</div>
+

@@ -3,6 +3,7 @@
 class functions extends CI_Controller {
 	public function get()
 	{	
+		date_default_timezone_set('Europe/Moscow');
 		if($this->session->userdata('rights')==3)
 		{
 					$this->load->model('lays_model');

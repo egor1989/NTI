@@ -1,4 +1,4 @@
-﻿<div id="content" class="pageContent">
+﻿
 	<?if(isset($some_info))echo $some_info;?>
 				Введите имя для поиска
 			<?
@@ -63,7 +63,6 @@
 	</table>
 	<?}?>
 	<?if($isfounded==0)echo "По вашему запросу ничего не найти<br/>";?>
-</div>
 
 
 

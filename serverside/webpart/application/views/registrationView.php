@@ -1,4 +1,4 @@
-<div id="content" class="pageContent">
+
 	<div  id="regform" class="regform">
 		После регистрации Вам будет выслана ссылка для подтверждения аккаунта.
 		<?if(isset($specinfo))echo $specinfo."<br/><br/><br/>";?>
@@ -25,7 +25,7 @@
 		</table>
 		<?echo form_close();?>
 </div>
-</div>
+
 
 				
 				

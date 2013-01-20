@@ -1,4 +1,4 @@
-﻿<div id="content" class="pageContent">
+﻿
 <?
 	
 	if ((isset($trr['total_trips']))&&($trr['total_trips']> 0)) {
@@ -92,4 +92,4 @@
 		<h3>Нет данных по поездкам или данные еще не поступили.</h3>
 	<?}
 ?>
-</div>
+

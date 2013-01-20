@@ -1,4 +1,4 @@
-﻿<div id="content" class="pageContent">
+﻿
 	<a href="/user/csv/<? echo $Id;?>">Ссылка на файл событий для скачивания</a>
 <table border=1>
 	<tr>
@@ -49,4 +49,4 @@
 
 <?}?>
 </table>
-</div>
+
