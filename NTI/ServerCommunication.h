@@ -24,7 +24,7 @@
     NSString *systemVersion;
     NSString *model;
     NSString *carrierName;
-    
+    NSData *dataAfterError;
 
     
 }

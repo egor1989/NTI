@@ -33,6 +33,9 @@
 		27A3755615F635D7002B51CB /* release_notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 27A3755215F635D7002B51CB /* release_notes.txt */; };
 		27CFA5301521EBA300F9AC21 /* FeedBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27CFA52E1521EBA300F9AC21 /* FeedBackViewController.m */; };
 		27EDA63B152B117A00679B25 /* MyTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 27EDA63A152B117A00679B25 /* MyTextField.m */; };
+		5302C01316AC224800AE1CF6 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 5302C01216AC224800AE1CF6 /* logo.png */; };
+		5302C01516AC22D800AE1CF6 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 538479761616027000927498 /* Default@2x.png */; };
+		5302C01616AC22EB00AE1CF6 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 538479781616027900927498 /* Default-568h@2x.png */; };
 		531D3228154D641C00FC4C2B /* StatHelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531D3227154D641C00FC4C2B /* StatHelpViewController.m */; };
 		531D324F1551A16C00FC4C2B /* GzipCompress.m in Sources */ = {isa = PBXBuildFile; fileRef = 531D324E1551A16B00FC4C2B /* GzipCompress.m */; };
 		5335372A15ECE440004F4A99 /* DeviceInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 5335372915ECE43F004F4A99 /* DeviceInfo.m */; };
@@ -41,8 +44,6 @@
 		536E026F14F00625003A2B15 /* compass.png in Resources */ = {isa = PBXBuildFile; fileRef = 536E026E14F00625003A2B15 /* compass.png */; };
 		5381C8F7153046380012E99D /* RecordAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 5381C8F6153046380012E99D /* RecordAction.m */; };
 		538479751616026100927498 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 538479741616026100927498 /* Default.png */; };
-		538479771616027100927498 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 538479761616027000927498 /* Default@2x.png */; };
-		538479791616027900927498 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 538479781616027900927498 /* Default-568h@2x.png */; };
 		53847995161A00B300927498 /* blogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 53847994161A00B300927498 /* blogo.png */; };
 		53847997161A00F500927498 /* blogo2.png in Resources */ = {isa = PBXBuildFile; fileRef = 53847996161A00F500927498 /* blogo2.png */; };
 		539B29BE14F305C3007E6977 /* gps.png in Resources */ = {isa = PBXBuildFile; fileRef = 539B29BC14F305C3007E6977 /* gps.png */; };
@@ -131,6 +132,7 @@
 		27CFA52E1521EBA300F9AC21 /* FeedBackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedBackViewController.m; sourceTree = "<group>"; };
 		27EDA639152B117A00679B25 /* MyTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTextField.h; sourceTree = "<group>"; };
 		27EDA63A152B117A00679B25 /* MyTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTextField.m; sourceTree = "<group>"; };
+		5302C01216AC224800AE1CF6 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = logo.png; path = Images/logo.png; sourceTree = "<group>"; };
 		531D3226154D641C00FC4C2B /* StatHelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StatHelpViewController.h; path = ../StatHelpViewController.h; sourceTree = "<group>"; };
 		531D3227154D641C00FC4C2B /* StatHelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StatHelpViewController.m; path = ../StatHelpViewController.m; sourceTree = "<group>"; };
 		531D324D1551A16B00FC4C2B /* GzipCompress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GzipCompress.h; path = ../GzipCompress.h; sourceTree = "<group>"; };
@@ -284,6 +286,7 @@
 		276C4C9214DEE6EA00C469A6 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				5302C01216AC224800AE1CF6 /* logo.png */,
 				53A2F1B715BECF6500B948A4 /* refresh.png */,
 				277925AA15349FA90062D871 /* time.png */,
 				2763714C152A4E94003FE70B /* Icons */,
@@ -684,10 +687,11 @@
 				27A3755515F635D7002B51CB /* README.txt in Resources */,
 				27A3755615F635D7002B51CB /* release_notes.txt in Resources */,
 				538479751616026100927498 /* Default.png in Resources */,
-				538479771616027100927498 /* Default@2x.png in Resources */,
-				538479791616027900927498 /* Default-568h@2x.png in Resources */,
 				53847995161A00B300927498 /* blogo.png in Resources */,
 				53847997161A00F500927498 /* blogo2.png in Resources */,
+				5302C01316AC224800AE1CF6 /* logo.png in Resources */,
+				5302C01516AC22D800AE1CF6 /* Default@2x.png in Resources */,
+				5302C01616AC22EB00AE1CF6 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -784,8 +788,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Vladislav Efremov";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Vladislav Efremov";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -794,6 +798,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PROVISIONING_PROFILE = "D97EA730-417A-4004-90DC-D4319BB680A6";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D97EA730-417A-4004-90DC-D4319BB680A6";
 				SDKROOT = iphoneos;
 				STRIP_INSTALLED_PRODUCT = NO;
 				VALIDATE_PRODUCT = YES;
@@ -855,8 +861,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Vladislav Efremov (MBL7632743)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vladislav Efremov (MBL7632743)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Vladislav Efremov";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Vladislav Efremov";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -865,8 +871,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "066FA6CD-82FF-4D47-892B-C75B48E3CD4A";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "066FA6CD-82FF-4D47-892B-C75B48E3CD4A";
+				PROVISIONING_PROFILE = "D97EA730-417A-4004-90DC-D4319BB680A6";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D97EA730-417A-4004-90DC-D4319BB680A6";
 				SDKROOT = iphoneos;
 				STRIP_INSTALLED_PRODUCT = NO;
 				VALIDATE_PRODUCT = YES;

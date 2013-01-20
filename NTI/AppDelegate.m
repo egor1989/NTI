@@ -24,7 +24,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {  
-    freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);      //!!!!!не забывать убирать логирвоание
+   //!!! freopen([[FileController filePath] cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);      //!!!!!не забывать убирать логирвоание
     [self appLife:@"on" time: [NSString stringWithFormat:@"%.f", [[NSDate date]timeIntervalSince1970]]];
     
     locationManager = [[CLLocationManager alloc] init];
@@ -34,7 +34,7 @@
         //тестовый блок, будет показывать local notification с координатами
              UILocalNotification *notification = [[UILocalNotification alloc] init];
              notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:15];
-             notification.alertBody = [NSString stringWithFormat:@"NTI. New location alert"];
+             notification.alertBody = [NSString stringWithFormat:@"NTI. Оповещение о начале движения"];
              [[UIApplication sharedApplication] scheduleLocalNotification:notification];
         
       //  if ([ServerCommunication checkInternetConnection: NO]) {
@@ -204,7 +204,7 @@
         
         UILocalNotification *notification = [[UILocalNotification alloc] init];
         notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:15];
-        notification.alertBody = [NSString stringWithFormat:@"NTI-BACKGROUND. New location alert"];
+        notification.alertBody = [NSString stringWithFormat:@"NTI-BACKGROUND. Оповещение о начале движения"];
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
         
         

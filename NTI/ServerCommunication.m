@@ -106,13 +106,20 @@
     
     if (requestError!=nil) {
         NSLog(@"%@", requestError);
-        [self uploadData:fileContent];
+        dataAfterError = fileContent;
+        //[self uploadData:fileContent];
+        [self uploadData:dataAfterError];
     }
     
     returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
     NSLog(@"returnData: %@", returnString);
     BOOL error = [self checkErrors:returnString method:@"sendData"];
-    if (error) [self uploadData:fileContent];
+    if (error) {
+        dataAfterError = fileContent;
+        //[self uploadData:fileContent];
+        [self uploadData:dataAfterError];
+
+    }
 }
  
  
