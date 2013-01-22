@@ -201,6 +201,16 @@
     return sendArray;
 }
 
+- (void)writeToBD: (NSData *)data{
+    //data to array
+    SBJsonParser *jsonParser = [SBJsonParser new];
+    NSArray *answer = [jsonParser objectWithData: data];
+    NSThread* myThread = [[NSThread alloc] initWithTarget:databaseAction
+                                                 selector:@selector(addArray:)
+                                                   object:answer];
+    [myThread start];
+}
+
 
 
 

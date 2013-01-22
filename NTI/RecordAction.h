@@ -35,6 +35,7 @@
 - (void)eventRecord: (NSString *)type;
 - (void)checkActivity;
 - (NSMutableArray *)JSONFormat: (NSMutableArray *)sendData;
+- (void)writeToBD: (NSData *)data;
 
 
 @end

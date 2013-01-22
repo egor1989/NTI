@@ -7,6 +7,7 @@
 //
 
 #import "ServerCommunication.h"
+#import "RecordAction.h"
 
 @implementation ServerCommunication
 @synthesize errors;
@@ -61,7 +62,8 @@
 }
 
 - (void)uploadData:(NSData *)fileContent{
-
+    //TODO каждый раз проверять размер БД, если больше 100 отправлять.
+    
     NSLog(@"SC -upload data");
     NSString *cookie = [self refreshCookie];
     NSLog(@"current cookie = %@",cookie);
@@ -71,9 +73,7 @@
     NSString *requestContent = [NSString stringWithFormat:@"{\"method\":\"addNTIFile\",\"params\":{\"ntifile\":%@}}",sJSON];
         
     NSLog(@"Request: %@", requestContent);
-        
-  
-
+    
     requestData = [NSData dataWithBytes:[requestContent UTF8String] length:[requestContent length]];
     NSData *compressData = [GzipCompress gzipDeflate:requestData];
     
@@ -105,20 +105,31 @@
     NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: &response error: &requestError ];
     
     if (requestError!=nil) {
+        //TODO протестировать
         NSLog(@"%@", requestError);
-        dataAfterError = fileContent;
-        //[self uploadData:fileContent];
-        [self uploadData:dataAfterError];
+        RecordAction *recordAction = [[RecordAction alloc] init];
+        [recordAction writeToBD:fileContent];
+       // if (sendError) {
+                //запись в бд
+            
+            //sendError = NO;
+       // }
+       // else {
+       //     dataAfterError = fileContent;
+      //      [self uploadData:dataAfterError];
+      //      sendError = YES;
+      //  }
     }
     
     returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
     NSLog(@"returnData: %@", returnString);
     BOOL error = [self checkErrors:returnString method:@"sendData"];
     if (error) {
-        dataAfterError = fileContent;
+        //dataAfterError = fileContent;
         //[self uploadData:fileContent];
-        [self uploadData:dataAfterError];
-
+        //[self uploadData:dataAfterError];
+        RecordAction *recordAction = [[RecordAction alloc] init];
+        [recordAction writeToBD:fileContent];
     }
 }
  
@@ -562,7 +573,8 @@
 }
 
 + (BOOL)checkInternetConnection: (BOOL)needNotify{
-
+    
+    
     Reachability* reach = [Reachability reachabilityForInternetConnection];
     
     NetworkStatus hostStatus = [reach currentReachabilityStatus];

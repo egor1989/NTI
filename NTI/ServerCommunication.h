@@ -25,7 +25,7 @@
     NSString *model;
     NSString *carrierName;
     NSData *dataAfterError;
-
+   // BOOL sendError;
     
 }
 - (void)regUser:(NSString *)login password:(NSString *)password email:(NSString *)email;
