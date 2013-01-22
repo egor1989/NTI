@@ -669,41 +669,47 @@
 }
 
 - (IBAction)sendButton:(id)sender{
+    if ([MFMailComposeViewController canSendMail]){
+        MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] initWithNibName:@"Email" bundle:nil];
+        
+        picker.mailComposeDelegate = self;
+        
+        // Set the subject of email
+        [picker setSubject:@"NTI"];
+        
+        // Add email addresses
+        // Notice three sections: "to" "cc" and "bcc"
+        [picker setToRecipients:[NSArray arrayWithObjects: @"peacock7team@gmail.com", nil]];
+        
+        // Fill out the email body text
+        NSString *emailBody = @"NTI log file";
+        
+        // This is not an HTML formatted email
+        [picker setMessageBody:emailBody isHTML:NO];
+        
+        
+        fileController = [[FileController alloc] init];
+        NSData *attachment = [fileController makeArchive];
+        
+        // Attach  data to the email
+        
+        [picker addAttachmentData:attachment mimeType:@"application/zip" fileName:@"LOG"];
+        
+        
+        // Show email view
+        //[self presentViewController:picker animated:YES completion:nil];
+        [self presentModalViewController:picker animated:YES];
+        
+        // Release picker
+        //[self dismissModalViewControllerAnimated:YES];
+
+    }
+    else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка отправки!" message:@"Настройте почту и/или проверьте интернет соединение" delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
+          [alert show];
+    }
     
-    
-    MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] initWithNibName:@"Email" bundle:nil];
-    picker.mailComposeDelegate = self;
-    
-	// Set the subject of email
-    [picker setSubject:@"NTI"];
-    
-	// Add email addresses
-    // Notice three sections: "to" "cc" and "bcc"	
-    [picker setToRecipients:[NSArray arrayWithObjects: @"peacock7team@gmail.com", nil]];		
-    
-	// Fill out the email body text
-	NSString *emailBody = @"NTI log file";
-    
-	// This is not an HTML formatted email
-	[picker setMessageBody:emailBody isHTML:NO];
-    
-    
-    fileController = [[FileController alloc] init];
-    NSData *attachment = [fileController makeArchive];
-    
-    // Attach  data to the email
-    
-	
-	[picker addAttachmentData:attachment mimeType:@"application/zip" fileName:@"LOG"];
-    
-    
-	// Show email view
-	
-	[self presentModalViewController:picker animated:YES];
-    
-	// Release picker
-    //[self dismissModalViewControllerAnimated:YES];
-    
+        
 }
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error 
