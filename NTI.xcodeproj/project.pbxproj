@@ -194,6 +194,7 @@
 		53E0A83514E6DDEB004E3E1B /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
 		53E0A83614E6DDEB004E3E1B /* ZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipArchive.h; sourceTree = "<group>"; };
 		53E0A83714E6DDEB004E3E1B /* ZipArchive.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ZipArchive.mm; sourceTree = "<group>"; };
+		53EDE6AD16B4288900608901 /* NTI.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = NTI.entitlements; sourceTree = "<group>"; };
 		53F0061215077DCB0074156E /* AuthViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AuthViewController.h; path = NTI/AuthViewController.h; sourceTree = "<group>"; };
 		53F0061315077DCB0074156E /* AuthViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AuthViewController.m; path = NTI/AuthViewController.m; sourceTree = "<group>"; };
 		53F0061715077F380074156E /* RegistrationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RegistrationViewController.h; path = NTI/RegistrationViewController.h; sourceTree = "<group>"; };
@@ -455,6 +456,7 @@
 		53E0A77014DEC75D004E3E1B /* NTI */ = {
 			isa = PBXGroup;
 			children = (
+				53EDE6AD16B4288900608901 /* NTI.entitlements */,
 				531D32501551A17800FC4C2B /* GZIP */,
 				27792596153486800062D871 /* route.csv */,
 				5361751A1510F8DB00D290F1 /* Reachability */,
@@ -788,8 +790,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Vladislav Efremov";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Vladislav Efremov";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Vladislav Efremov (MBL7632743)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vladislav Efremov (MBL7632743)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -798,8 +800,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "D97EA730-417A-4004-90DC-D4319BB680A6";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D97EA730-417A-4004-90DC-D4319BB680A6";
+				PROVISIONING_PROFILE = "147B0CD0-957E-4598-A533-071791E7CB77";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "066FA6CD-82FF-4D47-892B-C75B48E3CD4A";
 				SDKROOT = iphoneos;
 				STRIP_INSTALLED_PRODUCT = NO;
 				VALIDATE_PRODUCT = YES;
@@ -809,8 +811,9 @@
 		27DAEBCE159334A6008B37D8 /* Ad-hoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_ENTITLEMENTS = NTI/NTI.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Vladislav Efremov (MBL7632743)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vladislav Efremov (MBL7632743)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NTI/NTI-Prefix.pch";
 				INFOPLIST_FILE = "NTI/NTI-Info.plist";
@@ -819,8 +822,8 @@
 					"\"$(SRCROOT)/TestFlightSDK1.0\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "147B0CD0-957E-4598-A533-071791E7CB77";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "147B0CD0-957E-4598-A533-071791E7CB77";
 				VALID_ARCHS = armv7;
 				WRAPPER_EXTENSION = app;
 			};
@@ -848,7 +851,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				PROVISIONING_PROFILE = "066FA6CD-82FF-4D47-892B-C75B48E3CD4A";
+				PROVISIONING_PROFILE = "147B0CD0-957E-4598-A533-071791E7CB77";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "066FA6CD-82FF-4D47-892B-C75B48E3CD4A";
 				SDKROOT = iphoneos;
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -861,8 +864,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Vladislav Efremov";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Vladislav Efremov";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Vladislav Efremov (MBL7632743)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vladislav Efremov (MBL7632743)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -871,8 +874,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "D97EA730-417A-4004-90DC-D4319BB680A6";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D97EA730-417A-4004-90DC-D4319BB680A6";
+				PROVISIONING_PROFILE = "147B0CD0-957E-4598-A533-071791E7CB77";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "066FA6CD-82FF-4D47-892B-C75B48E3CD4A";
 				SDKROOT = iphoneos;
 				STRIP_INSTALLED_PRODUCT = NO;
 				VALIDATE_PRODUCT = YES;
@@ -882,6 +885,7 @@
 		53E0A79014DEC75D004E3E1B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = NTI/NTI.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Vladislav Efremov (MBL7632743)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vladislav Efremov (MBL7632743)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -892,8 +896,8 @@
 					"\"$(SRCROOT)/TestFlightSDK1.0\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "9AADCF24-6794-4AFC-B82B-36E64303E40E";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9AADCF24-6794-4AFC-B82B-36E64303E40E";
+				PROVISIONING_PROFILE = "147B0CD0-957E-4598-A533-071791E7CB77";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "147B0CD0-957E-4598-A533-071791E7CB77";
 				VALID_ARCHS = "armv7 ";
 				WRAPPER_EXTENSION = app;
 			};
@@ -902,8 +906,9 @@
 		53E0A79114DEC75D004E3E1B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Vladislav Efremov";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Vladislav Efremov";
+				CODE_SIGN_ENTITLEMENTS = NTI/NTI.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Vladislav Efremov (MBL7632743)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vladislav Efremov (MBL7632743)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NTI/NTI-Prefix.pch";
 				INFOPLIST_FILE = "NTI/NTI-Info.plist";
@@ -912,8 +917,8 @@
 					"\"$(SRCROOT)/TestFlightSDK1.0\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "86056BD0-9AFF-4E1A-893C-1277FB70C0D9";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "86056BD0-9AFF-4E1A-893C-1277FB70C0D9";
+				PROVISIONING_PROFILE = "147B0CD0-957E-4598-A533-071791E7CB77";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "147B0CD0-957E-4598-A533-071791E7CB77";
 				VALID_ARCHS = armv7;
 				WRAPPER_EXTENSION = app;
 			};

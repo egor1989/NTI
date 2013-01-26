@@ -107,16 +107,16 @@
     if (requestError!=nil) {
         //TODO протестировать
         NSLog(@"%@", requestError);
-        RecordAction *recordAction = [[RecordAction alloc] init];
-        [recordAction writeToBD:fileContent];
+    //    RecordAction *recordAction = [[RecordAction alloc] init];
+    //    [recordAction writeToBD:fileContent];
        // if (sendError) {
                 //запись в бд
             
             //sendError = NO;
        // }
        // else {
-       //     dataAfterError = fileContent;
-      //      [self uploadData:dataAfterError];
+            dataAfterError = fileContent;
+            [self uploadData:dataAfterError];
       //      sendError = YES;
       //  }
     }
@@ -125,11 +125,11 @@
     NSLog(@"returnData: %@", returnString);
     BOOL error = [self checkErrors:returnString method:@"sendData"];
     if (error) {
-        //dataAfterError = fileContent;
-        //[self uploadData:fileContent];
-        //[self uploadData:dataAfterError];
-        RecordAction *recordAction = [[RecordAction alloc] init];
-        [recordAction writeToBD:fileContent];
+        dataAfterError = fileContent;
+
+        [self uploadData:dataAfterError];
+   //     RecordAction *recordAction = [[RecordAction alloc] init];
+   //     [recordAction writeToBD:fileContent];
     }
 }
  
