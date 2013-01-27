@@ -62,7 +62,13 @@
 }
 
 - (void)uploadData:(NSData *)fileContent{
+    
+    NSLog(@"entries in bd %i", [[NSUserDefaults standardUserDefaults] integerForKey:@"pk"]);
     //TODO каждый раз проверять размер БД, если больше 100 отправлять.
+   // if ([[NSUserDefaults standardUserDefaults] integerForKey:@"pk"]>100){
+   //   [[[DatabaseActions alloc] init] sendDatabase];
+   // }
+    
     
     NSLog(@"SC -upload data");
     NSString *cookie = [self refreshCookie];
