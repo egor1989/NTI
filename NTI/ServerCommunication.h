@@ -25,6 +25,7 @@
     NSString *model;
     NSString *carrierName;
     NSData *dataAfterError;
+    BOOL activeCall;
    // BOOL sendError;
     
 }

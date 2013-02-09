@@ -14,38 +14,148 @@
 
 
 - (void)sendSinchRequest: (NSString *)sRequest method: (NSInteger)code{
+      /*
     NSString *rData = nil;
     NSString *methodName = nil;
     
     //upload data, code = 1
-    //forgot password (2)
+    //refresh cookie - 2
+    // auth user - 3
     switch (code) {
         case 1:{
+              NSLog(@"entries in bd %i", [[NSUserDefaults standardUserDefaults] integerForKey:@"pk"]);
+            //TODO каждый раз проверять размер БД, если больше 100 отправлять.
+            // if ([[NSUserDefaults standardUserDefaults] integerForKey:@"pk"]>100){
+            //   [[[DatabaseActions alloc] init] sendDatabase];
+            // }
+            NSString *cookie = [self refreshCookie];
+            NSLog(@"current cookie = %@",cookie);
             
+            NSString *sJSON = [[NSString alloc] initWithData:fileContent encoding:NSASCIIStringEncoding];
+            NSString *requestContent = [NSString stringWithFormat:@"{\"method\":\"addNTIFile\",\"params\":{\"ntifile\":%@}}",sJSON];
+            NSLog(@"Request: %@", requestContent);
+            
+            requestData = [NSData dataWithBytes:[requestContent UTF8String] length:[requestContent length]];
+            NSData *compressData = [GzipCompress gzipDeflate:requestData];
+            
+            
+            request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                          timeoutInterval:90.0];
+            NSString* requestDataFull = [NSString stringWithFormat:@"data=%@%@",[compressData description],@"&zip=1"];
+            
+            [request setHTTPMethod:@"POST"];
+            [request setHTTPBody: [NSData dataWithBytes:[requestDataFull UTF8String] length:[requestDataFull length]]];
+            [request setValue:@"gzip" forHTTPHeaderField:@"Content-Encoding"];
+            [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
+            NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                        @"http://nti.goodroads.ru/api/", NSHTTPCookieDomain,
+                                        @"NTIKeys", NSHTTPCookieName,
+                                        cookie, NSHTTPCookieValue,
+                                        @"/", NSHTTPCookiePath,
+                                        nil];
+            
+            [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:[NSHTTPCookie cookieWithProperties:properties]];
+            NSHTTPCookie *fcookie = [NSHTTPCookie cookieWithProperties:properties]; //?
+            NSArray* fcookies = [NSArray arrayWithObjects: fcookie, nil];   //?
+            NSDictionary * headers = [NSHTTPCookie requestHeaderFieldsWithCookies:fcookies]; //?
+            
+            [request setAllHTTPHeaderFields:headers];
+            
+            NSError *requestError = nil;
+            NSURLResponse *response = nil;
+            NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: &response error: &requestError ];
+            
+            if (requestError!=nil) {
+                //TODO протестировать
+                NSLog(@"%@", requestError);
+                //    RecordAction *recordAction = [[RecordAction alloc] init];
+                //    [recordAction writeToBD:fileContent];
+                // if (sendError) {
+                //запись в бд
+                
+                //sendError = NO;
+                // }
+                // else {
+                dataAfterError = fileContent;
+                [self uploadData:dataAfterError];
+                //      sendError = YES;
+                //  }
+            }
+            
+            returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
+            NSLog(@"returnData: %@", returnString);
+            BOOL error = [self checkErrors:returnString method:@"sendData"];
+            if (error) {
+                dataAfterError = fileContent;
+                
+                [self uploadData:dataAfterError];
+                //     RecordAction *recordAction = [[RecordAction alloc] init];
+                //     [recordAction writeToBD:fileContent];
+            }
+
         }
             break;
         case 2:{
-            rData = sRequest;
-            methodName = @"password";
             
-     /*       request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
-                                          timeoutInterval:60.0];
+        }
+            break;
+        case 3:{
+            
+            [self infoAboutDevice];
+            
+            NSString *data = [NSString stringWithFormat:(@"data={\"method\":\"NTIauth\",\"params\":{\"login\":\"%@%@%@%@%@%@%@%@%@%@%@%@"),login, @"\",\"secret\":\"", message,@"\",\"device\":\"", deviceName,@"\",\"model\":\"", model,@"\",\"version\":\"", systemVersion, @"\",\"carrier\":\"", carrierName, @"\"}}"];
+            
+            NSLog(@"Request: %@", data);
+            
+            request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                          timeoutInterval:90.0];
             
             requestData = [NSData dataWithBytes:[data UTF8String] length:[data length]];
             [request setHTTPMethod:@"POST"];
             [request setHTTPBody: requestData];
             
-            NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil];
+            NSError *requestError = nil;
+            NSURLResponse *response = nil;
+            NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: &response error: &requestError];
             
-            
+            if (requestError!=nil) {
+                //error code for NSURLErrorCallIsActive = -1019
+                if ([requestError code]== NSURLErrorCallIsActive){
+                    
+                }
+                
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message: [NSString stringWithFormat:@"%@",requestError] delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
+                [alert show];
+                NSLog(@"%@", requestError);
+            }
             returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
             NSLog(@"returnData: %@", returnString);
-            [self checkErrors:returnString method:@"password"];
-      */
+            [self checkErrors: returnString method:@"reg&auth"];
+            if (!errors) {
+                
+                NSDictionary *fields = [(NSHTTPURLResponse *)response allHeaderFields];
+                NSString *cookieWithDate = [fields valueForKey:@"Set-Cookie"];
+                // NSLog(@"Cookie: %@", cookie);
+                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                [userDefaults setValue: login forKey:@"login"];
+                [userDefaults setValue: message forKey:@"password"];
+                [userDefaults setValue: cookieWithDate forKey:@"cookieWithDate"];
+                [userDefaults synchronize];
+                NSLog(@"cookie - %@", [userDefaults valueForKey:@"cookie"]);
+                info = @"Поздравляем! Авторизация прошла успешно";
+                
+                //на таб
+            }
+            
+
         }
             break;
         default:
             break;
+            
+            
+            
+            
     }
     
     request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://nti.goodroads.ru/api/"]cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];
@@ -59,10 +169,11 @@
     returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
     NSLog(@"returnData: %@", returnString);
     [self checkErrors:returnString method:methodName];
+             */
 }
 
 - (void)uploadData:(NSData *)fileContent{
-    
+    activeCall = NO;
     NSLog(@"entries in bd %i", [[NSUserDefaults standardUserDefaults] integerForKey:@"pk"]);
     //TODO каждый раз проверять размер БД, если больше 100 отправлять.
    // if ([[NSUserDefaults standardUserDefaults] integerForKey:@"pk"]>100){
@@ -72,6 +183,11 @@
     
     NSLog(@"SC -upload data");
     NSString *cookie = [self refreshCookie];
+    if (activeCall) {
+        //RecordAction *recordAction = [[RecordAction alloc] init];
+        //[recordAction writeToBD:fileContent];;
+        return;
+    }
     NSLog(@"current cookie = %@",cookie);
     
     NSString *sJSON = [[NSString alloc] initWithData:fileContent encoding:NSASCIIStringEncoding]; 
@@ -552,13 +668,22 @@
     NSData *returnData = [NSURLConnection sendSynchronousRequest: request returningResponse: &response error: &requestError];
     
     if (requestError!=nil) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message: [NSString stringWithFormat:@"%@",requestError] delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
-        [alert show];
-        NSLog(@"%@", requestError);
+        //error code for NSURLErrorCallIsActive = -1019
+        if ([requestError code]== NSURLErrorCallIsActive){
+            errors = YES;
+            activeCall = YES;
+        }
+        else {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ошибка!" message: [NSString stringWithFormat:@"%@",requestError] delegate:self cancelButtonTitle:@"ОК" otherButtonTitles:nil];
+            [alert show];
+            NSLog(@"%@", requestError);
+        }
     }
-    returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
-    NSLog(@"returnData: %@", returnString);
-    [self checkErrors: returnString method:@"reg&auth"];
+    else {
+        returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
+        NSLog(@"returnData: %@", returnString);
+        [self checkErrors: returnString method:@"reg&auth"];
+    }
     if (!errors) {
 
         NSDictionary *fields = [(NSHTTPURLResponse *)response allHeaderFields];
