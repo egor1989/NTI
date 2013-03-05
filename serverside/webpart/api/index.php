@@ -457,6 +457,9 @@ function addNTIFile($param)
 			{
 				if($qq[$k]['gps']['latitude']!=0 && $qq[$k]['gps']['longitude']!=0 && $qq[$k]['gps']['speed']>0)
 				{
+					
+						if($qq[$k]['gps']['speed']>7)
+						{
 					//echo $k." ok";
 				if($i>0)
 				{
@@ -509,6 +512,7 @@ function addNTIFile($param)
 						$i++;
 				}
 			}
+			}
 				$lat=mysql_real_escape_string($qq[$k]['gps']['latitude']);
 				$lng=mysql_real_escape_string($qq[$k]['gps']['longitude']);
 				$accx=mysql_real_escape_string($qq[$k]['acc']['x']);
@@ -521,6 +525,10 @@ function addNTIFile($param)
 				$str = "INSERT INTO NTIEntry (UID, accx, accy, distance, lat, lng, direction, compass, speed, utimestamp, FileId) VALUES ($UID, $accx, $accy, $distance, $lat, $lng, $direction, $compass, $speed, $utimestamp, $fileid)";
 				mysql_query($str);
 			}
+
+			
+			
+			
 			//print_r($ArrayEntry);
 			//Разбили по времени
 			//Теперь перебирем поездки и высчитываем данные 
@@ -564,24 +572,7 @@ function addNTIFile($param)
 						if(	$deltaTime==0)$deltaTime=1;
 	
 						$deltaTurn=0;
-						/*
-						if($ArrayEntry[$i][$j]->getLng()-$ArrayEntry[$i][$j-1]->getLng()!=0)
-						{
-							$ArrayEntry[$i][$j]->setTurn(atan(($ArrayEntry[$i][$j]->getLat()-$ArrayEntry[$i][$j-1]->getLat())/($ArrayEntry[$i][$j]->getLng()-$ArrayEntry[$i][$j-1]->getLng())));
-							$deltaTurn = 	$ArrayEntry[$i][$j]->getTurn() - $ArrayEntry[$i][$j-1]->getTurn();
-							$wAcc = abs($deltaTurn/($deltaTime));
-							if (($wAcc < 0.15) && ($wAcc >= 0)) {$ArrayEntry[$i][$j]->setsevTurn(0);} 
-							else if (($wAcc >= 0.15) && ($wAcc < 0.5))	{$ArrayEntry[$i][$j]->setsevTurn(1);} 
-							else if (($wAcc >= 0.5) && ($wAcc < 0.75)){$ArrayEntry[$i][$j]->setsevTurn(2);} 
-							else if ($wAcc >= 0.75) {$ArrayEntry[$i][$j]->setsevTurn(3);}
-							$ArrayEntry[$i][$j]->setwAcc($wAcc);
-						}
-						else
-						{
-							$ArrayEntry[$i][$j]->setTurn($ArrayEntry[$i][$j-1]->getTurn());		
-							$ArrayEntry[$i][$j]->setwAcc($ArrayEntry[$i][$j-1]->getwAcc());	
-						}*/
-								$deltaSpeed = $speed/3.6 - ($ArrayEntry[$i][$j-1]->getSpeed())/3.6;
+						$deltaSpeed = $speed/3.6 - ($ArrayEntry[$i][$j-1]->getSpeed())/3.6;
 								
 								$accel = $deltaSpeed/$deltaTime;
 								if($accel==0)
@@ -725,6 +716,11 @@ function addNTIFile($param)
 									}
 								}
 					}
+					//Проверка на то, что точка может существовать 
+					//Для этого сравниваем её скорость
+					//Если скорость меньше 10 км/ч значит её убираем
+					//Если количество таких точек превышаем
+					
 					$TimeStart=$ArrayEntry[$i][0]->getTimestamp();//Подходит под определение ближайшей
 					$TimeEnd=$ArrayEntry[$i][0]->getTimestamp();//Хз может быть и перемешанно , пусть поищет
 					$TotalDistance=0;
@@ -762,23 +758,42 @@ function addNTIFile($param)
 						$Angle=rad2deg(atan(($k2-$k1)/(1+$k1*$k2)));
 						$deltaTime=$ArrayEntry[$i][$j]->getTimestamp()-$ArrayEntry[$i][$j-1]->getTimestamp();
 						if(	$deltaTime==0)$deltaTime=1;
-							if(abs($Angle)>15 && abs($Angle)<20)
-							{$ArrayEntry[$i][$j]->setsevTurn(1);
-							$wAcc=abs($Angle)/$deltaTime;
-							}
+						
+							//Подсчет формулы
+							/*
+							 * Получаем среднюю скорость
+							 * Умножаем её на косинус угла 
+							 * Получаем угловую скорость 
+							 * Делем её на 36( ~g=9.8 мс)
+							 * Получаем ускорение в угле 
+							 * 
+							 */ 
+							$wAcc=abs(((($ArrayEntry[$i][$j-1]+$ArrayEntry[$i][$j])/2)*sin($Angle))/36);
+							if($wAcc<0.4)
+									$ArrayEntry[$i][$j]->setsevTurn(0);
+							else if($wAcc>=0.4 && $wAcc<1)
+									$ArrayEntry[$i][$j]->setsevTurn(1);
+							else if($wAcc>=1 && $wAcc<2)
+									$ArrayEntry[$i][$j]->setsevTurn(2);
+							else if($wAcc>2)
+									$ArrayEntry[$i][$j]->setsevTurn(3);
+									
 							
-							if(abs($Angle)>20 && abs($Angle)<30)
-							{$ArrayEntry[$i][$j]->setsevTurn(2);
-							$wAcc=abs($Angle)/$deltaTime;}
-								
 							
-							if(abs($Angle)>30)
-							{$ArrayEntry[$i][$j]->setsevTurn(3);
-							$wAcc=abs($Angle)/$deltaTime;}
+							
+							
 							$ArrayEntry[$i][$j]->setwAcc($wAcc);	
 							
-						
-						
+							
+							
+								$deltaTurn=$ArrayEntry[$i][$j]->getCompass()-$ArrayEntry[$i][$j-1]->getCompass();
+							if(abs($deltaTurn)<180);
+							else if($deltaTurn<0)$deltaTurn=360+$deltaTurn;
+								else
+							$deltaTurn=360-$deltaTurn;
+						//В итоге получили изменение компаса 
+							if(abs($deltaTurn)>15)
+							{
 								if (abs($Angle)> 15 && $Angle>0)   {
 									if ($ArrayEntry[$i][$j-1]->getTurnType() == "normal point") $ArrayEntry[$i][$j]->setTurnType( "left turn started");
 									if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "left turn continued"))$ArrayEntry[$i][$j]->setTurnType("left turn continued");
@@ -789,6 +804,7 @@ function addNTIFile($param)
 									if (($ArrayEntry[$i][$j-1]->getTurnType() == "right turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "right turn continued"))$ArrayEntry[$i][$j]->setTurnType("right turn continued");
 									if (($ArrayEntry[$i][$j-1]->getTurnType() == "left turn started")||($ArrayEntry[$i][$j-1]->getTurnType() == "left turn continued"))$ArrayEntry[$i][$j]->setTurnType("left turn finished");
 								} 			
+							}
 					}
 					
 					
@@ -814,13 +830,14 @@ function addNTIFile($param)
 						if($ArrayEntry[$i][$j]->getTypeAcc()=="acc3 started")$acc3++;
 						if($ArrayEntry[$i][$j]->getTimestamp()<$TimeStart)$TimeStart=$ArrayEntry[$i][$j]->getTimestamp();
 						if($ArrayEntry[$i][$j]->getTimestamp()>$TimeEnd)$TimeEnd=$ArrayEntry[$i][$j]->getTimestamp();
-						if($TotalDistance<$ArrayEntry[$i][$j]->getDistance())$TotalDistance=$ArrayEntry[$i][$j]->getDistance();
+						//if($TotalDistance<$ArrayEntry[$i][$j]->getDistance())$TotalDistance=$ArrayEntry[$i][$j]->getDistance();
 						$TotalDistance+=distance($ArrayEntry[$i][$j]->getLat(),$ArrayEntry[$i][$j]->getLng(),$ArrayEntry[$i][$j+1]->getLat(),$ArrayEntry[$i][$j+1]->getLng());
 					}
 					if(count($ArrayEntry[$i])>0)
 					{
 						$mid_speed=$mid_speed/count($ArrayEntry[$i]);
 					}
+					if($mid_speed<15)continue;
 					//Теперь начинаем исключать телепортацию
 					//Собираем максимальное количество путей
 					$predifinedTrack=0;//Определяет максимальное количество возможных путей

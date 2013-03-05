@@ -35,7 +35,7 @@
 		<?if($trr[$i]['weight']==3){?>
 		<td><span style="font-size:10pt;color:red"><?echo $trr[$i]['weight'];?></span></td><?}?>
 		<td><span style="font-size:10pt"><?echo $trr[$i]['accx'];?></span></td>
-		<td><span style="font-size:10pt"><?echo 0;?></td>
+		<td><span style="font-size:10pt"><?echo $trr[$i]['wAcc'];?></td>
 		<td><span style="font-size:10pt"><?echo $trr[$i]['compass'];?></span></td>
 		<td><span style="font-size:10pt"><?echo $trr[$i]['minspeed'];?></span></td>
 		<td><span style="font-size:10pt"><?echo $trr[$i]['maxspeed'];?></span></td>
