@@ -66,7 +66,6 @@ function handler(request)
 		speed = filteredPt[i][3];
 		var color = "#00ff00";
 		var type=0;
-		if((filteredPt[i][4])=="Normal"){color = "#00FF00";type=0.1;}
 		
 		if((filteredPt[i][4])=="Acc" && Number(filteredPt[i][5])==1){color = "#00FF00";type=0.6;}
 		else if((filteredPt[i][4])=="Acc" && Number(filteredPt[i][5])==2){color = "#00FF00";type=0.8;}
