@@ -95,7 +95,7 @@
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
      (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
     
-    NSLog(@"%@",[[UIApplication sharedApplication] enabledRemoteNotificationTypes]);
+   // NSLog(@"%@",[[UIApplication sharedApplication] enabledRemoteNotificationTypes]);
     
     [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
     return YES;
@@ -436,6 +436,9 @@
 - (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
 {
 	NSLog(@"My token is: %@", deviceToken);
+    //NSString *myToken =[[NSString alloc] initWithBytes:[deviceToken bytes] length:[deviceToken length] encoding:NSUTF8StringEncoding];
+    [[ServerCommunication alloc] sendDataForPush:deviceToken];
+    
 }
 
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error

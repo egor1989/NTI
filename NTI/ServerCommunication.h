@@ -43,10 +43,12 @@
 - (void)sendFeedBackToServerWithTitle:(NSString*)title andBody: (NSString*)body;
 - (void)sendInterviewToServerWithData:(NSDictionary*)data;
 - (void)forgotPassword: (NSString *)login;
+- (void)sendDataForPush: (NSData *)token;
 
 + (BOOL)checkInternetConnection: (BOOL)needNotify;
 + (void)sendNotification: (NSString *)time lng:(NSString *)longitude lat:(NSString *)latitude;
 + (void)sendAppInfo: (NSArray *)infoArray;
+
 
 
 @property (nonatomic) BOOL errors;
