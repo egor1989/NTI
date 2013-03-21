@@ -694,6 +694,10 @@
         [userDefaults setValue: message forKey:@"password"];
         [userDefaults setValue: cookieWithDate forKey:@"cookieWithDate"];
         [userDefaults synchronize];
+        
+        if (![[NSUserDefaults standardUserDefaults] boolForKey:@"Push"]){
+            [self sendDataForPush:[userDefaults objectForKey:@"pushToken"]];
+        }
         NSLog(@"cookie - %@", [userDefaults valueForKey:@"cookie"]);
         info = @"Поздравляем! Авторизация прошла успешно";
         
@@ -954,7 +958,9 @@
     }
     returnString = [[NSString alloc] initWithData:returnData encoding: NSUTF8StringEncoding];
     NSLog(@"returnData: %@", returnString);
-    [self checkErrors:returnString method:@"push"];
+   if (![self checkErrors:returnString method:@"push"])
+       [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"Push"];
+    
 }
 
 @end

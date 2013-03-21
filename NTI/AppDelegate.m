@@ -29,7 +29,7 @@
     
     locationManager = [[CLLocationManager alloc] init];
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes: (UIRemoteNotificationTypeAlert |UIRemoteNotificationTypeBadge |UIRemoteNotificationTypeSound)];
- /***********************************************************************************/   
+ /***********************************************************************************/
     if ([launchOptions objectForKey:UIApplicationLaunchOptionsLocationKey]) {
         //тестовый блок, будет показывать local notification с координатами
              UILocalNotification *notification = [[UILocalNotification alloc] init];
@@ -91,9 +91,7 @@
     newCompassTarget    = 0;
     
     [self.window makeKeyAndVisible];
-    
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
-     (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+   
     
    // NSLog(@"%@",[[UIApplication sharedApplication] enabledRemoteNotificationTypes]);
     
@@ -437,7 +435,10 @@
 {
 	NSLog(@"My token is: %@", deviceToken);
     //NSString *myToken =[[NSString alloc] initWithBytes:[deviceToken bytes] length:[deviceToken length] encoding:NSUTF8StringEncoding];
-    [[ServerCommunication alloc] sendDataForPush:deviceToken];
+
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"Push"]&&([[NSUserDefaults standardUserDefaults] stringForKey:@"cookie"] != nil))
+        [[ServerCommunication alloc] sendDataForPush:deviceToken];
+    else  [[NSUserDefaults standardUserDefaults] setObject:deviceToken forKey:@"pushToken"];
     
 }
 
