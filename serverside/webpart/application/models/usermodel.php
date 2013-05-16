@@ -6,6 +6,24 @@
 				parent::__construct();
 			}
 		
+	//Функция проверяет права польоватедя 
+	function CheckRights($uid)
+	{
+				$uid=intval($uid);//Быстренько приводим к виду числа
+				$query = $this->db->query("Select Rights from NTIUsers where Id=$uid");
+				if($query->num_rows()>0)
+				{
+					foreach($query->result() as $row)
+					{
+						return $row->Rights;
+					}
+				}
+				else
+					return -1;
+	}
+		
+		
+		
 		
 		function authorization($login,$password){
 		
@@ -312,7 +330,7 @@
 		{			$id=mysql_real_escape_string($id);
 			$userId=mysql_real_escape_string($userId);
 			//Сначала получаем id пользователя относительно его имени
-			$query = $this->db->query("Select * from NTIUsers where Login=".$this->db->escape($userId));
+			$query = $this->db->query("Select * from NTIUsers where Id=".$this->db->escape($userId));
 			if($query->num_rows()>0){
 			
 				foreach($query->result() as $row){
@@ -325,11 +343,11 @@
 				return -1;
 			}
 			//Теперь проверяем , может уже была создано отношение?
-			$query = $this->db->query("Select * from NTIRelations where UserID='$userid' and ExpertID='$id'");
-			if($query->num_rows()>0)return -2;
+			//$query = $this->db->query("Select * from NTIRelations where UserID='$userid' and ExpertID='$id'");
+			//if($query->num_rows()>0)return -2;
 			
 			//Теперь проверяем на возможнось создания повторной заявки 
-			$query = $this->db->query("Select * from NTIRequests where UserId='$userid' and ExpertId='$id' and Status=1");
+			$query = $this->db->query("Select * from NTIRequests where UserId='$userid' and ExpertId='$id' and (Status=1 or Status=2)");
 			if($query->num_rows()==0)return -3;
 		
 			//Отлично , значит заявка у нас не создана и отношения нет

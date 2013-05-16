@@ -23,7 +23,7 @@ class Admin extends CI_Controller
 			} 
 		}
 	}
-	/* Not need in this further. Updated to non-ticket (permanent) unbinding.
+	
 	public function dismiss()
 	{
 		if(!$this->input->post('relation'))
@@ -44,7 +44,7 @@ class Admin extends CI_Controller
 			} 		
 		}
 	}
-	*/	
+
 	
 	
 		public function banuser()
@@ -103,7 +103,7 @@ class Admin extends CI_Controller
 						'i' => $this->input->post('userid'),
 						'r' => $this->input->post('nrights')
 					);
-					if (($dt['r'] == 0) || ($dt['r'] == 1) || ($dt['r'] == 2)) 
+					//if (($dt['r'] == 0) || ($dt['r'] == 1) || ($dt['r'] == 2)) Ок раз админ может делать админов
 						$response = $this->admin_functions->chrights($dt);
 					header("Location:http://nti.goodroads.ru/all");	
 			}

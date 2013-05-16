@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php date_default_timezone_set('Europe/Moscow'); if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class User extends CI_Controller {
 	
@@ -12,14 +12,35 @@ class User extends CI_Controller {
 			$this->load->helper('url');
 			$urls=$this->uri->segment(3);
 			$checker=$this->userModel->checkrealation($this->session->userdata('id'),$urls);
-				if($checker==1 || $this->session->userdata('rights')==3)
+			if($this->session->userdata('rights')==3 && $this->userModel->CheckRights($urls)==2)
+			{
+					$new_data['retdata']=$this->userModel->get_all_users($urls);
+					if ($new_data['retdata'] == 0) { //Если у этого эксперта НЕТ пользователей.
+						$new_data['users'] = -1;
+						$this->load->view('header',$new_data);
+						$this->load->view('userInfoView', $new_data);
+						$this->load->view('footer');
+					} else {
+						//Получение всех открытых заявок относительно данного пользователя
+						for($i=0;$i<count($new_data['retdata']);$i++)
+						{
+							$new_data['retdata'][$i]['stats']=$this->lays_model->getUserTravelStats($new_data['retdata'][$i]['Id']);
+						}
+						$new_data['tickets']=$this->userModel->load_all_tickets($this->session->userdata('id'));
+						$new_data['users']=1;
+						$this->load->view('header',$new_data);
+						$this->load->view('userInfoView', $new_data);
+						$this->load->view('footer');
+					}
+			}
+			else if(($checker==1 || $this->session->userdata('rights')==3) && ($this->userModel->CheckRights($urls)>0 && $this->userModel->CheckRights($urls)<2))
 				{
-					$rs['rights']=1;date_default_timezone_set('Europe/Moscow'); 
+					$rs['rights']=1;
 					$this->load->view('header',$new_data);
 					$rs['trr'] = $this->lays_model->getTotalStats($urls);//Получение статистики по пользователю
 					$this->load->view('lasttrips_view',$rs);
 					$this->load->view('footer');
-		}
+				}
 		else
 			header("Location: http://nti.goodroads.ru/");
 		} else
@@ -794,7 +815,6 @@ private function get_raw_csv($urls) {
 			
 			$new_data['map_type'] = 2;
 			//Обработка экспертов
-			date_default_timezone_set('Europe/Moscow'); 
 			if($this->session->userdata('rights')!=3)
 			{
 				if($this->session->userdata('rights')==2)
@@ -803,6 +823,7 @@ private function get_raw_csv($urls) {
 					$new_data['retdata']=$this->userModel->get_all_users($this->session->userdata('id'));
 					if ($new_data['retdata'] == 0) { //Если у этого эксперта НЕТ пользователей.
 						$new_data['users'] = -1;
+						
 						$this->load->view('header',$new_data);
 						$this->load->view('userInfoView', $new_data);
 						$this->load->view('footer');
@@ -1060,7 +1081,7 @@ $new_data['rights']=0;
 			$this->load->model('userModel');
 			//1) Check if he can see		
 			$checker=$this->userModel->AddRelationQuery($this->session->userdata('id'),$urls);
-			header("Location: http://nti.goodroads.ru/search");
+			header("Location: http://nti.goodroads.ru/all");
 		}
 		else
 		{
@@ -1070,7 +1091,9 @@ $new_data['rights']=0;
 	}
 	
 	
-	public function removeaccept()	{
+		public function removeaccept()	{
+					$this->load->library('user_agent');
+		$this->load->helper('url');
 		if($this->session->userdata('rights')>=2)
 		{
 
@@ -1078,7 +1101,12 @@ $new_data['rights']=0;
 			$this->load->model('userModel');
 			//1) Check if he can see		
 			$checker=$this->userModel->RemoveRelationQuery($this->session->userdata('id'),$urls);
-		header("Location: http://nti.goodroads.ru/search");
+			if ($this->agent->is_referral())
+			$retcite=$this->agent->referrer();
+				else
+			$retcite="http://nti.goodroads.ru/";
+
+			  redirect($retcite);
 		}
 		else
 		{
@@ -1087,13 +1115,21 @@ $new_data['rights']=0;
 	}
 	
 	public function deleteaccept() {
+		$this->load->library('user_agent');
+		$this->load->helper('url');
 		if($this->session->userdata('rights')>=2)
 		{
 			$urls=$this->input->post('userid');	
 			$this->load->model('userModel');
 			//1) Check if he can see		
 			$checker=$this->userModel->DeleteRelation($this->session->userdata('id'),$urls);
-			header("Location: http://nti.goodroads.ru/search");
+			if ($this->agent->is_referral())
+			$retcite=$this->agent->referrer();
+				else
+			$retcite="http://nti.goodroads.ru/";
+
+			  redirect($retcite);
+			
 		}
 		else
 		{

@@ -89,7 +89,8 @@ $userCount=0;
 					    }
 					for($j=2;$j<$i;$j++)
 					{
-						echo "S1=".$tracking[$j]['speed']."S2=".$tracking[$j-1]['speed']." WAccG=".$tracking[$j]['wAccG']." WaccC=".$tracking[$j]['wAccC']." GeomAngle=".$tracking[$j]['Angle'].".CompasDelta=".$tracking[$j]['deltaTurn']." compas1=".$tracking[$j]['compass']." compas2=".$tracking[$j-1]['compass']."==".$deltaTurn."<br/>";
+						echo $tracking[$j]['turntype']."<br/>";
+						//echo "S1=".$tracking[$j]['speed']."S2=".$tracking[$j-1]['speed']." WAccG=".$tracking[$j]['wAccG']." WaccC=".$tracking[$j]['wAccC']." GeomAngle=".$tracking[$j]['Angle'].".CompasDelta=".$tracking[$j]['deltaTurn']." compas1=".$tracking[$j]['compass']." compas2=".$tracking[$j-1]['compass']."==".$deltaTurn."<br/>";
 
 						$id=$tracking[$j]['Id'];
 					}
