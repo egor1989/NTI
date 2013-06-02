@@ -6,33 +6,59 @@
 				parent::__construct();
 			}
 		//Функция отвечает за добав
-		function approve($relation_id)
+		function approve($relation_id,$rtype)
 		{
 			//1 получение данных о отношении
-			$query = $this->db->get_where('NTIRequests', array('Id' => $relation_id));
+			$query = $this->db->get_where('NTIRequests', array('Id' => $relation_id,'Type'=>$rtype));
 			foreach($query->result() as $row)
 				{
 					$CKId = $row->ExpertId;
 					$UserId = $row->UserId;
 				}
 			//Теперь проверяем, было ли создано такое отношение прежде
-			$query = $this->db->get_where('NTIRelations', array('ExpertID' => $CKId,'UserID' => $UserId));
-			if($query->num_rows()>0)
+			if($rtype==0)
 			{
-			//Отношение было создано до нас
-				return -1;
+				$query = $this->db->get_where('NTIRelations', array('ExpertID' => $CKId,'UserID' => $UserId));
+				if($query->num_rows()>0)
+				{
+				//Отношение было создано до нас
+					return -1;
+				}
+			
+				$this->db->insert('NTIRelations', array('ExpertID' => $CKId,'UserID' => $UserId,'Type'=>$rtype)); 
+				$data = array('Status' => 4);
+				$this->db->where('Id', $relation_id);
+				$this->db->where('Type', $rtype);
+				$this->db->update('NTIRequests', $data); 
 			}
-			$this->db->insert('NTIRelations', array('ExpertID' => $CKId,'UserID' => $UserId)); 
-			$data = array('Status' => 4);
-			$this->db->where('Id', $relation_id);
-			$this->db->update('NTIRequests', $data); 
+			else
+			{
+				$query = $this->db->get_where('NTIRelations', array('ExpertID' => $CKId,'UserID' => $UserId));
+				if($query->num_rows()>0)
+				{
+						$data = array('Status' => 4);
+						$this->db->where('Id', $relation_id);
+						$this->db->where('Type', $rtype);
+						$this->db->update('NTIRequests', $data); 
+						
+						
+						$data = array('Type' => 1);
+						$this->db->where('ExpertID', $CKId);
+						$this->db->where('UserID', $UserId);
+						$this->db->update('NTIRelations', $data); 
+						
+						
+						
+				}
+			}
 			return 1;	
 		}
 		//Функция отвечает за добав
-		function dismiss($relation_id)
+		function dismiss($relation_id,$rtype)
 		{
 			$data = array('Status' => 3);
 			$this->db->where('Id', $relation_id);
+			$this->db->where('Type', $rtype);
 			$this->db->update('NTIRequests', $data); 
 			return 1;	
 		}

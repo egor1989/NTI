@@ -12,8 +12,11 @@ class User extends CI_Controller {
 			$this->load->helper('url');
 			$urls=$this->uri->segment(3);
 			$checker=$this->userModel->checkrealation($this->session->userdata('id'),$urls);
+			
 			if($this->session->userdata('rights')==3 && $this->userModel->CheckRights($urls)==2)
 			{
+				
+				
 					$new_data['retdata']=$this->userModel->get_all_users($urls);
 					if ($new_data['retdata'] == 0) { //Если у этого эксперта НЕТ пользователей.
 						$new_data['users'] = -1;
@@ -33,7 +36,7 @@ class User extends CI_Controller {
 						$this->load->view('footer');
 					}
 			}
-			else if(($checker==1 || $this->session->userdata('rights')==3) && ($this->userModel->CheckRights($urls)>0 && $this->userModel->CheckRights($urls)<2))
+			else if(($checker==1 || $this->session->userdata('rights')==3) && ($this->userModel->CheckRights($urls)>=0 && $this->userModel->CheckRights($urls)<2))
 				{
 					$rs['rights']=1;
 					$this->load->view('header',$new_data);
@@ -1072,6 +1075,127 @@ $new_data['rights']=0;
 	
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Для расширения прав эксперта на пользователя
+
+
+
+	public function addacceptExpUseMap()	{
+							$this->load->library('user_agent');
+		$this->load->helper('url');
+		if($this->session->userdata('rights')>=2)
+		{
+			$urls=$this->input->post('userid');
+			$this->load->model('userModel');
+			//1) Check if he can see		
+			$checker=$this->userModel->AddRelationQuery($this->session->userdata('id'),$urls,1);
+						if ($this->agent->is_referral())
+			$retcite=$this->agent->referrer();
+				else
+			$retcite="http://nti.goodroads.ru/";
+			 redirect($retcite);
+		}
+		else
+		{
+			header("Location: http://nti.goodroads.ru");
+		}
+		
+	}
+	
+	
+		public function removeacceptExpUseMap()	{
+					$this->load->library('user_agent');
+		$this->load->helper('url');
+		if($this->session->userdata('rights')>=2)
+		{
+
+			$urls=$this->input->post('userid');
+			$this->load->model('userModel');
+			//1) Check if he can see		
+			$checker=$this->userModel->RemoveRelationQuery($this->session->userdata('id'),$urls,1);
+			if ($this->agent->is_referral())
+			$retcite=$this->agent->referrer();
+				else
+			$retcite="http://nti.goodroads.ru/";
+
+			  redirect($retcite);
+		}
+		else
+		{
+			header("Location: http://nti.goodroads.ru/");
+		}
+	}
+	
+	public function deleteacceptExpUseMap() {
+		$this->load->library('user_agent');
+		$this->load->helper('url');
+		if($this->session->userdata('rights')>=2)
+		{
+			$urls=$this->input->post('userid');	
+			$this->load->model('userModel');
+			//1) Check if he can see		
+			$checker=$this->userModel->DeleteRelation($this->session->userdata('id'),$urls,1);
+			if ($this->agent->is_referral())			$retcite=$this->agent->referrer();
+			else			$retcite="http://nti.goodroads.ru/";
+			  redirect($retcite);	
+		}
+		else
+		{
+			header("Location: http://nti.goodroads.ru/");
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	
 	public function addaccept()	{
 		
@@ -1080,7 +1204,7 @@ $new_data['rights']=0;
 			$urls=$this->input->post('userid');
 			$this->load->model('userModel');
 			//1) Check if he can see		
-			$checker=$this->userModel->AddRelationQuery($this->session->userdata('id'),$urls);
+			$checker=$this->userModel->AddRelationQuery($this->session->userdata('id'),$urls,0);
 			header("Location: http://nti.goodroads.ru/all");
 		}
 		else
@@ -1100,7 +1224,7 @@ $new_data['rights']=0;
 			$urls=$this->input->post('userid');
 			$this->load->model('userModel');
 			//1) Check if he can see		
-			$checker=$this->userModel->RemoveRelationQuery($this->session->userdata('id'),$urls);
+			$checker=$this->userModel->RemoveRelationQuery($this->session->userdata('id'),$urls,0);
 			if ($this->agent->is_referral())
 			$retcite=$this->agent->referrer();
 				else
@@ -1122,20 +1246,21 @@ $new_data['rights']=0;
 			$urls=$this->input->post('userid');	
 			$this->load->model('userModel');
 			//1) Check if he can see		
-			$checker=$this->userModel->DeleteRelation($this->session->userdata('id'),$urls);
-			if ($this->agent->is_referral())
-			$retcite=$this->agent->referrer();
-				else
-			$retcite="http://nti.goodroads.ru/";
-
-			  redirect($retcite);
-			
+			$checker=$this->userModel->DeleteRelation($this->session->userdata('id'),$urls,0);
+			if ($this->agent->is_referral())			$retcite=$this->agent->referrer();
+			else			$retcite="http://nti.goodroads.ru/";
+			  redirect($retcite);	
 		}
 		else
 		{
 			header("Location: http://nti.goodroads.ru/");
 		}
 	}
+	
+	
+
+	
+	
 	
 	public function block()	{
 		if($this->session->userdata('rights')==3) {

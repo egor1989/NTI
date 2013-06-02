@@ -51,7 +51,7 @@
 		
 			function get_all_users($id){
 			$id=mysql_real_escape_string($id);
-			$query = $this->db->query("SELECT NTIUsers.* from NTIUsers,(Select UserID from NTIRelations where ExpertID='$id') as ExpertRel where NTIUsers.Id=ExpertRel.UserID");
+			$query = $this->db->query("SELECT NTIUsers.*,ExpertRel.Type from NTIUsers,(Select UserID,Type from NTIRelations where ExpertID='$id') as ExpertRel where NTIUsers.Id=ExpertRel.UserID");
 			if($query->num_rows()>0){
 			
 				return $query->result_array();
@@ -139,6 +139,22 @@
 			}
 		}
 		
+		
+		//Функция проверяет, может ли эксперт получить доступ к данным карты для своего пользователя
+		function checkrealationMap($id,$dataId)
+		{
+			$id=mysql_real_escape_string($id);
+		$query = $this->db->query("Select UserID from NTIRelations,
+		(Select distinct(UID) as ID from NTIUserDrivingEntry where DrivingID=".$this->db->escape($dataId).") as UserRel
+		 where UserRel.ID=NTIRelations.UserID and NTIRelations.ExpertID='$id' and Type=1");
+			if($query->num_rows()>0){
+			
+			return 1;
+			}
+			else{
+				return 0;
+			}
+		}
 		
 		//Получение последних count пользователей
 		function load_users_list($count)
@@ -286,7 +302,7 @@
 		
 		//Функиця отвечает за проверку и добавление заявки пользователя
 		
-		function AddRelationQuery($id,$userId)
+		function AddRelationQuery($id,$userId,$relType)
 		{
 			$id=mysql_real_escape_string($id);
 			$userId=mysql_real_escape_string($userId);
@@ -294,21 +310,20 @@
 			$query = $this->db->query("Select * from NTIUsers where Rights<2 and Id=".$this->db->escape($userId));
 			if($query->num_rows()>0){
 			
-				foreach($query->result() as $row){
-					$userid= $row->Id;
-					
-				}
+				foreach($query->result() as $row){$userid= $row->Id;}
 			}
 			else
 			{
 				return -1;
 			}
 			//Теперь проверяем , может уже была создано отношение?
-			$query = $this->db->query("Select * from NTIRelations where UserID='$userid' and ExpertID='$id'");
-			if($query->num_rows()>0)return -2;
-			
+			if($relType==0)
+			{
+				$query = $this->db->query("Select * from NTIRelations where UserID='$userid' and ExpertID='$id'");
+				if($query->num_rows()>0)return -2;
+			}
 			//Теперь проверяем на возможнось создания повторной заявки 
-			$query = $this->db->query("Select * from NTIRequests where UserId='$userid' and ExpertId='$id' and (Status=1 or Status=2)");
+			$query = $this->db->query("Select * from NTIRequests where UserId='$userid' and ExpertId='$id'  and Type='$relType' and (Status=1 or Status=2)");
 			if($query->num_rows()>0)return -3;
 		
 			//Отлично , значит заявка у нас не создана и отношения нет
@@ -316,7 +331,8 @@
 			$data = array(
 				'UserId' => $userid ,
 				'ExpertId' => $id  ,
-				'Status' => 1
+				'Status' => 1,
+				'Type'=>$relType
 						);
 
 				$this->db->insert('NTIRequests', $data); 
@@ -326,7 +342,7 @@
 		}
 		
 			
-		function RemoveRelationQuery($id,$userId)
+		function RemoveRelationQuery($id,$userId,$relType)
 		{			$id=mysql_real_escape_string($id);
 			$userId=mysql_real_escape_string($userId);
 			//Сначала получаем id пользователя относительно его имени
@@ -347,7 +363,7 @@
 			//if($query->num_rows()>0)return -2;
 			
 			//Теперь проверяем на возможнось создания повторной заявки 
-			$query = $this->db->query("Select * from NTIRequests where UserId='$userid' and ExpertId='$id' and (Status=1 or Status=2)");
+			$query = $this->db->query("Select * from NTIRequests where UserId='$userid' and Type='$relType'  and ExpertId='$id' and (Status=1 or Status=2)");
 			if($query->num_rows()==0)return -3;
 		
 			//Отлично , значит заявка у нас не создана и отношения нет
@@ -357,7 +373,7 @@
 						);
 				$this->db->where('UserId', $userid);
 				$this->db->where('ExpertId', $id);
-
+				$this->db->where('Type', $relType);
 				$this->db->update('NTIRequests', $data); 
 				
 				return 1;
@@ -365,7 +381,7 @@
 		}
 		
 		
-		function DeleteRelation($id,$username)
+		function DeleteRelation($id,$username,$relType)
 		{
 			
 						$id=mysql_real_escape_string($id);
@@ -388,7 +404,7 @@
 			if($query->num_rows()==0)return -2;
 			
 			//Теперь проверяем на возможнось создания повторной заявки 
-			$query = $this->db->query("Select * from NTIRequests where UserId='$userid' and ExpertId='$id' and (Status=1 or Status=2)");
+			$query = $this->db->query("Select * from NTIRequests where and Type='$relType'  UserId='$userid' and ExpertId='$id' and (Status=1 or Status=2)");
 			if($query->num_rows()>0)return -3;
 		
 			//Отношение есть
@@ -397,7 +413,8 @@
 				$data = array(
 				'UserId' => $userid ,
 				'ExpertId' => $id  ,
-				'Status' => 2
+				'Status' => 2,
+				'Type'=>$relType
 						);
 
 				$this->db->insert('NTIRequests', $data); 
@@ -467,7 +484,7 @@
 		}
 		function LoadTickets()
 		{
-			$query = $this->db->query("select al.RequestId,al.Eid,al.Uid,al.Status,al.FName as CKName,al.SName as CKSName,al.Login as CKLogin,al.Rights as CKRights,us.Login as ULogin,us.FName as UFName,us.SName as USName,us.Rights as URights from (SELECT NTIRequests.Id as RequestId,NTIRequests.`ExpertId` as Eid,NTIRequests.`UserId` as Uid,NTIRequests.`Status` as Status,exp.* FROM `NTIRequests` join (select Id,Login,FName,SName,Rights from NTIUsers) as exp on NTIRequests.`ExpertId`=exp.Id) as al join (select Id,Login,FName,SName,Rights from NTIUsers) as us on al.`Uid`=us.Id where Status<=2" );
+			$query = $this->db->query("select al.RequestId,al.Eid,al.Uid,al.RType,al.Status,al.FName as CKName,al.SName as CKSName,al.Login as CKLogin,al.Rights as CKRights,us.Login as ULogin,us.FName as UFName,us.SName as USName,us.Rights as URights from (SELECT NTIRequests.Id as RequestId,NTIRequests.`ExpertId` as Eid,NTIRequests.`UserId` as Uid,NTIRequests.`Status` as Status,NTIRequests.`Type` as RType,exp.* FROM `NTIRequests` join (select Id,Login,FName,SName,Rights from NTIUsers) as exp on NTIRequests.`ExpertId`=exp.Id) as al join (select Id,Login,FName,SName,Rights from NTIUsers) as us on al.`Uid`=us.Id where Status<=2" );
 			if($query->num_rows()>0)
 			{
 			

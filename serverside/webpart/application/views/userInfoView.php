@@ -6,25 +6,35 @@
 			{ 
 				if($row['Status']==1)
 				{
-					echo "<tr><td><a href=/user/search/".$row['Id'].">".$row['Login']."</a></td><td>".$row['FName']."</td><td>".$row['SName']."</td><td>Заявка на добавление </td><td>";
-
-						echo form_open('/user/removeaccept/');
-						echo form_hidden('userid', $row['Id']);
-						echo form_submit('delete', 'Удалить заявку');
-						echo form_close();
-
-					
+						if($row['Type']==0)
+						{
+								echo "<tr><td><a href=/user/search/".$row['Id'].">".$row['Login']."</a></td><td>".$row['FName']."</td><td>".$row['SName']."</td><td>Заявка на добавление </td><td>";
+				
+							echo form_open('/user/removeaccept/');
+							echo form_hidden('userid', $row['Id']);
+							echo form_submit('delete', 'Удалить заявку');
+							echo form_close();
+						}
+						if($row['Type']==1)
+						{
+								echo "<tr><td><a href=/user/search/".$row['Id'].">".$row['Login']."</a></td><td>".$row['FName']."</td><td>".$row['SName']."</td><td>Заявка на добавление прав</td><td>";
+				
+							echo form_open('/user/removeacceptExpUseMap/');
+							echo form_hidden('userid', $row['Id']);
+							echo form_submit('delete', 'Удалить заявку');
+							echo form_close();
+						}
 					echo"</td>  </tr>";	
 				}
 				if($row['Status']==2)
 				{
-					echo "<tr><td><a href=/user/search/".$row['Id'].">".$row['Login']."</a></td><td>".$row['FName']."</td><td>".$row['SName']."</td><td>Заявка на удаление </td><td> ";
-											echo form_open('/user/removeaccept/');
-						echo form_hidden('userid', $row['Id']);
-						echo form_submit('delete', 'Удалить заявку');
-						echo form_close();
+							echo "<tr><td><a href=/user/search/".$row['Id'].">".$row['Login']."</a></td><td>".$row['FName']."</td><td>".$row['SName']."</td><td>Заявка на удаление </td><td> ";
+							echo form_open('/user/removeaccept/');
+							echo form_hidden('userid', $row['Id']);
+							echo form_submit('delete', 'Удалить заявку');
+							echo form_close();
+						
 
-					
 					echo"</td>  </tr>";		
 				}
 			}
@@ -62,9 +72,28 @@ else if ($users == 1) {
 						echo form_submit('delete', 'Удалить');
 						echo form_close();
 						?>
-						</td>
+	
+						
+						
+				</td>
 						<?}?>
-			<td><a href="/user/viewuser/<?echo $row['Id'];?>"><?echo $row['Login'];?></a></td><td><?echo $row['FName'];?></td><td><?echo $row['SName'];?></td> 
+
+						
+			<td><a href="/user/viewuser/<?echo $row['Id'];?>"><?echo $row['Login'];?></a>
+			<?if( $row['Type']==0){?>
+			<?
+						echo form_open('/user/addacceptExpUseMap/');
+						echo form_hidden('userid', $row['Id']);
+						echo form_submit('rightsrequest','Запрос доступа');
+						echo form_close();
+						?>
+				
+			<?}?>	
+			
+			
+			
+			
+			</td><td><?echo $row['FName'];?></td><td><?echo $row['SName'];?></td> 
 				<?if($row['stats']['is_set']==1){?>
 				
 			<td style="width:250px;">
