@@ -38,9 +38,11 @@ class User extends CI_Controller {
 			}
 			else if(($checker==1 || $this->session->userdata('rights')==3) && ($this->userModel->CheckRights($urls)>=0 && $this->userModel->CheckRights($urls)<2))
 				{
-					$rs['rights']=1;
+					$rs['rights']=$this->session->userdata('rights');
+					$rs['id']=$urls;
 					$this->load->view('header',$new_data);
 					$rs['trr'] = $this->lays_model->getTotalStats($urls);//Получение статистики по пользователю
+					$rs['mapExist']=$this->userModel->checkrealationUserMap($this->session->userdata('id'),$urls);
 					$this->load->view('lasttrips_view',$rs);
 					$this->load->view('footer');
 				}

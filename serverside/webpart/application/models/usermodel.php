@@ -139,6 +139,23 @@
 			}
 		}
 		
+		//Проверяет относительно пользователя может ли эксперт получить доступ к данным
+		function checkrealationUserMap($id,$username)
+		{
+		$query = $this->db->query("Select UserID from NTIRelations,
+		(Select * from NTIUsers where Id=".$this->db->escape($username).") 
+		as UserRel where UserRel.ID=NTIRelations.UserID and NTIRelations.ExpertID=".$this->db->escape($id)." and Type=1");
+			if($query->num_rows()>0){
+			
+			return 1;
+			}
+			else{
+				return 0;
+			}
+		}
+		
+		
+		
 		
 		//Функция проверяет, может ли эксперт получить доступ к данным карты для своего пользователя
 		function checkrealationMap($id,$dataId)

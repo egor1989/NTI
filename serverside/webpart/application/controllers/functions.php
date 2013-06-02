@@ -9,8 +9,7 @@ class functions extends CI_Controller {
 		{
 			$this->load->model('userModel');
 			$this->load->helper('url');
-		
-				$admin_data= $this->session->userdata('page');
+			$admin_data= $this->session->userdata('page');
 			$checker=$this->userModel->checkrealationMap($this->session->userdata('id'),$admin_data);
 		}
 	
