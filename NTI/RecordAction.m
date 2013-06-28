@@ -85,12 +85,16 @@
  //   lat = lat + 0.0002;
  //   lon = lon + 0.0002;
     //**************
+    
+    double sinB = y/sqrt(pow(x, 2)+pow(y, 2));
+    double gAccNormal = sqrt(pow(x, 2)+pow(y, 2))+sinB-sin([myAppDelegate course]);
+    
     float distance = [myAppDelegate allDistance]/1000;
     NSString *type = @"-";
 
-    NSArray *keys = [NSArray arrayWithObjects:@"timestamp", @"type", @"accX", @"accY", @"compass", @"direction", @"distance", @"latitude", @"longitude",@"speed", nil];
+    NSArray *keys = [NSArray arrayWithObjects:@"timestamp", @"type", @"accX", @"accY", @"compass", @"direction", @"distance", @"latitude", @"longitude",@"speed",@"gAccNormal", nil];
     
-    NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]], type, [NSString stringWithFormat:@"%f", x], [NSString stringWithFormat:@"%f", y], [NSString stringWithFormat:@"%.0f",[myAppDelegate north]], [NSString stringWithFormat:@"%.1f",[myAppDelegate course]], [NSString stringWithFormat:@"%.2f",distance], [NSString stringWithFormat:@"%.6f",location.coordinate.latitude],[NSString stringWithFormat:@"%.6f",location.coordinate.longitude], [NSString stringWithFormat:@"%.2f",curSpeed], nil];
+    NSArray *objs = [NSArray arrayWithObjects:  [NSString stringWithFormat:@"%.0f",[[[NSDate alloc ]init]timeIntervalSince1970]], type, [NSString stringWithFormat:@"%f", x], [NSString stringWithFormat:@"%f", y], [NSString stringWithFormat:@"%.0f",[myAppDelegate north]], [NSString stringWithFormat:@"%.1f",[myAppDelegate course]], [NSString stringWithFormat:@"%.2f",distance], [NSString stringWithFormat:@"%.6f",location.coordinate.latitude],[NSString stringWithFormat:@"%.6f",location.coordinate.longitude], [NSString stringWithFormat:@"%.2f",curSpeed], [NSString stringWithFormat:@"%.2f",gAccNormal], nil];
     NSDictionary *entries = [NSDictionary dictionaryWithObjects: objs forKeys:keys];
     [dataArray addObject:entries];
      NSLog(@"data array size = %i",[dataArray count]);    
