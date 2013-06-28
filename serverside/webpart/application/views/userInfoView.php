@@ -1,4 +1,49 @@
-﻿<?if ($users == -1) {
+﻿	<?if(isset($tickets) && $tickets != 0) {?> 
+	Ваши заявки<br/>
+		<table border=1>
+		<?
+			foreach ($tickets as $row)	
+			{ 
+				if($row['Status']==1)
+				{
+						if($row['Type']==0)
+						{
+								echo "<tr><td><a href=/user/search/".$row['Id'].">".$row['Login']."</a></td><td>".$row['FName']."</td><td>".$row['SName']."</td><td>Заявка на добавление </td><td>";
+				
+							echo form_open('/user/removeaccept/');
+							echo form_hidden('userid', $row['Id']);
+							echo form_submit('delete', 'Удалить заявку');
+							echo form_close();
+						}
+						if($row['Type']==1)
+						{
+								echo "<tr><td><a href=/user/search/".$row['Id'].">".$row['Login']."</a></td><td>".$row['FName']."</td><td>".$row['SName']."</td><td>Заявка на добавление прав</td><td>";
+				
+							echo form_open('/user/removeacceptExpUseMap/');
+							echo form_hidden('userid', $row['Id']);
+							echo form_submit('delete', 'Удалить заявку');
+							echo form_close();
+						}
+					echo"</td>  </tr>";	
+				}
+				if($row['Status']==2)
+				{
+							echo "<tr><td><a href=/user/search/".$row['Id'].">".$row['Login']."</a></td><td>".$row['FName']."</td><td>".$row['SName']."</td><td>Заявка на удаление </td><td> ";
+							echo form_open('/user/removeaccept/');
+							echo form_hidden('userid', $row['Id']);
+							echo form_submit('delete', 'Удалить заявку');
+							echo form_close();
+						
+
+					echo"</td>  </tr>";		
+				}
+			}
+		?>
+		</table>
+		<?}?>
+
+
+<?if ($users == -1) {
 	?><span style="color:black;font-size: 12px;">На данный момент, у вас 0 (ноль) пользователей.</span><br>
 <?}
 else if ($users == 1) {
@@ -7,6 +52,8 @@ else if ($users == 1) {
 	
 	<table border=1 >
 		<tr>
+			<?if($rights!=3){?>
+			<td></td><?}?>
 			<td>Логин</td>
 			<td>Имя</td>
 			<td>Фамилия</td>
@@ -17,7 +64,36 @@ else if ($users == 1) {
 	<?foreach ($retdata as $row){ ?>
 
 		<tr>
-			<td><a href="/user/viewuser/<?echo $row['Id'];?>"><?echo $row['Login'];?></a></td><td><?echo $row['FName'];?></td><td><?echo $row['SName'];?></td> 
+			<?if($rights!=3){?>
+			<td>
+			<?
+						echo form_open('/user/deleteaccept/');
+						echo form_hidden('userid', $row['Id']);
+						echo form_submit('delete', 'Удалить');
+						echo form_close();
+						?>
+	
+						
+						
+				</td>
+						<?}?>
+
+						
+			<td><a href="/user/viewuser/<?echo $row['Id'];?>"><?echo $row['Login'];?></a>
+			<?if( $row['Type']==0){?>
+			<?
+						echo form_open('/user/addacceptExpUseMap/');
+						echo form_hidden('userid', $row['Id']);
+						echo form_submit('rightsrequest','Запрос доступа');
+						echo form_close();
+						?>
+				
+			<?}?>	
+			
+			
+			
+			
+			</td><td><?echo $row['FName'];?></td><td><?echo $row['SName'];?></td> 
 				<?if($row['stats']['is_set']==1){?>
 				
 			<td style="width:250px;">
@@ -70,14 +146,4 @@ else if ($users == 1) {
 	</table>
 <?}?>
 	
-	<?if(isset($tickets) && $tickets != 0) {?> 
-	Ваши заявки<br/>
-		<table border=1>
-		<?
-			foreach ($tickets as $row)	
-			{ 
-				echo "<tr><td><a href=/user/search/".$row['Id'].">".$row['Login']."</a></td><td>".$row['FName']."</td><td>".$row['SName']."</td> </tr>";
-			}
-		?>
-		</table>
-		<?}?>
+

@@ -6,20 +6,49 @@ class Map extends CI_Controller {
 	{	
 		if($this->session->userdata('rights')==3)
 		{
-		$new_data['map_type']=3;
-		$new_data['menu']=1;
-		$new_data['library']=2;
-		$this->load->model('lays_model');
-		$new_data['rights']=$this->session->userdata('rights');
-		$this->session->set_userdata('map',"beta");
-		$this->load->helper('url');
-		$urls=$this->uri->segment(3);
-		$this->session->set_userdata('page',$urls);
-		$new_data['trr'] = $this->lays_model->getMapData($urls);
-		$this->load->view('header',$new_data);
-		$this->load->view('map_content',$new_data);
-		$this->load->view('footer');
-	}
+			$new_data['map_type']=3;
+			$new_data['menu']=1;
+			$new_data['library']=2;
+			$this->load->model('lays_model');
+			$new_data['rights']=$this->session->userdata('rights');
+			$this->session->set_userdata('map',"beta");
+			$this->load->helper('url');
+			$urls=$this->uri->segment(3);
+			$this->session->set_userdata('page',$urls);
+			$new_data['trr'] = $this->lays_model->getMapData($urls);
+			$this->load->view('header',$new_data);
+			$this->load->view('map_content',$new_data);
+			$this->load->view('footer');
+		}
+		else if($this->session->userdata('rights')==2)
+		{
+			$this->load->model('userModel');
+			$this->load->helper('url');
+			$urls=$this->uri->segment(3);
+			$checker=$this->userModel->checkrealationMap($this->session->userdata('id'),$urls);
+			
+			if($checker==1)
+			{
+				$new_data['map_type']=3;
+				$new_data['menu']=1;
+				$new_data['library']=2;
+				$this->load->model('lays_model');
+				$new_data['rights']=$this->session->userdata('rights');
+				$this->session->set_userdata('map',"beta");
+				$this->load->helper('url');
+				$urls=$this->uri->segment(3);
+				$this->session->set_userdata('page',$urls);
+				$new_data['trr'] = $this->lays_model->getMapData($urls);
+				$this->load->view('header',$new_data);
+				$this->load->view('map_content',$new_data);
+				$this->load->view('footer');
+			}
+			else
+			{
+				header("Location: http://nti.goodroads.ru/");
+			}
+
+		}
 	else
 	{
 		header("Location: http://nti.goodroads.ru/");

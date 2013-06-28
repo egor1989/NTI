@@ -13,8 +13,7 @@
 		<td><span style="font-size:10pt">Продолж.(с)</span></td>
 		<td><span style="font-size:10pt">Скорость перед событием</span></td>
 		<td><span style="font-size:10pt">Направление перед событием</span> </td>
-		<td><span style="font-size:10pt">Lat</span> </td>
-		<td><span style="font-size:10pt">Lng</span> </td>
+
 	</tr>	
 <?for($i=0;$i<count($trr);$i++){?>
 <tr>
@@ -42,8 +41,7 @@
 		<td><span style="font-size:10pt"><?echo $trr[$i]['duration'];?></span></td>
 		<td><span style="font-size:10pt"><?echo $trr[$i]['prespeed'];?></span></td>
 		<td><span style="font-size:10pt"><?echo $trr[$i]['predir'];?></span></td>
-		<td><span style="font-size:10pt"><?echo $trr[$i]['lat'];?></span></td>
-		<td><span style="font-size:10pt"><?echo $trr[$i]['lng'];?></span></td>
+
 
 	</tr>	
 

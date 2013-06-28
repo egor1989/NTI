@@ -52,14 +52,13 @@
  if(isset($rights) && $rights==2)
  {?>         
 
-		<td class="headerMenu__firstItem"><a href="/search" class="hrefmenu" >Поиск пользователей</a></td>
+		<td class="headerMenu__firstItem"><a href="/all" class="hrefmenu" >Поиск пользователей</a></td>
 		<td class="headerMenu__lastItem"><a href="/fback" class="hrefmenu" >Обратная связь</a></td>
 
 <?}
 else if(isset($rights) && $rights==3){?>
 
-		<td class="headerMenu__firstItem"><a href="/search" class="hrefmenu" >Поиск</a></td>
-		<td><a href="/all/users" class="hrefmenu" >Управление пользователями</a></td> 
+		<td class="headerMenu__firstItem"><a href="/all/users" class="hrefmenu" >Управление пользователями</a></td> 
 		<td  class="headerMenu__lastItem"><a href="/all/ck" class="hrefmenu" >Управление экспертами</a></td>
 
 

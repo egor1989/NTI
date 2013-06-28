@@ -237,7 +237,7 @@ else if($json['method']=="getUsersInfo"){getUsersInfo();}//-
 else if($json['method']=="getUserRideInfo"){getUserRideInfo($json['params']);}//-
 else if($json['method']=="getUsersInfoOldForm"){getUsersInfoOldForm($json['params']);}//-
 else if($json['method']=="getUsers"){getUsers();}//-
-
+else if($json['method']=="setDeviceId"){updateData($json['params']);}//-
 else
 {
 	   $errortype=array('info'=>"No action set, or function is incorrect",'code'=>  6);
@@ -281,6 +281,9 @@ function NTIregister($param)
 	$email=$param['login'];
 	$name=$param['name'];
 	$surname=$param['surname'];
+	$deviceId=$param['deviceId'];
+	
+	
 	
 	if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  7);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
 	
@@ -289,6 +292,7 @@ function NTIregister($param)
 	$email=mysql_real_escape_string($email);
 	$name=mysql_real_escape_string($name);
 	$surname=mysql_real_escape_string($surname);
+	$deviceId=mysql_real_escape_string($deviceId);
 		if(!isset($username) || !isset($password))
 	{
 
@@ -308,6 +312,10 @@ function NTIregister($param)
 		
 		exit();
 	}
+	
+	
+	
+	
 	$result = mysql_query("SELECT Id from NTIUsers where Email='$email'");
 	$cnt=mysql_num_rows($result);
 	if(!$cnt==0)
@@ -336,7 +344,7 @@ function NTIregister($param)
 		exit();
 	}
 
-			if(strlen($email)<3)
+	if(strlen($email)<3)
 	{
 		
 		$errortype=array('info'=>"Email is too short",'code'=>  16);
@@ -344,7 +352,7 @@ function NTIregister($param)
 		echo json_encode($res);
 		exit();
 	}
-	mysql_query("INSERT into NTIUsers (Login,Password,Email,FName,SName) values ('$username','$password','$email','$name','$surname')");
+	mysql_query("INSERT into NTIUsers (Login,Password,Email,FName,SName,DeviceId) values ('$username','$password','$email','$name','$surname','$deviceId')");
 	
 	$id=mysql_insert_id();
 	$tm=time(); 
@@ -768,14 +776,14 @@ function addNTIFile($param)
 							 * Получаем ускорение в угле 
 							 * 
 							 */ 
-							$wAcc=abs(((($ArrayEntry[$i][$j-1]+$ArrayEntry[$i][$j])/2)*sin($Angle))/36);
-							if($wAcc<0.4)
+							$wAcc=abs(((($ArrayEntry[$i][$j-1]->getSpeed()+$ArrayEntry[$i][$j]->getSpeed())/2)*sin($Angle))/36);
+							if($wAcc<0.2)
 									$ArrayEntry[$i][$j]->setsevTurn(0);
-							else if($wAcc>=0.4 && $wAcc<1)
+							else if($wAcc>=0.2 && $wAcc<0.7)
 									$ArrayEntry[$i][$j]->setsevTurn(1);
-							else if($wAcc>=1 && $wAcc<2)
+							else if($wAcc>=0.7 && $wAcc<1.5)
 									$ArrayEntry[$i][$j]->setsevTurn(2);
-							else if($wAcc>2)
+							else if($wAcc>1.5)
 									$ArrayEntry[$i][$j]->setsevTurn(3);
 									
 							
@@ -1616,6 +1624,34 @@ $res[$i]['TotalScore']=$row['OldStats'];
 	$rest=array('result'=>$res,'error'=> $errortype);
 	echo json_encode($rest,JSON_NUMERIC_CHECK );	
 }
+
+
+function updateData($param)
+{
+
+	$deviceId=$param['deviceId'];
+	$deviceId=str_replace('<','',$deviceId);
+	$deviceId=str_replace(' ','',$deviceId);
+	$deviceId=str_replace('>','',$deviceId);
+	//	echo json_encode($deviceId);	
+	if(connec_to_db()==0){$errortype=array('info'=>"Cannot connect to DB",'code'=>  7);	$res=array('result'=>2,'error'=>  $errortype);	echo json_encode($res);	exit();	}
+	$UID=NTI_Cookie_check();		
+	if($UID>0)
+	{
+		$deviceId=mysql_real_escape_string($deviceId);
+		mysql_query("Update NTIUsers set DeviceId='$deviceId' where Id=$UID");
+		$errortype=array('info'=>"",'code'=>  0);
+		$res=array('result'=>1,'error'=> $errortype);
+		echo json_encode($res);	
+	}
+	else
+	{
+		$errortype=array('info'=>"Connection broken or you are not authorized",'code'=>  71);
+		$res=array('result'=>-1,'error'=> $errortype);
+		echo json_encode($res);	
+	}
+}
+
 
 
 

@@ -4,7 +4,16 @@ class functions extends CI_Controller {
 	public function get()
 	{	
 		date_default_timezone_set('Europe/Moscow');
-		if($this->session->userdata('rights')==3)
+		$checker=0;
+		if($this->session->userdata('rights')==2)
+		{
+			$this->load->model('userModel');
+			$this->load->helper('url');
+			$admin_data= $this->session->userdata('page');
+			$checker=$this->userModel->checkrealationMap($this->session->userdata('id'),$admin_data);
+		}
+	
+		if($this->session->userdata('rights')==3 || $checker==1)
 		{
 					$this->load->model('lays_model');
 					$this->load->library('session');

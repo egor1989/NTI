@@ -1,6 +1,15 @@
 ﻿
 <?
 	
+			if($rights==2 && $mapExist==0){
+						echo form_open('/user/addacceptExpUseMap/');
+						echo form_hidden('userid', $id);
+						echo form_submit('rightsrequest','Запрос доступа для получения полого доступа');
+						echo form_close();
+					}
+	
+	
+	
 	if ((isset($trr['total_trips']))&&($trr['total_trips']> 0)) {
 		switch($trr['total_trips']) {
 			case 1: 
@@ -31,10 +40,11 @@
 					<span style="color:black"> Конец  поездки:<br><?echo date('d.m.Y H:i:s',$trr[$c]['TimeEnd']);?></span><br/>
 					<?if(isset($rights) && $rights>=1){?>
 					<a href="/user/raw/<?echo $trr[$c]['Id'];?>">Просмотреть данные</a><br/>
-					<?}?>
-					<?if(isset($rights) && $rights>=1){?>
+					<?}
+					?>
+					<?if((isset($rights) && $rights>=3 )|| ($mapExist==1) || $rights==1){?>
 					<a href="/map/viewdata/<?echo $trr[$c]['Id'];?>">Карта данных</a><br/>
-										<table border=0>
+					<table border=0>
 						<tr>
 					<td><span style="font-size:12px">K<sub>скор.</sub>=<?echo $trr[$c]['SpeedK'];?></span></td>
 					<td><span style="font-size:12px">K<sub>пов.</sub>=<?echo $trr[$c]['TurnK'];?></span></td>

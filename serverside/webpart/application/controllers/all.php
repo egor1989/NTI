@@ -47,9 +47,10 @@ class All extends CI_Controller {
 		}
 		
 	}
+	 
 		public function users(){
 
-		if($this->session->userdata('id')!=null && $this->session->userdata('rights')==3)
+		if($this->session->userdata('id')!=null && $this->session->userdata('rights')>=2)
 		
 		{
 			//загружаем модель pagination
@@ -71,10 +72,19 @@ class All extends CI_Controller {
 				$this->  pagination->  initialize($config);
 				$new_data['pager']=$this->  pagination-> create_links();
 				$offset=$this->uri->segment(3);
+				$new_data['tickets']=$this->userModel->load_all_tickets($this->session->userdata('id'));
 				if(!is_numeric($offset))$offset=0;
 				
+				
 				$new_data['retdata']=$this->userModel->load_all_simple_users(20,$offset);
-				$new_data['rights']=3;
+				$new_data['retdata']=$this->userModel->load_all_simple_users(20,$offset);
+				for($i=0;$i<count($new_data['retdata']);$i++)
+				{
+					
+					$new_data['retdata'][$i]['rels']=$this->userModel->checkrealation($this->session->userdata('id'),$new_data['retdata'][$i]['Id']);
+				}
+				$new_data['rights']= $this->session->userdata('rights');
+				
 				$this->load->view('header',$new_data);
 				$this->load->view('allusertable', $new_data);
 				$this->load->view('footer');
@@ -86,6 +96,10 @@ class All extends CI_Controller {
 		}
 		
 	}
+	
+
+	
+	
 	
 	
 }
